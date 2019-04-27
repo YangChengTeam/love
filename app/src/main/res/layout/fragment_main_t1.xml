@@ -1,4 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
+
+<!--
 <android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
@@ -12,9 +14,9 @@
         android:textColor="@color/black"
         android:textSize="@dimen/size_20" />
 
-    <!--
+    &lt;!&ndash;
      app:layout_constraintRight_toLeftOf="@+id/main_t1_tv_name"
-     app:layout_constraintLeft_toLeftOf="parent"-->
+     app:layout_constraintLeft_toLeftOf="parent"&ndash;&gt;
     <LinearLayout
         android:id="@+id/main_t1_ll"
         android:layout_width="match_parent"
@@ -28,4 +30,16 @@
     </LinearLayout>
 
 
-</android.support.constraint.ConstraintLayout>
+</android.support.constraint.ConstraintLayout>-->
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/coordinatortablayout"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+
+    <android.support.v7.widget.RecyclerView
+        android:id="@+id/main_t1_rl"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" />
+
+</LinearLayout>

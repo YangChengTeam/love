@@ -1,31 +1,45 @@
 package com.yc.love.ui.frament;
 
+import android.support.v7.widget.DefaultItemAnimator;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.OrientationHelper;
+import android.support.v7.widget.RecyclerView;
+import android.text.TextUtils;
 import android.util.Log;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.ViewGroup;
 import android.widget.ImageView;
-import android.widget.LinearLayout;
-import android.widget.TextView;
+import android.widget.Toast;
 
 import com.yc.love.R;
-import com.yc.love.cont.gank.MainT1FragGank;
-import com.yc.love.cont.http.RequestImpl;
-import com.yc.love.model.bean.BannerItemBean;
-import com.yc.love.model.bean.FrontpageBean;
-import com.yc.love.model.bean.JobBean;
+import com.yc.love.adaper.rv.base.MainMoreItemAdapter;
+import com.yc.love.adaper.rv.base.RecyclerViewItemListener;
+import com.yc.love.adaper.rv.holder.BaseViewHolder;
+import com.yc.love.adaper.rv.holder.ProgressBarViewHolder;
+import com.yc.love.adaper.rv.holder.StringBeanViewHolder;
+import com.yc.love.adaper.rv.holder.TitleViewHolder;
+import com.yc.love.model.bean.StringBean;
 import com.yc.love.ui.frament.base.BaseMainFragment;
-import com.yc.love.ui.view.LoadingDialog;
 
 import java.util.ArrayList;
-
-import io.reactivex.disposables.Disposable;
+import java.util.List;
 
 /**
  * Created by mayn on 2019/4/23.
  */
 
 public class MainT1Fragment extends BaseMainFragment {
+    private List<StringBean> stringBeans;
+    private int PAGE_NUM = 10;
+    private boolean loadMoreEnd;
+    private boolean loadDataEnd;
+    private boolean showProgressBar = false;
+    private MainMoreItemAdapter mAdapter;
+    private int num = 10;
+    private ProgressBarViewHolder progressBarViewHolder;
 
-    private TextView tvName;
-
+    //    private TextView tvName;
 
     @Override
     protected int setContentView() {
@@ -34,8 +48,112 @@ public class MainT1Fragment extends BaseMainFragment {
 
     @Override
     protected void initViews() {
-        tvName = rootView.findViewById(R.id.main_t1_tv_name);
+//        tvName = rootView.findViewById(R.id.main_t1_tv_name);
+
+        final RecyclerView recyclerView = rootView.findViewById(R.id.main_t1_rl);
+        LinearLayoutManager layoutManager = new LinearLayoutManager(mMainActivity);
+        recyclerView.setLayoutManager(layoutManager);
+        layoutManager.setOrientation(OrientationHelper.VERTICAL);
+        //设置增加或删除条目的动画
+        recyclerView.setItemAnimator(new DefaultItemAnimator());
+
+        stringBeans = new ArrayList<>();
+        for (int i = 0; i < 10; i++) {
+            stringBeans.add(new StringBean("name " + i));
+        }
+
+        ImageView imageView = new ImageView(mMainActivity);
+
+        mAdapter = new MainMoreItemAdapter<StringBean>(stringBeans, recyclerView, imageView) {
+            @Override
+            public BaseViewHolder getHolder(ViewGroup parent) {
+                return new StringBeanViewHolder(mMainActivity, recyclerViewItemListener, parent);
+            }
+
+            @Override
+            public BaseViewHolder getTitleHolder(ViewGroup parent) {
+                TitleViewHolder titleViewHolder = new TitleViewHolder(mMainActivity, null, parent);
+                titleViewHolder.setOnClickShareListent(new TitleViewHolder.OnClickShareListent() {
+                    @Override
+                    public void clickShareListent() {
+                        Toast.makeText(mMainActivity, "clickShare", Toast.LENGTH_SHORT).show();
+                    }
+                });
+                return titleViewHolder;
+            }
+
+            @Override
+            protected RecyclerView.ViewHolder getBarViewHolder(ViewGroup parent) {
+                View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.recycler_view_test_item_footer, parent, false);
+                progressBarViewHolder = new ProgressBarViewHolder(view);
+                return progressBarViewHolder;
+            }
+        };
+        recyclerView.setAdapter(mAdapter);
+        if (stringBeans.size() < PAGE_NUM) {
+            Log.d("ssss", "loadMoreData: data---end");
+        } else {
+            mAdapter.setOnMoreDataLoadListener(new MainMoreItemAdapter.OnLoadMoreDataListener() {
+                @Override
+                public void loadMoreData() {
+                    if (loadDataEnd == false) {
+                        return;
+                    }
+                    if (showProgressBar == false) {
+                        //加入null值此时adapter会判断item的type
+                        stringBeans.add(null);
+                        mAdapter.notifyDataSetChanged();
+                        showProgressBar = true;
+                    }
+                    if (!loadMoreEnd) {
+                        recyclerView.postDelayed(new Runnable() {
+                            @Override
+                            public void run() {
+
+                                if (num >= 41) {
+                                    progressBarViewHolder.removePbChangDes("已加载全部数据");
+                                    return;
+                                }
+
+                                List<StringBean> netLoadMoreData = new ArrayList<>();
+                                for (int i = 0; i < 10; i++) {
+                                    netLoadMoreData.add(new StringBean("name " + (i + num)));
+                                }
+                                num += 10;
+                                showProgressBar = false;
+                                stringBeans.remove(stringBeans.size() - 1);
+                                mAdapter.notifyDataSetChanged();
+                                if (netLoadMoreData.size() < PAGE_NUM) {
+                                    loadMoreEnd = true;
+                                }
+                                stringBeans.addAll(netLoadMoreData);
+                                mAdapter.notifyDataSetChanged();
+                                mAdapter.setLoaded();
+                            }
+                        }, 1000);
+                    } else {
+                        Log.d("mylog", "loadMoreData: loadMoreEnd end 已加载全部数据 ");
+                        stringBeans.remove(stringBeans.size() - 1);
+                        mAdapter.notifyDataSetChanged();
+                    }
+                }
+            });
+        }
+        loadDataEnd = true;
     }
+
+    RecyclerViewItemListener recyclerViewItemListener = new RecyclerViewItemListener() {
+        @Override
+        public void onItemClick(int position) {
+            Toast.makeText(mMainActivity, "onItemClick " + position, Toast.LENGTH_SHORT).show();
+        }
+
+        @Override
+        public void onItemLongClick(int position) {
+
+        }
+    };
+
 
     @Override
     protected void lazyLoad() {
@@ -45,10 +163,10 @@ public class MainT1Fragment extends BaseMainFragment {
 
             }
         }, 1000);*/
-        isCanLoadData();
+//        isCanLoadData();
     }
 
-    private void isCanLoadData() {
+    /*private void isCanLoadData() {
         final LoadingDialog loadingView = new LoadingDialog(mMainActivity);
         loadingView.showLoading();
 
@@ -69,8 +187,8 @@ public class MainT1Fragment extends BaseMainFragment {
                             ImageView imageView = new ImageView(mMainActivity);
                             imageView.setImageDrawable(mMainActivity.getResources().getDrawable(R.mipmap.tab_home));
 //                            Glide.with(mMainActivity).load(result.get(i).getRandpic()).into(imageView);
-                           /* Picasso.with(mMainActivity).load(result.get(i).getRandpic())
-                                    .into(mBannerImagess.get(i));*/
+                           *//* Picasso.with(mMainActivity).load(result.get(i).getRandpic())
+                                    .into(mBannerImagess.get(i));*//*
 
                             TextView textView = new TextView(mMainActivity);
                             textView.setText(mBannerImages.get(i));
@@ -78,13 +196,13 @@ public class MainT1Fragment extends BaseMainFragment {
                         }
                         tvName.setText(getClass().getName());
                         loadingView.dismissLoading();
-                      /*  maCache.remove(Constants.BANNER_PIC);
+                      *//*  maCache.remove(Constants.BANNER_PIC);
                         maCache.put(Constants.BANNER_PIC, mBannerImages);
                         maCache.remove(Constants.BANNER_PIC_DATA);
                         maCache.put(Constants.BANNER_PIC_DATA, result);
                         bannerDataBean.setData(mBannerImages, result);
 
-                        bannerData.setValue(bannerDataBean);*/
+                        bannerData.setValue(bannerDataBean);*//*
                     }
                 }
             }
@@ -126,7 +244,7 @@ public class MainT1Fragment extends BaseMainFragment {
                 Log.d("mylog", "addSubscription: subscription " + subscription.toString());
             }
         });
-    }
+    }*/
 
 
 }

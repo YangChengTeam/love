@@ -1,18 +1,20 @@
 package com.yc.love.ui.activity;
 
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.OrientationHelper;
 import android.support.v7.widget.RecyclerView;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 
 import com.yc.love.R;
-import com.yc.love.adaper.rv.base.BaseLoadMoreClickItemAdapter;
+import com.yc.love.adaper.rv.base.BaseLoadMoreAdapter;
+import com.yc.love.adaper.rv.base.MainMoreItemAdapter;
 import com.yc.love.adaper.rv.base.RecyclerViewItemListener;
 import com.yc.love.adaper.rv.holder.BaseViewHolder;
 import com.yc.love.adaper.rv.holder.StringBeanViewHolder;
+import com.yc.love.adaper.rv.holder.TitleViewHolder;
 import com.yc.love.model.bean.StringBean;
 import com.yc.love.ui.activity.base.SlidingBaseActivity;
 
@@ -45,15 +47,23 @@ public class RecyclerViewActivity extends SlidingBaseActivity {
             stringBeans.add(new StringBean("name " + i));
         }
 
-        BaseLoadMoreClickItemAdapter adapter = new BaseLoadMoreClickItemAdapter<StringBean>(stringBeans, recyclerView) {
+        ImageView ll_toolbar =findViewById(R.id.recycler_view_iv);
+
+        BaseLoadMoreAdapter adapter = new BaseLoadMoreAdapter<StringBean>(stringBeans, recyclerView,ll_toolbar) {
             @Override
             public BaseViewHolder getHolder(ViewGroup parent) {
 
                 return new StringBeanViewHolder(RecyclerViewActivity.this, recyclerViewItemListener, parent);
             }
+
+            @Override
+            public BaseViewHolder getTitleHolder(ViewGroup parent) {
+                return new TitleViewHolder(RecyclerViewActivity.this, null, parent);
+            }
         };
         recyclerView.setAdapter(adapter);
     }
+
     RecyclerViewItemListener recyclerViewItemListener = new RecyclerViewItemListener() {
         @Override
         public void onItemClick(int position) {

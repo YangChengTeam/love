@@ -28,16 +28,16 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+        <!-- android:theme="@style/AppTheme.NoActionBar"-->
         <activity
             android:name=".ui.activity.MainActivity"
             android:label="@string/app_name"
-            android:theme="@style/AppTheme.NoActionBar" />
+          />
         <activity
             android:name=".ui.activity.FruitActivity"
             android:theme="@style/JK.SwipeBack.Transparent.Theme" />
-        <activity
-            android:name=".ui.activity.RecyclerViewActivity"
-            android:theme="@style/JK.SwipeBack.Transparent.Theme" />
+        <activity android:name=".ui.activity.RecyclerViewActivity" />
+        <activity android:name=".ui.activity.Main4Activity"></activity>
     </application>
 
 </manifest>

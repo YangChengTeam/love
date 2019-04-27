@@ -9,9 +9,10 @@ import android.widget.TextView;
 import com.yc.love.R;
 import com.yc.love.adaper.vp.MainPagerAdapter;
 import com.yc.love.factory.MainFragmentFactory;
+import com.yc.love.ui.activity.base.BaseActivity;
 import com.yc.love.ui.view.ControlScrollViewPager;
 
-public class MainActivity extends AppCompatActivity implements View.OnClickListener {
+public class MainActivity extends BaseActivity implements View.OnClickListener {
 
     private ControlScrollViewPager mVpFragment;
     private TextView mTvTab1, mTvTab2, mTvTab3, mTvTab4, mTvTab5;
@@ -20,9 +21,13 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        //侵入状态栏
+        invadeStatusBar();
+
+//        setStatusBarFullTransparent();
+//        setFitSystemWindow(false);
 
         initView();
-
     }
 
     private void initView() {

@@ -1,6 +1,7 @@
 package com.yc.love.ui.frament;
 
 import android.content.Intent;
+import android.view.View;
 import android.widget.TextView;
 
 import com.yc.love.R;
@@ -39,8 +40,14 @@ public class MainT4Fragment extends BaseMainFragment {
             public void run() {
                 tvName.setText(getClass().getName());
                 loadingView.dismissLoading();
-                startActivity(new Intent(mMainActivity, RecyclerViewActivity.class));
             }
         }, 400);
+
+        tvName.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                startActivity(new Intent(mMainActivity, RecyclerViewActivity.class));
+            }
+        });
     }
 }

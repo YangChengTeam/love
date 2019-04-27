@@ -4,6 +4,8 @@
     android:layout_height="match_parent">
 
     <TextView
+        android:paddingTop="45dp"
+        android:layout_marginTop="45dp"
         android:id="@+id/main_t4_tv_name"
         android:layout_width="wrap_content"
         android:text="555555"

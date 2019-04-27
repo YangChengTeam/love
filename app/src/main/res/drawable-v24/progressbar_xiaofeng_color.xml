@@ -11,10 +11,10 @@
         android:thicknessRatio="10"
         android:useLevel="false">
         <gradient
-            android:centerColor="@color/xiaofeng_orange"
+            android:centerColor="@color/gray_loading_01"
             android:centerY="0.50"
-            android:endColor="@color/white"
-            android:startColor="@color/xiaofeng_orange_33"
+            android:endColor="@color/gray_loading_03"
+            android:startColor="@color/gray_loading_02"
             android:type="sweep"
             android:useLevel="false" />
     </shape>

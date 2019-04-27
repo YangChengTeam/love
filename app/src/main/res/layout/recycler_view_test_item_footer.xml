@@ -3,13 +3,26 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:gravity="center"
-    android:orientation="vertical"
-    android:padding="8dp">
+    android:orientation="horizontal"
+    android:paddingTop="3dp"
+    android:paddingBottom="6dp">
 
     <ProgressBar
-        android:id="@+id/rv_pb_load_more"
-        android:layout_width="28dp"
-        android:layout_height="28dp"
+        android:id="@+id/item_holder_pb_pb"
+        android:layout_width="16dp"
+        android:layout_height="16dp"
         android:indeterminateDrawable="@drawable/progressbar_xiaofeng_color" />
+
+    <View
+        android:layout_width="12dp"
+        android:layout_height="1dp" />
+
+    <TextView
+        android:id="@+id/item_holder_pb_tv"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="加载中 ..."
+        android:textColor="@color/gray_loading_01"
+        android:textSize="@dimen/size_14" />
 
 </LinearLayout>
