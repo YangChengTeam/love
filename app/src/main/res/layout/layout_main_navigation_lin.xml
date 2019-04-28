@@ -20,6 +20,6 @@
         android:layout_marginLeft="6dp"
         android:text="恋爱帮手"
         android:textColor="@color/black"
-        android:textSize="@dimen/size_22"
+        android:textSize="@dimen/size_18"
         android:textStyle="bold" />
 </LinearLayout>

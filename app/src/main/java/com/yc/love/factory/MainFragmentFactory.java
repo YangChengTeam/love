@@ -6,7 +6,6 @@ import com.yc.love.ui.frament.MainT1Fragment;
 import com.yc.love.ui.frament.MainT2Fragment;
 import com.yc.love.ui.frament.MainT3Fragment;
 import com.yc.love.ui.frament.MainT4Fragment;
-import com.yc.love.ui.frament.MainT5Fragment;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -20,7 +19,7 @@ public class MainFragmentFactory {
     public static final int MAIN_FRAGMENT_1 = 1;
     public static final int MAIN_FRAGMENT_2 = 2;
     public static final int MAIN_FRAGMENT_3 = 3;
-    public static final int MAIN_FRAGMENT_4 = 4;
+//    public static final int MAIN_FRAGMENT_4 = 4;
 
 
     public static Map<Integer, Fragment> fragments = new HashMap<>();
@@ -48,10 +47,10 @@ public class MainFragmentFactory {
                 fragment = new MainT4Fragment();
                 fragments.put(MAIN_FRAGMENT_3, fragment);
                 break;
-            case MAIN_FRAGMENT_4:
+            /*case MAIN_FRAGMENT_4:
                 fragment = new MainT5Fragment();
                 fragments.put(MAIN_FRAGMENT_4, fragment);
-                break;
+                break;*/
         }
         return fragment;
     }

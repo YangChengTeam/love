@@ -1,17 +1,14 @@
-package com.yc.love.adaper.rv.base;
+package com.yc.love.adaper.rv;
 
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
-import android.view.LayoutInflater;
-import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 
-import com.yc.love.R;
 import com.yc.love.adaper.rv.holder.BaseViewHolder;
 import com.yc.love.adaper.rv.holder.ProgressBarViewHolder;
-import com.yc.love.adaper.rv.holder.TitleViewHolder;
+import com.yc.love.adaper.rv.holder.TitleT1ViewHolder;
 
 import java.util.List;
 
@@ -20,7 +17,7 @@ import java.util.List;
  * Created by Administrator on 2017/9/12.
  */
 
-public abstract class MainMoreItemAdapter<T> extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
+public abstract class MainT1MoreItemAdapter<T> extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
 
     private final List<T> mPersonList;
     private final ImageView ll_toolbar;
@@ -34,7 +31,7 @@ public abstract class MainMoreItemAdapter<T> extends RecyclerView.Adapter<Recycl
     //当前滚动的position下面最小的items的临界值
 //    private int visibleThreshold = 5;
 
-    public MainMoreItemAdapter(List<T> personList, RecyclerView recyclerView, ImageView ll_toolbar) {
+    public MainT1MoreItemAdapter(List<T> personList, RecyclerView recyclerView, ImageView ll_toolbar) {
         this.mPersonList = personList;
         this.mRecyclerView = recyclerView;
         this.ll_toolbar = ll_toolbar;
@@ -76,7 +73,7 @@ public abstract class MainMoreItemAdapter<T> extends RecyclerView.Adapter<Recycl
 
     @Override
     public void onBindViewHolder(RecyclerView.ViewHolder holder, int position) {
-        if (holder instanceof TitleViewHolder) {
+        if (holder instanceof TitleT1ViewHolder) {
             ((BaseViewHolder) holder).bindData(mPersonList.get(position));
         } else if (holder instanceof BaseViewHolder) {
             ((BaseViewHolder) holder).bindData(mPersonList.get(position - 1));

@@ -15,7 +15,7 @@ import com.yc.love.ui.view.ControlScrollViewPager;
 public class MainActivity extends BaseActivity implements View.OnClickListener {
 
     private ControlScrollViewPager mVpFragment;
-    private TextView mTvTab1, mTvTab2, mTvTab3, mTvTab4, mTvTab5;
+    private TextView mTvTab1, mTvTab2, mTvTab3, mTvTab4;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -28,6 +28,8 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
 //        setFitSystemWindow(false);
 
         initView();
+
+        //TODO 点击tab水波纹效果
     }
 
     private void initView() {
@@ -36,17 +38,14 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
         mTvTab2 = findViewById(R.id.comp_main_tv_tab_2);
         mTvTab3 = findViewById(R.id.comp_main_tv_tab_3);
         mTvTab4 = findViewById(R.id.comp_main_tv_tab_4);
-        mTvTab5 = findViewById(R.id.comp_main_tv_tab_5);
 
         mTvTab1.setOnClickListener(this);
         mTvTab2.setOnClickListener(this);
         mTvTab3.setOnClickListener(this);
         mTvTab4.setOnClickListener(this);
-        mTvTab5.setOnClickListener(this);
 
         MainPagerAdapter mainPagerAdapter = new MainPagerAdapter(getSupportFragmentManager());
         mVpFragment.setAdapter(mainPagerAdapter);
-
     }
 
     @Override
@@ -68,10 +67,6 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
                 mVpFragment.setCurrentItem(MainFragmentFactory.MAIN_FRAGMENT_3, false);
                 iconSelect(MainFragmentFactory.MAIN_FRAGMENT_3);
                 break;
-            case R.id.comp_main_tv_tab_5:
-                mVpFragment.setCurrentItem(MainFragmentFactory.MAIN_FRAGMENT_4, false);
-                iconSelect(MainFragmentFactory.MAIN_FRAGMENT_4);
-                break;
         }
     }
 
@@ -79,40 +74,35 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
         cleatIconState();
         switch (current) {
             case MainFragmentFactory.MAIN_FRAGMENT_0:
-                setCompoundDrawablesTop(mTvTab1, R.mipmap.tab_home_selection);
+                setCompoundDrawablesTop(mTvTab1, R.mipmap.main_icon_tab_01_s);
                 break;
             case MainFragmentFactory.MAIN_FRAGMENT_1:
-                setCompoundDrawablesTop(mTvTab2, R.mipmap.tab_home_selection);
+                setCompoundDrawablesTop(mTvTab2, R.mipmap.main_icon_tab_02_s);
                 break;
             case MainFragmentFactory.MAIN_FRAGMENT_2:
-                setCompoundDrawablesTop(mTvTab3, R.mipmap.tab_home_selection);
+                setCompoundDrawablesTop(mTvTab3, R.mipmap.main_icon_tab_03_s);
                 break;
             case MainFragmentFactory.MAIN_FRAGMENT_3:
-                setCompoundDrawablesTop(mTvTab4, R.mipmap.tab_home_selection);
-                break;
-            case MainFragmentFactory.MAIN_FRAGMENT_4:
-                setCompoundDrawablesTop(mTvTab5, R.mipmap.tab_home_selection);
+                setCompoundDrawablesTop(mTvTab4, R.mipmap.main_icon_tab_04_s);
                 break;
         }
     }
 
     private void cleatIconState() {
-        setCompoundDrawablesTop(mTvTab1, R.mipmap.tab_home);
-        setCompoundDrawablesTop(mTvTab2, R.mipmap.tab_home);
-        setCompoundDrawablesTop(mTvTab3, R.mipmap.tab_home);
-        setCompoundDrawablesTop(mTvTab4, R.mipmap.tab_home);
-        setCompoundDrawablesTop(mTvTab5, R.mipmap.tab_home);
+        setCompoundDrawablesTop(mTvTab1, R.mipmap.main_icon_tab_01);
+        setCompoundDrawablesTop(mTvTab2, R.mipmap.main_icon_tab_02);
+        setCompoundDrawablesTop(mTvTab3, R.mipmap.main_icon_tab_03);
+        setCompoundDrawablesTop(mTvTab4, R.mipmap.main_icon_tab_04);
 
-        mTvTab1.setTextColor(getResources().getColor(R.color.black));
-        mTvTab2.setTextColor(getResources().getColor(R.color.black));
-        mTvTab3.setTextColor(getResources().getColor(R.color.black));
-        mTvTab4.setTextColor(getResources().getColor(R.color.black));
-        mTvTab5.setTextColor(getResources().getColor(R.color.black));
+        mTvTab1.setTextColor(getResources().getColor(R.color.text_gray));
+        mTvTab2.setTextColor(getResources().getColor(R.color.text_gray));
+        mTvTab3.setTextColor(getResources().getColor(R.color.text_gray));
+        mTvTab4.setTextColor(getResources().getColor(R.color.text_gray));
     }
 
     public void setCompoundDrawablesTop(TextView tv_icon, int id) {
         Drawable top22 = getResources().getDrawable(id);
         tv_icon.setCompoundDrawablesWithIntrinsicBounds(null, top22, null, null);
-        tv_icon.setTextColor(getResources().getColor(R.color.red));
+        tv_icon.setTextColor(getResources().getColor(R.color.black));
     }
 }

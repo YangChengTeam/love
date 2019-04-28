@@ -3,6 +3,7 @@ package com.yc.love.ui.frament;
 import android.content.Intent;
 import android.view.View;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.yc.love.R;
 import com.yc.love.ui.activity.RecyclerViewActivity;
@@ -24,7 +25,14 @@ public class MainT4Fragment extends BaseMainFragment {
 
     @Override
     protected void initViews() {
-        tvName = rootView.findViewById(R.id.main_t4_tv_name);
+//        tvName = rootView.findViewById(R.id.main_t4_tv_name);
+        TextView tvBtnInfo = rootView.findViewById(R.id.main_t4_tv_btn_info);
+        tvBtnInfo.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Toast.makeText(mMainActivity,"tvBtnInfo",Toast.LENGTH_SHORT).show();
+            }
+        });
     }
 
     @Override
@@ -33,7 +41,7 @@ public class MainT4Fragment extends BaseMainFragment {
     }
 
     private void isCanLoadData() {
-        final LoadingDialog loadingView = new LoadingDialog(mMainActivity);
+       /* final LoadingDialog loadingView = new LoadingDialog(mMainActivity);
         loadingView.showLoading();
         tvName.postDelayed(new Runnable() {
             @Override
@@ -48,6 +56,6 @@ public class MainT4Fragment extends BaseMainFragment {
             public void onClick(View v) {
                 startActivity(new Intent(mMainActivity, RecyclerViewActivity.class));
             }
-        });
+        });*/
     }
 }

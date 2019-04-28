@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/background">
+    android:background="@color/love_background">
 
 
     <LinearLayout
@@ -22,44 +22,37 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="54dp"
-            android:background="@color/background"
+            android:background="@color/love_background"
             android:orientation="horizontal">
 
 
             <TextView
                 android:id="@+id/comp_main_tv_tab_1"
                 style="@style/tv_main_icon_bottom"
-                android:drawableTop="@mipmap/tab_home_selection"
-                android:text="1"
+                android:drawableTop="@mipmap/main_icon_tab_01_s"
+                android:text="首页"
                 android:textColor="@color/black" />
 
             <TextView
                 android:id="@+id/comp_main_tv_tab_2"
                 style="@style/tv_main_icon_bottom"
-                android:drawableTop="@mipmap/tab_home"
-                android:text="2"
-                android:textColor="@color/black" />
+                android:drawableTop="@mipmap/main_icon_tab_02"
+                android:text="实例"
+                android:textColor="@color/text_gray" />
 
             <TextView
                 android:id="@+id/comp_main_tv_tab_3"
                 style="@style/tv_main_icon_bottom"
-                android:drawableTop="@mipmap/tab_home"
-                android:text="3"
-                android:textColor="@color/black" />
+                android:drawableTop="@mipmap/main_icon_tab_03"
+                android:text="提升"
+                android:textColor="@color/text_gray" />
 
             <TextView
                 android:id="@+id/comp_main_tv_tab_4"
                 style="@style/tv_main_icon_bottom"
-                android:drawableTop="@mipmap/tab_home"
-                android:text="4"
-                android:textColor="@color/black" />
-
-            <TextView
-                android:id="@+id/comp_main_tv_tab_5"
-                style="@style/tv_main_icon_bottom"
-                android:drawableTop="@mipmap/tab_home"
-                android:text="5"
-                android:textColor="@color/black" />
+                android:drawableTop="@mipmap/main_icon_tab_04"
+                android:text="我的"
+                android:textColor="@color/text_gray" />
 
 
         </LinearLayout>

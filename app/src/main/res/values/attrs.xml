@@ -8,4 +8,10 @@
     <declare-styleable name="MainNavigationLin">
         <attr name="textName" format="string" />
     </declare-styleable>
+    <declare-styleable name="MainMyItemLin">
+        <attr name="textNameMyItem" format="string" />
+        <attr name="imgSrc" format="reference" />
+        <attr name="isAddIntervalTop" format="boolean" />
+        <attr name="isAddIntervalBom" format="boolean" />
+    </declare-styleable>
 </resources>

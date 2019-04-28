@@ -1,16 +1,20 @@
-package com.yc.love.adaper.rv.base;
+package com.yc.love.adaper.rv;
 
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
-import android.view.LayoutInflater;
-import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 
-import com.yc.love.R;
 import com.yc.love.adaper.rv.holder.BaseViewHolder;
+import com.yc.love.adaper.rv.holder.MainT2ViewHolder;
 import com.yc.love.adaper.rv.holder.ProgressBarViewHolder;
+import com.yc.love.adaper.rv.holder.StringBeanViewHolder;
+import com.yc.love.adaper.rv.holder.TitleT1ViewHolder;
+import com.yc.love.adaper.rv.holder.TitleT2ViewHolder;
+import com.yc.love.adaper.rv.holder.VipViewHolder;
+import com.yc.love.model.bean.MainT2Bean;
+import com.yc.love.model.bean.StringBean;
 
 import java.util.List;
 
@@ -19,22 +23,23 @@ import java.util.List;
  * Created by Administrator on 2017/9/12.
  */
 
-public abstract class BaseLoadMoreAdapter<T> extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
+public abstract class MainT2MoreItemAdapter<T> extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
 
-    //    private List msgs = new ArrayList<>();
     private final List<T> mPersonList;
     private final ImageView ll_toolbar;
     private RecyclerView mRecyclerView;
-    private static final int VIEW_ITEM = 0;
-    private static final int VIEW_PROG = 1;
-//    private static final int VIEW_TITLE = 2;
+    private static final int VIEW_TITLE = 0;
+    private static final int VIEW_ITEM = 1;
+    private static final int VIEW_VIP = 2;
+    private static final int VIEW_PROG = 3;
     private boolean isLoading;
     private int totalItemCount;
     private int lastVisibleItemPosition;
+//    private int vipPosition = -1;
     //当前滚动的position下面最小的items的临界值
-    private int visibleThreshold = 5;
+//    private int visibleThreshold = 5;
 
-    public BaseLoadMoreAdapter(List<T> personList, RecyclerView recyclerView, ImageView ll_toolbar) {
+    public MainT2MoreItemAdapter(List<T> personList, RecyclerView recyclerView, ImageView ll_toolbar) {
         this.mPersonList = personList;
         this.mRecyclerView = recyclerView;
         this.ll_toolbar = ll_toolbar;
@@ -52,25 +57,48 @@ public abstract class BaseLoadMoreAdapter<T> extends RecyclerView.Adapter<Recycl
     //根据不同的数据返回不同的viewType
     @Override
     public int getItemViewType(int position) {
+        int size = mPersonList.size();
+        MainT2Bean mainT2Bean = null;
+        try {
+            mainT2Bean = (MainT2Bean) mPersonList.get(position);
+        } catch (IndexOutOfBoundsException e) {
+            Log.d("mylog", "getItemViewType: e " + e);
+        }
+        if (mainT2Bean != null) {
+            int type = mainT2Bean.type;
+            if (type == VIEW_TITLE) {
+                return VIEW_TITLE;
+            } else if (type == VIEW_VIP) {
+                return VIEW_VIP;
+            }
+        }
         return mPersonList.get(position) != null ? VIEW_ITEM : VIEW_PROG;
     }
 
     @Override
     public RecyclerView.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         RecyclerView.ViewHolder holder;
-      if (viewType == VIEW_ITEM) {
+        if (viewType == VIEW_TITLE) {
+            holder = getTitleHolder(parent);
+        } else if (viewType == VIEW_VIP) {
+            holder = getVipHolder(parent);
+        } else if (viewType == VIEW_ITEM) {
             holder = getHolder(parent);
         } else {
-            View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.recycler_view_test_item_footer, parent, false);
-            holder = new ProgressBarViewHolder(view);
+            holder = getBarViewHolder(parent);
         }
         return holder;
     }
 
+
     @Override
     public void onBindViewHolder(RecyclerView.ViewHolder holder, int position) {
-        if (holder instanceof BaseViewHolder) {
-            ((BaseViewHolder) holder).bindData(mPersonList.get(position - 1));
+        if (holder instanceof TitleT2ViewHolder) {
+            ((BaseViewHolder) holder).bindData(mPersonList.get(position));
+        } else if (holder instanceof VipViewHolder) {
+            ((BaseViewHolder) holder).bindData(mPersonList.get(position));
+        } else if (holder instanceof MainT2ViewHolder) {
+            ((BaseViewHolder) holder).bindData(mPersonList.get(position));
         } else if (holder instanceof ProgressBarViewHolder) {
             ProgressBarViewHolder viewHolder = (ProgressBarViewHolder) holder;
             viewHolder.pb.setIndeterminate(true);
@@ -83,8 +111,9 @@ public abstract class BaseLoadMoreAdapter<T> extends RecyclerView.Adapter<Recycl
             super.onScrolled(recyclerView, dx, dy);
             final LinearLayoutManager linearLayoutManager = (LinearLayoutManager) mRecyclerView.getLayoutManager();
 
+            int currentposition = linearLayoutManager.getPosition(linearLayoutManager.getChildAt(0));
             int firstVisibleItemPosition = linearLayoutManager.findFirstVisibleItemPosition();
-          /*  if (firstVisibleItemPosition >= 1) {
+           /* if (firstVisibleItemPosition >= 1) {
                 ll_toolbar.setVisibility(View.VISIBLE);
             } else {
                 ll_toolbar.setVisibility(View.GONE);
@@ -94,16 +123,13 @@ public abstract class BaseLoadMoreAdapter<T> extends RecyclerView.Adapter<Recycl
             totalItemCount = linearLayoutManager.getItemCount();
             lastVisibleItemPosition = linearLayoutManager.findLastVisibleItemPosition();
             Log.d("ssss", "onScrolled totalItemCount =  全部数据条数 " + totalItemCount + "-----");
-            Log.d("ssss", "onScrolled: visibleThreshold  伐值 :" + visibleThreshold);
+//            Log.d("ssss", "onScrolled: visibleThreshold  伐值 :" + visibleThreshold);
 
-            int firstCompletelyVisibleItemPosition = linearLayoutManager.findFirstCompletelyVisibleItemPosition();
-            int lastCompletelyVisibleItemPosition = linearLayoutManager.findLastCompletelyVisibleItemPosition();
+//            int firstCompletelyVisibleItemPosition = linearLayoutManager.findFirstCompletelyVisibleItemPosition();
+//            int lastCompletelyVisibleItemPosition = linearLayoutManager.findLastCompletelyVisibleItemPosition();
 
 
-            Log.d("mylog", "onScrolled: " + "firstVisibleItemPosition 可见的第一条 111 =" + firstVisibleItemPosition);
             Log.d("ssss", "onScrolled: " + "lastVisibleItemPosition 可见的最后一条  222 =" + lastVisibleItemPosition);
-            Log.d("ssss", "onScrolled: " + "firstCompletelyVisibleItemPosition 完全可见的第一条 333 =" + firstCompletelyVisibleItemPosition);
-            Log.d("ssss", "onScrolled: " + "lastCompletelyVisibleItemPosition 完全可见的最后一条 444 =" + lastCompletelyVisibleItemPosition);
 
             if (totalItemCount == lastVisibleItemPosition + 1) {
                 if (totalItemCount == 0) {
@@ -119,8 +145,8 @@ public abstract class BaseLoadMoreAdapter<T> extends RecyclerView.Adapter<Recycl
                         return;
                     }
                     isLoading = true;
+                    // 加载数据
                     mMoreDataListener.loadMoreData();
-                    Log.d("ssss", "onScrolled: 触发加载数据 --------");
                 }
 //                isLoading = true;
             }
@@ -159,4 +185,8 @@ public abstract class BaseLoadMoreAdapter<T> extends RecyclerView.Adapter<Recycl
     public abstract BaseViewHolder getHolder(ViewGroup parent);
 
     public abstract BaseViewHolder getTitleHolder(ViewGroup parent);
+
+    protected abstract RecyclerView.ViewHolder getBarViewHolder(ViewGroup parent);
+
+    protected abstract RecyclerView.ViewHolder getVipHolder(ViewGroup parent);
 }

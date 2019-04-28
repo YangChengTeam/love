@@ -4,7 +4,6 @@ import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.OrientationHelper;
 import android.support.v7.widget.RecyclerView;
-import android.text.TextUtils;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -13,12 +12,12 @@ import android.widget.ImageView;
 import android.widget.Toast;
 
 import com.yc.love.R;
-import com.yc.love.adaper.rv.base.MainMoreItemAdapter;
+import com.yc.love.adaper.rv.MainT1MoreItemAdapter;
 import com.yc.love.adaper.rv.base.RecyclerViewItemListener;
 import com.yc.love.adaper.rv.holder.BaseViewHolder;
 import com.yc.love.adaper.rv.holder.ProgressBarViewHolder;
 import com.yc.love.adaper.rv.holder.StringBeanViewHolder;
-import com.yc.love.adaper.rv.holder.TitleViewHolder;
+import com.yc.love.adaper.rv.holder.TitleT1ViewHolder;
 import com.yc.love.model.bean.StringBean;
 import com.yc.love.ui.frament.base.BaseMainFragment;
 
@@ -35,7 +34,7 @@ public class MainT1Fragment extends BaseMainFragment {
     private boolean loadMoreEnd;
     private boolean loadDataEnd;
     private boolean showProgressBar = false;
-    private MainMoreItemAdapter mAdapter;
+    private MainT1MoreItemAdapter mAdapter;
     private int num = 10;
     private ProgressBarViewHolder progressBarViewHolder;
 
@@ -64,7 +63,7 @@ public class MainT1Fragment extends BaseMainFragment {
 
         ImageView imageView = new ImageView(mMainActivity);
 
-        mAdapter = new MainMoreItemAdapter<StringBean>(stringBeans, recyclerView, imageView) {
+        mAdapter = new MainT1MoreItemAdapter<StringBean>(stringBeans, recyclerView, imageView) {
             @Override
             public BaseViewHolder getHolder(ViewGroup parent) {
                 return new StringBeanViewHolder(mMainActivity, recyclerViewItemListener, parent);
@@ -72,14 +71,14 @@ public class MainT1Fragment extends BaseMainFragment {
 
             @Override
             public BaseViewHolder getTitleHolder(ViewGroup parent) {
-                TitleViewHolder titleViewHolder = new TitleViewHolder(mMainActivity, null, parent);
-                titleViewHolder.setOnClickShareListent(new TitleViewHolder.OnClickShareListent() {
+                TitleT1ViewHolder titleT1ViewHolder = new TitleT1ViewHolder(mMainActivity, null, parent);
+                titleT1ViewHolder.setOnClickShareListent(new TitleT1ViewHolder.OnClickShareListent() {
                     @Override
                     public void clickShareListent() {
                         Toast.makeText(mMainActivity, "clickShare", Toast.LENGTH_SHORT).show();
                     }
                 });
-                return titleViewHolder;
+                return titleT1ViewHolder;
             }
 
             @Override
@@ -93,7 +92,7 @@ public class MainT1Fragment extends BaseMainFragment {
         if (stringBeans.size() < PAGE_NUM) {
             Log.d("ssss", "loadMoreData: data---end");
         } else {
-            mAdapter.setOnMoreDataLoadListener(new MainMoreItemAdapter.OnLoadMoreDataListener() {
+            mAdapter.setOnMoreDataLoadListener(new MainT1MoreItemAdapter.OnLoadMoreDataListener() {
                 @Override
                 public void loadMoreData() {
                     if (loadDataEnd == false) {

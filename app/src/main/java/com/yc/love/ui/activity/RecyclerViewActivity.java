@@ -10,11 +10,10 @@ import android.widget.ImageView;
 
 import com.yc.love.R;
 import com.yc.love.adaper.rv.base.BaseLoadMoreAdapter;
-import com.yc.love.adaper.rv.base.MainMoreItemAdapter;
 import com.yc.love.adaper.rv.base.RecyclerViewItemListener;
 import com.yc.love.adaper.rv.holder.BaseViewHolder;
 import com.yc.love.adaper.rv.holder.StringBeanViewHolder;
-import com.yc.love.adaper.rv.holder.TitleViewHolder;
+import com.yc.love.adaper.rv.holder.TitleT1ViewHolder;
 import com.yc.love.model.bean.StringBean;
 import com.yc.love.ui.activity.base.SlidingBaseActivity;
 
@@ -58,7 +57,7 @@ public class RecyclerViewActivity extends SlidingBaseActivity {
 
             @Override
             public BaseViewHolder getTitleHolder(ViewGroup parent) {
-                return new TitleViewHolder(RecyclerViewActivity.this, null, parent);
+                return new TitleT1ViewHolder(RecyclerViewActivity.this, null, parent);
             }
         };
         recyclerView.setAdapter(adapter);

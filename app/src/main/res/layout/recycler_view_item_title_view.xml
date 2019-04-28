@@ -6,6 +6,7 @@
 
 
     <!--android:src="@mipmap/main_bg_title"-->
+    <!--android:src="@mipmap/main_bg_title" -->
     <ImageView
         android:id="@+id/item_title_view_iv_title"
         android:layout_width="match_parent"
@@ -67,8 +68,7 @@
         android:id="@+id/item_title_view_rl_share"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_alignBottom="@+id/item_title_view_view_temp"
-        android:layout_marginTop="152dp">
+        android:layout_marginTop="709px">
 
         <ImageView
             android:id="@+id/item_title_view_iv_share"
