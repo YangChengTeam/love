@@ -25,6 +25,10 @@ public class FruitActivity extends SlidingBaseActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_fruit);
+
+        //侵入状态栏
+        invadeStatusBar();
+
         //用于设置向右滑动为返回，该库默认是向上滑动为返回
 //        setDragEdge(SwipeBackLayout.DragEdge.LEFT);
 

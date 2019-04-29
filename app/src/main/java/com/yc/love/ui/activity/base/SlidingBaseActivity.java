@@ -17,7 +17,8 @@ import java.lang.reflect.Field;
 
 public class SlidingBaseActivity extends BaseActivity  implements SlidingPaneLayout.PanelSlideListener {
 
-    public final static String TAG = BaseActivity.class.getCanonicalName();
+//    public final static String TAG = BaseActivity.class.getCanonicalName();
+    public final static String TAG = "mylog";
 
 
     FrameLayout mContainerFl;

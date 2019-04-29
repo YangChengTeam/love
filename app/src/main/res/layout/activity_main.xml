@@ -29,6 +29,7 @@
             <TextView
                 android:id="@+id/comp_main_tv_tab_1"
                 style="@style/tv_main_icon_bottom"
+                android:background="?attr/selectableItemBackgroundBorderless"
                 android:drawableTop="@mipmap/main_icon_tab_01_s"
                 android:text="首页"
                 android:textColor="@color/black" />
@@ -36,6 +37,7 @@
             <TextView
                 android:id="@+id/comp_main_tv_tab_2"
                 style="@style/tv_main_icon_bottom"
+                android:background="?attr/selectableItemBackgroundBorderless"
                 android:drawableTop="@mipmap/main_icon_tab_02"
                 android:text="实例"
                 android:textColor="@color/text_gray" />
@@ -43,6 +45,7 @@
             <TextView
                 android:id="@+id/comp_main_tv_tab_3"
                 style="@style/tv_main_icon_bottom"
+                android:background="?attr/selectableItemBackgroundBorderless"
                 android:drawableTop="@mipmap/main_icon_tab_03"
                 android:text="提升"
                 android:textColor="@color/text_gray" />
@@ -50,6 +53,7 @@
             <TextView
                 android:id="@+id/comp_main_tv_tab_4"
                 style="@style/tv_main_icon_bottom"
+                android:background="?attr/selectableItemBackgroundBorderless"
                 android:drawableTop="@mipmap/main_icon_tab_04"
                 android:text="我的"
                 android:textColor="@color/text_gray" />

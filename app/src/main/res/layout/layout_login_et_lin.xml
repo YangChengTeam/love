@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="@drawable/shape_et_login_gray"
+    android:gravity="center_vertical"
+    android:orientation="horizontal"
+    android:paddingLeft="12dp"
+    android:paddingTop="8dp"
+    android:paddingRight="12dp"
+    android:paddingBottom="8dp">
+
+
+    <ImageView
+        android:id="@+id/login_et_lin_iv_icon"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:src="@mipmap/icon_login_name" />
+
+    <EditText
+        android:id="@+id/login_et_lin_et"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="10dp"
+        android:layout_weight="10"
+        android:background="@null"
+        android:hint="输入"
+        android:lines="1"
+        android:maxLength="18"
+        android:textColorHint="@color/gray_et_text"
+        android:textSize="@dimen/size_16" />
+
+    <TextView
+        android:id="@+id/login_et_lin_tv_code"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="6dp"
+        android:background="?attr/selectableItemBackgroundBorderless"
+        android:text="验证码"
+        android:textColor="@color/select_color_red_crimson"
+        android:textSize="@dimen/size_14" />
+</LinearLayout>

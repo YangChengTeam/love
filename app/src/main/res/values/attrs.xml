@@ -14,4 +14,10 @@
         <attr name="isAddIntervalTop" format="boolean" />
         <attr name="isAddIntervalBom" format="boolean" />
     </declare-styleable>
+    <declare-styleable name="LoginEditTextLin">
+        <attr name="textHintLoginEt" format="string" />
+        <attr name="iconSrcLoginEt" format="reference" />
+        <attr name="isShowCodeLoginEt" format="boolean" />
+        <attr name="maxLengthLoginEt" format="integer" />
+    </declare-styleable>
 </resources>

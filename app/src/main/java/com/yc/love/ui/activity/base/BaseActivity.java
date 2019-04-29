@@ -10,6 +10,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.Window;
 import android.view.WindowManager;
+import android.widget.Toast;
 
 /**
  * Created by mayn on 2019/4/25.
@@ -17,6 +18,11 @@ import android.view.WindowManager;
 
 public abstract class BaseActivity extends AppCompatActivity {
 
+
+
+    public void showToastShort(String des){
+        Toast.makeText(this,des,Toast.LENGTH_SHORT).show();
+    }
 
     /**
      * 侵入状态栏

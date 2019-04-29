@@ -61,6 +61,7 @@
         android:src="@mipmap/main_item_open_vip" />
 
     <com.yc.love.ui.view.MainMyItemLin
+        android:id="@+id/main_t4_ll_item_01"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         app:imgSrc="@mipmap/main_icon_my_01"
@@ -68,6 +69,7 @@
         app:textNameMyItem="我的收藏" />
 
     <com.yc.love.ui.view.MainMyItemLin
+        android:id="@+id/main_t4_ll_item_02"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         app:imgSrc="@mipmap/main_icon_my_02"
@@ -76,12 +78,14 @@
         app:textNameMyItem="使用帮助" />
 
     <com.yc.love.ui.view.MainMyItemLin
+        android:id="@+id/main_t4_ll_item_03"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         app:imgSrc="@mipmap/main_icon_my_03"
         app:textNameMyItem="客服反馈" />
 
     <com.yc.love.ui.view.MainMyItemLin
+        android:id="@+id/main_t4_ll_item_04"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         app:imgSrc="@mipmap/main_icon_my_04"

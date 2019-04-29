@@ -7,6 +7,8 @@
     <color name="black">#000</color>
     <color name="red">#f00</color>
     <color name="gray">#55000000</color>
+    <color name="gray_et_gb">#f8f8f8</color>
+    <color name="gray_et_text">#999999</color>
 
     <color name="xiaofeng_orange">#ff8200</color>
     <color name="white">#FFFFFF</color>
@@ -17,4 +19,25 @@
     <color name="gray_loading_03">#eaeaea</color>
     <color name="red_crimson">#fa4a65</color>
     <color name="red_crimson_66">#66fa4a65</color>
+    <color name="red_crimson_login_start">#ff6a9a</color>
+    <color name="red_crimson_login_center">#ff6e89</color>
+    <color name="red_crimson_login_end">#fe7c7c</color>
+    <color name="red_crimson_login_btn_start">#fe9276</color>
+    <color name="red_crimson_login_btn_center">#fe748c</color>
+    <color name="red_crimson_login_btn_end">#ff54a4</color>
+    <color name="red_crimson_login_btn_start_s">#88fe9276</color>
+    <color name="red_crimson_login_btn_center_s">#88fe748c</color>
+    <color name="red_crimson_login_btn_end_s">#88ff54a4</color>
+   <!-- <color name="red_crimson_login_card_start">#11fe9276</color>
+    <color name="red_crimson_login_card_center">#11fe748c</color>
+    <color name="red_crimson_login_card_end">#11ff54a4</color>-->
+    <color name="red_crimson_card_back">#fff0f1</color>
+
+
+    <color name="red_crimson_card_01">#22ffdeea</color>
+    <color name="red_crimson_card_02">#22ffe1e7</color>
+    <color name="red_crimson_card_03">#22ffdaed</color>
+    <color name="red_crimson_card_04">#11ffe7eb</color>
+
+    <color name="black_extreme_thin">#119b9b9b</color>
 </resources>
