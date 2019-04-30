@@ -9,11 +9,9 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.yc.love.R;
-import com.yc.love.ui.activity.FruitActivity;
-import com.yc.love.ui.activity.IdCorrelationActivity;
-import com.yc.love.ui.activity.RecyclerViewActivity;
+import com.yc.love.ui.activity.FruitSlidingActivity;
+import com.yc.love.ui.activity.IdCorrelationSlidingActivity;
 import com.yc.love.ui.frament.base.BaseMainFragment;
-import com.yc.love.ui.view.LoadingDialog;
 
 /**
  * Created by mayn on 2019/4/23.
@@ -44,28 +42,17 @@ public class MainT4Fragment extends BaseMainFragment {
         llItem01.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-//
+                IdCorrelationSlidingActivity.startIdCorrelationActivity(mMainActivity, IdCorrelationSlidingActivity.ID_CORRELATION_STATE_LOGIN);
             }
         });
         llItem02.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                startActivity(new Intent(mMainActivity, FruitActivity.class));
+                startActivity(new Intent(mMainActivity, FruitSlidingActivity.class));
             }
         });
 
-        AlertDialog alertDialog = new AlertDialog.Builder(mMainActivity).create();
-        alertDialog.setTitle("提示");
-        alertDialog.setMessage("您还未登录，请先登录");
-        alertDialog.setButton(DialogInterface.BUTTON_POSITIVE, "确定", new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialogInterface, int i) {
-                IdCorrelationActivity.startIdCorrelationActivity(mMainActivity, IdCorrelationActivity.ID_CORRELATION_STATE_LOGIN);
-            }
-        });
-        DialogInterface.OnClickListener listent=null;
-        alertDialog.setButton(DialogInterface.BUTTON_NEGATIVE,"取消",listent);
-        alertDialog.show();
+
     }
 
     @Override
@@ -74,21 +61,18 @@ public class MainT4Fragment extends BaseMainFragment {
     }
 
     private void isCanLoadData() {
-       /* final LoadingDialog loadingView = new LoadingDialog(mMainActivity);
-        loadingView.showLoading();
-        tvName.postDelayed(new Runnable() {
+        AlertDialog alertDialog = new AlertDialog.Builder(mMainActivity).create();
+        alertDialog.setTitle("提示");
+        alertDialog.setMessage("您还未登录，请先登录");
+        alertDialog.setButton(DialogInterface.BUTTON_POSITIVE, "确定", new DialogInterface.OnClickListener() {
             @Override
-            public void run() {
-                tvName.setText(getClass().getName());
-                loadingView.dismissLoading();
+            public void onClick(DialogInterface dialogInterface, int i) {
+                IdCorrelationSlidingActivity.startIdCorrelationActivity(mMainActivity, IdCorrelationSlidingActivity.ID_CORRELATION_STATE_LOGIN);
             }
-        }, 400);
+        });
+        DialogInterface.OnClickListener listent = null;
+        alertDialog.setButton(DialogInterface.BUTTON_NEGATIVE, "取消", listent);
+        alertDialog.show();
 
-        tvName.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                startActivity(new Intent(mMainActivity, RecyclerViewActivity.class));
-            }
-        });*/
     }
 }

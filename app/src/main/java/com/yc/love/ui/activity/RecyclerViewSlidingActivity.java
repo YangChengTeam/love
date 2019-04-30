@@ -15,12 +15,12 @@ import com.yc.love.adaper.rv.holder.BaseViewHolder;
 import com.yc.love.adaper.rv.holder.StringBeanViewHolder;
 import com.yc.love.adaper.rv.holder.TitleT1ViewHolder;
 import com.yc.love.model.bean.StringBean;
-import com.yc.love.ui.activity.base.SlidingBaseActivity;
+import com.yc.love.ui.activity.base.BaseSlidingActivity;
 
 import java.util.ArrayList;
 import java.util.List;
 
-public class RecyclerViewActivity extends SlidingBaseActivity {
+public class RecyclerViewSlidingActivity extends BaseSlidingActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -52,12 +52,12 @@ public class RecyclerViewActivity extends SlidingBaseActivity {
             @Override
             public BaseViewHolder getHolder(ViewGroup parent) {
 
-                return new StringBeanViewHolder(RecyclerViewActivity.this, recyclerViewItemListener, parent);
+                return new StringBeanViewHolder(RecyclerViewSlidingActivity.this, recyclerViewItemListener, parent);
             }
 
             @Override
             public BaseViewHolder getTitleHolder(ViewGroup parent) {
-                return new TitleT1ViewHolder(RecyclerViewActivity.this, null, parent);
+                return new TitleT1ViewHolder(RecyclerViewSlidingActivity.this, null, parent);
             }
         };
         recyclerView.setAdapter(adapter);

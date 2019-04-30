@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical">
+
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="10dp"
+        android:background="@color/love_background" />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/white"
+        android:gravity="center_vertical"
+        android:orientation="horizontal"
+        android:paddingLeft="12dp"
+        android:paddingTop="10dp"
+        android:paddingBottom="2dp">
+
+        <ImageView
+            android:layout_width="5dp"
+            android:layout_height="14dp"
+            android:src="@drawable/shape_icon_red_crimson" />
+
+        <TextView
+            android:id="@+id/item_t3item_title_tv_name"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:paddingLeft="10dp"
+            android:text="55555"
+            android:textColor="@color/black"
+            android:textSize="@dimen/size_16" />
+    </LinearLayout>
+</LinearLayout>

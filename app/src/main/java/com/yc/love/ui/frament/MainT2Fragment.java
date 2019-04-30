@@ -66,7 +66,7 @@ public class MainT2Fragment extends BaseMainFragment {
 
         ImageView imageView = new ImageView(mMainActivity);
 
-        mAdapter = new MainT2MoreItemAdapter<MainT2Bean>(stringBeans, recyclerView, imageView) {
+        mAdapter = new MainT2MoreItemAdapter<MainT2Bean>(stringBeans, recyclerView) {
             @Override
             public BaseViewHolder getHolder(ViewGroup parent) {
                 return new MainT2ViewHolder(mMainActivity, recyclerViewItemListener, parent);

@@ -4,8 +4,11 @@ import android.app.Activity;
 import android.content.Context;
 import android.graphics.Color;
 import android.os.Build;
+import android.os.Bundle;
+import android.os.PersistableBundle;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.Window;
@@ -19,9 +22,14 @@ import android.widget.Toast;
 public abstract class BaseActivity extends AppCompatActivity {
 
 
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        Log.d("ClassName", "onCreate: ClassName " + getClass().getName());
+    }
 
-    public void showToastShort(String des){
-        Toast.makeText(this,des,Toast.LENGTH_SHORT).show();
+    public void showToastShort(String des) {
+        Toast.makeText(this, des, Toast.LENGTH_SHORT).show();
     }
 
     /**
@@ -38,6 +46,45 @@ public abstract class BaseActivity extends AppCompatActivity {
             getWindow().setStatusBarColor(Color.TRANSPARENT);
         }
         getSupportActionBar().hide();
+    }
+
+    /**
+     * 谷歌原生方式改变状态栏文字颜色
+     *
+     * @param dark 一旦用谷歌原生设置状态栏文字颜色的方法进行设置的话，因为一直会携带SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN这个flag，
+     *             那么默认界面会变成全屏模式，需要在根布局中设置FitsSystemWindows属性为true
+     */
+    public void setAndroidNativeLightStatusBar(boolean dark) {
+        View decor = getWindow().getDecorView();
+        if (dark) {
+            decor.setSystemUiVisibility(View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN | View.SYSTEM_UI_FLAG_LIGHT_STATUS_BAR);
+        } else {
+            decor.setSystemUiVisibility(View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN | View.SYSTEM_UI_FLAG_LAYOUT_STABLE);
+        }
+    }
+
+    public void setAndroidNativeLightStatusBar() {
+        setAndroidNativeLightStatusBar(true);
+    }
+
+    /**
+     * 获取状态栏高度 直接获取属性，通过getResource
+     *
+     * @return
+     */
+    public void setStateBarHeight(View viewBar) {
+        int result = 0;
+        int resourceId = this.getResources().getIdentifier("status_bar_height", "dimen", "android");
+        if (resourceId > 0) {
+            result = this.getResources().getDimensionPixelSize(resourceId);
+        }
+        if (result <= 0) {
+            return;
+        }
+        ViewGroup.LayoutParams layoutParams = viewBar.getLayoutParams();
+        layoutParams.height = result;
+        viewBar.setLayoutParams(layoutParams);
+        Log.d("ClassName", "setStateBarHeight: layoutParams.height " + layoutParams.height);
     }
 
 

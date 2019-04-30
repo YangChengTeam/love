@@ -2,21 +2,20 @@ package com.yc.love.ui.activity;
 
 import android.content.Context;
 import android.content.Intent;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.text.InputType;
 import android.util.Log;
 import android.view.View;
-import android.widget.EditText;
+import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.yc.love.R;
-import com.yc.love.ui.activity.base.SlidingBaseActivity;
+import com.yc.love.ui.activity.base.BaseSlidingActivity;
 import com.yc.love.ui.view.LoginEditTextLin;
 
-public class IdCorrelationActivity extends SlidingBaseActivity implements View.OnClickListener {
+public class IdCorrelationSlidingActivity extends BaseSlidingActivity implements View.OnClickListener {
 
     private LoginEditTextLin mEtCode;
 
@@ -55,7 +54,7 @@ public class IdCorrelationActivity extends SlidingBaseActivity implements View.O
     }
 
     public static void startIdCorrelationActivity(Context context, int state) {
-        Intent intent = new Intent(context, IdCorrelationActivity.class);
+        Intent intent = new Intent(context, IdCorrelationSlidingActivity.class);
         intent.putExtra("state", state);
         context.startActivity(intent);
     }
@@ -87,6 +86,7 @@ public class IdCorrelationActivity extends SlidingBaseActivity implements View.O
 
 
     private void initViews() {
+        View viewBar = findViewById(R.id.id_correlation_view_bar);
         ImageView ivBack = findViewById(R.id.id_correlation_iv_back);
         mTvTitle = findViewById(R.id.id_correlation_tv_title);
         mTvSwitch = findViewById(R.id.id_correlation_tv_switch);
@@ -122,6 +122,8 @@ public class IdCorrelationActivity extends SlidingBaseActivity implements View.O
         tvProtocol.setOnClickListener(this);
 
         mEtCode.setOnClickEtCodeListent(clickEtCodeListent);
+
+        setStateBarHeight(viewBar);
     }
 
     private LoginEditTextLin.OnClickEtCodeListent clickEtCodeListent = new LoginEditTextLin.OnClickEtCodeListent() {
@@ -141,11 +143,11 @@ public class IdCorrelationActivity extends SlidingBaseActivity implements View.O
             case R.id.id_correlation_tv_switch:
                 switch (mInitentState) {
                     case ID_CORRELATION_STATE_LOGIN:
-                        IdCorrelationActivity.startIdCorrelationActivity(IdCorrelationActivity.this, ID_CORRELATION_STATE_REGISTER);
+                        IdCorrelationSlidingActivity.startIdCorrelationActivity(IdCorrelationSlidingActivity.this, ID_CORRELATION_STATE_REGISTER);
                         break;
                     case ID_CORRELATION_STATE_REGISTER:
                     case ID_CORRELATION_STATE_SEEK:
-                        IdCorrelationActivity.startIdCorrelationActivity(IdCorrelationActivity.this, ID_CORRELATION_STATE_LOGIN);
+                        IdCorrelationSlidingActivity.startIdCorrelationActivity(IdCorrelationSlidingActivity.this, ID_CORRELATION_STATE_LOGIN);
                         break;
                 }
                 break;
@@ -156,14 +158,14 @@ public class IdCorrelationActivity extends SlidingBaseActivity implements View.O
                 showToastShort("protocol");
                 break;
             case R.id.id_correlation_tv_register:
-                IdCorrelationActivity.startIdCorrelationActivity(IdCorrelationActivity.this, ID_CORRELATION_STATE_REGISTER);
+                IdCorrelationSlidingActivity.startIdCorrelationActivity(IdCorrelationSlidingActivity.this, ID_CORRELATION_STATE_REGISTER);
                 break;
             case R.id.id_correlation_tv_keep_pwd_check:
                 mIsKeepPwd = !mIsKeepPwd;
                 changChecked(mIsKeepPwd);
                 break;
             case R.id.id_correlation_tv_keep_pwd_seek:
-                IdCorrelationActivity.startIdCorrelationActivity(IdCorrelationActivity.this, ID_CORRELATION_STATE_REGISTER);
+                IdCorrelationSlidingActivity.startIdCorrelationActivity(IdCorrelationSlidingActivity.this, ID_CORRELATION_STATE_REGISTER);
                 break;
         }
     }

@@ -1,5 +1,6 @@
 package com.yc.love.ui.frament;
 
+import android.content.Intent;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.OrientationHelper;
@@ -19,6 +20,7 @@ import com.yc.love.adaper.rv.holder.ProgressBarViewHolder;
 import com.yc.love.adaper.rv.holder.StringBeanViewHolder;
 import com.yc.love.adaper.rv.holder.TitleT1ViewHolder;
 import com.yc.love.model.bean.StringBean;
+import com.yc.love.ui.activity.LoveHealActivity;
 import com.yc.love.ui.frament.base.BaseMainFragment;
 
 import java.util.ArrayList;
@@ -72,10 +74,20 @@ public class MainT1Fragment extends BaseMainFragment {
             @Override
             public BaseViewHolder getTitleHolder(ViewGroup parent) {
                 TitleT1ViewHolder titleT1ViewHolder = new TitleT1ViewHolder(mMainActivity, null, parent);
-                titleT1ViewHolder.setOnClickShareListent(new TitleT1ViewHolder.OnClickShareListent() {
+                titleT1ViewHolder.setOnClickShareListent(new TitleT1ViewHolder.OnClickMainT1TitleListent() {
                     @Override
                     public void clickShareListent() {
                         Toast.makeText(mMainActivity, "clickShare", Toast.LENGTH_SHORT).show();
+                    }
+
+                    @Override
+                    public void clickIvModule02Listent() {
+                        startActivity(new Intent(mMainActivity,LoveHealActivity.class));
+                    }
+
+                    @Override
+                    public void clickIvModule03Listent() {
+                        Toast.makeText(mMainActivity, "clickIvModule03", Toast.LENGTH_SHORT).show();
                     }
                 });
                 return titleT1ViewHolder;

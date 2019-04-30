@@ -15,7 +15,7 @@ import java.lang.reflect.Field;
  * Created by mayn on 2019/4/25.
  */
 
-public class SlidingBaseActivity extends BaseActivity  implements SlidingPaneLayout.PanelSlideListener {
+public class BaseSlidingActivity extends BaseActivity  implements SlidingPaneLayout.PanelSlideListener {
 
 //    public final static String TAG = BaseActivity.class.getCanonicalName();
     public final static String TAG = "mylog";

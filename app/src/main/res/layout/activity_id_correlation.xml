@@ -6,9 +6,10 @@
     android:layout_height="match_parent"
     android:background="@drawable/shape_bg_login_red_crimson"
     android:orientation="vertical"
-    tools:context=".ui.activity.IdCorrelationActivity">
+    tools:context=".ui.activity.IdCorrelationSlidingActivity">
 
     <View
+        android:id="@+id/id_correlation_view_bar"
         android:layout_width="match_parent"
         android:layout_height="25dp" />
 

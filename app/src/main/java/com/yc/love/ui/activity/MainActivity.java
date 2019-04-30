@@ -1,5 +1,6 @@
 package com.yc.love.ui.activity;
 
+import android.app.Activity;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
@@ -21,8 +22,9 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        //侵入状态栏
-        invadeStatusBar();
+
+        invadeStatusBar(); //侵入状态栏
+        setAndroidNativeLightStatusBar(); //状态栏字体颜色改变
 
 //        setStatusBarFullTransparent();
 //        setFitSystemWindow(false);
@@ -105,4 +107,6 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
         tv_icon.setCompoundDrawablesWithIntrinsicBounds(null, top22, null, null);
         tv_icon.setTextColor(getResources().getColor(R.color.black));
     }
+
+
 }
