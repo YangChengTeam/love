@@ -20,7 +20,6 @@ import java.util.List;
 public abstract class MainT1MoreItemAdapter<T> extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
 
     private final List<T> mPersonList;
-    private final ImageView ll_toolbar;
     private RecyclerView mRecyclerView;
     private static final int VIEW_ITEM = 0;
     private static final int VIEW_PROG = 1;
@@ -31,10 +30,9 @@ public abstract class MainT1MoreItemAdapter<T> extends RecyclerView.Adapter<Recy
     //当前滚动的position下面最小的items的临界值
 //    private int visibleThreshold = 5;
 
-    public MainT1MoreItemAdapter(List<T> personList, RecyclerView recyclerView, ImageView ll_toolbar) {
+    public MainT1MoreItemAdapter(List<T> personList, RecyclerView recyclerView) {
         this.mPersonList = personList;
         this.mRecyclerView = recyclerView;
-        this.ll_toolbar = ll_toolbar;
         addOnScrollListenerPacked();
     }
 

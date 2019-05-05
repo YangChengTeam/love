@@ -2,7 +2,6 @@ package com.yc.love.ui.activity.base;
 
 import android.os.Bundle;
 import android.support.v4.widget.SlidingPaneLayout;
-import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.FrameLayout;
@@ -18,10 +17,10 @@ import java.lang.reflect.Field;
 public class BaseSlidingActivity extends BaseActivity  implements SlidingPaneLayout.PanelSlideListener {
 
 //    public final static String TAG = BaseActivity.class.getCanonicalName();
-    public final static String TAG = "mylog";
+//    public final static String TAG = "mylog";
 
 
-    FrameLayout mContainerFl;
+//    FrameLayout mContainerFl;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         initSwipeBackFinish();

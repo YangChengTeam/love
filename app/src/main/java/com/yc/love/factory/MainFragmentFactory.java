@@ -2,10 +2,10 @@ package com.yc.love.factory;
 
 import android.support.v4.app.Fragment;
 
-import com.yc.love.ui.frament.MainT1Fragment;
-import com.yc.love.ui.frament.MainT2Fragment;
-import com.yc.love.ui.frament.MainT3Fragment;
-import com.yc.love.ui.frament.MainT4Fragment;
+import com.yc.love.ui.frament.main.MainT1Fragment;
+import com.yc.love.ui.frament.main.MainT2Fragment;
+import com.yc.love.ui.frament.main.MainT3Fragment;
+import com.yc.love.ui.frament.main.MainT4Fragment;
 
 import java.util.HashMap;
 import java.util.Map;

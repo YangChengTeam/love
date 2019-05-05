@@ -1,15 +1,15 @@
-package com.yc.love.ui.frament;
+package com.yc.love.ui.frament.main;
 
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.support.v7.app.AlertDialog;
 import android.view.View;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.yc.love.R;
-import com.yc.love.ui.activity.FruitSlidingActivity;
+import com.yc.love.ui.activity.BecomeVipActivity;
 import com.yc.love.ui.activity.IdCorrelationSlidingActivity;
 import com.yc.love.ui.frament.base.BaseMainFragment;
 
@@ -17,7 +17,7 @@ import com.yc.love.ui.frament.base.BaseMainFragment;
  * Created by mayn on 2019/4/23.
  */
 
-public class MainT4Fragment extends BaseMainFragment {
+public class MainT4Fragment extends BaseMainFragment implements View.OnClickListener {
     private TextView tvName;
 
 
@@ -29,30 +29,22 @@ public class MainT4Fragment extends BaseMainFragment {
 
     @Override
     protected void initViews() {
-//        tvName = rootView.findViewById(R.id.main_t4_tv_name);
+        View viewBar = rootView.findViewById(R.id.main_t4_view_bar);
         TextView tvBtnInfo = rootView.findViewById(R.id.main_t4_tv_btn_info);
+        ImageView ivVip = rootView.findViewById(R.id.main_t4_ll_iv_vip);
         LinearLayout llItem01 = rootView.findViewById(R.id.main_t4_ll_item_01);
         LinearLayout llItem02 = rootView.findViewById(R.id.main_t4_ll_item_02);
-        tvBtnInfo.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Toast.makeText(mMainActivity, "tvBtnInfo", Toast.LENGTH_SHORT).show();
-            }
-        });
-        llItem01.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                IdCorrelationSlidingActivity.startIdCorrelationActivity(mMainActivity, IdCorrelationSlidingActivity.ID_CORRELATION_STATE_LOGIN);
-            }
-        });
-        llItem02.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                startActivity(new Intent(mMainActivity, FruitSlidingActivity.class));
-            }
-        });
+        LinearLayout llItem03 = rootView.findViewById(R.id.main_t4_ll_item_03);
+        LinearLayout llItem04 = rootView.findViewById(R.id.main_t4_ll_item_04);
 
+        tvBtnInfo.setOnClickListener(this);
+        ivVip.setOnClickListener(this);
+        llItem01.setOnClickListener(this);
+        llItem02.setOnClickListener(this);
+        llItem03.setOnClickListener(this);
+        llItem04.setOnClickListener(this);
 
+        mMainActivity.setStateBarHeight(viewBar);
     }
 
     @Override
@@ -74,5 +66,29 @@ public class MainT4Fragment extends BaseMainFragment {
         alertDialog.setButton(DialogInterface.BUTTON_NEGATIVE, "取消", listent);
         alertDialog.show();
 
+    }
+
+    @Override
+    public void onClick(View v) {
+        switch (v.getId()) {
+            case R.id.main_t4_tv_btn_info:
+                IdCorrelationSlidingActivity.startIdCorrelationActivity(mMainActivity, IdCorrelationSlidingActivity.ID_CORRELATION_STATE_LOGIN);
+                break;
+            case R.id.main_t4_ll_iv_vip:
+                mMainActivity.startActivity(new Intent(mMainActivity, BecomeVipActivity.class));
+                break;
+            case R.id.main_t4_ll_item_01:
+
+                break;
+            case R.id.main_t4_ll_item_02:
+
+                break;
+            case R.id.main_t4_ll_item_03:
+
+                break;
+            case R.id.main_t4_ll_item_04:
+
+                break;
+        }
     }
 }

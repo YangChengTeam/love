@@ -1,4 +1,4 @@
-package com.yc.love.ui.frament;
+package com.yc.love.ui.frament.main;
 
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
@@ -8,7 +8,6 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ImageView;
 import android.widget.Toast;
 
 import com.yc.love.R;
@@ -17,10 +16,9 @@ import com.yc.love.adaper.rv.base.RecyclerViewItemListener;
 import com.yc.love.adaper.rv.holder.BaseViewHolder;
 import com.yc.love.adaper.rv.holder.ProgressBarViewHolder;
 import com.yc.love.adaper.rv.holder.MainT2ViewHolder;
-import com.yc.love.adaper.rv.holder.TitleT2ViewHolder;
+import com.yc.love.adaper.rv.holder.MainT2TitleViewHolder;
 import com.yc.love.adaper.rv.holder.VipViewHolder;
 import com.yc.love.model.bean.MainT2Bean;
-import com.yc.love.model.bean.StringBean;
 import com.yc.love.ui.frament.base.BaseMainFragment;
 
 import java.util.ArrayList;
@@ -64,7 +62,6 @@ public class MainT2Fragment extends BaseMainFragment {
             }
         }
 
-        ImageView imageView = new ImageView(mMainActivity);
 
         mAdapter = new MainT2MoreItemAdapter<MainT2Bean>(stringBeans, recyclerView) {
             @Override
@@ -74,14 +71,14 @@ public class MainT2Fragment extends BaseMainFragment {
 
             @Override
             public BaseViewHolder getTitleHolder(ViewGroup parent) {
-                TitleT2ViewHolder titleT2ViewHolder = new TitleT2ViewHolder(mMainActivity, null, parent);
-                titleT2ViewHolder.setOnClickShareListent(new TitleT2ViewHolder.OnClickShareListent() {
+                MainT2TitleViewHolder mainT2TitleViewHolder = new MainT2TitleViewHolder(mMainActivity, null, parent);
+                mainT2TitleViewHolder.setOnClickShareListent(new MainT2TitleViewHolder.OnClickShareListent() {
                     @Override
                     public void clickShareListent() {
                         Toast.makeText(mMainActivity, "clickShare", Toast.LENGTH_SHORT).show();
                     }
                 });
-                return titleT2ViewHolder;
+                return mainT2TitleViewHolder;
             }
 
             @Override

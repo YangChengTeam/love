@@ -30,8 +30,6 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
 //        setFitSystemWindow(false);
 
         initView();
-
-        //TODO 点击tab水波纹效果
     }
 
     private void initView() {

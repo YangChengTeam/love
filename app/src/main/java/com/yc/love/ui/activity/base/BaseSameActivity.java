@@ -20,6 +20,7 @@ public abstract class BaseSameActivity extends BaseSlidingActivity implements Vi
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        initIntentData();
         super.setContentView(R.layout.activity_base_same);
         if (!isTaskRoot()) {
             /* If this is not the root activity,finish it.*/
@@ -34,6 +35,7 @@ public abstract class BaseSameActivity extends BaseSlidingActivity implements Vi
         invadeStatusBar(); //侵入状态栏
         setAndroidNativeLightStatusBar(); //状态栏字体颜色改变
     }
+
 
     @Override
     public void setContentView(int layoutId) {
@@ -55,7 +57,11 @@ public abstract class BaseSameActivity extends BaseSlidingActivity implements Vi
         } else {
             rlTitleCon.setVisibility(View.VISIBLE);
         }
-        setStateBarHeight(viewBar);
+        if (hindActivityBar()) {
+            viewBar.setVisibility(View.GONE);
+        } else {
+            setStateBarHeight(viewBar);
+        }
 
         tvTitle.setText(offerActivityTitle());
         tvSub.setText(offerActivitySubTitle());
@@ -70,11 +76,19 @@ public abstract class BaseSameActivity extends BaseSlidingActivity implements Vi
         return false;
     }
 
+    protected boolean hindActivityBar() {
+        return false;
+    }
+
     protected String offerActivitySubTitle() {
         return "";
     }
 
     protected abstract String offerActivityTitle();
+
+    protected void initIntentData() {
+
+    }
 
     @Override
     public void onClick(View v) {

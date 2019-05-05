@@ -1,4 +1,4 @@
-package com.yc.love.ui.frament;
+package com.yc.love.ui.frament.main;
 
 import android.widget.TextView;
 

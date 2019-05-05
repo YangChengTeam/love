@@ -29,9 +29,9 @@
     <color name="red_crimson_login_btn_start_s">#88fe9276</color>
     <color name="red_crimson_login_btn_center_s">#88fe748c</color>
     <color name="red_crimson_login_btn_end_s">#88ff54a4</color>
-   <!-- <color name="red_crimson_login_card_start">#11fe9276</color>
-    <color name="red_crimson_login_card_center">#11fe748c</color>
-    <color name="red_crimson_login_card_end">#11ff54a4</color>-->
+    <!-- <color name="red_crimson_login_card_start">#11fe9276</color>
+     <color name="red_crimson_login_card_center">#11fe748c</color>
+     <color name="red_crimson_login_card_end">#11ff54a4</color>-->
     <color name="red_crimson_card_back">#fff0f1</color>
 
 
@@ -39,6 +39,11 @@
     <color name="red_crimson_card_02">#22ffe1e7</color>
     <color name="red_crimson_card_03">#22ffdaed</color>
     <color name="red_crimson_card_04">#11ffe7eb</color>
+
+    <color name="gray_brim_gray_04">#f3f6fa</color>
+    <color name="gray_brim_gray_03">#88f4f7fb</color>
+    <color name="gray_brim_gray_02">#44f7f9fc</color>
+    <color name="gray_brim_gray_01">#11fcfdfe</color>
 
     <color name="red_gray">#faf6f8</color>
     <color name="red_gray_s">#88faf6f8</color>

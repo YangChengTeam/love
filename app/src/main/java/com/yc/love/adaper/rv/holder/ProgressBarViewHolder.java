@@ -8,9 +8,7 @@ import android.widget.TextView;
 import com.yc.love.R;
 
 
-/**
- * Created by Administrator on 2017/9/12.
- */
+
 
 public class ProgressBarViewHolder extends RecyclerView.ViewHolder {
 

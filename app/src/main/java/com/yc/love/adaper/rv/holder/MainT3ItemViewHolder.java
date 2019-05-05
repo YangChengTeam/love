@@ -11,9 +11,7 @@ import com.yc.love.model.bean.LoveHealBean;
 import com.yc.love.model.bean.MainT3Bean;
 
 
-/**
- * Created by Administrator on 2017/9/12.
- */
+
 
 public class MainT3ItemViewHolder extends BaseViewHolder<MainT3Bean> {
 

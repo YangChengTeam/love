@@ -1,4 +1,4 @@
-package com.yc.love.ui.frament;
+package com.yc.love.ui.frament.main;
 
 import android.content.Intent;
 import android.support.v7.widget.DefaultItemAnimator;
@@ -21,6 +21,7 @@ import com.yc.love.adaper.rv.holder.StringBeanViewHolder;
 import com.yc.love.adaper.rv.holder.TitleT1ViewHolder;
 import com.yc.love.model.bean.StringBean;
 import com.yc.love.ui.activity.LoveHealActivity;
+import com.yc.love.ui.activity.LoveHealingActivity;
 import com.yc.love.ui.frament.base.BaseMainFragment;
 
 import java.util.ArrayList;
@@ -36,8 +37,8 @@ public class MainT1Fragment extends BaseMainFragment {
     private boolean loadMoreEnd;
     private boolean loadDataEnd;
     private boolean showProgressBar = false;
-    private MainT1MoreItemAdapter mAdapter;
     private int num = 10;
+    private MainT1MoreItemAdapter mAdapter;
     private ProgressBarViewHolder progressBarViewHolder;
 
     //    private TextView tvName;
@@ -63,9 +64,7 @@ public class MainT1Fragment extends BaseMainFragment {
             stringBeans.add(new StringBean("name " + i));
         }
 
-        ImageView imageView = new ImageView(mMainActivity);
-
-        mAdapter = new MainT1MoreItemAdapter<StringBean>(stringBeans, recyclerView, imageView) {
+        mAdapter = new MainT1MoreItemAdapter<StringBean>(stringBeans, recyclerView) {
             @Override
             public BaseViewHolder getHolder(ViewGroup parent) {
                 return new StringBeanViewHolder(mMainActivity, recyclerViewItemListener, parent);
@@ -83,11 +82,13 @@ public class MainT1Fragment extends BaseMainFragment {
                     @Override
                     public void clickIvModule02Listent() {
                         startActivity(new Intent(mMainActivity,LoveHealActivity.class));
+
                     }
 
                     @Override
                     public void clickIvModule03Listent() {
-                        Toast.makeText(mMainActivity, "clickIvModule03", Toast.LENGTH_SHORT).show();
+                        startActivity(new Intent(mMainActivity,LoveHealingActivity.class));
+//                        Toast.makeText(mMainActivity, "clickIvModule03", Toast.LENGTH_SHORT).show();
                     }
                 });
                 return titleT1ViewHolder;

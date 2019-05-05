@@ -21,7 +21,7 @@ import java.util.List;
 
 
 /**
- * 恋爱药方
+ * 恋爱妙方
  */
 
 public class LoveHealActivity extends BaseSameActivity {

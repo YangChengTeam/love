@@ -9,9 +9,7 @@ import com.yc.love.adaper.rv.base.RecyclerViewItemListener;
 import com.yc.love.model.bean.MainT2Bean;
 
 
-/**
- * Created by Administrator on 2017/9/12.
- */
+
 
 public class MainT2ViewHolder extends BaseViewHolder<MainT2Bean> {
 

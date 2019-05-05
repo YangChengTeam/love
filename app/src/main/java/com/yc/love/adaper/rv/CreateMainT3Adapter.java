@@ -7,12 +7,9 @@ import android.support.v7.widget.RecyclerView;
 import android.view.ViewGroup;
 
 import com.yc.love.adaper.rv.holder.BaseViewHolder;
-import com.yc.love.adaper.rv.holder.LoveHealItemViewHolder;
-import com.yc.love.adaper.rv.holder.LoveHealTitleViewHolder;
 import com.yc.love.adaper.rv.holder.MainT3ItemTitleViewHolder;
 import com.yc.love.adaper.rv.holder.MainT3ItemViewHolder;
 import com.yc.love.adaper.rv.holder.MainT3TitleViewHolder;
-import com.yc.love.model.bean.LoveHealBean;
 import com.yc.love.model.bean.MainT3Bean;
 
 import java.util.List;

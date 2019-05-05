@@ -1,30 +1,21 @@
-package com.yc.love.ui.frament;
+package com.yc.love.ui.frament.main;
 
-import android.content.Intent;
-import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
 import com.yc.love.R;
-import com.yc.love.adaper.rv.CreateAdapter;
 import com.yc.love.adaper.rv.CreateMainT3Adapter;
 import com.yc.love.adaper.rv.base.RecyclerViewItemListener;
 import com.yc.love.adaper.rv.holder.BaseViewHolder;
-import com.yc.love.adaper.rv.holder.LoveHealItemViewHolder;
-import com.yc.love.adaper.rv.holder.LoveHealTitleViewHolder;
 import com.yc.love.adaper.rv.holder.MainT3ItemTitleViewHolder;
 import com.yc.love.adaper.rv.holder.MainT3ItemViewHolder;
 import com.yc.love.adaper.rv.holder.MainT3TitleViewHolder;
-import com.yc.love.model.bean.LoveHealBean;
 import com.yc.love.model.bean.MainT3Bean;
-import com.yc.love.ui.activity.FruitSlidingActivity;
-import com.yc.love.ui.activity.LoveDialogueActivity;
-import com.yc.love.ui.activity.LoveHealActivity;
+import com.yc.love.ui.activity.LoveByStagesActivity;
+import com.yc.love.ui.activity.LoveIntroductionActivity;
 import com.yc.love.ui.frament.base.BaseMainFragment;
-import com.yc.love.ui.view.LoadingDialog;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -95,13 +86,39 @@ public class MainT3Fragment extends BaseMainFragment {
 
             @Override
             public BaseViewHolder getTitleHolder(ViewGroup parent) {
-                return new MainT3TitleViewHolder(mMainActivity, null, parent);
+                MainT3TitleViewHolder mainT3TitleViewHolder = new MainT3TitleViewHolder(mMainActivity, null, parent);
+                mainT3TitleViewHolder.setOnClickTitleIconListener(new MainT3TitleViewHolder.OnClickTitleIconListener() {
+                    @Override
+                    public void clickTitleIcon01() {
+                        LoveByStagesActivity.startLoveByStagesActivity(mMainActivity, "单身期");
+                    }
+
+                    @Override
+                    public void clickTitleIcon02() {
+                        LoveByStagesActivity.startLoveByStagesActivity(mMainActivity, "追求期");
+                    }
+
+                    @Override
+                    public void clickTitleIcon03() {
+                        LoveByStagesActivity.startLoveByStagesActivity(mMainActivity, "热恋期");
+                    }
+
+                    @Override
+                    public void clickTitleIcon04() {
+                        LoveByStagesActivity.startLoveByStagesActivity(mMainActivity, "失恋期");
+                    }
+
+                    @Override
+                    public void clickTitleIcon05() {
+                        LoveByStagesActivity.startLoveByStagesActivity(mMainActivity, "婚后期");
+                    }
+                });
+                return mainT3TitleViewHolder;
             }
 
             @Override
             protected BaseViewHolder getItemTitleHolder(ViewGroup parent) {
                 return new MainT3ItemTitleViewHolder(mMainActivity, null, parent);
-//                return new LoveHealTitleViewHolder(LoveHealActivity.this, null, parent);
             }
         };
         mRecyclerView.setAdapter(mainT3Adapter);
@@ -110,6 +127,8 @@ public class MainT3Fragment extends BaseMainFragment {
     RecyclerViewItemListener recyclerViewItemListener = new RecyclerViewItemListener() {
         @Override
         public void onItemClick(int position) {
+            MainT3Bean mainT3Bean = mDatas.get(position);
+            LoveIntroductionActivity.startLoveIntroductionActivity(mMainActivity, mainT3Bean.name);
 //            LoveDialogueActivity.startLoveDialogueActivity(mMainActivity, mDatas.get(position).name);
         }
 

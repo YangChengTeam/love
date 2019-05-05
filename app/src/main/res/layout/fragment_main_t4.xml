@@ -4,7 +4,11 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical">
-
+    <View
+        android:id="@+id/main_t4_view_bar"
+        android:layout_width="match_parent"
+        android:layout_height="25dp"
+        android:background="@color/white" />
     <LinearLayout
         android:background="@color/white"
         android:layout_width="match_parent"
@@ -53,6 +57,7 @@
     </LinearLayout>
 
     <ImageView
+        android:id="@+id/main_t4_ll_iv_vip"
         android:background="@color/white"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"

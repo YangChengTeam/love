@@ -10,9 +10,7 @@ import com.yc.love.model.bean.LoveHealBean;
 import com.yc.love.model.bean.StringBean;
 
 
-/**
- * Created by Administrator on 2017/9/12.
- */
+
 
 public class LoveHealTitleViewHolder extends BaseViewHolder<LoveHealBean> {
 

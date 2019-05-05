@@ -9,9 +9,7 @@ import com.yc.love.adaper.rv.base.RecyclerViewItemListener;
 import com.yc.love.model.bean.StringBean;
 
 
-/**
- * Created by Administrator on 2017/9/12.
- */
+
 
 public class StringBeanViewHolder extends BaseViewHolder<StringBean> {
 

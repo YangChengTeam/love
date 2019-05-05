@@ -4,17 +4,13 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.ViewGroup;
-import android.widget.ImageView;
 
 import com.yc.love.adaper.rv.holder.BaseViewHolder;
 import com.yc.love.adaper.rv.holder.MainT2ViewHolder;
 import com.yc.love.adaper.rv.holder.ProgressBarViewHolder;
-import com.yc.love.adaper.rv.holder.StringBeanViewHolder;
-import com.yc.love.adaper.rv.holder.TitleT1ViewHolder;
-import com.yc.love.adaper.rv.holder.TitleT2ViewHolder;
+import com.yc.love.adaper.rv.holder.MainT2TitleViewHolder;
 import com.yc.love.adaper.rv.holder.VipViewHolder;
 import com.yc.love.model.bean.MainT2Bean;
-import com.yc.love.model.bean.StringBean;
 
 import java.util.List;
 
@@ -88,7 +84,7 @@ public abstract class MainT2MoreItemAdapter<T> extends RecyclerView.Adapter<Recy
 
     @Override
     public void onBindViewHolder(RecyclerView.ViewHolder holder, int position) {
-        if (holder instanceof TitleT2ViewHolder) {
+        if (holder instanceof MainT2TitleViewHolder) {
             ((BaseViewHolder) holder).bindData(mPersonList.get(position));
         } else if (holder instanceof VipViewHolder) {
             ((BaseViewHolder) holder).bindData(mPersonList.get(position));

@@ -1,0 +1,44 @@
+<layer-list xmlns:android="http://schemas.android.com/apk/res/android">
+    <!-- android:left="2px"
+                android:right="2px"
+                android:top="2px"-->
+    <item>
+        <shape android:shape="rectangle">
+            <padding android:bottom="4px" android:left="4px" android:right="4px" android:top="4px" />
+            <solid android:color="@color/gray_brim_gray_01" />
+            <corners android:radius="12dp" />
+        </shape>
+    </item>
+    <item>
+        <shape android:shape="rectangle">
+            <padding android:bottom="4px" android:left="4px" android:right="4px" android:top="4px" />
+            <solid android:color="@color/gray_brim_gray_02" />
+            <corners android:radius="12dp" />
+        </shape>
+    </item>
+    <item>
+        <shape android:shape="rectangle">
+            <padding android:bottom="4px" android:left="4px" android:right="4px" android:top="4px" />
+            <solid android:color="@color/gray_brim_gray_03" />
+            <corners android:radius="12dp" />
+        </shape>
+    </item>
+    <item>
+        <shape android:shape="rectangle">
+            <padding android:bottom="4px" android:left="4px" android:right="4px" android:top="4px" />
+            <solid android:color="@color/gray_brim_gray_04" />
+            <corners android:radius="12dp" />
+        </shape>
+    </item>
+    <item>
+        <shape android:shape="rectangle">
+            <corners android:radius="12dp" />
+            <solid android:color="@color/white" />
+            <padding
+                android:bottom="3px"
+                android:left="3px"
+                android:right="3px"
+                android:top="3px" />
+        </shape>
+    </item>
+</layer-list>

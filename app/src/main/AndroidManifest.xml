@@ -34,13 +34,16 @@
             android:name=".ui.activity.MainActivity"
             android:label="@string/app_name"
             android:theme="@style/AppTheme" />
-        <activity android:name=".ui.activity.FruitSlidingActivity" />
         <activity android:name=".ui.activity.RecyclerViewSlidingActivity" />
         <activity android:name=".ui.activity.Main4Activity" />
         <activity android:name=".ui.activity.IdCorrelationSlidingActivity" />
         <activity android:name=".ui.activity.LoveHealActivity" />
         <activity android:name=".ui.activity.LoveDialogueActivity" />
-        <activity android:name=".ui.activity.LoveHealingActivity"></activity>
+        <activity android:name=".ui.activity.LoveHealingActivity" />
+        <activity android:name=".ui.activity.LoveByStagesActivity" />
+        <activity android:name=".ui.activity.LoveUpDownPhotoActivity" />
+        <activity android:name=".ui.activity.LoveIntroductionActivity" />
+        <activity android:name=".ui.activity.BecomeVipActivity"></activity>
     </application>
 
 </manifest>

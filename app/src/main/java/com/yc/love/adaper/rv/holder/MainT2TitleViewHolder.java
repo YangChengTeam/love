@@ -16,12 +16,12 @@ import com.yc.love.model.bean.StringBean;
  * Created by mayn on 2019/4/26.
  */
 
-public class TitleT2ViewHolder extends BaseViewHolder<MainT2Bean> {
+public class MainT2TitleViewHolder extends BaseViewHolder<MainT2Bean> {
 
     private final Context context;
     private OnClickShareListent onClickShareListent;
 
-    public TitleT2ViewHolder(Context context, RecyclerViewItemListener listener, ViewGroup parent) {
+    public MainT2TitleViewHolder(Context context, RecyclerViewItemListener listener, ViewGroup parent) {
         super(context, parent, R.layout.recycler_view_item_title_t2_view, listener);   //一个类对应一个布局文件
         this.context = context;
     }
