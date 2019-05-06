@@ -35,6 +35,22 @@
     <color name="red_crimson_card_back">#fff0f1</color>
 
 
+    <color name="yellow_vip_text_mon_s">#543115</color>
+    <color name="yellow_vip_text_mon">#ddae52</color>
+    <color name="yellow_vip_text_tit">#6e4c2b</color>
+
+    <color name="yellow_vip_btn">#bf8d53</color>
+
+    <color name="yellow_vip_tv_pay_s">#bc875d</color>
+    <color name="yellow_vip_tv_pay">#ddae52</color>
+
+    <color name="yellow_vip_btn_start">#e9c98c</color>
+    <color name="yellow_vip_btn_center">#e5be75</color>
+    <color name="yellow_vip_btn_end">#e0b25c</color>
+    <color name="yellow_vip_btn_start_s">#88e9c98c</color>
+    <color name="yellow_vip_btn_center_s">#88e5be75</color>
+    <color name="yellow_vip_btn_end_s">#88e0b25c</color>
+
     <color name="red_crimson_card_01">#22ffdeea</color>
     <color name="red_crimson_card_02">#22ffe1e7</color>
     <color name="red_crimson_card_03">#22ffdaed</color>

@@ -9,7 +9,7 @@
     <View
         android:id="@+id/main_my_item_lin_view_line_top"
         android:layout_width="match_parent"
-        android:layout_height="12dp"
+        android:layout_height="10dp"
         android:background="@color/love_background" />
 
     <LinearLayout

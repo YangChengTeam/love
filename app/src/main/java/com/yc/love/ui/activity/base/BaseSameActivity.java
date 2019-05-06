@@ -17,6 +17,9 @@ import com.yc.love.R;
  */
 
 public abstract class BaseSameActivity extends BaseSlidingActivity implements View.OnClickListener {
+
+    private TextView mTvSub;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -50,7 +53,7 @@ public abstract class BaseSameActivity extends BaseSlidingActivity implements Vi
         RelativeLayout rlTitleCon = findViewById(R.id.activity_base_same_rl_title_con);
         ImageView ivBack = findViewById(R.id.activity_base_same_iv_back);
         TextView tvTitle = findViewById(R.id.activity_base_same_tv_title);
-        TextView tvSub = findViewById(R.id.activity_base_same_tv_sub);
+        mTvSub = findViewById(R.id.activity_base_same_tv_sub);
         boolean isHind = hindActivityTitle();
         if (isHind) {
             rlTitleCon.setVisibility(View.GONE);
@@ -64,10 +67,10 @@ public abstract class BaseSameActivity extends BaseSlidingActivity implements Vi
         }
 
         tvTitle.setText(offerActivityTitle());
-        tvSub.setText(offerActivitySubTitle());
+        mTvSub.setText(offerActivitySubTitle());
 
         ivBack.setOnClickListener(this);
-        tvSub.setOnClickListener(this);
+//        tvSub.setOnClickListener(this);
 
         linearLayout.addView(view, new ConstraintLayout.LayoutParams(ConstraintLayout.LayoutParams.MATCH_PARENT, ConstraintLayout.LayoutParams.MATCH_PARENT));
     }
@@ -82,6 +85,9 @@ public abstract class BaseSameActivity extends BaseSlidingActivity implements Vi
 
     protected String offerActivitySubTitle() {
         return "";
+    }
+    protected TextView offerActivitySubTitleView() {
+        return mTvSub;
     }
 
     protected abstract String offerActivityTitle();

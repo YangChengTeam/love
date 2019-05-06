@@ -13,6 +13,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.Window;
 import android.view.WindowManager;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.Toast;
 
 /**
@@ -83,6 +84,20 @@ public abstract class BaseActivity extends AppCompatActivity {
         }
         ViewGroup.LayoutParams layoutParams = viewBar.getLayoutParams();
         layoutParams.height = result;
+        viewBar.setLayoutParams(layoutParams);
+        Log.d("ClassName", "setStateBarHeight: layoutParams.height " + layoutParams.height);
+    }
+    public void setStateBarHeight(View viewBar,int addHeight) {
+        int result = 0;
+        int resourceId = this.getResources().getIdentifier("status_bar_height", "dimen", "android");
+        if (resourceId > 0) {
+            result = this.getResources().getDimensionPixelSize(resourceId);
+        }
+        if (result <= 0) {
+            return;
+        }
+        ViewGroup.LayoutParams layoutParams = viewBar.getLayoutParams();
+        layoutParams.height = result+addHeight;
         viewBar.setLayoutParams(layoutParams);
         Log.d("ClassName", "setStateBarHeight: layoutParams.height " + layoutParams.height);
     }
@@ -171,5 +186,12 @@ public abstract class BaseActivity extends AppCompatActivity {
             e.printStackTrace();
         }
         return statusHeight;
+    }
+
+    public void hindKeyboard(View view){
+       InputMethodManager inputMethodManager= (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
+       if(inputMethodManager!=null){
+           inputMethodManager.hideSoftInputFromWindow(view.getWindowToken(),0);
+       }
     }
 }

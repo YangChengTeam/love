@@ -6,11 +6,19 @@
     android:layout_height="match_parent"
     tools:context=".ui.activity.BecomeVipActivity">
 
-
-
     <android.support.v7.widget.RecyclerView
         android:id="@+id/become_vip_rv"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:background="@color/white" />
+
+    <LinearLayout
+        android:id="@+id/become_vip_ll_title_con"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
+
+        <include layout="@layout/layout_activity_title" />
+    </LinearLayout>
+
 </android.support.constraint.ConstraintLayout>

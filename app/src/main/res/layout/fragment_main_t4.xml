@@ -3,22 +3,26 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@color/love_background"
     android:orientation="vertical">
+
     <View
         android:id="@+id/main_t4_view_bar"
         android:layout_width="match_parent"
         android:layout_height="25dp"
         android:background="@color/white" />
+
     <LinearLayout
-        android:background="@color/white"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_gravity="center_vertical"
+        android:background="@color/white"
         android:orientation="horizontal"
         android:padding="12dp">
 
         <ImageView
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_height="match_parent"
             android:src="@mipmap/main_icon_default_head" />
 
         <LinearLayout
@@ -56,14 +60,36 @@
         </LinearLayout>
     </LinearLayout>
 
-    <ImageView
-        android:id="@+id/main_t4_ll_iv_vip"
-        android:background="@color/white"
-        android:layout_width="match_parent"
+    <RelativeLayout
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:paddingLeft="12dp"
-        android:paddingRight="12dp"
-        android:src="@mipmap/main_item_open_vip" />
+        android:background="@color/white"
+        android:paddingTop="12dp"
+        android:paddingBottom="6dp">
+
+        <ImageView
+            android:id="@+id/main_t4_ll_iv_vip"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@color/white"
+            android:src="@mipmap/main_item_open_vip" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentRight="true"
+            android:layout_marginTop="21dp"
+            android:layout_marginRight="48dp"
+            android:background="@drawable/shape_btn_vip_static_yellow"
+            android:paddingLeft="22dp"
+            android:paddingTop="4dp"
+            android:paddingRight="22dp"
+            android:paddingBottom="4dp"
+            android:text="去开通"
+            android:textColor="@color/white"
+            android:textSize="@dimen/size_14" />
+    </RelativeLayout>
+
 
     <com.yc.love.ui.view.MainMyItemLin
         android:id="@+id/main_t4_ll_item_01"

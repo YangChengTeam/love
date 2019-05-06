@@ -1,0 +1,172 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/love_background"
+    tools:context=".ui.activity.UserInfoActivity">
+
+
+    <RelativeLayout
+        android:id="@+id/user_info_rl_tit_con"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="35dp"
+        android:layout_marginBottom="35dp"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
+
+        <ImageView
+            android:id="@+id/user_info_iv_icon"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@mipmap/main_icon_default_head" />
+
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignRight="@+id/user_info_iv_icon"
+            android:layout_alignBottom="@+id/user_info_iv_icon"
+            android:src="@mipmap/icon_open_camera" />
+    </RelativeLayout>
+
+    <LinearLayout
+        android:id="@+id/user_info_ll_item_01"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="35dp"
+        android:background="@color/white"
+        android:orientation="horizontal"
+        android:paddingRight="12dp"
+        app:layout_constraintTop_toBottomOf="@+id/user_info_rl_tit_con">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_margin="12dp"
+            android:text="昵称"
+            android:textColor="@color/black"
+            android:textSize="@dimen/size_14" />
+
+        <EditText
+            android:id="@+id/user_info_et_name"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_vertical"
+            android:layout_marginLeft="10dp"
+            android:background="@null"
+            android:hint="请填写你要修改的昵称"
+            android:lines="1"
+            android:maxLength="18"
+            android:textColorHint="@color/gray_et_text"
+            android:textSize="@dimen/size_14" />
+
+    </LinearLayout>
+
+    <RelativeLayout
+        android:id="@+id/user_info_ll_rl_02"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
+        android:background="@color/white"
+        app:layout_constraintTop_toBottomOf="@+id/user_info_ll_item_01">
+
+        <LinearLayout
+            android:id="@+id/user_info_ll_item_02"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="?android:attr/selectableItemBackground"
+            android:gravity="center_vertical"
+            android:orientation="horizontal"
+            android:paddingRight="12dp">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_margin="12dp"
+                android:text="生日"
+                android:textColor="@color/black"
+                android:textSize="@dimen/size_14" />
+
+            <TextView
+                android:id="@+id/user_info_tv_date"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="10dp"
+                android:layout_weight="10"
+                android:text="2000-01-01"
+                android:textColor="@color/black"
+                android:textSize="@dimen/size_14" />
+
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:gravity="right"
+                android:src="@mipmap/main_icon_arr_rig_gray" />
+
+        </LinearLayout>
+    </RelativeLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
+        android:background="@color/white"
+        android:gravity="center_vertical"
+        android:orientation="horizontal"
+        android:paddingRight="12dp"
+        app:layout_constraintTop_toBottomOf="@+id/user_info_ll_rl_02">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_margin="12dp"
+            android:text="昵称"
+            android:textColor="@color/black"
+            android:textSize="@dimen/size_14" />
+
+
+        <com.yc.love.ui.view.CheckBoxSample
+            android:id="@+id/user_info_check_women"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="10dp"
+            app:color_background="@color/red_crimson"
+            app:color_border="@color/text_gray"
+            app:size="16dp" />
+
+        <TextView
+            android:id="@+id/user_info_tv_women"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:paddingLeft="4dp"
+            android:text="女"
+            android:textColor="@color/text_gray"
+            android:textSize="@dimen/size_14"
+            android:textStyle="bold" />
+
+        <com.yc.love.ui.view.CheckBoxSample
+            android:id="@+id/user_info_check_men"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="45dp"
+            app:color_background="@color/red_crimson"
+            app:color_border="@color/text_gray"
+            app:size="16dp" />
+
+        <TextView
+            android:id="@+id/user_info_tv_men"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:paddingLeft="4dp"
+            android:text="男"
+            android:textColor="@color/text_gray"
+            android:textSize="@dimen/size_14"
+            android:textStyle="bold" />
+
+
+    </LinearLayout>
+
+</android.support.constraint.ConstraintLayout>

@@ -2,14 +2,14 @@
 <android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="wrap_content"
+    android:background="@color/white"
+    android:paddingTop="18dp">
 
     <View
         android:id="@+id/item_become_vip_tail_view"
         android:layout_width="match_parent"
-        android:layout_height="14dp"
-        android:layout_marginTop="14dp"
-        android:layout_marginBottom="14dp"
+        android:layout_height="10dp"
         android:background="@color/love_background" />
 
     <LinearLayout
@@ -17,158 +17,376 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginLeft="10dp"
+        android:layout_marginTop="16dp"
         android:layout_marginRight="10dp"
         android:orientation="horizontal"
         app:layout_constraintTop_toBottomOf="@+id/item_become_vip_tail_view">
 
-        <LinearLayout
+        <android.support.constraint.ConstraintLayout
+            android:id="@+id/item_become_vip_tail_cl_con_01"
             android:layout_width="0dp"
-            android:layout_height="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_marginRight="4dp"
             android:layout_weight="1"
+            android:background="@mipmap/become_vip_bg_pay"
             android:gravity="center_horizontal"
             android:orientation="vertical">
 
             <TextView
+                android:id="@+id/item_become_vip_tail_tv_pay_tit_01"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="66" />
+                android:paddingTop="8dp"
+                android:text="66"
+                android:textColor="@color/yellow_vip_text_tit"
+                android:textSize="@dimen/size_12"
+                app:layout_constraintLeft_toLeftOf="parent"
+                app:layout_constraintRight_toRightOf="parent" />
 
             <LinearLayout
+                android:id="@+id/item_become_vip_tail_ll_pay_con_01"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:orientation="horizontal">
+                android:orientation="horizontal"
+                app:layout_constraintLeft_toLeftOf="parent"
+                app:layout_constraintRight_toRightOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/item_become_vip_tail_tv_pay_tit_01">
 
                 <TextView
+                    android:id="@+id/item_become_vip_tail_tv_pay_unit_01"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="￥" />
+                    android:text="￥"
+                    android:textColor="@color/yellow_vip_text_mon"
+                    android:textSize="@dimen/size_14" />
 
                 <TextView
+                    android:id="@+id/item_become_vip_tail_tv_pay_mon_01"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="56"
+                    android:textColor="@color/yellow_vip_text_mon"
                     android:textSize="@dimen/size_26" />
             </LinearLayout>
 
             <TextView
+                android:id="@+id/item_become_vip_tail_tv_pay_des_01"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="4dp"
+                android:layout_marginRight="4dp"
+                android:layout_marginBottom="6dp"
+                android:background="@drawable/shape_tv_asymmetry_yellow"
+                android:gravity="center_horizontal"
+                android:paddingLeft="4dp"
+                android:paddingTop="3dp"
+                android:paddingRight="4dp"
+                android:paddingBottom="3dp"
+                android:text="最低1.2元/天"
+                android:textColor="@color/white"
+                android:textSize="@dimen/size_10"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/item_become_vip_tail_ll_pay_con_01" />
+
+            <ImageView
+                android:id="@+id/item_become_vip_tail_iv_pay_sel_01"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="77" />
-        </LinearLayout>
+                android:src="@mipmap/become_vip_icon_pay_s"
+                android:visibility="gone"
 
-        <LinearLayout
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintRight_toRightOf="parent" />
+        </android.support.constraint.ConstraintLayout>
+
+        <android.support.constraint.ConstraintLayout
+            android:id="@+id/item_become_vip_tail_cl_con_02"
             android:layout_width="0dp"
-            android:layout_height="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_marginLeft="4dp"
+            android:layout_marginRight="4dp"
             android:layout_weight="1"
+            android:background="@mipmap/become_vip_bg_pay"
             android:gravity="center_horizontal"
             android:orientation="vertical">
 
             <TextView
+                android:id="@+id/item_become_vip_tail_tv_pay_tit_02"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="66" />
+                android:paddingTop="8dp"
+                android:text="66"
+                android:textColor="@color/yellow_vip_text_tit"
+                android:textSize="@dimen/size_12"
+                app:layout_constraintLeft_toLeftOf="parent"
+                app:layout_constraintRight_toRightOf="parent" />
 
             <LinearLayout
+                android:id="@+id/item_become_vip_tail_ll_pay_con_02"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:orientation="horizontal">
+                android:orientation="horizontal"
+                app:layout_constraintLeft_toLeftOf="parent"
+                app:layout_constraintRight_toRightOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/item_become_vip_tail_tv_pay_tit_02">
 
                 <TextView
+                    android:id="@+id/item_become_vip_tail_tv_pay_unit_02"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="￥" />
+                    android:text="￥"
+                    android:textColor="@color/yellow_vip_text_mon"
+                    android:textSize="@dimen/size_14" />
 
                 <TextView
+                    android:id="@+id/item_become_vip_tail_tv_pay_mon_02"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="56"
+                    android:textColor="@color/yellow_vip_text_mon"
                     android:textSize="@dimen/size_26" />
             </LinearLayout>
 
             <TextView
+                android:id="@+id/item_become_vip_tail_tv_pay_des_02"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="4dp"
+                android:layout_marginRight="4dp"
+                android:layout_marginBottom="6dp"
+                android:background="@drawable/shape_tv_asymmetry_yellow"
+                android:gravity="center_horizontal"
+                android:paddingLeft="4dp"
+                android:paddingTop="3dp"
+                android:paddingRight="4dp"
+                android:paddingBottom="3dp"
+                android:text="55555555"
+                android:textColor="@color/white"
+                android:textSize="@dimen/size_10"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/item_become_vip_tail_ll_pay_con_02" />
+
+            <ImageView
+                android:id="@+id/item_become_vip_tail_iv_pay_sel_02"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="77" />
-        </LinearLayout>
+                android:src="@mipmap/become_vip_icon_pay_s"
+                android:visibility="gone"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintRight_toRightOf="parent" />
+        </android.support.constraint.ConstraintLayout>
 
-        <LinearLayout
+        <android.support.constraint.ConstraintLayout
+            android:id="@+id/item_become_vip_tail_cl_con_03"
             android:layout_width="0dp"
-            android:layout_height="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_marginLeft="4dp"
+            android:layout_marginRight="4dp"
             android:layout_weight="1"
+            android:background="@mipmap/become_vip_bg_pay"
             android:gravity="center_horizontal"
             android:orientation="vertical">
 
             <TextView
+                android:id="@+id/item_become_vip_tail_tv_pay_tit_03"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="66" />
+                android:paddingTop="8dp"
+                android:text="66"
+                android:textColor="@color/yellow_vip_text_tit"
+                android:textSize="@dimen/size_12"
+                app:layout_constraintLeft_toLeftOf="parent"
+                app:layout_constraintRight_toRightOf="parent" />
 
             <LinearLayout
+                android:id="@+id/item_become_vip_tail_ll_pay_con_03"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:orientation="horizontal">
+                android:orientation="horizontal"
+                app:layout_constraintLeft_toLeftOf="parent"
+                app:layout_constraintRight_toRightOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/item_become_vip_tail_tv_pay_tit_03">
 
                 <TextView
+                    android:id="@+id/item_become_vip_tail_tv_pay_unit_03"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="￥" />
+                    android:text="￥"
+                    android:textColor="@color/yellow_vip_text_mon"
+                    android:textSize="@dimen/size_14" />
 
                 <TextView
+                    android:id="@+id/item_become_vip_tail_tv_pay_mon_03"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="56"
+                    android:textColor="@color/yellow_vip_text_mon"
                     android:textSize="@dimen/size_26" />
             </LinearLayout>
 
             <TextView
+                android:id="@+id/item_become_vip_tail_tv_pay_des_03"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="4dp"
+                android:layout_marginRight="4dp"
+                android:layout_marginBottom="6dp"
+                android:background="@drawable/shape_tv_asymmetry_yellow"
+                android:gravity="center_horizontal"
+                android:paddingLeft="4dp"
+                android:paddingTop="3dp"
+                android:paddingRight="4dp"
+                android:paddingBottom="3dp"
+                android:text="55555555"
+                android:textColor="@color/white"
+                android:textSize="@dimen/size_10"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/item_become_vip_tail_ll_pay_con_03" />
+
+            <ImageView
+                android:id="@+id/item_become_vip_tail_iv_pay_sel_03"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="77" />
-        </LinearLayout>
+                android:src="@mipmap/become_vip_icon_pay_s"
+                android:visibility="gone"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintRight_toRightOf="parent" />
+        </android.support.constraint.ConstraintLayout>
 
-        <LinearLayout
+        <android.support.constraint.ConstraintLayout
+            android:id="@+id/item_become_vip_tail_cl_con_04"
             android:layout_width="0dp"
-            android:layout_height="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_marginLeft="4dp"
             android:layout_weight="1"
+            android:background="@mipmap/become_vip_bg_pay"
             android:gravity="center_horizontal"
             android:orientation="vertical">
 
             <TextView
+                android:id="@+id/item_become_vip_tail_tv_pay_tit_04"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="66" />
+                android:paddingTop="8dp"
+                android:text="66"
+                android:textColor="@color/yellow_vip_text_tit"
+                android:textSize="@dimen/size_12"
+                app:layout_constraintLeft_toLeftOf="parent"
+                app:layout_constraintRight_toRightOf="parent" />
 
             <LinearLayout
+                android:id="@+id/item_become_vip_tail_ll_pay_con_04"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:orientation="horizontal">
+                android:orientation="horizontal"
+                app:layout_constraintLeft_toLeftOf="parent"
+                app:layout_constraintRight_toRightOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/item_become_vip_tail_tv_pay_tit_04">
 
                 <TextView
+                    android:id="@+id/item_become_vip_tail_tv_pay_unit_04"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="￥" />
+                    android:text="￥"
+                    android:textColor="@color/yellow_vip_text_mon"
+                    android:textSize="@dimen/size_14" />
 
                 <TextView
+                    android:id="@+id/item_become_vip_tail_tv_pay_mon_04"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="56"
+                    android:textColor="@color/yellow_vip_text_mon"
                     android:textSize="@dimen/size_26" />
             </LinearLayout>
 
             <TextView
+                android:id="@+id/item_become_vip_tail_tv_pay_des_04"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="4dp"
+                android:layout_marginRight="4dp"
+                android:layout_marginBottom="6dp"
+                android:background="@drawable/shape_tv_asymmetry_yellow"
+                android:gravity="center_horizontal"
+                android:maxLines="2"
+                android:paddingLeft="4dp"
+                android:paddingTop="3dp"
+                android:paddingRight="4dp"
+                android:paddingBottom="3dp"
+                android:text="最低1.2元/天最低1."
+                android:textColor="@color/white"
+                android:textSize="@dimen/size_10"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/item_become_vip_tail_ll_pay_con_04" />
+
+            <ImageView
+                android:id="@+id/item_become_vip_tail_iv_pay_sel_04"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="77" />
-        </LinearLayout>
+                android:src="@mipmap/become_vip_icon_pay_s"
+                android:visibility="gone"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintRight_toRightOf="parent" />
+        </android.support.constraint.ConstraintLayout>
+    </LinearLayout>
 
+    <LinearLayout
+        android:id="@+id/item_become_vip_tail_ll_pay_type_con"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
+        android:orientation="horizontal"
+        app:layout_constraintTop_toBottomOf="@+id/item_become_vip_tail_ll_pay_con">
+
+        <ImageView
+            android:id="@+id/item_become_vip_tail_iv_pay_zfb"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="10dp"
+            android:layout_marginRight="4dp"
+            android:layout_weight="1"
+            android:scaleType="fitXY"
+            android:src="@mipmap/become_vip_icon_pay_zfb" />
+
+        <ImageView
+            android:id="@+id/item_become_vip_tail_iv_pay_wx"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="4dp"
+            android:layout_marginRight="10dp"
+            android:layout_weight="1"
+            android:scaleType="fitXY"
+            android:src="@mipmap/become_vip_icon_pay_wx" />
     </LinearLayout>
 
     <View
         android:id="@+id/item_become_vip_tail_view2"
         android:layout_width="match_parent"
-        android:layout_height="14dp"
+        android:layout_height="10dp"
         android:layout_marginTop="14dp"
-        android:layout_marginBottom="14dp"
         android:background="@color/love_background"
-        app:layout_constraintTop_toBottomOf="@+id/item_become_vip_tail_ll_pay_con" />
+        app:layout_constraintTop_toBottomOf="@+id/item_become_vip_tail_ll_pay_type_con" />
+
+    <!--  android:background="@drawable/selectot_btn_pay_vip_yellow"-->
+    <!--android:background="@drawable/shape_btn_vip_yellow"-->
+    <TextView
+        android:id="@+id/item_become_vip_tv_next"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="25dp"
+        android:layout_marginTop="12dp"
+        android:layout_marginRight="25dp"
+        android:background="@drawable/selectot_btn_pay_vip_yellow"
+        android:gravity="center_horizontal"
+        android:padding="8dp"
+        android:text="确   定"
+        android:textColor="@color/white"
+        android:textSize="@dimen/size_16"
+        app:layout_constraintTop_toBottomOf="@+id/item_become_vip_tail_view2" />
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="75dp"
+        app:layout_constraintTop_toBottomOf="@+id/item_become_vip_tv_next" />
 </android.support.constraint.ConstraintLayout>

@@ -43,7 +43,8 @@
         <activity android:name=".ui.activity.LoveByStagesActivity" />
         <activity android:name=".ui.activity.LoveUpDownPhotoActivity" />
         <activity android:name=".ui.activity.LoveIntroductionActivity" />
-        <activity android:name=".ui.activity.BecomeVipActivity"></activity>
+        <activity android:name=".ui.activity.BecomeVipActivity" />
+        <activity android:name=".ui.activity.UserInfoActivity"></activity>
     </application>
 
 </manifest>

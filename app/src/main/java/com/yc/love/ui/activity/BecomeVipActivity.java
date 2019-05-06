@@ -1,11 +1,18 @@
 package com.yc.love.ui.activity;
 
+import android.graphics.Color;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
+import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
+import android.widget.LinearLayout;
+import android.widget.RelativeLayout;
+import android.widget.TextView;
 
 import com.yc.love.R;
 import com.yc.love.adaper.rv.BecomeVipAdapter;
@@ -26,7 +33,7 @@ import com.yc.love.ui.activity.base.BaseSlidingActivity;
 import java.util.ArrayList;
 import java.util.List;
 
-public class BecomeVipActivity extends BaseSlidingActivity {
+public class BecomeVipActivity extends BaseSlidingActivity implements View.OnClickListener {
     private int[] imgResIds = {R.mipmap.become_vip_icon_01, R.mipmap.become_vip_icon_02, R.mipmap.become_vip_icon_03,
             R.mipmap.become_vip_icon_04, R.mipmap.become_vip_icon_05, R.mipmap.become_vip_icon_06};
     private String[] names = {"20W+话术免费搜索", "海量话术实战免费查看", "海量话术技巧免费阅读",
@@ -38,19 +45,37 @@ public class BecomeVipActivity extends BaseSlidingActivity {
     private int[] payMoney = {38, 58, 198, 298};
     private String[] payDes = {"最低1.2元/天", "最低0.6元/天", "最低0.5元/天", "一次开通永久免费限时免费"};
     private RecyclerView mRecyclerView;
+    private LinearLayout mLlTitleCon;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_become_vip);
-        //侵入状态栏
-        invadeStatusBar();
+
+        invadeStatusBar(); //侵入状态栏
+        setAndroidNativeLightStatusBar(); //状态栏字体颜色改变
         initViews();
         initRecyclerData();
     }
 
     protected void initViews() {
+        initTitleView();
         initRecyclerView();
+    }
+
+    private void initTitleView() {
+        mLlTitleCon = findViewById(R.id.become_vip_ll_title_con);
+        View viewBar = findViewById(R.id.activity_base_same_view_bar);
+        RelativeLayout rlTitleCon = findViewById(R.id.activity_base_same_rl_title_con);
+        ImageView ivBack = findViewById(R.id.activity_base_same_iv_back);
+        TextView tvTitle = findViewById(R.id.activity_base_same_tv_title);
+        viewBar.setBackgroundColor(Color.TRANSPARENT);
+        rlTitleCon.setBackgroundColor(Color.TRANSPARENT);
+        ivBack.setOnClickListener(this);
+        ivBack.setImageDrawable(getResources().getDrawable(R.mipmap.icon_arr_lift_white));
+        tvTitle.setTextColor(Color.WHITE);
+        tvTitle.setText("开通会员");
+        setStateBarHeight(viewBar, 25);
     }
 
     public void initRecyclerView() {
@@ -73,9 +98,9 @@ public class BecomeVipActivity extends BaseSlidingActivity {
             BecomeVipPayBean payBean = new BecomeVipPayBean(payName[i], payMoney[i], payDes[i]);
             list.add(payBean);
         }
-        new BecomeVipBean(3, list);
+        datas.add(new BecomeVipBean(3, list));
 
-        BecomeVipAdapter becomeVipAdapter = new BecomeVipAdapter(datas, mRecyclerView) {
+        BecomeVipAdapter becomeVipAdapter = new BecomeVipAdapter(datas, mRecyclerView, mLlTitleCon) {
             @Override
             public BaseViewHolder getTitleHolder(ViewGroup parent) {
                 return new BecomeVipTitleViewHolder(BecomeVipActivity.this, null, parent);
@@ -88,9 +113,25 @@ public class BecomeVipActivity extends BaseSlidingActivity {
 
             @Override
             protected RecyclerView.ViewHolder getTailViewHolder(ViewGroup parent) {
-                return new BecomeVipTailViewHolder(BecomeVipActivity.this, null, parent);
+                BecomeVipTailViewHolder becomeVipTailViewHolder = new BecomeVipTailViewHolder(BecomeVipActivity.this, null, parent);
+                becomeVipTailViewHolder.setOnClickTailListener(new BecomeVipTailViewHolder.OnClickTailListener() {
+                    @Override
+                    public void onClickTailNext(int payType, int selectMoney) {
+                        Log.d("mylog", "onClickTailNext: payType " + payType + " selectMoney " + selectMoney);
+                    }
+                });
+                return becomeVipTailViewHolder;
             }
         };
         mRecyclerView.setAdapter(becomeVipAdapter);
+    }
+
+    @Override
+    public void onClick(View v) {
+        switch (v.getId()) {
+            case R.id.activity_base_same_iv_back:
+                finish();
+                break;
+        }
     }
 }

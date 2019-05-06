@@ -11,6 +11,7 @@ import android.widget.TextView;
 import com.yc.love.R;
 import com.yc.love.ui.activity.BecomeVipActivity;
 import com.yc.love.ui.activity.IdCorrelationSlidingActivity;
+import com.yc.love.ui.activity.UserInfoActivity;
 import com.yc.love.ui.frament.base.BaseMainFragment;
 
 /**
@@ -44,7 +45,7 @@ public class MainT4Fragment extends BaseMainFragment implements View.OnClickList
         llItem03.setOnClickListener(this);
         llItem04.setOnClickListener(this);
 
-        mMainActivity.setStateBarHeight(viewBar);
+        mMainActivity.setStateBarHeight(viewBar, 14);
     }
 
     @Override
@@ -72,7 +73,8 @@ public class MainT4Fragment extends BaseMainFragment implements View.OnClickList
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.main_t4_tv_btn_info:
-                IdCorrelationSlidingActivity.startIdCorrelationActivity(mMainActivity, IdCorrelationSlidingActivity.ID_CORRELATION_STATE_LOGIN);
+                mMainActivity.startActivity(new Intent(mMainActivity,UserInfoActivity.class));
+//                IdCorrelationSlidingActivity.startIdCorrelationActivity(mMainActivity, IdCorrelationSlidingActivity.ID_CORRELATION_STATE_LOGIN);
                 break;
             case R.id.main_t4_ll_iv_vip:
                 mMainActivity.startActivity(new Intent(mMainActivity, BecomeVipActivity.class));
