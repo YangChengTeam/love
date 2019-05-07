@@ -12,8 +12,15 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.yc.love.R;
+import com.yc.love.cont.gank.IdCorrelationGank;
+import com.yc.love.cont.http.RequestImpl;
+import com.yc.love.model.bean.IdCorrelationSmsBean;
+import com.yc.love.model.util.UnicodeUtil;
 import com.yc.love.ui.activity.base.BaseSlidingActivity;
+import com.yc.love.ui.view.LoadingDialog;
 import com.yc.love.ui.view.LoginEditTextLin;
+
+import io.reactivex.disposables.Disposable;
 
 public class IdCorrelationSlidingActivity extends BaseSlidingActivity implements View.OnClickListener {
 
@@ -129,7 +136,32 @@ public class IdCorrelationSlidingActivity extends BaseSlidingActivity implements
     private LoginEditTextLin.OnClickEtCodeListent clickEtCodeListent = new LoginEditTextLin.OnClickEtCodeListent() {
         @Override
         public void onClickEtCode() {
+//            LoadingDialog loadingDialog = new LoadingDialog(IdCorrelationSlidingActivity.this);
+//            loadingDialog.showLoading();
             mEtCode.setEditCodeText("mEtCode");
+            IdCorrelationGank idCorrelationGank = new IdCorrelationGank();
+            RequestImpl request = new RequestImpl() {
+                @Override
+                public void loadSuccess(Object object) {
+                    IdCorrelationSmsBean idCorrelationSmsBean = (IdCorrelationSmsBean) object;
+                    Log.d("mylog", "loadSuccess: idCorrelationSmsBean " + idCorrelationSmsBean.toString());
+                    String data = idCorrelationSmsBean.data;
+                    Log.d("mylog", "loadSuccess: data " + data);
+//                    String s = UnicodeUtil.unicodeToString(data);
+//                    Log.d("mylog", "loadSuccess: s " + s);
+                }
+
+                @Override
+                public void loadFailed(Throwable throwable) {
+
+                }
+
+                @Override
+                public void addSubscription(Disposable subscription) {
+
+                }
+            };
+            idCorrelationGank.showSmsData(request );
         }
     };
 

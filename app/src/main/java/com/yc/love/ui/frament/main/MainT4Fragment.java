@@ -10,7 +10,10 @@ import android.widget.TextView;
 
 import com.yc.love.R;
 import com.yc.love.ui.activity.BecomeVipActivity;
+import com.yc.love.ui.activity.CollectActivity;
+import com.yc.love.ui.activity.FeedbackActivity;
 import com.yc.love.ui.activity.IdCorrelationSlidingActivity;
+import com.yc.love.ui.activity.SettingActivity;
 import com.yc.love.ui.activity.UserInfoActivity;
 import com.yc.love.ui.frament.base.BaseMainFragment;
 
@@ -73,23 +76,24 @@ public class MainT4Fragment extends BaseMainFragment implements View.OnClickList
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.main_t4_tv_btn_info:
-                mMainActivity.startActivity(new Intent(mMainActivity,UserInfoActivity.class));
+                mMainActivity.startActivity(new Intent(mMainActivity, UserInfoActivity.class));
 //                IdCorrelationSlidingActivity.startIdCorrelationActivity(mMainActivity, IdCorrelationSlidingActivity.ID_CORRELATION_STATE_LOGIN);
                 break;
             case R.id.main_t4_ll_iv_vip:
                 mMainActivity.startActivity(new Intent(mMainActivity, BecomeVipActivity.class));
                 break;
             case R.id.main_t4_ll_item_01:
+                mMainActivity.startActivity(new Intent(mMainActivity, CollectActivity.class));
 
                 break;
             case R.id.main_t4_ll_item_02:
 
                 break;
             case R.id.main_t4_ll_item_03:
-
+                mMainActivity.startActivity(new Intent(mMainActivity, FeedbackActivity.class));
                 break;
             case R.id.main_t4_ll_item_04:
-
+                mMainActivity.startActivity(new Intent(mMainActivity, SettingActivity.class));
                 break;
         }
     }

@@ -5,24 +5,22 @@ import android.text.TextUtils;
 import android.util.Log;
 import android.view.View;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.bigkoo.pickerview.builder.TimePickerBuilder;
 import com.bigkoo.pickerview.listener.OnTimeSelectListener;
 import com.bigkoo.pickerview.view.TimePickerView;
 import com.yc.love.R;
 import com.yc.love.model.util.TimeUtils;
-import com.yc.love.ui.activity.base.BaseSameActivity;
+import com.yc.love.ui.activity.base.BasePushPhotoActivity;
 import com.yc.love.ui.view.CheckBoxSample;
 
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
 import java.util.Date;
 
-public class UserInfoActivity extends BaseSameActivity {
+public class UserInfoActivity extends BasePushPhotoActivity {
 
     private CheckBoxSample mCheckMen;
     private CheckBoxSample mCheckWoMen;
@@ -33,6 +31,7 @@ public class UserInfoActivity extends BaseSameActivity {
     private long mBirthdayLong;
     private TextView mTvDate;
     private String mStringEtName;
+    private ImageView mIvIcon;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -45,6 +44,7 @@ public class UserInfoActivity extends BaseSameActivity {
     private void initViews() {
         LinearLayout llItem02 = findViewById(R.id.user_info_ll_item_02);
         RelativeLayout rlTitCon = findViewById(R.id.user_info_rl_tit_con);
+        mIvIcon = findViewById(R.id.user_info_iv_icon);
 
         mEtName = findViewById(R.id.user_info_et_name);
 
@@ -104,7 +104,7 @@ public class UserInfoActivity extends BaseSameActivity {
                 showDateTimePickerView();
                 break;
             case R.id.user_info_rl_tit_con:
-                //TODO 修改头像
+                showSelsctPhotoDialog(mIvIcon);
                 break;
             case R.id.activity_base_same_tv_sub:
                 boolean isCanSub = checkInput();

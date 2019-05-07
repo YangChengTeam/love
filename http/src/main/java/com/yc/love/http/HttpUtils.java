@@ -48,8 +48,10 @@ import retrofit2.converter.gson.GsonConverterFactory;
 
 public class HttpUtils {
 
+    public final static String API_LOVE = "http://love.bshu.com/v1/";
     public final static String API_TING = "https://tingapi.ting.baidu.com/v1/restserver/";
-    public final static String API_JOB = "https://api.caikajob.com/mszs-open/interf/";
+//    public final static String API_JOB = "https://api.caikajob.com/mszs-open/interf/";
+    public final static String API_JOB = "http://love.bshu.com/v1/";
     private static HttpUtils instance;
     private Context context;
     private Gson gson;

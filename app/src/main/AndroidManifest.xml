@@ -3,11 +3,14 @@
     package="com.yc.love">
 
     <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.CAMERA" />
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
     <uses-permission android:name="android.permission.ACCESS_WIFI_STATE" />
     <uses-permission android:name="android.permission.CHANGE_WIFI_STATE" />
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.REQUEST_INSTALL_PACKAGES" />
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.REQUEST_PERMISSIONS" />
 
     <!-- android:theme="@style/AppTheme" -->
     <application
@@ -44,7 +47,54 @@
         <activity android:name=".ui.activity.LoveUpDownPhotoActivity" />
         <activity android:name=".ui.activity.LoveIntroductionActivity" />
         <activity android:name=".ui.activity.BecomeVipActivity" />
-        <activity android:name=".ui.activity.UserInfoActivity"></activity>
+        <activity android:name=".ui.activity.UserInfoActivity" />
+        <!--
+       //图片选择Activity
+       //去掉Activity的ActionBar。
+       //使用者可以根据自己的项目去配置，不一定要这样写，只要不Activity的ActionBar去掉就可以了。
+       //横竖屏切换处理。
+       //如果要支持横竖屏切换，一定要加上这句，否则在切换横竖屏的时候会发生异常。
+        -->
+        <!--
+        <activity
+            android:name="com.donkingliang.imageselector.ImageSelectorActivity"
+            android:configChanges="orientation|keyboardHidden|screenSize"
+            android:theme="@style/Theme.AppCompat.Light.NoActionBar" />
+
+        &lt;!&ndash; //图片预览Activity &ndash;&gt;
+        <activity
+            android:name="com.donkingliang.imageselector.PreviewActivity"
+            android:configChanges="orientation|keyboardHidden|screenSize"
+            android:theme="@style/Theme.AppCompat.Light.NoActionBar" />
+        &lt;!&ndash; //图片剪切Activity &ndash;&gt;
+        <activity
+            android:name="com.donkingliang.imageselector.ClipImageActivity"
+            android:theme="@style/Theme.AppCompat.Light.NoActionBar" />
+
+        <provider
+            android:name="android.support.v4.content.FileProvider"
+            android:authorities="com.yc.love.fileProvider"
+            android:exported="false"
+            android:grantUriPermissions="true">
+            <meta-data
+                android:name="android.support.FILE_PROVIDER_PATHS"
+                android:resource="@xml/file_paths" />
+        </provider>
+        -->
+        <activity android:name=".ui.activity.FeedbackActivity" />
+        <activity android:name=".ui.activity.SettingActivity" />
+        <activity android:name=".ui.activity.CollectActivity" />
+        <activity android:name=".ui.view.imgs.ISListActivity" />
+        <activity android:name=".ui.view.imgs.ISCameraActivity"></activity>
+        <provider
+            android:name="android.support.v4.content.FileProvider"
+            android:authorities="com.yc.love.fileprovider"
+            android:exported="false"
+            android:grantUriPermissions="true">
+            <meta-data
+                android:name="android.support.FILE_PROVIDER_PATHS"
+                android:resource="@xml/provider_paths" />
+        </provider>
     </application>
 
 </manifest>

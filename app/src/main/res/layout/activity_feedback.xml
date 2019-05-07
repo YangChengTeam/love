@@ -1,0 +1,168 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/love_background"
+    android:orientation="vertical">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/white"
+        android:orientation="vertical">
+
+
+        <EditText
+            android:id="@+id/feedback_et_work_content"
+            android:layout_width="match_parent"
+            android:layout_height="125dp"
+            android:layout_margin="8dp"
+            android:background="@null"
+            android:gravity="top"
+            android:hint="请填写意见反馈内容"
+            android:maxLength="200"
+            android:padding="8dp"
+            android:textSize="@dimen/size_14" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:paddingTop="2dp"
+            android:paddingRight="12dp"
+            android:paddingBottom="4dp">
+
+            <TextView
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="10" />
+
+            <TextView
+                android:id="@+id/feedback_tv_num"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="0"
+                android:textColor="@color/text_gray"
+                android:textSize="@dimen/size_12" />
+
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="/200"
+                android:textColor="@color/text_gray"
+                android:textSize="@dimen/size_12" />
+        </LinearLayout>
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="1dp"
+        android:background="@color/white"
+        android:orientation="horizontal"
+        android:padding="12dp">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="客服QQ: "
+            android:textColor="@color/text_gray_deep"
+            android:textSize="@dimen/size_16" />
+
+        <TextView
+            android:id="@+id/feedback_tv_qq_num"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="10"
+            android:text="18508609"
+            android:textColor="@color/text_gray_deep"
+            android:textSize="@dimen/size_16" />
+
+        <TextView
+            android:id="@+id/feedback_tv_cope"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:background="@drawable/selectot_btn_blue"
+            android:paddingLeft="12dp"
+            android:paddingTop="1dp"
+            android:paddingRight="12dp"
+            android:paddingBottom="1dp"
+            android:text="复制QQ"
+            android:textColor="@color/select_color_blue"
+            android:textSize="@dimen/size_12" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
+        android:background="@color/white"
+        android:orientation="horizontal"
+        android:padding="12dp">
+
+        <TextView
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="QQ(必填)"
+            android:textColor="@color/black"
+            android:textSize="@dimen/size_16" />
+
+        <EditText
+            android:id="@+id/feedback_et_qq"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="3"
+            android:background="@null"
+            android:hint="请填写你的QQ号码"
+            android:lines="1"
+            android:maxLength="18"
+            android:textColorHint="@color/gray_et_text"
+            android:textSize="@dimen/size_14" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="1dp"
+        android:background="@color/white"
+        android:orientation="horizontal"
+        android:padding="12dp">
+
+        <TextView
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="微信号"
+            android:textColor="@color/black"
+            android:textSize="@dimen/size_16" />
+
+        <EditText
+            android:id="@+id/feedback_et_wx"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="3"
+            android:background="@null"
+            android:hint="请填写你的微信号码"
+            android:lines="1"
+            android:maxLength="18"
+            android:textColorHint="@color/gray_et_text"
+            android:textSize="@dimen/size_14" />
+    </LinearLayout>
+
+    <TextView
+        android:id="@+id/feedback_tv_next"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="12dp"
+        android:layout_marginTop="24dp"
+        android:layout_marginRight="12dp"
+        android:background="@drawable/selectot_btn_brim_red_crimson"
+        android:gravity="center_horizontal"
+        android:paddingTop="12dp"
+        android:paddingBottom="18dp"
+        android:text="提  交"
+        android:textColor="@color/white" />
+
+</LinearLayout>

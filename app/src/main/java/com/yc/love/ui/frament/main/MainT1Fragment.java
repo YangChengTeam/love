@@ -10,8 +10,11 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
+import android.widget.TextView;
 import android.widget.Toast;
 
+import com.squareup.picasso.Picasso;
 import com.yc.love.R;
 import com.yc.love.adaper.rv.MainT1MoreItemAdapter;
 import com.yc.love.adaper.rv.base.RecyclerViewItemListener;
@@ -19,13 +22,21 @@ import com.yc.love.adaper.rv.holder.BaseViewHolder;
 import com.yc.love.adaper.rv.holder.ProgressBarViewHolder;
 import com.yc.love.adaper.rv.holder.StringBeanViewHolder;
 import com.yc.love.adaper.rv.holder.TitleT1ViewHolder;
+import com.yc.love.cont.gank.MainT1FragGank;
+import com.yc.love.cont.http.RequestImpl;
+import com.yc.love.model.bean.BannerItemBean;
+import com.yc.love.model.bean.FrontpageBean;
+import com.yc.love.model.bean.JobBean;
 import com.yc.love.model.bean.StringBean;
 import com.yc.love.ui.activity.LoveHealActivity;
 import com.yc.love.ui.activity.LoveHealingActivity;
 import com.yc.love.ui.frament.base.BaseMainFragment;
+import com.yc.love.ui.view.LoadingDialog;
 
 import java.util.ArrayList;
 import java.util.List;
+
+import io.reactivex.disposables.Disposable;
 
 /**
  * Created by mayn on 2019/4/23.
@@ -175,12 +186,12 @@ public class MainT1Fragment extends BaseMainFragment {
 
             }
         }, 1000);*/
-//        isCanLoadData();
+        isCanLoadData();
     }
 
-    /*private void isCanLoadData() {
-        final LoadingDialog loadingView = new LoadingDialog(mMainActivity);
-        loadingView.showLoading();
+    private void isCanLoadData() {
+//        final LoadingDialog loadingView = new LoadingDialog(mMainActivity);
+//        loadingView.showLoading();
 
         MainT1FragGank mainT1FragGank = new MainT1FragGank();
         RequestImpl request = new RequestImpl() {
@@ -190,7 +201,7 @@ public class MainT1Fragment extends BaseMainFragment {
                 if (bean != null && bean.getResult() != null && bean.getResult().getFocus() != null && bean.getResult().getFocus().getResult() != null) {
                     final ArrayList<BannerItemBean> result = (ArrayList<BannerItemBean>) bean.getResult().getFocus().getResult();
                     ArrayList<String> mBannerImages = new ArrayList<String>();
-                    LinearLayout ll = rootView.findViewById(R.id.main_t1_ll);
+//                    LinearLayout ll = rootView.findViewById(R.id.main_t1_ll);
                     if (result != null && result.size() > 0) {
                         for (int i = 0; i < result.size(); i++) {
                             //获取所有图片
@@ -199,22 +210,22 @@ public class MainT1Fragment extends BaseMainFragment {
                             ImageView imageView = new ImageView(mMainActivity);
                             imageView.setImageDrawable(mMainActivity.getResources().getDrawable(R.mipmap.tab_home));
 //                            Glide.with(mMainActivity).load(result.get(i).getRandpic()).into(imageView);
-                           *//* Picasso.with(mMainActivity).load(result.get(i).getRandpic())
-                                    .into(mBannerImagess.get(i));*//*
+//                            Picasso.with(mMainActivity).load(result.get(i).getRandpic())
+//                                    .into(mBannerImagess.get(i));
 
                             TextView textView = new TextView(mMainActivity);
                             textView.setText(mBannerImages.get(i));
-                            ll.addView(textView);
+//                            ll.addView(textView);
                         }
-                        tvName.setText(getClass().getName());
-                        loadingView.dismissLoading();
-                      *//*  maCache.remove(Constants.BANNER_PIC);
+//                        tvName.setText(getClass().getName());
+//                        loadingView.dismissLoading();
+                       /* maCache.remove(Constants.BANNER_PIC);
                         maCache.put(Constants.BANNER_PIC, mBannerImages);
                         maCache.remove(Constants.BANNER_PIC_DATA);
                         maCache.put(Constants.BANNER_PIC_DATA, result);
                         bannerDataBean.setData(mBannerImages, result);
 
-                        bannerData.setValue(bannerDataBean);*//*
+                        bannerData.setValue(bannerDataBean);*/
                     }
                 }
             }
@@ -222,7 +233,7 @@ public class MainT1Fragment extends BaseMainFragment {
             @Override
             public void loadFailed(Throwable throwable) {
                 Log.d("mylog", "MainT1Fragment loadFailed: throwable "+throwable);
-                loadingView.dismissLoading();
+//                loadingView.dismissLoading();
             }
 
 
@@ -256,7 +267,7 @@ public class MainT1Fragment extends BaseMainFragment {
                 Log.d("mylog", "addSubscription: subscription " + subscription.toString());
             }
         });
-    }*/
+    }
 
 
 }

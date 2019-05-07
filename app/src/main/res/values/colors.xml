@@ -13,11 +13,13 @@
     <color name="xiaofeng_orange">#ff8200</color>
     <color name="white">#FFFFFF</color>
     <color name="xiaofeng_orange_33">#11ff8200</color>
+    <color name="text_gray_deep">#555555</color>
     <color name="text_gray">#9a9a9a</color>
     <color name="gray_loading_01">#9b9b9b</color>
     <color name="gray_loading_02">#c1c0c0</color>
     <color name="gray_loading_03">#eaeaea</color>
     <color name="red_crimson">#fa4a65</color>
+    <color name="red_crimson_s">#88fa4a65</color>
     <color name="red_crimson_66">#66fa4a65</color>
     <color name="red_crimson_99">#99fa4a65</color>
     <color name="red_crimson_login_start">#ff6a9a</color>
@@ -33,6 +35,15 @@
      <color name="red_crimson_login_card_center">#11fe748c</color>
      <color name="red_crimson_login_card_end">#11ff54a4</color>-->
     <color name="red_crimson_card_back">#fff0f1</color>
+
+
+    <color name="red_crimson_brim_01">#22f6e0e2</color>
+    <color name="red_crimson_brim_02">#66f6e0e2</color>
+    <color name="red_crimson_brim_03">#99f6e0e2</color>
+    <color name="red_crimson_brim_04">#f6e0e2</color>
+
+    <color name="blue_01">#00b9fe</color>
+    <color name="blue_01_s">#9900b9fe</color>
 
 
     <color name="yellow_vip_text_mon_s">#543115</color>
@@ -67,4 +78,10 @@
     <color name="text_gray_dark_s">#88666666</color>
 
     <color name="black_extreme_thin">#119b9b9b</color>
+
+    <color name="bottom_bg">#aaaaaa</color>
+    <!--<color name="colorAccent">#FF4081</color>
+    <color name="colorPrimary">#3F51B5</color>
+    <color name="colorPrimaryDark">#303F9F</color>-->
+
 </resources>

@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/white"
+    android:minWidth="10000dp"
+    android:orientation="vertical">
+
+    <TextView
+        android:id="@+id/dialog_select_photo_tv_album"
+        style="@style/SelectPhotoTextView"
+        android:text="从相册选择图片" />
+
+    <TextView style="@style/bgLineMatchSmallItemDecoration" />
+
+    <TextView
+        android:id="@+id/dialog_select_photo_tv_camera"
+        style="@style/SelectPhotoTextView"
+        android:text="拍照" />
+
+
+    <TextView style="@style/bgLineMatchMedium" />
+
+    <TextView
+        android:id="@+id/dialog_select_photo_tv_cancel"
+        style="@style/SelectPhotoTextView"
+        android:text="取消" />
+
+</LinearLayout>

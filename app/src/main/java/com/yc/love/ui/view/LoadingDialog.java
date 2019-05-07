@@ -55,20 +55,20 @@ public class LoadingDialog {
     /**
      * 成功
      */
-    public void showSuccess() {
+    /*public void showSuccess() {
         iv.setImageResource(R.mipmap.load_success);
         iv.setVisibility(View.VISIBLE);
         progressBar.setVisibility(View.GONE);
     }
 
-    /**
+    *//**
      * 失败
-     */
+     *//*
     public void showFail() {
         iv.setImageResource(R.mipmap.load_fail);
         iv.setVisibility(View.VISIBLE);
         progressBar.setVisibility(View.GONE);
-    }
+    }*/
 
     /**
      * 提示文字

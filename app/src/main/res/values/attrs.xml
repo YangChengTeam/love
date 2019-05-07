@@ -10,6 +10,7 @@
     </declare-styleable>
     <declare-styleable name="MainMyItemLin">
         <attr name="textNameMyItem" format="string" />
+        <attr name="textSubMyItem" format="string" />
         <attr name="imgSrc" format="reference" />
         <attr name="isAddIntervalTop" format="boolean" />
         <attr name="isAddIntervalBom" format="boolean" />

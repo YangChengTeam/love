@@ -18,6 +18,7 @@ import com.yc.love.R;
  */
 
 public class MainMyItemLin extends LinearLayout {
+    private TextView mTvSub;
 
 
 //    private TextView mTvDes;
@@ -30,12 +31,14 @@ public class MainMyItemLin extends LinearLayout {
     private void initView(Context context, AttributeSet attrs) {
         TypedArray typedArray = context.obtainStyledAttributes(attrs, R.styleable.MainMyItemLin);
         String text = typedArray.getString(R.styleable.MainMyItemLin_textNameMyItem);
+        String textSub = typedArray.getString(R.styleable.MainMyItemLin_textSubMyItem);
         Drawable imgSrc = typedArray.getDrawable(R.styleable.MainMyItemLin_imgSrc);
         boolean isAddIntervalTop = typedArray.getBoolean(R.styleable.MainMyItemLin_isAddIntervalTop, false);
         boolean isAddIntervalBom = typedArray.getBoolean(R.styleable.MainMyItemLin_isAddIntervalBom, false);
 
         View inflate = LayoutInflater.from(context).inflate(R.layout.layout_main_my_item_lin, this, true);
         TextView tvDes = inflate.findViewById(R.id.main_my_item_lin_tv_des);
+        mTvSub = inflate.findViewById(R.id.main_my_item_lin_tv_sub);
         View viewLineTop = inflate.findViewById(R.id.main_my_item_lin_view_line_top);
         View viewLineBom = inflate.findViewById(R.id.main_my_item_lin_view_line_bom);
         ImageView ivIcon = inflate.findViewById(R.id.main_my_item_lin_iv_icon);
@@ -46,12 +49,18 @@ public class MainMyItemLin extends LinearLayout {
             viewLineBom.setVisibility(GONE);
         }
         tvDes.setText(text);
+        mTvSub.setText(textSub);
         ivIcon.setImageDrawable(imgSrc);
     }
 
-/*    public void setDes(String des) {
+    /*    public void setDes(String des) {
+            if (!TextUtils.isEmpty(des)) {
+                mTvDes.setText(des);
+            }
+        }*/
+    public void setSub(String des) {
         if (!TextUtils.isEmpty(des)) {
-            mTvDes.setText(des);
+            mTvSub.setText(des);
         }
-    }*/
+    }
 }
