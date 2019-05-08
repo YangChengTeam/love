@@ -20,6 +20,8 @@ import com.yc.love.adaper.rv.holder.MainT2TitleViewHolder;
 import com.yc.love.adaper.rv.holder.VipViewHolder;
 import com.yc.love.model.bean.MainT2Bean;
 import com.yc.love.ui.frament.base.BaseMainFragment;
+import com.yc.love.ui.view.LoadDialog;
+import com.yc.love.ui.view.LoadingDialog;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -54,11 +56,11 @@ public class MainT2Fragment extends BaseMainFragment {
         //设置增加或删除条目的动画
         recyclerView.setItemAnimator(new DefaultItemAnimator());
         stringBeans = new ArrayList<>();
-        stringBeans.add(new MainT2Bean("tit",0));
+        stringBeans.add(new MainT2Bean("tit", 0));
         for (int i = 0; i < 10; i++) {
-            stringBeans.add(new MainT2Bean("name " + i,1));
+            stringBeans.add(new MainT2Bean("name " + i, 1));
             if (i == 4) {
-                stringBeans.add(new MainT2Bean("vip",2));
+                stringBeans.add(new MainT2Bean("vip", 2));
             }
         }
 
@@ -125,7 +127,7 @@ public class MainT2Fragment extends BaseMainFragment {
 
                                 List<MainT2Bean> netLoadMoreData = new ArrayList<>();
                                 for (int i = 0; i < 10; i++) {
-                                    netLoadMoreData.add(new MainT2Bean("name " + (i + num),1));
+                                    netLoadMoreData.add(new MainT2Bean("name " + (i + num), 1));
                                 }
                                 num += 10;
                                 showProgressBar = false;
@@ -168,6 +170,7 @@ public class MainT2Fragment extends BaseMainFragment {
     }
 
     private void isCanLoadData() {
+
        /* final LoadingDialog loadingView = new LoadingDialog(mMainActivity);
         loadingView.showLoading();
         tvName.postDelayed(new Runnable() {

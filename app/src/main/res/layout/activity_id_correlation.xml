@@ -124,6 +124,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="25dp"
                 android:layout_marginRight="25dp"
+                app:isShowCodeLoginEt="false"
                 app:maxLengthLoginEt="11"
                 app:textHintLoginEt="请输入手机号码" />
 
@@ -136,6 +137,7 @@
                 android:layout_marginRight="25dp"
                 app:iconSrcLoginEt="@mipmap/icon_login_code"
                 app:isShowCodeLoginEt="true"
+                app:maxLengthLoginEt="6"
                 app:textHintLoginEt="请输入验证码" />
 
             <com.yc.love.ui.view.LoginEditTextLin
@@ -145,8 +147,8 @@
                 android:layout_marginLeft="25dp"
                 android:layout_marginTop="18dp"
                 android:layout_marginRight="25dp"
-                app:maxLengthLoginEt="16"
                 app:iconSrcLoginEt="@mipmap/icon_login_pwd"
+                app:maxLengthLoginEt="16"
                 app:textHintLoginEt="请输入密码" />
 
             <View

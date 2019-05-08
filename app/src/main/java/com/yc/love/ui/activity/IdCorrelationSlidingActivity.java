@@ -3,28 +3,34 @@ package com.yc.love.ui.activity;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.CountDownTimer;
 import android.text.InputType;
+import android.text.TextUtils;
 import android.util.Log;
 import android.view.View;
-import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import com.alibaba.fastjson.JSON;
+import com.google.gson.Gson;
 import com.yc.love.R;
-import com.yc.love.cont.gank.IdCorrelationGank;
-import com.yc.love.cont.http.RequestImpl;
-import com.yc.love.model.bean.IdCorrelationSmsBean;
-import com.yc.love.model.util.UnicodeUtil;
+import com.yc.love.app.YcApplication;
+import com.yc.love.model.base.MySubscriber;
+import com.yc.love.model.bean.AResultInfo;
+import com.yc.love.model.bean.IdCorrelationLoginBean;
+import com.yc.love.model.data.BackfillSingle;
+import com.yc.love.model.engin.IdCorrelationEngin;
+import com.yc.love.model.util.CheckNumberRegulationsUtil;
+import com.yc.love.model.util.SPUtils;
 import com.yc.love.ui.activity.base.BaseSlidingActivity;
-import com.yc.love.ui.view.LoadingDialog;
 import com.yc.love.ui.view.LoginEditTextLin;
 
-import io.reactivex.disposables.Disposable;
+import java.util.Timer;
+import java.util.TimerTask;
 
 public class IdCorrelationSlidingActivity extends BaseSlidingActivity implements View.OnClickListener {
 
-    private LoginEditTextLin mEtCode;
 
     public static final int ID_CORRELATION_STATE_LOGIN = 1; //登录
     private final int ID_CORRELATION_STATE_REGISTER = 2; //注册
@@ -38,8 +44,13 @@ public class IdCorrelationSlidingActivity extends BaseSlidingActivity implements
     private LinearLayout mLlProtocolCon;
 //    private ImageView mIvKeepPwdCheck;
 
-    private boolean mIsKeepPwd = false;
+    private boolean mIsKeepPwd = true;
     private TextView mTvKeepPwdCheck;
+    private IdCorrelationEngin mIdCorrelationEngin;
+    //    private MyTimerTask mMyTimerTask;
+//    private Timer mTimer = new Timer();
+    private LoginEditTextLin mEtPhone, mEtCode, mEtPwd;
+    private String mInputPhoneString, mInputPwdString, mInputCodeString;
 
 
     @Override
@@ -53,6 +64,10 @@ public class IdCorrelationSlidingActivity extends BaseSlidingActivity implements
         initViews();
         Log.d("mylog", "onCreate: mInitentState " + mInitentState);
         initState(mInitentState);
+        mIdCorrelationEngin = new IdCorrelationEngin(this);
+
+        YcApplication ycApplication = (YcApplication) getApplication();
+        ycApplication.activityIdCorList.add(this);
     }
 
     private void initInitent() {
@@ -98,9 +113,9 @@ public class IdCorrelationSlidingActivity extends BaseSlidingActivity implements
         mTvTitle = findViewById(R.id.id_correlation_tv_title);
         mTvSwitch = findViewById(R.id.id_correlation_tv_switch);
 
-        LoginEditTextLin etPhone = findViewById(R.id.id_correlation_let_phont);
+        mEtPhone = findViewById(R.id.id_correlation_let_phont);
         mEtCode = findViewById(R.id.id_correlation_let_code);
-        LoginEditTextLin etPwd = findViewById(R.id.id_correlation_let_pwd);
+        mEtPwd = findViewById(R.id.id_correlation_let_pwd);
         TextView tvNext = findViewById(R.id.id_correlation_tv_next);
         mTvRegister = findViewById(R.id.id_correlation_tv_register);
         mLlKeepPwdCon = findViewById(R.id.id_correlation_ll_keep_pwd_con);
@@ -109,9 +124,10 @@ public class IdCorrelationSlidingActivity extends BaseSlidingActivity implements
         changChecked(mIsKeepPwd);
         //        mEt.setInputType(InputType.TYPE_CLASS_NUMBER); //输入类型
 //        mEt.setTransformationMethod(PasswordTransformationMethod.getInstance()); //设置为密码输入框
-        etPhone.mEt.setInputType(InputType.TYPE_CLASS_NUMBER); //输入类型
+        mEtPhone.mEt.setInputType(InputType.TYPE_CLASS_NUMBER); //输入类型
         mEtCode.mEt.setInputType(InputType.TYPE_CLASS_NUMBER);
-        etPwd.mEt.setInputType(0x81);
+        mEtPwd.mEt.setInputType(0x81);
+//        mEtCode.registerTvCodeListent();
 
 
         mLlProtocolCon = findViewById(R.id.id_correlation_ll_protocol_con);
@@ -133,38 +149,140 @@ public class IdCorrelationSlidingActivity extends BaseSlidingActivity implements
         setStateBarHeight(viewBar);
     }
 
+//    private Timer timer = new Timer();
+
+//    private final int RECLEN_TIME = 60;
+//    private int recLen = RECLEN_TIME;
+
+    private long countDoenInterval = 980;
+    private long millisInFuture = 1000 * 9 + 300;
+
     private LoginEditTextLin.OnClickEtCodeListent clickEtCodeListent = new LoginEditTextLin.OnClickEtCodeListent() {
         @Override
         public void onClickEtCode() {
-//            LoadingDialog loadingDialog = new LoadingDialog(IdCorrelationSlidingActivity.this);
-//            loadingDialog.showLoading();
-            mEtCode.setEditCodeText("mEtCode");
-            IdCorrelationGank idCorrelationGank = new IdCorrelationGank();
-            RequestImpl request = new RequestImpl() {
+            if (!checkInputPhone()) {
+                return;
+            }
+            mLoadingDialog.show();
+            mIdCorrelationEngin.sms("0", mInputPhoneString).subscribe(new MySubscriber<AResultInfo<String>>(mLoadingDialog) {
+
                 @Override
-                public void loadSuccess(Object object) {
-                    IdCorrelationSmsBean idCorrelationSmsBean = (IdCorrelationSmsBean) object;
-                    Log.d("mylog", "loadSuccess: idCorrelationSmsBean " + idCorrelationSmsBean.toString());
-                    String data = idCorrelationSmsBean.data;
-                    Log.d("mylog", "loadSuccess: data " + data);
-//                    String s = UnicodeUtil.unicodeToString(data);
-//                    Log.d("mylog", "loadSuccess: s " + s);
+                protected void onNetNext(AResultInfo<String> myIdCorrelationSmsBeanAResultInfo) {
+                    String msg = myIdCorrelationSmsBeanAResultInfo.msg;
+                    int code = myIdCorrelationSmsBeanAResultInfo.code;
+                    String data = myIdCorrelationSmsBeanAResultInfo.data;
+                    mEtCode.waitCode(true);
+                    mEtCode.setEditCodeWaitText("60秒后重试");
+                    CountDownTimer countDownTimer = new CountDownTimer(millisInFuture, countDoenInterval) {
+
+                        @Override
+                        public void onTick(long millisUntilFinished) {
+                            int countDown = (int) (millisUntilFinished / 1000);
+                            Log.d("mylog", "onTick: countDown " + countDown);
+                            if (countDown <= 1) {
+                                mEtCode.waitCode(false);
+                            } else {
+                                if (countDown != 1) {
+                                    mEtCode.setEditCodeWaitText(countDown--+"秒后重试");
+//                                    tv_count_down.setText(String.valueOf(countDown - 1) + "  跳过");
+                                }
+                            }
+                        }
+
+                        @Override
+                        public void onFinish() {
+
+                        }
+                    }.start();
+                }
+
+
+                @Override
+                protected void onNetError(Throwable e) {
+
                 }
 
                 @Override
-                public void loadFailed(Throwable throwable) {
+                protected void onNetCompleted() {
 
                 }
-
-                @Override
-                public void addSubscription(Disposable subscription) {
-
-                }
-            };
-            idCorrelationGank.showSmsData(request );
+            });
         }
     };
 
+
+    private boolean checkInputLogin() {
+        if (!checkInputPhone()) {
+            return false;
+        }
+        mInputPwdString = mEtPwd.getEditTextTrim();
+        if (TextUtils.isEmpty(mInputPwdString)) {
+            showToastShort("密码不能为空");
+            return false;
+        }
+        if (mInputPwdString.length() < 6) {
+            showToastShort("密码不合法");
+            return false;
+        }
+        return true;
+    }
+
+    private boolean checkInputRegisterOrSeek() {
+        mInputCodeString = mEtCode.getEditTextTrim();
+        if (TextUtils.isEmpty(mInputCodeString)) {
+            showToastShort("验证码不能为空");
+            return false;
+        }
+        if (mInputCodeString.length() != 6) {
+            showToastShort("验证码格式错误");
+            return false;
+        }
+        return checkInputLogin();
+    }
+
+    private boolean checkInputPhone() {
+        mInputPhoneString = mEtPhone.getEditTextTrim();
+        if (TextUtils.isEmpty(mInputPhoneString)) {
+            showToastShort("手机号不能为空");
+            return false;
+        }
+        if (mInputPhoneString.length() != 11 || CheckNumberRegulationsUtil.isTelPhoneNumber(mInputCodeString)) {
+            showToastShort("手机号不合法");
+            return false;
+        }
+        return true;
+    }
+
+ /*   @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        if (mTimer != null) {
+            mTimer.cancel();
+        }
+        if (mMyTimerTask != null) {
+            mMyTimerTask.cancel();
+        }
+    }*/
+
+    /*class MyTimerTask extends TimerTask {
+
+        @Override
+        public void run() {
+            runOnUiThread(new Runnable() {      // UI thread
+                @Override
+                public void run() {
+                    recLen--;
+                    mEtCode.setEditCodeText(recLen + "秒后重试");
+                    if (recLen <= 0) {
+                        recLen = RECLEN_TIME;
+                        mEtCode.registerTvCodeListent();
+                        mEtCode.setEditCodeText("验证码");
+                        cancel();
+                    }
+                }
+            });
+        }
+    }*/
 
     @Override
     public void onClick(View v) {
@@ -185,6 +303,29 @@ public class IdCorrelationSlidingActivity extends BaseSlidingActivity implements
                 break;
             case R.id.id_correlation_tv_next:
                 //TODO  mIsKeepPwd true-->记住密码  false-->不用记住密码
+                switch (mInitentState) {
+                    case ID_CORRELATION_STATE_LOGIN:
+                        boolean isCanLogin = checkInputLogin();
+                        if (!isCanLogin) {
+                            return;
+                        }
+                        netLogin();
+                        break;
+                    case ID_CORRELATION_STATE_REGISTER:
+                        boolean isCanRegister = checkInputRegisterOrSeek();
+                        if (!isCanRegister) {
+                            return;
+                        }
+                        netRegister();
+                        break;
+                    case ID_CORRELATION_STATE_SEEK:
+                        boolean isCanSeek = checkInputRegisterOrSeek();
+                        if (!isCanSeek) {
+                            return;
+                        }
+                        netResetPassword();
+                        break;
+                }
                 break;
             case R.id.id_correlation_tv_protocol:
                 showToastShort("protocol");
@@ -197,9 +338,92 @@ public class IdCorrelationSlidingActivity extends BaseSlidingActivity implements
                 changChecked(mIsKeepPwd);
                 break;
             case R.id.id_correlation_tv_keep_pwd_seek:
-                IdCorrelationSlidingActivity.startIdCorrelationActivity(IdCorrelationSlidingActivity.this, ID_CORRELATION_STATE_REGISTER);
+                IdCorrelationSlidingActivity.startIdCorrelationActivity(IdCorrelationSlidingActivity.this, ID_CORRELATION_STATE_SEEK);
                 break;
         }
+    }
+
+    private void netResetPassword() {
+        mLoadingDialog.show();
+        mIdCorrelationEngin.resetPassword(mInputCodeString, mInputPhoneString, mInputPwdString, "user/resetPassword").subscribe(new MySubscriber<AResultInfo<String>>(mLoadingDialog) {
+
+            @Override
+            protected void onNetNext(AResultInfo<String> myIdCorrelationSmsBeanAResultInfo) {
+                String msg = myIdCorrelationSmsBeanAResultInfo.msg;
+                int code = myIdCorrelationSmsBeanAResultInfo.code;
+                String data = myIdCorrelationSmsBeanAResultInfo.data;
+                Log.d("mylog", "onNetNext: myIdCorrelationSmsBeanAResultInfo " + myIdCorrelationSmsBeanAResultInfo.toString());
+            }
+
+
+            @Override
+            protected void onNetError(Throwable e) {
+
+            }
+
+            @Override
+            protected void onNetCompleted() {
+
+            }
+        });
+    }
+
+    private void netRegister() {
+        mLoadingDialog.show();
+        mIdCorrelationEngin.register(mInputCodeString, mInputPhoneString, mInputPwdString, "user/reg").subscribe(new MySubscriber<AResultInfo<IdCorrelationLoginBean>>(mLoadingDialog) {
+
+            @Override
+            protected void onNetNext(AResultInfo<IdCorrelationLoginBean> myIdCorrelationSmsBeanAResultInfo) {
+                String msg = myIdCorrelationSmsBeanAResultInfo.msg;
+                int code = myIdCorrelationSmsBeanAResultInfo.code;
+                //{"vip_end_time":0,"mobile":"15927678095","id":"2","vip":0}
+                IdCorrelationLoginBean data = myIdCorrelationSmsBeanAResultInfo.data;
+                Log.d("mylog", "onNetNext: myIdCorrelationSmsBeanAResultInfo " + myIdCorrelationSmsBeanAResultInfo.toString());
+                String str = JSON.toJSONString(data);// java对象转为jsonString
+                SPUtils.put(IdCorrelationSlidingActivity.this, SPUtils.LOGIN_BEAN, str);
+                BackfillSingle.backfillLoginData(str);
+            }
+
+
+            @Override
+            protected void onNetError(Throwable e) {
+
+            }
+
+            @Override
+            protected void onNetCompleted() {
+
+            }
+        });
+    }
+
+    private void netLogin() {
+        mLoadingDialog.show();
+        mIdCorrelationEngin.login(mInputPhoneString, mInputPwdString, "user/login").subscribe(new MySubscriber<AResultInfo<IdCorrelationLoginBean>>(mLoadingDialog) {
+
+            @Override
+            protected void onNetNext(AResultInfo<IdCorrelationLoginBean> myIdCorrelationSmsBeanAResultInfo) {
+                String msg = myIdCorrelationSmsBeanAResultInfo.msg;
+                int code = myIdCorrelationSmsBeanAResultInfo.code;
+                IdCorrelationLoginBean data = myIdCorrelationSmsBeanAResultInfo.data;
+                String str = JSON.toJSONString(data);// java对象转为jsonString
+                SPUtils.put(IdCorrelationSlidingActivity.this, SPUtils.LOGIN_BEAN, str);
+                BackfillSingle.backfillLoginData(str);
+                IdCorrelationLoginBean idCorrelationLoginBean = new Gson().fromJson(str, IdCorrelationLoginBean.class);
+                Log.d("mylog", "onNetNext: idCorrelationLoginBean " + idCorrelationLoginBean.toString());
+            }
+
+
+            @Override
+            protected void onNetError(Throwable e) {
+
+            }
+
+            @Override
+            protected void onNetCompleted() {
+
+            }
+        });
     }
 
     private void changChecked(boolean isKeepPwd) {

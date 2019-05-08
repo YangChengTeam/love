@@ -3,6 +3,7 @@ package com.yc.love.ui.view;
 import android.content.Context;
 import android.support.annotation.StringRes;
 import android.support.v7.app.AlertDialog;
+import android.util.Log;
 import android.view.View;
 import android.view.Window;
 import android.widget.ImageView;
@@ -35,17 +36,21 @@ public class LoadingDialog {
         Window window = alertDialog.getWindow();
         window.setContentView(R.layout.loading_view);
 
-        progressBar = window.findViewById(R.id.loading_view_progressbar);
-        tv = window.findViewById(R.id.loading_view_tv);
-        iv = window.findViewById(R.id.loading_view_iv);
+//        progressBar = window.findViewById(R.id.loading_view_progressbar);
+//        tv = window.findViewById(R.id.loading_view_tv);
+//        iv = window.findViewById(R.id.loading_view_iv);
     }
 
     /**
      * loading
      */
     public void showLoading() {
-        iv.setVisibility(View.GONE);
-        progressBar.setVisibility(View.VISIBLE);
+//        iv.setVisibility(View.GONE);
+//        progressBar.setVisibility(View.VISIBLE);
+        if (!alertDialog.isShowing()) {
+            Log.d("mylog", "showLoading: alertDialog.isShowing() " + alertDialog.isShowing());
+            alertDialog.show();
+        }
     }
 
     public void dismissLoading() {

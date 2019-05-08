@@ -193,7 +193,7 @@ public class MainT1Fragment extends BaseMainFragment {
 //        final LoadingDialog loadingView = new LoadingDialog(mMainActivity);
 //        loadingView.showLoading();
 
-        MainT1FragGank mainT1FragGank = new MainT1FragGank();
+        /*MainT1FragGank mainT1FragGank = new MainT1FragGank();
         RequestImpl request = new RequestImpl() {
             @Override
             public void loadSuccess(Object object) {
@@ -219,13 +219,13 @@ public class MainT1Fragment extends BaseMainFragment {
                         }
 //                        tvName.setText(getClass().getName());
 //                        loadingView.dismissLoading();
-                       /* maCache.remove(Constants.BANNER_PIC);
+                       *//* maCache.remove(Constants.BANNER_PIC);
                         maCache.put(Constants.BANNER_PIC, mBannerImages);
                         maCache.remove(Constants.BANNER_PIC_DATA);
                         maCache.put(Constants.BANNER_PIC_DATA, result);
                         bannerDataBean.setData(mBannerImages, result);
 
-                        bannerData.setValue(bannerDataBean);*/
+                        bannerData.setValue(bannerDataBean);*//*
                     }
                 }
             }
@@ -244,10 +244,10 @@ public class MainT1Fragment extends BaseMainFragment {
             }
         };
 
-        mainT1FragGank.showData(request);
+        mainT1FragGank.showData(request);*/
 
 
-        mainT1FragGank.showJobData(new RequestImpl() {
+        /*mainT1FragGank.showJobData(new RequestImpl() {
             @Override
             public void loadSuccess(Object object) {
                 JobBean jobBean = (JobBean) object;
@@ -266,7 +266,7 @@ public class MainT1Fragment extends BaseMainFragment {
             public void addSubscription(Disposable subscription) {
                 Log.d("mylog", "addSubscription: subscription " + subscription.toString());
             }
-        });
+        });*/
     }
 
 

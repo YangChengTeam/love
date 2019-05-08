@@ -7,6 +7,9 @@ import android.view.ViewGroup;
 import android.widget.FrameLayout;
 
 import com.yc.love.R;
+import com.yc.love.ui.activity.IdCorrelationSlidingActivity;
+import com.yc.love.ui.view.LoadDialog;
+import com.yc.love.ui.view.LoadingDialog;
 
 import java.lang.reflect.Field;
 
@@ -15,6 +18,7 @@ import java.lang.reflect.Field;
  */
 
 public class BaseSlidingActivity extends BaseActivity  implements SlidingPaneLayout.PanelSlideListener {
+    public LoadDialog mLoadingDialog;
 
 //    public final static String TAG = BaseActivity.class.getCanonicalName();
 //    public final static String TAG = "mylog";
@@ -25,7 +29,7 @@ public class BaseSlidingActivity extends BaseActivity  implements SlidingPaneLay
     protected void onCreate(Bundle savedInstanceState) {
         initSwipeBackFinish();
         super.onCreate(savedInstanceState);
-
+        mLoadingDialog = new LoadDialog(this);
     }
 
     /**

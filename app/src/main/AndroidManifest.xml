@@ -39,7 +39,9 @@
             android:theme="@style/AppTheme" />
         <activity android:name=".ui.activity.RecyclerViewSlidingActivity" />
         <activity android:name=".ui.activity.Main4Activity" />
-        <activity android:name=".ui.activity.IdCorrelationSlidingActivity" />
+        <activity
+            android:launchMode="standard"
+            android:name=".ui.activity.IdCorrelationSlidingActivity" />
         <activity android:name=".ui.activity.LoveHealActivity" />
         <activity android:name=".ui.activity.LoveDialogueActivity" />
         <activity android:name=".ui.activity.LoveHealingActivity" />
