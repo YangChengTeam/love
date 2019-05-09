@@ -117,8 +117,10 @@
     </style>
 
     <style name="DialogBottom">
-        <item name="@android:windowEnterAnimation">@anim/dialog_enter</item>
-        <item name="@android:windowExitAnimation">@anim/dialog_exit</item>
+        <!--<item name="@android:windowEnterAnimation">@anim/dialog_enter</item>-->
+        <!--<item name="@android:windowExitAnimation">@anim/dialog_exit</item>-->
+        <item name="android:windowEnterAnimation">@anim/dialog_enter</item>
+        <item name="android:windowExitAnimation">@anim/dialog_exit</item>
     </style>
 
     <style name="BaseAppTheme" parent="Theme.AppCompat.Light.NoActionBar">

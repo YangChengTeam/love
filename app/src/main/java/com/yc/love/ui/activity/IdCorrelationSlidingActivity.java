@@ -406,11 +406,11 @@ public class IdCorrelationSlidingActivity extends BaseSlidingActivity implements
                 String msg = myIdCorrelationSmsBeanAResultInfo.msg;
                 int code = myIdCorrelationSmsBeanAResultInfo.code;
                 IdCorrelationLoginBean data = myIdCorrelationSmsBeanAResultInfo.data;
-                String str = JSON.toJSONString(data);// java对象转为jsonString
-                SPUtils.put(IdCorrelationSlidingActivity.this, SPUtils.LOGIN_BEAN, str);
-                BackfillSingle.backfillLoginData(str);
-                IdCorrelationLoginBean idCorrelationLoginBean = new Gson().fromJson(str, IdCorrelationLoginBean.class);
-                Log.d("mylog", "onNetNext: idCorrelationLoginBean " + idCorrelationLoginBean.toString());
+//                String str = JSON.toJSONString(data);// java对象转为jsonString
+//                SPUtils.put(IdCorrelationSlidingActivity.this, SPUtils.LOGIN_BEAN, str);
+//                BackfillSingle.backfillLoginData(str);
+//                IdCorrelationLoginBean idCorrelationLoginBean = new Gson().fromJson(str, IdCorrelationLoginBean.class);
+                Log.d("mylog", "onNetNext: idCorrelationLoginBean " + data.toString());
             }
 
 
