@@ -1,8 +1,27 @@
 package com.yc.love.model.data;
 
+import android.content.Context;
+import android.text.TextUtils;
+import android.util.Log;
+
+import com.alibaba.fastjson.JSON;
 import com.google.gson.Gson;
+import com.google.gson.JsonObject;
 import com.yc.love.model.bean.IdCorrelationLoginBean;
 import com.yc.love.model.single.YcSingle;
+import com.yc.love.model.util.SPUtils;
+import com.yc.love.ui.activity.IdCorrelationSlidingActivity;
+
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import java.lang.reflect.Method;
+import java.util.HashMap;
+import java.util.Map;
+import java.lang.reflect.Field;
+import java.lang.reflect.Method;
+import java.util.HashMap;
+import java.util.Map;
 
 /**
  * Created by mayn on 2019/5/8.
@@ -10,17 +29,66 @@ import com.yc.love.model.single.YcSingle;
 
 public class BackfillSingle {
 
-    public static void backfillLoginData(String stringBean) {
-        IdCorrelationLoginBean idCorrelationLoginBean = new Gson().fromJson(stringBean, IdCorrelationLoginBean.class);
+    public static void backfillLoginData(Context context, String stringBean) {
+        String idInfoString = (String) SPUtils.get(context, SPUtils.ID_INFO_BEAN, "");
+        IdCorrelationLoginBean idCorrelationLogin = new Gson().fromJson(idInfoString, IdCorrelationLoginBean.class);
         YcSingle ycSingle = YcSingle.getInstance();
-        ycSingle.vip_end_time = idCorrelationLoginBean.vip_end_time;
-        ycSingle.id = idCorrelationLoginBean.id;
-        ycSingle.vip = idCorrelationLoginBean.vip;
-        ycSingle.id = idCorrelationLoginBean.id;
-        ycSingle.face = idCorrelationLoginBean.face;
-        ycSingle.nick_name = idCorrelationLoginBean.nick_name;
-        ycSingle.name = idCorrelationLoginBean.name;
-        ycSingle.mobile = idCorrelationLoginBean.mobile;
+        if (!TextUtils.isEmpty(stringBean)) {
+            try {
+                JSONObject jsonObject = new JSONObject(stringBean);
+                if (jsonObject.has("face")) {
+                    String face = jsonObject.getString("face");
+                    if (!TextUtils.isEmpty(face)) {
+                        ycSingle.face = face;
+                        idCorrelationLogin.face = face;
+                    }
+                }
+                if (jsonObject.has("nick_name")) {
+                    String nick_name = jsonObject.getString("nick_name");
+                    if (!TextUtils.isEmpty(nick_name)) {
+                        ycSingle.nick_name = nick_name;
+                        idCorrelationLogin.nick_name = nick_name;
+                    }
+                }
+                if (jsonObject.has("name")) {
+                    String name = jsonObject.getString("name");
+                    if (!TextUtils.isEmpty(name)) {
+                        ycSingle.name = name;
+                        idCorrelationLogin.name = name;
+                    }
+                }
+                if (jsonObject.has("mobile")) {
+                    String mobile = jsonObject.getString("mobile");
+                    if (!TextUtils.isEmpty(mobile)) {
+                        ycSingle.mobile = mobile;
+                        idCorrelationLogin.mobile = mobile;
+                    }
+                }
+                if (jsonObject.has("vip_end_time")) {
+                    int vip_end_time = jsonObject.getInt("vip_end_time");
+                    if (vip_end_time > 0) {
+                        ycSingle.vip_end_time = vip_end_time;
+                        idCorrelationLogin.vip_end_time = vip_end_time;
+                    }
+                }
+                if (jsonObject.has("id")) {
+                    int id = jsonObject.getInt("id");
+                    if (id > 0) {
+                        ycSingle.id = id;
+                        idCorrelationLogin.id = id;
+                    }
+                }
+                if (jsonObject.has("vip")) {
+                    int vip = jsonObject.getInt("vip");
+                    if (vip > 0) {
+                        ycSingle.vip = vip;
+                        idCorrelationLogin.vip = vip;
+                    }
+                }
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
+        }
+        SPUtils.put(context, SPUtils.ID_INFO_BEAN, JSON.toJSONString(idCorrelationLogin));
     }
-
 }

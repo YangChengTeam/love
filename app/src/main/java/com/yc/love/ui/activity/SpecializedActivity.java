@@ -6,6 +6,7 @@ import android.support.v4.app.FragmentActivity;
 import android.os.Bundle;
 
 import com.yc.love.R;
+import com.yc.love.model.data.BackfillSingle;
 
 public class SpecializedActivity extends FragmentActivity {
 
@@ -22,6 +23,9 @@ public class SpecializedActivity extends FragmentActivity {
         new Handler().postDelayed(new Runnable() {
             @Override
             public void run() {
+
+                BackfillSingle.backfillLoginData(SpecializedActivity.this, ""); //初始化单例，回填ID数据
+
                 startActivity(new Intent(SpecializedActivity.this, MainActivity.class));
                 overridePendingTransition(R.anim.screen_zoom_in, R.anim.screen_zoom_out);
                 finish();

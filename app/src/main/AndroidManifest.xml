@@ -39,9 +39,7 @@
             android:theme="@style/AppTheme" />
         <activity android:name=".ui.activity.RecyclerViewSlidingActivity" />
         <activity android:name=".ui.activity.Main4Activity" />
-        <activity
-            android:launchMode="standard"
-            android:name=".ui.activity.IdCorrelationSlidingActivity" />
+        <activity android:name=".ui.activity.IdCorrelationSlidingActivity" />
         <activity android:name=".ui.activity.LoveHealActivity" />
         <activity android:name=".ui.activity.LoveDialogueActivity" />
         <activity android:name=".ui.activity.LoveHealingActivity" />
@@ -88,6 +86,7 @@
         <activity android:name=".ui.activity.CollectActivity" />
         <activity android:name=".ui.view.imgs.ISListActivity" />
         <activity android:name=".ui.view.imgs.ISCameraActivity"></activity>
+
         <provider
             android:name="android.support.v4.content.FileProvider"
             android:authorities="com.yc.love.fileprovider"

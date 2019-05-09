@@ -16,10 +16,10 @@ public class IdCorrelationLoginBean {
      */
 
     public String face;
-    public int vip_end_time;
     public String nick_name;
     public String name;
     public String mobile;
+    public int vip_end_time;
     public int id;
     public int vip;
 

@@ -28,6 +28,7 @@ import com.yc.love.model.bean.BannerItemBean;
 import com.yc.love.model.bean.FrontpageBean;
 import com.yc.love.model.bean.JobBean;
 import com.yc.love.model.bean.StringBean;
+import com.yc.love.model.data.BackfillSingle;
 import com.yc.love.ui.activity.LoveHealActivity;
 import com.yc.love.ui.activity.LoveHealingActivity;
 import com.yc.love.ui.frament.base.BaseMainFragment;
@@ -190,6 +191,9 @@ public class MainT1Fragment extends BaseMainFragment {
     }
 
     private void isCanLoadData() {
+
+
+
 //        final LoadingDialog loadingView = new LoadingDialog(mMainActivity);
 //        loadingView.showLoading();
 
