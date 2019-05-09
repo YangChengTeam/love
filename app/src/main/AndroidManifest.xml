@@ -85,7 +85,7 @@
         <activity android:name=".ui.activity.SettingActivity" />
         <activity android:name=".ui.activity.CollectActivity" />
         <activity android:name=".ui.view.imgs.ISListActivity" />
-        <activity android:name=".ui.view.imgs.ISCameraActivity"></activity>
+        <activity android:name=".ui.view.imgs.ISCameraActivity" />
 
         <provider
             android:name="android.support.v4.content.FileProvider"
@@ -96,6 +96,8 @@
                 android:name="android.support.FILE_PROVIDER_PATHS"
                 android:resource="@xml/provider_paths" />
         </provider>
+
+        <activity android:name=".ui.activity.LoveHealDetailsActivity"></activity>
     </application>
 
 </manifest>

@@ -7,10 +7,11 @@
 
     <View
         android:layout_width="match_parent"
-        android:layout_height="10dp"
+        android:layout_height="9dp"
         android:background="@color/love_background" />
 
     <LinearLayout
+        android:paddingTop="2dp"
         android:paddingLeft="12dp"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"

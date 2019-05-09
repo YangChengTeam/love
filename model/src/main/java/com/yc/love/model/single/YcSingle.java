@@ -22,9 +22,19 @@ public class YcSingle {
     public String face;
     public String nick_name;
     public String name;
-    public String mobile;
+    public String mobile;  //登录界面手机号取SP 其他用内存数据
     public int vip_end_time;
     public int id;
     public int vip;
+
+    public void clearAllData() {
+        face = "";
+        nick_name = "";
+        name = "";
+        mobile = "";
+        vip_end_time = 0;
+        id = 0;
+        vip = 0;
+    }
 
 }

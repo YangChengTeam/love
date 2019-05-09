@@ -10,15 +10,29 @@ import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
+import com.alibaba.fastjson.JSON;
 import com.bigkoo.pickerview.builder.TimePickerBuilder;
 import com.bigkoo.pickerview.listener.OnTimeSelectListener;
 import com.bigkoo.pickerview.view.TimePickerView;
 import com.yc.love.R;
+import com.yc.love.model.base.MySubscriber;
+import com.yc.love.model.bean.AResultInfo;
+import com.yc.love.model.bean.EventLoginState;
+import com.yc.love.model.bean.IdCorrelationLoginBean;
+import com.yc.love.model.data.BackfillSingle;
+import com.yc.love.model.engin.IdCorrelationEngin;
+import com.yc.love.model.single.YcSingle;
+import com.yc.love.model.util.SPUtils;
 import com.yc.love.model.util.TimeUtils;
 import com.yc.love.ui.activity.base.BasePushPhotoActivity;
 import com.yc.love.ui.view.CheckBoxSample;
 
+import org.greenrobot.eventbus.EventBus;
+
+import java.util.Calendar;
 import java.util.Date;
+
+import static com.yc.love.ui.activity.IdCorrelationSlidingActivity.ID_CORRELATION_STATE_LOGIN;
 
 public class UserInfoActivity extends BasePushPhotoActivity {
 
@@ -32,6 +46,7 @@ public class UserInfoActivity extends BasePushPhotoActivity {
     private TextView mTvDate;
     private String mStringEtName;
     private ImageView mIvIcon;
+    private IdCorrelationEngin mIdCorrelationEngin;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -39,7 +54,10 @@ public class UserInfoActivity extends BasePushPhotoActivity {
         setContentView(R.layout.activity_user_info);
 
         initViews();
+        initData();
+        mIdCorrelationEngin = new IdCorrelationEngin(this);
     }
+
 
     private void initViews() {
         LinearLayout llItem02 = findViewById(R.id.user_info_ll_item_02);
@@ -69,6 +87,17 @@ public class UserInfoActivity extends BasePushPhotoActivity {
         tvSub.setText("完成");
         tvSub.setOnClickListener(this);
         rlTitCon.setOnClickListener(this);
+    }
+
+    private void initData() {
+        YcSingle instance = YcSingle.getInstance();
+        String nick_name = instance.nick_name;
+        if (!TextUtils.isEmpty(nick_name)) {
+            mEtName.setText(nick_name);
+            mEtName.setSelection(nick_name.length());
+        }
+
+        //TODO 性别 生日的默认值
     }
 
     private void isCheckedMen(boolean isCheckedMen) {
@@ -113,8 +142,42 @@ public class UserInfoActivity extends BasePushPhotoActivity {
                 }
                 Log.d("mylog", "onClick: 是男性吗 mIsCheckedMen " + mIsCheckedMen + " 昵称 mStringEtName" + mStringEtName
                         + " 生日 mBirthdayString " + mBirthdayString);
+
+                netUpdateInfo();
                 break;
         }
+    }
+
+    private void netUpdateInfo() {
+        String pwd = (String) SPUtils.get(this, SPUtils.LOGIN_PWD, "");
+        int id = YcSingle.getInstance().id;
+        mLoadingDialog.show();
+        //TODO 图片上传 生日
+        String face = "https://avatar.csdn.net/A/1/4/3_lawsonjin.jpg";
+        mIdCorrelationEngin.updateInfo(String.valueOf(id), mStringEtName, face, pwd, "user/update").subscribe(new MySubscriber<AResultInfo<IdCorrelationLoginBean>>(mLoadingDialog) {
+            @Override
+            protected void onNetNext(AResultInfo<IdCorrelationLoginBean> idCorrelationLoginBeanAResultInfo) {
+
+                IdCorrelationLoginBean data = idCorrelationLoginBeanAResultInfo.data;
+                //持久化存储登录信息
+                String str = JSON.toJSONString(data);// java对象转为jsonString
+                BackfillSingle.backfillLoginData(UserInfoActivity.this, str);
+
+                EventBus.getDefault().post(new EventLoginState(EventLoginState.STATE_UPDATE_INFO));
+                showToastShort("完善信息成功");
+                finish();
+            }
+
+            @Override
+            protected void onNetError(Throwable e) {
+
+            }
+
+            @Override
+            protected void onNetCompleted() {
+
+            }
+        });
     }
 
     private boolean checkInput() {
@@ -136,6 +199,10 @@ public class UserInfoActivity extends BasePushPhotoActivity {
     }
 
     private void showDateTimePickerView() {
+        showDateTimePickerView(0, 0, 0);
+    }
+
+    private void showDateTimePickerView(int year, int month, int day) {
         if (mPvTime == null) {
             mPvTime = new TimePickerBuilder(this, new OnTimeSelectListener() {
                 @Override
@@ -151,8 +218,21 @@ public class UserInfoActivity extends BasePushPhotoActivity {
                     .setSubmitColor(getResources().getColor(R.color.text_gray))//确定按钮文字颜色
                     .setCancelColor(getResources().getColor(R.color.text_gray))//取消按钮文字颜色
                     .build();
+            if (year > 0) {
+                Calendar selectedDate = Calendar.getInstance();
+                selectedDate.set(year, month - 1, day);
+                mPvTime.setDate(selectedDate);// 如果不设置的话，默认是系统时间
+            }
         }
         mPvTime.show();
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        if (mPvTime != null) {
+            mPvTime = null;
+        }
     }
 
     @Override

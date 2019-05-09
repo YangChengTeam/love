@@ -3,6 +3,7 @@ package com.yc.love.model.util;
 import android.util.Log;
 
 import java.text.ParseException;
+import java.text.ParsePosition;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
@@ -31,5 +32,22 @@ public class TimeUtils {
         }
         return parse.getTime();
     }
+
+   /* public static Date dateStringToDate(String dateString) {
+//        Date date = new Date(dateLong);
+//        Date currentTime = new Date();
+        SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd");
+//        String dateString = formatter.format(date);
+//        ParsePosition pos = new ParsePosition(8);
+//        Date currentTime_2 = formatter.parse(dateString, pos);
+        Date  date=new Date();
+        try {
+            date = formatter.parse(dateString);
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+
+        return date;
+    }*/
 
 }

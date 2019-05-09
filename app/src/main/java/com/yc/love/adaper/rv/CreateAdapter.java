@@ -4,19 +4,14 @@ import android.content.Context;
 import android.support.annotation.NonNull;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.ViewGroup;
 
 import com.yc.love.adaper.rv.holder.BaseViewHolder;
 import com.yc.love.adaper.rv.holder.LoveHealItemViewHolder;
 import com.yc.love.adaper.rv.holder.LoveHealTitleViewHolder;
-import com.yc.love.adaper.rv.holder.TitleT1ViewHolder;
 import com.yc.love.model.bean.LoveHealBean;
 
-import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 /**
  * Created by mayn on 2019/4/30.
@@ -25,8 +20,6 @@ import java.util.Map;
 public abstract class CreateAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
 
     private Context mContext;
-    //    private HashMap<String, List<T>> mHashMap;
-//    private HashMap<String, > mHashMap;
     private List<LoveHealBean> mDatas;
 
     private final int LOVE_HEAL_TYPE_TITLE = 1;

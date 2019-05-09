@@ -2,16 +2,21 @@ package com.yc.love.ui.activity;
 
 import android.content.DialogInterface;
 import android.support.v7.app.AlertDialog;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.LinearLayout;
+import android.widget.TextView;
 
 import com.yc.love.R;
+import com.yc.love.model.bean.EventLoginState;
+import com.yc.love.model.single.YcSingle;
 import com.yc.love.model.util.DataCleanManagerUtils;
+import com.yc.love.model.util.SPUtils;
 import com.yc.love.ui.activity.base.BaseSameActivity;
 import com.yc.love.ui.view.LoadingDialog;
 import com.yc.love.ui.view.MainMyItemLin;
+
+import org.greenrobot.eventbus.EventBus;
 
 public class SettingActivity extends BaseSameActivity {
 
@@ -26,10 +31,17 @@ public class SettingActivity extends BaseSameActivity {
     }
 
     private void initViews() {
+        LinearLayout llExit = findViewById(R.id.setting_ll_exit);
+        llExit.setOnClickListener(this);
+
+
+        TextView tvExit = findViewById(R.id.setting_tv_exit);
         LinearLayout llItem01 = findViewById(R.id.setting_ll_item_01);
         LinearLayout llItem02 = findViewById(R.id.setting_ll_item_02);
         LinearLayout llItem03 = findViewById(R.id.setting_ll_item_03);
         mLlItem04 = findViewById(R.id.setting_ll_item_04);
+
+        tvExit.setOnClickListener(this);
 
         llItem01.setOnClickListener(this);
         llItem02.setOnClickListener(this);
@@ -42,12 +54,21 @@ public class SettingActivity extends BaseSameActivity {
         } catch (Exception e) {
             e.printStackTrace();
         }
+
+        int id = YcSingle.getInstance().id;
+        if (id > 0) {
+            tvExit.setVisibility(View.VISIBLE);
+        }
     }
 
     @Override
     public void onClick(View v) {
         super.onClick(v);
         switch (v.getId()) {
+            case R.id.setting_tv_exit:
+            case R.id.setting_ll_exit:
+                clearExit();
+                break;
             case R.id.setting_ll_item_01:
 
                 break;
@@ -61,6 +82,26 @@ public class SettingActivity extends BaseSameActivity {
                 clearCache();
                 break;
         }
+    }
+
+    private void clearExit() {
+        AlertDialog alertDialog = new AlertDialog.Builder(this).create();
+        alertDialog.setMessage("是否退出登录？");
+        DialogInterface.OnClickListener listent = null;
+        alertDialog.setButton(DialogInterface.BUTTON_NEGATIVE, "取消", listent);
+        alertDialog.setButton(DialogInterface.BUTTON_POSITIVE, "退出", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialogInterface, int i) {
+//                SPUtils.put(SettingActivity.this, SPUtils.LOGIN_PWD, "");
+                SPUtils.put(SettingActivity.this, SPUtils.ID_INFO_BEAN, "");
+                YcSingle.getInstance().clearAllData();
+
+                EventBus.getDefault().post( new EventLoginState(EventLoginState.STATE_EXIT));
+                showToastShort("退出登录成功");
+                finish();
+            }
+        });
+        alertDialog.show();
     }
 
     private void clearCache() {
