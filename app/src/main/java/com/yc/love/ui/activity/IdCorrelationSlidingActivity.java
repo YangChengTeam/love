@@ -81,6 +81,7 @@ public class IdCorrelationSlidingActivity extends BaseSlidingActivity implements
         ycApplication.activityIdCorList.add(this);
     }
 
+
     private void initInitent() {
         Intent intent = getIntent();
         mInitentState = intent.getIntExtra("state", -1);
@@ -346,7 +347,7 @@ public class IdCorrelationSlidingActivity extends BaseSlidingActivity implements
 
         // TODO 重置密码的接口用不了
         mLoadingDialog.show();
-        mIdCorrelationEngin.resetPassword(mInputCodeString, mInputPhoneString, mInputPwdString, "user/resetPassword").subscribe(new MySubscriber<AResultInfo<String>>(mLoadingDialog) {
+        mIdCorrelationEngin.resetPassword(mInputCodeString, mInputPhoneString, mInputPwdString, "user/reset").subscribe(new MySubscriber<AResultInfo<String>>(mLoadingDialog) {
 
             @Override
             protected void onNetNext(AResultInfo<String> myIdCorrelationSmsBeanAResultInfo) {

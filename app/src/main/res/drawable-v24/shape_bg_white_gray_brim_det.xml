@@ -4,28 +4,28 @@
                 android:top="2px"-->
     <item>
         <shape android:shape="rectangle">
-            <padding android:bottom="4px" android:left="2px" android:right="2px" android:top="1px" />
+            <padding android:bottom="4px" android:left="3px" android:right="3px" android:top="2px" />
             <solid android:color="@color/gray_brim_gray_01" />
             <corners android:radius="6dp" />
         </shape>
     </item>
     <item>
         <shape android:shape="rectangle">
-            <padding android:bottom="4px" android:left="2px" android:right="2px" android:top="1px" />
+            <padding android:bottom="4px" android:left="3px" android:right="3px" android:top="2px" />
             <solid android:color="@color/gray_brim_gray_02" />
             <corners android:radius="6dp" />
         </shape>
     </item>
     <item>
         <shape android:shape="rectangle">
-            <padding android:bottom="4px" android:left="2px" android:right="2px" android:top="1px" />
+            <padding android:bottom="4px" android:left="3px" android:right="3px" android:top="2px" />
             <solid android:color="@color/gray_brim_gray_03" />
             <corners android:radius="6dp" />
         </shape>
     </item>
     <item>
         <shape android:shape="rectangle">
-            <padding android:bottom="4px" android:left="2px" android:right="2px" android:top="1px" />
+            <padding android:bottom="4px" android:left="3px" android:right="3px" android:top="2px" />
             <solid android:color="@color/gray_brim_gray_04" />
             <corners android:radius="6dp" />
         </shape>

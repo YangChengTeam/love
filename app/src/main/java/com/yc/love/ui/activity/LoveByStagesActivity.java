@@ -3,14 +3,18 @@ package com.yc.love.ui.activity;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Color;
+import android.os.Parcelable;
 import android.support.v4.view.ViewPager;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.view.animation.AccelerateInterpolator;
 import android.view.animation.DecelerateInterpolator;
 
 import com.yc.love.R;
 import com.yc.love.adaper.vp.LoveByStagesPagerAdapter;
+import com.yc.love.model.bean.CategoryArticleBean;
+import com.yc.love.model.bean.CategoryArticleChildrenBean;
 import com.yc.love.ui.activity.base.BaseSameActivity;
 import com.yc.love.ui.view.ColorFlipPagerTitleView;
 
@@ -36,6 +40,7 @@ public class LoveByStagesActivity extends BaseSameActivity {
     private ViewPager mViewPager;
     private MagicIndicator mTabLayout;
     private String mActivityTitle;
+    private List<CategoryArticleChildrenBean> mCategoryArticleChildrenBeans;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -52,24 +57,23 @@ public class LoveByStagesActivity extends BaseSameActivity {
     }
 
     private void netSwitchPagerData() {
-        List<String> titleList = new ArrayList<>();
-        titleList.add(mActivityTitle + " 1");
-        titleList.add(mActivityTitle + " 2");
-        titleList.add(mActivityTitle + " 3");
-        titleList.add(mActivityTitle + " 4");
-        titleList.add(mActivityTitle + " 5");
-        titleList.add(mActivityTitle + " 6");
+        List<String> titleLists = new ArrayList<>();
+        List<Integer> idLists = new ArrayList<>();
+        for (int i = 0; i < mCategoryArticleChildrenBeans.size(); i++) {
+            CategoryArticleChildrenBean categoryArticleChildrenBean = mCategoryArticleChildrenBeans.get(i);
+            titleLists.add(categoryArticleChildrenBean.name);
+            idLists.add(categoryArticleChildrenBean.id);
+        }
 
-        initNavigator(titleList);
+        initNavigator(titleLists);
 
-        LoveByStagesPagerAdapter loveByStagesPagerAdapter = new LoveByStagesPagerAdapter(getSupportFragmentManager(), titleList);
+        LoveByStagesPagerAdapter loveByStagesPagerAdapter = new LoveByStagesPagerAdapter(getSupportFragmentManager(), titleLists,idLists);
         mViewPager.setAdapter(loveByStagesPagerAdapter);
     }
 
     private void initNavigator(final List<String> titleList) {
         CommonNavigator commonNavigator = new CommonNavigator(this);
         commonNavigator.setScrollPivotX(0.65f);
-        //                indicator.setMode(LinePagerIndicator.MODE_WRAP_CONTENT);
         CommonNavigatorAdapter navigatorAdapter = new CommonNavigatorAdapter() {
 
             @Override
@@ -121,11 +125,13 @@ public class LoveByStagesActivity extends BaseSameActivity {
     protected void initIntentData() {
         Intent intent = getIntent();
         mActivityTitle = intent.getStringExtra("title");
+        mCategoryArticleChildrenBeans = intent.getParcelableArrayListExtra("CategoryArticleChildrenBeans");
     }
 
-    public static void startLoveByStagesActivity(Context context, String title) {
+    public static void startLoveByStagesActivity(Context context, String title, ArrayList<CategoryArticleChildrenBean> children) {
         Intent intent = new Intent(context, LoveByStagesActivity.class);
         intent.putExtra("title", title);
+        intent.putParcelableArrayListExtra("CategoryArticleChildrenBeans",children);
         context.startActivity(intent);
     }
 

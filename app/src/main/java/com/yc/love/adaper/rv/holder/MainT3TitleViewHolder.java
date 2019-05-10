@@ -41,45 +41,45 @@ public class MainT3TitleViewHolder extends BaseViewHolder<MainT3Bean> {
         tvIcon01.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                onClickTitleIconListener.clickTitleIcon01();
+                onClickTitleIconListener.clickTitleIcon(0);
             }
         });
         tvIcon02.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                onClickTitleIconListener.clickTitleIcon02();
+                onClickTitleIconListener.clickTitleIcon(1);
             }
         });
         tvIcon03.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                onClickTitleIconListener.clickTitleIcon03();
+                onClickTitleIconListener.clickTitleIcon(2);
             }
         });
         tvIcon04.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                onClickTitleIconListener.clickTitleIcon04();
+                onClickTitleIconListener.clickTitleIcon(3);
             }
         });
         tvIcon05.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                onClickTitleIconListener.clickTitleIcon05();
+                onClickTitleIconListener.clickTitleIcon(4);
             }
         });
     }
 
     public interface OnClickTitleIconListener {
-        void clickTitleIcon01();
+        void clickTitleIcon(int position);
 
-        void clickTitleIcon02();
+        /*void clickTitleIcon02();
 
         void clickTitleIcon03();
 
         void clickTitleIcon04();
 
-        void clickTitleIcon05();
+        void clickTitleIcon05();*/
     }
 
     public void setOnClickTitleIconListener(OnClickTitleIconListener onClickTitleIconListener) {

@@ -20,7 +20,7 @@ public class LoveUpDownPhotoFragment extends BaseLazyFragment {
 
     @Override
     protected int setContentView() {
-        initBundle();
+
         Log.d("mylog", "setContentView: LoveUpDownPhotoFragment ");
         return R.layout.fragment_love_up_down_photo;
     }
@@ -31,9 +31,8 @@ public class LoveUpDownPhotoFragment extends BaseLazyFragment {
         tv.setText(mDataString);
     }
 
-
-
-    private void initBundle() {
+    @Override
+    protected void initBundle() {
         Bundle arguments = getArguments();
         if (arguments != null) {
             int position = arguments.getInt("position");

@@ -16,17 +16,20 @@ import android.view.WindowManager;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.Toast;
 
+import com.yc.love.ui.view.LoadDialog;
+
 /**
  * Created by mayn on 2019/4/25.
  */
 
 public abstract class BaseActivity extends AppCompatActivity {
 
-
+    public LoadDialog mLoadingDialog;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         Log.d("ClassName", "onCreate: ClassName " + getClass().getName());
+        mLoadingDialog = new LoadDialog(this);
     }
 
     public void showToastShort(String des) {

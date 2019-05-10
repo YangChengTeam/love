@@ -23,8 +23,8 @@ public abstract class LoveHealDetailsAdapter extends RecyclerView.Adapter<Recycl
 
     private final List<LoveHealDetBean> mPersonList;
     private RecyclerView mRecyclerView;
-    private static final int VIEW_ITEM = 0;
-    private static final int VIEW_VIP = 1;
+    private static final int VIEW_ITEM = 1;  // 0 显示VIP  1 不显示VIP,显示ITEM
+    private static final int VIEW_VIP = 0;
     private static final int VIEW_PROG = 2;
     private boolean isLoading;
     private int totalItemCount;
@@ -39,7 +39,6 @@ public abstract class LoveHealDetailsAdapter extends RecyclerView.Adapter<Recycl
     @Override
     public int getItemCount() {
         if (mPersonList != null) {
-            Log.d("mylog", "getItemCount: mPersonList.size() "+mPersonList.size());
             return mPersonList.size();
         }
         return 0;
@@ -52,7 +51,7 @@ public abstract class LoveHealDetailsAdapter extends RecyclerView.Adapter<Recycl
         if (loveHealDetBean == null) {
             return VIEW_PROG;
         }
-        int type = loveHealDetBean.type;
+        int type = loveHealDetBean.is_vip;
         switch (type) {
             case VIEW_ITEM:
                 return VIEW_ITEM;

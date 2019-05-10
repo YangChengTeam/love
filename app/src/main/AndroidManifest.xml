@@ -97,7 +97,8 @@
                 android:resource="@xml/provider_paths" />
         </provider>
 
-        <activity android:name=".ui.activity.LoveHealDetailsActivity"></activity>
+        <activity android:name=".ui.activity.LoveHealDetailsActivity" />
+        <activity android:name=".ui.activity.LoveByStagesDetailsActivity"></activity>
     </application>
 
 </manifest>

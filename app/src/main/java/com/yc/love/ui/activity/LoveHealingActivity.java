@@ -21,7 +21,11 @@ import com.yc.love.adaper.rv.holder.LoveHealingItemViewHolder;
 import com.yc.love.adaper.rv.holder.MainT3ItemTitleViewHolder;
 import com.yc.love.adaper.rv.holder.ProgressBarViewHolder;
 import com.yc.love.adaper.rv.holder.LoveHealingTitleViewHolder;
+import com.yc.love.model.base.MySubscriber;
+import com.yc.love.model.bean.AResultInfo;
+import com.yc.love.model.bean.LoveHealDetBean;
 import com.yc.love.model.bean.LoveHealingBean;
+import com.yc.love.model.engin.LoveEngin;
 import com.yc.love.ui.activity.base.BaseSameActivity;
 
 import java.util.ArrayList;
@@ -42,12 +46,13 @@ public class LoveHealingActivity extends BaseSameActivity {
     //    private MainT2MoreItemAdapter mAdapter;
     private int num = 10;
     private ProgressBarViewHolder progressBarViewHolder;
+    private LoveEngin mLoveEngin;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_love_healing);
-
+        mLoveEngin=new LoveEngin(this);
         initViews();
     }
 
@@ -147,7 +152,27 @@ public class LoveHealingActivity extends BaseSameActivity {
         }
         loadDataEnd = true;
     }
+   /* private void netData() {
+        mLoadingDialog.show();
+        mLoveEngin.loveListCategory(), "Dialogue/lists").subscribe(new MySubscriber<AResultInfo<List<LoveHealDetBean>>>(mLoadingDialog) {
 
+
+            @Override
+            protected void onNetNext(AResultInfo<List<LoveHealDetBean>> listAResultInfo) {
+
+            }
+
+            @Override
+            protected void onNetError(Throwable e) {
+
+            }
+
+            @Override
+            protected void onNetCompleted() {
+
+            }
+        });
+    }*/
     RecyclerViewItemListener recyclerViewItemListener = new RecyclerViewItemListener() {
         @Override
         public void onItemClick(int position) {

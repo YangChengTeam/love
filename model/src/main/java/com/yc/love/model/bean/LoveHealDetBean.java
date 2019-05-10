@@ -8,7 +8,7 @@ import java.util.List;
 
 public class LoveHealDetBean {
 
-    public int type=0;
+//    public int type=0;
     /**
      * ans_sex : 1
      * chat_count : 2
@@ -24,20 +24,22 @@ public class LoveHealDetBean {
     public String chat_count;
     public String chat_name;
     public int id;
+    public int is_vip=1; // 0 显示  1 不显示
     public String quiz_sex;
     public String is_open;
     public String search_type;
-    public List<DetailsBean> details;
+    public List<LoveHealDetDetailsBean> details;
 
-    public static class DetailsBean {
-        /**
+  /*  public static class DetailsBean {
+        *//**
          * id : 3013
          * dialogue_id : 907
          * content : 李晨
          * ans_sex : 2
-         */
+         *//*
 
         public int id;
+        public int size;
         public int dialogue_id;
         public String content;
         public String ans_sex;
@@ -51,12 +53,11 @@ public class LoveHealDetBean {
                     ", ans_sex='" + ans_sex + '\'' +
                     '}';
         }
-    }
+    }*/
 
     @Override
     public String toString() {
         return "LoveHealDetBean{" +
-                "type=" + type +
                 ", ans_sex='" + ans_sex + '\'' +
                 ", chat_count='" + chat_count + '\'' +
                 ", chat_name='" + chat_name + '\'' +

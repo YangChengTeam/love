@@ -17,20 +17,20 @@ public class LoveByStagesFactory {
 
     public static Map<Integer, Fragment> fragments = new HashMap<>();
 
-    public static Fragment createFragment(int position, String jobType) {
+    public static Fragment createFragment(int position, int  id) {
         Fragment fragment = fragments.get(position);
         if (fragment != null) {
             return fragment;
         }
-        fragment = createJobTypePervasiveFragment(position, jobType);
+        fragment = createJobTypePervasiveFragment(position, id);
         fragments.put(position, fragment);
         return fragment;
     }
 
-    private static Fragment createJobTypePervasiveFragment(int position, String jobType) {
+    private static Fragment createJobTypePervasiveFragment(int position, int  id) {
         Fragment fragment = new LoveByStagesFragment();
         Bundle args = new Bundle();
-//        args.putString("jobType", jobType);
+        args.putInt("category_id", id);
         args.putInt("position", position);
         fragment.setArguments(args);
         return fragment;
