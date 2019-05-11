@@ -184,7 +184,7 @@ public class IdCorrelationSlidingActivity extends BaseSlidingActivity implements
             if (!checkInputPhone()) {
                 return;
             }
-            mLoadingDialog.show();
+            mLoadingDialog.showLoadingDialog();
             mIdCorrelationEngin.sms("0", mInputPhoneString).subscribe(new MySubscriber<AResultInfo<String>>(mLoadingDialog) {
 
                 @Override
@@ -346,7 +346,7 @@ public class IdCorrelationSlidingActivity extends BaseSlidingActivity implements
     private void netResetPassword() {
 
         // TODO 重置密码的接口用不了
-        mLoadingDialog.show();
+        mLoadingDialog.showLoadingDialog();
         mIdCorrelationEngin.resetPassword(mInputCodeString, mInputPhoneString, mInputPwdString, "user/reset").subscribe(new MySubscriber<AResultInfo<String>>(mLoadingDialog) {
 
             @Override
@@ -375,7 +375,7 @@ public class IdCorrelationSlidingActivity extends BaseSlidingActivity implements
     }
 
     private void netRegister() {
-        mLoadingDialog.show();
+        mLoadingDialog.showLoadingDialog();
         mIdCorrelationEngin.register(mInputCodeString, mInputPhoneString, mInputPwdString, "user/reg").subscribe(new MySubscriber<AResultInfo<IdCorrelationLoginBean>>(mLoadingDialog) {
 
             @Override
@@ -402,7 +402,7 @@ public class IdCorrelationSlidingActivity extends BaseSlidingActivity implements
     }
 
     private void netLogin() {
-        mLoadingDialog.show();
+        mLoadingDialog.showLoadingDialog();
         /*mIdCorrelationEngin.myLogin(mInputPhoneString, mInputPwdString, "user/login").subscribe(new MySubscriber<AResultInfo<String>>(mLoadingDialog) {
 
             @Override

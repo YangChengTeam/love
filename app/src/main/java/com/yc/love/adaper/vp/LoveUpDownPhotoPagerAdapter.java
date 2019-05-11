@@ -25,21 +25,18 @@ public class LoveUpDownPhotoPagerAdapter extends YFragmentPagerAdapter  {
 
     public LoveUpDownPhotoPagerAdapter(FragmentManager fm, List<String> datas) {
         super(fm);
-        Log.d("mylog", "LoveUpDownPhotoPagerAdapter: LoveUpDownPhotoFragment");
         this.fm = fm;
         this.datas = datas;
     }
 
     @Override
     public Fragment getItem(int position) {//指定Fragmemt
-        Log.d("mylog", "getItem: LoveUpDownPhotoFragment");
         Fragment fragment = LoveUpDownPhotoFragmentFactory.createFragment(position, datas.get(position));
         return fragment;
     }
 
     @Override
     public int getCount() {
-        Log.d("mylog", "getCount: LoveUpDownPhotoFragment "+datas.size());
         if (datas != null) {
             return datas.size();
         }

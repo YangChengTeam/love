@@ -151,7 +151,7 @@ public class UserInfoActivity extends BasePushPhotoActivity {
     private void netUpdateInfo() {
         String pwd = (String) SPUtils.get(this, SPUtils.LOGIN_PWD, "");
         int id = YcSingle.getInstance().id;
-        mLoadingDialog.show();
+        mLoadingDialog.showLoadingDialog();
         //TODO 图片上传 生日
         String face = "https://avatar.csdn.net/A/1/4/3_lawsonjin.jpg";
         mIdCorrelationEngin.updateInfo(String.valueOf(id), mStringEtName, face, pwd, "user/update").subscribe(new MySubscriber<AResultInfo<IdCorrelationLoginBean>>(mLoadingDialog) {

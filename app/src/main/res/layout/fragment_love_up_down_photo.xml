@@ -2,13 +2,9 @@
 <android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
-
     android:layout_height="match_parent">
     <!--android:id="@+id/fragment_love_up_down_photo_constraint_layout"-->
-    <ImageView
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:src="@mipmap/love_up_down_photo_bg" />
+
 
     <TextView
         android:id="@+id/fragment_love_up_down_photo_tv"
@@ -16,10 +12,13 @@
         android:layout_height="wrap_content"
         android:text="5"
         android:textColor="@color/black"
-        android:textSize="@dimen/size_24"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        android:textSize="@dimen/size_24" />
+
+    <android.support.v7.widget.RecyclerView
+        android:id="@+id/fragment_love_up_down_photo_rv"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/white"
+        app:layout_constraintTop_toBottomOf="@+id/fragment_love_up_down_photo_tv" />
 
 </android.support.constraint.ConstraintLayout>

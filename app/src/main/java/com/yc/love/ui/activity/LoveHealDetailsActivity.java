@@ -87,7 +87,7 @@ public class LoveHealDetailsActivity extends BaseSameActivity {
     }
 
     private void netData() {
-        mLoadingDialog.show();
+        mLoadingDialog.showLoadingDialog();
         mLoveEngin.loveListCategory(mCategoryId, String.valueOf(PAGE_NUM), String.valueOf(PAGE_SIZE), "Dialogue/lists").subscribe(new MySubscriber<AResultInfo<List<LoveHealDetBean>>>(mLoadingDialog) {
 
 

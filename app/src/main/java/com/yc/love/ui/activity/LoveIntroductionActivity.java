@@ -131,7 +131,7 @@ public class LoveIntroductionActivity extends BaseSameActivity {
     }
 
     private void netData() {
-        mLoadingDialog.show();
+        mLoadingDialog.showLoadingDialog();
         mLoveEngin.exampleTsList(mTagId, String.valueOf(PAGE_NUM), String.valueOf(PAGE_SIZE), "example/ts_lists").subscribe(new MySubscriber<AResultInfo<String>>(mLoadingDialog) {
 
 

@@ -65,7 +65,7 @@ public class LoveHealActivity extends BaseSameActivity {
     }
 
     private void netData() {
-        mLoadingDialog.show();
+        mLoadingDialog.showLoadingDialog();
         mLoveEngin.loveCategory("Dialogue/category").subscribe(new MySubscriber<AResultInfo<List<LoveHealDateBean>>>(mLoadingDialog) {
 
 

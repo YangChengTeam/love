@@ -77,7 +77,7 @@ public class LoveByStagesFragment extends BaseLoveByStagesFragment {
 
 
     private void netData() {
-        mLoadingDialog.show();
+        mLoadingDialog.showLoadingDialog();
         mLoveEngin.listsArticle(String.valueOf(mCategoryId), String.valueOf(PAGE_NUM), String.valueOf(PAGE_SIZE), "Article/lists").subscribe(new MySubscriber<AResultInfo<List<LoveByStagesBean>>>(mLoadingDialog) {
 
             @Override
@@ -168,7 +168,7 @@ public class LoveByStagesFragment extends BaseLoveByStagesFragment {
         @Override
         public void onItemClick(int position) {
             LoveByStagesBean loveByStagesBean = mLoveByStagesBeans.get(position);
-            LoveByStagesDetailsActivity.startLoveByStagesDetailsActivity(mLoveByStagesActivity,loveByStagesBean.id);
+            LoveByStagesDetailsActivity.startLoveByStagesDetailsActivity(mLoveByStagesActivity,loveByStagesBean.id,loveByStagesBean.post_title);
         }
 
         @Override

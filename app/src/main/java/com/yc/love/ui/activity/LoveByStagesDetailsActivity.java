@@ -14,7 +14,9 @@ import android.webkit.WebSettings;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
 import android.widget.LinearLayout;
+import android.widget.TextView;
 
+import com.kk.utils.LogUtil;
 import com.yc.love.R;
 import com.yc.love.model.base.MySubscriber;
 import com.yc.love.model.bean.AResultInfo;
@@ -22,6 +24,7 @@ import com.yc.love.model.bean.LoveByStagesBean;
 import com.yc.love.model.bean.LoveByStagesDetailsBean;
 import com.yc.love.model.engin.LoveEngin;
 import com.yc.love.ui.activity.base.BaseSameActivity;
+import com.yc.love.ui.view.NewsScrollView;
 
 import java.util.List;
 
@@ -30,17 +33,20 @@ public class LoveByStagesDetailsActivity extends BaseSameActivity {
     private LoveEngin mLoveEngin;
     private int mId;
     private WebView webView;
+    private String mPostTitle;
 
     @Override
     protected void initIntentData() {
         Intent intent = getIntent();
         mId = intent.getIntExtra("id", -1);
+        mPostTitle = intent.getStringExtra("post_title");
     }
 
 
-    public static void startLoveByStagesDetailsActivity(Context context, int id) {
+    public static void startLoveByStagesDetailsActivity(Context context, int id, String postTitle) {
         Intent intent = new Intent(context, LoveByStagesDetailsActivity.class);
         intent.putExtra("id", id);
+        intent.putExtra("post_title", postTitle);
         context.startActivity(intent);
     }
 
@@ -51,131 +57,117 @@ public class LoveByStagesDetailsActivity extends BaseSameActivity {
         mLoveEngin = new LoveEngin(this);
         initViews();
         netData();
+
+        //TODO 点赞 收藏
     }
 
     private void initViews() {
         webView = findViewById(R.id.love_by_stages_details_webview);
-//        initWebView();
+        TextView textView = findViewById(R.id.love_by_stages_details_tv_name);
+        final LinearLayout llTitCon = findViewById(R.id.love_by_stages_details_ll_title_con);
+        NewsScrollView newsScrollView = findViewById(R.id.love_by_stages_details_scroll_view);
+        textView.setText(mPostTitle);
 
 
-       /* webView = new WebView(getApplicationContext());
-        *//*LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
-        params.setMargins(AutoUtils.getPercentWidthSize(6), AutoUtils.getPercentHeightSize(6), AutoUtils.getPercentWidthSize(10), 0);
-        mLlSuveryHolder.addView(webView, params);*//*
-        webView.getSettings().setJavaScriptEnabled(true);
-        webView.setHorizontalScrollBarEnabled(false);//水平不显示
-        webView.setVerticalScrollBarEnabled(false); //垂直不显示
-        webView.setLayerType(View.LAYER_TYPE_HARDWARE, null);//硬件加速*/
- 
-
-    }
-
-    /** * 设置WebView自适应屏幕 * @param data 目标字符串 */
-    public void initWebView(String data){
-        WebSettings settings = webView.getSettings();
-
-        //settings.setUseWideViewPort(true);//调整到适合webview的大小，不过尽量不要用，有些手机有问题
-        settings.setLoadWithOverviewMode(true);//设置WebView是否使用预览模式加载界面。
-        webView.setVerticalScrollBarEnabled(false);//不能垂直滑动
-        webView.setHorizontalScrollBarEnabled(false);//不能水平滑动
-        settings.setTextSize(WebSettings.TextSize.LARGEST);//通过设置WebSettings，改变HTML中文字的大小
-        settings.setJavaScriptCanOpenWindowsAutomatically(true);//支持通过JS打开新窗口
-        //设置WebView属性，能够执行Javascript脚本
-        webView.getSettings().setJavaScriptEnabled(true);//设置js可用
-        webView.setWebViewClient(new WebViewClient());
-        webView.addJavascriptInterface(new AndroidJavaScript(getApplication()), "android");//设置js接口
-        settings.setLayoutAlgorithm(WebSettings.LayoutAlgorithm.SINGLE_COLUMN);//支持内容重新布局
-        webView.loadDataWithBaseURL(null, data, "text/html", "utf-8", null);
-    }
-    /**
-     * AndroidJavaScript
-     * 本地与h5页面交互的js类，这里写成内部类了
-     * returnAndroid方法上@JavascriptInterface一定不能漏了
-     */
-    private class AndroidJavaScript  {
-        Context mContxt;
-
-        public AndroidJavaScript (Context mContxt) {
-            this.mContxt = mContxt;
-        }
-
-        @JavascriptInterface
-        public void returnAndroid(String name) {//从网页跳回到APP，这个方法已经在上面的HTML中写上了
-            if (name.isEmpty()||name.equals("")){
-                return ;
+        newsScrollView.setOnScrollChangeListener(new NewsScrollView.onScrollChangeListener() {
+            @Override
+            public void onScrollChange(int l, int t, int oldl, int oldt) {
+                if (t > llTitCon.getMeasuredHeight()) {
+                    setBarTitle(mPostTitle);
+//                    mToolbar.setTitle(title);
+                } else {
+                    setBarTitle("问答");
+//                    mToolbar.setTitle("");
+                }
             }
-            showToastShort(name);
-            //这里写你的操作///////////////////////
-            //MainActivity就是一个空页面，不影响
-            Intent intent = new Intent(LoveByStagesDetailsActivity.this, MainActivity.class);
-            intent.putExtra("name",name);
-            startActivity(intent);
-        }
+        });
     }
 
+    private void initWebView(final String data) {
 
-   /* @SuppressLint("SetJavaScriptEnabled")
-    private void initWebView() {
-//        mProgressBar.setVisibility(View.VISIBLE);
-        WebSettings ws = webView.getSettings();
-        // 网页内容的宽度是否可大于WebView控件的宽度
-        ws.setLoadWithOverviewMode(false);
-        // 保存表单数据
-        ws.setSaveFormData(true);
-        // 是否应该支持使用其屏幕缩放控件和手势缩放
-        ws.setSupportZoom(true);
-        ws.setBuiltInZoomControls(true);
-        ws.setDisplayZoomControls(false);
-        // 启动应用缓存
-        ws.setAppCacheEnabled(true);
-        // 设置缓存模式
-        ws.setCacheMode(WebSettings.LOAD_DEFAULT);
-        // setDefaultZoom  api19被弃用
-        // 设置此属性，可任意比例缩放。
-        ws.setUseWideViewPort(true);
-        // 不缩放
-        webView.setInitialScale(100);
-        // 告诉WebView启用JavaScript执行。默认的是false。
-        ws.setJavaScriptEnabled(true);
-        //  页面加载好以后，再放开图片
-        ws.setBlockNetworkImage(false);
-        // 使用localStorage则必须打开
-        ws.setDomStorageEnabled(true);
-        // 排版适应屏幕
-        ws.setLayoutAlgorithm(WebSettings.LayoutAlgorithm.NARROW_COLUMNS);
-        // WebView是否新窗口打开(加了后可能打不开网页)
-//        ws.setSupportMultipleWindows(true);
+        final WebSettings webSettings = webView.getSettings();
+        webSettings.setJavaScriptEnabled(true);
 
-        // webview从5.0开始默认不允许混合模式,https中不能加载http资源,需要设置开启。
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-            ws.setMixedContentMode(WebSettings.MIXED_CONTENT_ALWAYS_ALLOW);
-        }
-        *//** 设置字体默认缩放大小(改变网页字体大小,setTextSize  api14被弃用)*//*
-        ws.setTextZoom(100);
+        //设置自适应屏幕，两者合用
+        webSettings.setUseWideViewPort(true); //将图片调整到适合webview的大小
+        webSettings.setLoadWithOverviewMode(true); // 缩放至屏幕的大小
+       /* if (Build.VERSION.SDK_INT > Build.VERSION_CODES.JELLY_BEAN_MR1)
+            webView.addJavascriptInterface(new JavascriptInterface(), "HTML");*/
 
-       *//* mWebChromeClient = new MyWebChromeClient(this);
-        webView.setWebChromeClient(mWebChromeClient);
-        // 与js交互
-        webView.addJavascriptInterface(new ImageClickInterface(this), "injectedObject");
-        webView.setWebViewClient(new MyWebViewClient(this));
+        //其他细节操作
+        webSettings.setCacheMode(WebSettings.LOAD_CACHE_ELSE_NETWORK); //关闭webview中缓存 //优先使用缓存:
+        webSettings.setAllowFileAccess(true); //设置可以访问本地文件
+        webSettings.setJavaScriptCanOpenWindowsAutomatically(true); //支持通过JS打开新窗口
+//        webSettings.setLoadsImagesAutomatically(true); //支持自动加载图片
+        webSettings.setDefaultTextEncodingName("utf-8");//设置编码格式
+        webSettings.setBlockNetworkImage(true);//设置是否加载网络图片 true 为不加载 false 为加载
+
+//        String body = data.getInfo().getBody();
+        webView.loadDataWithBaseURL(null, data, "text/html", "utf-8", null);
+
+
+        webView.setWebViewClient(new WebViewClient() {
+
+            @Override
+            public void onPageFinished(WebView view, String url) {
+            }
+        });
+
+
         webView.setOnLongClickListener(new View.OnLongClickListener() {
             @Override
             public boolean onLongClick(View v) {
-                return handleLongImage();
+                // 长按事件监听（注意：需要实现LongClickCallBack接口并传入对象）
+
+                final WebView.HitTestResult htr = webView.getHitTestResult();//获取所点击的内容
+                if (htr.getType() == WebView.HitTestResult.IMAGE_TYPE
+                        || htr.getType() == WebView.HitTestResult.IMAGE_ANCHOR_TYPE
+                        || htr.getType() == WebView.HitTestResult.SRC_IMAGE_ANCHOR_TYPE) {
+                    //判断被点击的类型为图片
+
+//                    showQRCodeDialog(htr.getExtra());
+
+                }
+
+                LogUtil.msg("url: " + htr.getExtra());
+
+                return false;
             }
-        });*//*
+        });
+    }
+
+   /* private class JavascriptInterface {
+
+        @android.webkit.JavascriptInterface
+        public void openImg(final String imgPath) {
+            *//*if (imageList.indexOf(imgPath) == -1) {
+                imageList.add(imgPath);
+            }
+            Log.e("mylog", "openImg: " + imgPath);
+            Intent intent = new Intent(NewsDetailActivity.this, GroupPictureDetailActivity.class);
+            intent.putExtra("mList", imageList);
+            intent.putExtra("position", imageList.indexOf(imgPath));
+            startActivity(intent);*//*
+
+        }
+
+        *//*@android.webkit.JavascriptInterface
+        public void getImgs(String imgPaths) {
+            LogUtils.e("getImgs " + imgPaths);
+        }*//*
+
     }*/
 
     private void netData() {
-        mLoadingDialog.show();
+        mLoadingDialog.showLoadingDialog();
         mLoveEngin.detailArticle(String.valueOf(String.valueOf(mId)), "Article/detail").subscribe(new MySubscriber<AResultInfo<LoveByStagesDetailsBean>>(mLoadingDialog) {
 
             @Override
             protected void onNetNext(AResultInfo<LoveByStagesDetailsBean> listAResultInfo) {
                 LoveByStagesDetailsBean loveByStagesDetailsBean = listAResultInfo.data;
                 Log.d("mylog", "onNetNext: loveByStagesDetailsBean " + loveByStagesDetailsBean.toString());
-
-                initWebView(loveByStagesDetailsBean.post_content);
+                String postContent = loveByStagesDetailsBean.post_content;
+                initWebView(postContent);
             }
 
             @Override

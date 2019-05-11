@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:padding="12dp">
+
+
+    <ImageView
+        android:id="@+id/item_up_down_women_iv_icon"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:src="@mipmap/icon_up_down_women"
+        app:layout_constraintRight_toRightOf="parent" />
+
+    <!--  android:background="@mipmap/icon_up_down_dia_women"-->
+    <TextView
+        android:id="@+id/item_up_down_women_tv_name"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginRight="8dp"
+        android:background="@drawable/icon_up_down_dia_men"
+        android:gravity="center_vertical"
+        android:paddingLeft="20dp"
+        android:paddingRight="28dp"
+        android:text="这个意思就是说studio在解析这个图片时出错了，那我们点开这个图片重新画一下，这是第一步，有可能有的朋友到这儿就解决问题了"
+        android:textColor="@color/black"
+        android:textSize="@dimen/size_16"
+        app:layout_constraintRight_toLeftOf="@+id/item_up_down_women_iv_icon" />
+
+    <View
+        app:layout_constraintRight_toLeftOf="@+id/item_up_down_women_tv_name"
+        android:layout_width="45dp"
+        android:layout_height="1dp"/>
+
+</android.support.constraint.ConstraintLayout>

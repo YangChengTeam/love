@@ -19,6 +19,7 @@ import com.yc.love.R;
 public abstract class BaseSameActivity extends BaseSlidingActivity implements View.OnClickListener {
 
     private TextView mTvSub;
+    private TextView mTvTitle;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -52,7 +53,7 @@ public abstract class BaseSameActivity extends BaseSlidingActivity implements Vi
         View viewBar = findViewById(R.id.activity_base_same_view_bar);
         RelativeLayout rlTitleCon = findViewById(R.id.activity_base_same_rl_title_con);
         ImageView ivBack = findViewById(R.id.activity_base_same_iv_back);
-        TextView tvTitle = findViewById(R.id.activity_base_same_tv_title);
+        mTvTitle = findViewById(R.id.activity_base_same_tv_title);
         mTvSub = findViewById(R.id.activity_base_same_tv_sub);
         boolean isHind = hindActivityTitle();
         if (isHind) {
@@ -66,13 +67,17 @@ public abstract class BaseSameActivity extends BaseSlidingActivity implements Vi
             setStateBarHeight(viewBar);
         }
 
-        tvTitle.setText(offerActivityTitle());
+        mTvTitle.setText(offerActivityTitle());
         mTvSub.setText(offerActivitySubTitle());
 
         ivBack.setOnClickListener(this);
 //        tvSub.setOnClickListener(this);
 
         linearLayout.addView(view, new ConstraintLayout.LayoutParams(ConstraintLayout.LayoutParams.MATCH_PARENT, ConstraintLayout.LayoutParams.MATCH_PARENT));
+    }
+
+    public void setBarTitle(String barTitle){
+        mTvTitle.setText(barTitle);
     }
 
     protected boolean hindActivityTitle() {

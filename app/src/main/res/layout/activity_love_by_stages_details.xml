@@ -6,11 +6,69 @@
     android:layout_height="match_parent"
     tools:context=".ui.activity.LoveByStagesDetailsActivity">
 
-    <WebView
-        android:id="@+id/love_by_stages_details_webview"
+
+    <com.yc.love.ui.view.NewsScrollView
+        android:id="@+id/love_by_stages_details_scroll_view"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:scrollbarSize="3dp"
-         />
+        android:descendantFocusability="blocksDescendants">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical">
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:background="@color/love_background" />
+
+            <LinearLayout
+                android:id="@+id/love_by_stages_details_ll_title_con"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@color/white"
+                android:gravity="center_vertical"
+                android:orientation="horizontal"
+                android:paddingLeft="12dp"
+                android:paddingTop="16dp"
+                android:paddingBottom="16dp">
+
+                <ImageView
+                    android:layout_width="5dp"
+                    android:layout_height="22dp"
+                    android:src="@drawable/shape_icon_red_crimson" />
+
+                <TextView
+                    android:id="@+id/love_by_stages_details_tv_name"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:ellipsize="end"
+                    android:maxLines="1"
+                    android:paddingLeft="10dp"
+                    android:paddingRight="10dp"
+                    android:text="55555"
+                    android:textColor="@color/black"
+                    android:textSize="@dimen/size_18"
+                    android:textStyle="bold" />
+            </LinearLayout>
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="8dp"
+                android:background="@color/love_background" />
+
+            <WebView
+                android:id="@+id/love_by_stages_details_webview"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:focusable="true"
+                android:focusableInTouchMode="true"
+                android:paddingLeft="8dp"
+                android:paddingTop="18dp"
+                android:paddingRight="8dp"
+                android:paddingBottom="14dp" />
+        </LinearLayout>
+    </com.yc.love.ui.view.NewsScrollView>
 
 </android.support.constraint.ConstraintLayout>

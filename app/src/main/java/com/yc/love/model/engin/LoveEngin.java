@@ -13,6 +13,8 @@ import com.yc.love.model.bean.LoveByStagesBean;
 import com.yc.love.model.bean.LoveByStagesDetailsBean;
 import com.yc.love.model.bean.LoveHealDateBean;
 import com.yc.love.model.bean.LoveHealDetBean;
+import com.yc.love.model.bean.LoveHealingBean;
+import com.yc.love.model.bean.LoveUpDownPhotoBean;
 import com.yc.love.model.domain.URLConfig;
 
 import java.util.HashMap;
@@ -73,6 +75,20 @@ public class LoveEngin extends BaseEngine {
         return rxpost;
     }
 
+    public Observable<AResultInfo<List<LoveHealingBean>>> recommendLovewords(String page, String page_size, String url) {
+        Map<String, String> params = new HashMap<>();
+        params.put("page", page);
+        params.put("page_size", page_size);
+        requestParams(params);
+        HttpCoreEngin<AResultInfo<List<LoveHealingBean>>> httpCoreEngin = HttpCoreEngin.get(mContext);
+        Observable<AResultInfo<List<LoveHealingBean>>> rxpost = httpCoreEngin.rxpost(URLConfig.getUrl(url), new TypeReference<AResultInfo<List<LoveHealingBean>>>() {
+                }.getType(),
+                params,
+                true,
+                true, true);
+        return rxpost;
+    }
+
     public Observable<AResultInfo<List<ExampleTsBean>>> exampleTs(String url) {
         Map<String, String> params = new HashMap<>();
 //        params.put("password", password);
@@ -120,6 +136,18 @@ public class LoveEngin extends BaseEngine {
         requestParams(params);
         HttpCoreEngin<AResultInfo<LoveByStagesDetailsBean>> httpCoreEngin = HttpCoreEngin.get(mContext);
         Observable<AResultInfo<LoveByStagesDetailsBean>> rxpost = httpCoreEngin.rxpost(URLConfig.getUrl(url), new TypeReference<AResultInfo<LoveByStagesDetailsBean>>() {
+                }.getType(),
+                params,
+                true,
+                true, true);
+        return rxpost;
+    }
+    public Observable<AResultInfo<LoveUpDownPhotoBean>> detailLovewords(String lovewordsId, String url) {
+        Map<String, String> params = new HashMap<>();
+        params.put("lovewords_id", lovewordsId);
+        requestParams(params);
+        HttpCoreEngin<AResultInfo<LoveUpDownPhotoBean>> httpCoreEngin = HttpCoreEngin.get(mContext);
+        Observable<AResultInfo<LoveUpDownPhotoBean>> rxpost = httpCoreEngin.rxpost(URLConfig.getUrl(url), new TypeReference<AResultInfo<LoveUpDownPhotoBean>>() {
                 }.getType(),
                 params,
                 true,

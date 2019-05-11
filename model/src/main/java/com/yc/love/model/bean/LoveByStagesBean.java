@@ -1,12 +1,16 @@
 package com.yc.love.model.bean;
 
-import java.util.List;
-
 /**
  * Created by mayn on 2019/5/10.
  */
 
 public class LoveByStagesBean {
+    /**
+     * create_time : 1543305363
+     * feeluseful : 200
+     * id : 159
+     * post_title : 刚在一起没多久就要分隔两地，如何维持异地关系？
+     */
 
     public int id;
     public int feeluseful;

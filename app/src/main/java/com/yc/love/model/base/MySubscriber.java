@@ -55,6 +55,7 @@ public abstract class MySubscriber<T> extends Subscriber<T> {
         } catch (ClassCastException e) {
             Log.d("mylog", "MySubscriber onNext: ClassCastException " + e);
         }
+        loadDialog.dismissLoadingDialog();
         onNetNext(t);
     }
 

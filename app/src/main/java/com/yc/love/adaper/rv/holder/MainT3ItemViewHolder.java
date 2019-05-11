@@ -36,7 +36,7 @@ public class MainT3ItemViewHolder extends BaseViewHolder<MainT3Bean> {
         if(TextUtils.isEmpty(image)){
             image="image";
         }
-        Picasso.with(context).load(image).transform(new CropSquareTransformation()).into(imageView);
+        Picasso.with(context).load(image).transform(new CropSquareTransformation()).error(R.mipmap.main_bg_t3_placeholder).placeholder(R.mipmap.main_bg_t3_placeholder).into(imageView);
 
     }
 }
