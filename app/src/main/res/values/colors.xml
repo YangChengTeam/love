@@ -19,6 +19,7 @@
     <color name="gray_loading_02">#c1c0c0</color>
     <color name="gray_loading_03">#eaeaea</color>
     <color name="red_crimson">#fa4a65</color>
+    <color name="red_crimson_im_bg">#fdf7f8</color>
     <color name="red_crimson_s">#88fa4a65</color>
     <color name="red_crimson_66">#66fa4a65</color>
     <color name="red_crimson_99">#99fa4a65</color>

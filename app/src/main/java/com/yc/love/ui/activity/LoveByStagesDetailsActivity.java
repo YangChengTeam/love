@@ -4,8 +4,10 @@ import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Build;
+import android.support.constraint.ConstraintLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.text.TextUtils;
 import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
@@ -13,6 +15,7 @@ import android.webkit.JavascriptInterface;
 import android.webkit.WebSettings;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
@@ -23,6 +26,7 @@ import com.yc.love.model.bean.AResultInfo;
 import com.yc.love.model.bean.LoveByStagesBean;
 import com.yc.love.model.bean.LoveByStagesDetailsBean;
 import com.yc.love.model.engin.LoveEngin;
+import com.yc.love.model.single.YcSingle;
 import com.yc.love.ui.activity.base.BaseSameActivity;
 import com.yc.love.ui.view.NewsScrollView;
 
@@ -34,6 +38,12 @@ public class LoveByStagesDetailsActivity extends BaseSameActivity {
     private int mId;
     private WebView webView;
     private String mPostTitle;
+    private boolean mIsCollectArticle = false;
+    private boolean mIsDigArticle;
+    private int mCategoryId;
+    private ConstraintLayout mClLikeCon;
+    private String mUrl = "";
+    private ImageView mIvLike;
 
     @Override
     protected void initIntentData() {
@@ -58,15 +68,104 @@ public class LoveByStagesDetailsActivity extends BaseSameActivity {
         initViews();
         netData();
 
-        //TODO 点赞 收藏
+    }
+
+    @Override
+    public void onClick(View v) {
+        super.onClick(v);
+        switch (v.getId()) {
+            case R.id.activity_base_same_tv_sub:
+                netCollectArticle(mIsCollectArticle);
+                break;
+            case R.id.love_by_stages_details_iv_like:
+                netDigArticle(mIsDigArticle);  //TODO 点赞 收藏
+                break;
+        }
+    }
+
+    private void netDigArticle(boolean isDigArticle) {
+        int id = YcSingle.getInstance().id;
+        if (id <= 0) {
+            showToLoginDialog();
+            return;
+        }
+        if (mCategoryId <= 0) {
+            showToastShort("文章Id为 " + mCategoryId);
+            return;
+        }
+        if (isDigArticle) {
+            mUrl = "Article/undig";
+        } else {
+            mUrl = "Article/dig";
+        }
+        mLoadingDialog.showLoadingDialog();
+        mLoveEngin.collectArticle(String.valueOf(id), String.valueOf(mCategoryId), mUrl).subscribe(new MySubscriber<AResultInfo<String>>(mLoadingDialog) {
+            @Override
+            protected void onNetNext(AResultInfo<String> stringAResultInfo) {
+                String msg = stringAResultInfo.msg;
+                showToastShort(msg);
+                mIsDigArticle = !mIsDigArticle;
+                changCollectStaty(mIsDigArticle);
+            }
+
+            @Override
+            protected void onNetError(Throwable e) {
+            }
+
+            @Override
+            protected void onNetCompleted() {
+            }
+        });
+    }
+
+    private void netCollectArticle(boolean isCollectArticle) {
+        int id = YcSingle.getInstance().id;
+        if (id <= 0) {
+            showToLoginDialog();
+            return;
+        }
+        if (mCategoryId <= 0) {
+            showToastShort("文章Id为 " + mCategoryId);
+            return;
+        }
+        if (!isCollectArticle) {
+            mUrl = "Article/collect";
+        } else {
+            mUrl = "Article/uncollect";
+        }
+        mLoadingDialog.showLoadingDialog();
+        mLoveEngin.collectArticle(String.valueOf(id), String.valueOf(mCategoryId), mUrl).subscribe(new MySubscriber<AResultInfo<String>>(mLoadingDialog) {
+
+            @Override
+            protected void onNetNext(AResultInfo<String> stringAResultInfo) {
+                String msg = stringAResultInfo.msg;
+                showToastShort(msg);
+                mIsCollectArticle = !mIsCollectArticle;
+                changCollectStaty(mIsCollectArticle);
+            }
+
+            @Override
+            protected void onNetError(Throwable e) {
+
+            }
+
+            @Override
+            protected void onNetCompleted() {
+
+            }
+        });
     }
 
     private void initViews() {
+        mClLikeCon = findViewById(R.id.love_by_stages_details_cl_like_con);
+        mIvLike = findViewById(R.id.love_by_stages_details_iv_like);
+
         webView = findViewById(R.id.love_by_stages_details_webview);
         TextView textView = findViewById(R.id.love_by_stages_details_tv_name);
         final LinearLayout llTitCon = findViewById(R.id.love_by_stages_details_ll_title_con);
         NewsScrollView newsScrollView = findViewById(R.id.love_by_stages_details_scroll_view);
         textView.setText(mPostTitle);
+        mIvLike.setOnClickListener(this);
 
 
         newsScrollView.setOnScrollChangeListener(new NewsScrollView.onScrollChangeListener() {
@@ -82,6 +181,7 @@ public class LoveByStagesDetailsActivity extends BaseSameActivity {
             }
         });
     }
+
 
     private void initWebView(final String data) {
 
@@ -136,38 +236,44 @@ public class LoveByStagesDetailsActivity extends BaseSameActivity {
         });
     }
 
-   /* private class JavascriptInterface {
-
-        @android.webkit.JavascriptInterface
-        public void openImg(final String imgPath) {
-            *//*if (imageList.indexOf(imgPath) == -1) {
-                imageList.add(imgPath);
-            }
-            Log.e("mylog", "openImg: " + imgPath);
-            Intent intent = new Intent(NewsDetailActivity.this, GroupPictureDetailActivity.class);
-            intent.putExtra("mList", imageList);
-            intent.putExtra("position", imageList.indexOf(imgPath));
-            startActivity(intent);*//*
-
-        }
-
-        *//*@android.webkit.JavascriptInterface
-        public void getImgs(String imgPaths) {
-            LogUtils.e("getImgs " + imgPaths);
-        }*//*
-
-    }*/
 
     private void netData() {
         mLoadingDialog.showLoadingDialog();
-        mLoveEngin.detailArticle(String.valueOf(String.valueOf(mId)), "Article/detail").subscribe(new MySubscriber<AResultInfo<LoveByStagesDetailsBean>>(mLoadingDialog) {
+        mLoveEngin.detailArticle(String.valueOf(String.valueOf(mId)), String.valueOf(YcSingle.getInstance().id), "Article/detail").subscribe(new MySubscriber<AResultInfo<LoveByStagesDetailsBean>>(mLoadingDialog) {
 
             @Override
             protected void onNetNext(AResultInfo<LoveByStagesDetailsBean> listAResultInfo) {
                 LoveByStagesDetailsBean loveByStagesDetailsBean = listAResultInfo.data;
-                Log.d("mylog", "onNetNext: loveByStagesDetailsBean " + loveByStagesDetailsBean.toString());
+                //收藏
+                int isCollect = loveByStagesDetailsBean.is_collect;
+                switch (isCollect) {
+                    case 0:
+                        break;
+                    case 1:
+                        mIsCollectArticle = true;
+                        break;
+                }
+                changCollectStaty(mIsCollectArticle);
+                mBaseSameTvSub.setOnClickListener(LoveByStagesDetailsActivity.this);
+
+                //点赞
+                int isLike = loveByStagesDetailsBean.is_like;
+                switch (isLike) {
+                    case 0:
+                        break;
+                    case 1:
+                        mIsDigArticle = true;
+                        break;
+                }
+                changLikeStaty(mIsDigArticle);
+                mClLikeCon.setVisibility(View.VISIBLE);
+
+                mCategoryId = loveByStagesDetailsBean.category_id;
+
                 String postContent = loveByStagesDetailsBean.post_content;
                 initWebView(postContent);
+
+
             }
 
             @Override
@@ -180,6 +286,22 @@ public class LoveByStagesDetailsActivity extends BaseSameActivity {
 
             }
         });
+    }
+
+    private void changCollectStaty(boolean isCollectArticle) {
+        if (isCollectArticle) {
+            mBaseSameTvSub.setCompoundDrawablesWithIntrinsicBounds(0, 0, R.mipmap.icon_star_s, 0);
+        } else {
+            mBaseSameTvSub.setCompoundDrawablesWithIntrinsicBounds(0, 0, R.mipmap.icon_star_black, 0);
+        }
+    }
+
+    private void changLikeStaty(boolean isLikeArticle) {
+        if (isLikeArticle) {
+            mIvLike.setImageDrawable(getResources().getDrawable(R.mipmap.icon_like_s));
+        } else {
+            mIvLike.setImageDrawable(getResources().getDrawable(R.mipmap.icon_like_gray));
+        }
     }
 
     @Override

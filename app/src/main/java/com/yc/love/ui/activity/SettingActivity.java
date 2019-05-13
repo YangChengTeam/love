@@ -8,7 +8,7 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.yc.love.R;
-import com.yc.love.model.bean.EventLoginState;
+import com.yc.love.model.bean.event.EventLoginState;
 import com.yc.love.model.single.YcSingle;
 import com.yc.love.model.util.DataCleanManagerUtils;
 import com.yc.love.model.util.SPUtils;

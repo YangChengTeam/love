@@ -3,6 +3,7 @@ package com.yc.love.ui.frament.main;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
+import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
@@ -62,6 +63,8 @@ public class MainT3Fragment extends BaseMainFragment {
     @Override
     protected void initViews() {
         mLoveEngin = new LoveEngin(mMainActivity);
+        View viewBar = rootView.findViewById(R.id.main_t3_view_bar);
+        mMainActivity.setStateBarHeight(viewBar, 1);
 //        mLoadingDialog = mMainActivity.mLoadingDialog;
         initRecyclerView();
     }

@@ -7,16 +7,16 @@ package com.yc.love.model.bean;
 public class LoveByStagesDetailsBean {
 
         public int id;
-        public Object is_open;
+        public String is_open;
         public String status;
-        public int category_id;
+        public int category_id; //栏目id
         public String category_name;
         public int create_time;
-        public int is_collect;
-        public Object check;
-        public Object image;
-        public int is_like;
-        public Object is_top;
+        public int is_collect;    //是否收藏
+        public int check;
+        public String image;
+        public int is_like; //是否喜欢
+        public int is_top;
         public String morepic;
         public String post_content;
 

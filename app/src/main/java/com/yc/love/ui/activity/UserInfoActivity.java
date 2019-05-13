@@ -17,7 +17,7 @@ import com.bigkoo.pickerview.view.TimePickerView;
 import com.yc.love.R;
 import com.yc.love.model.base.MySubscriber;
 import com.yc.love.model.bean.AResultInfo;
-import com.yc.love.model.bean.EventLoginState;
+import com.yc.love.model.bean.event.EventLoginState;
 import com.yc.love.model.bean.IdCorrelationLoginBean;
 import com.yc.love.model.data.BackfillSingle;
 import com.yc.love.model.engin.IdCorrelationEngin;
@@ -31,8 +31,6 @@ import org.greenrobot.eventbus.EventBus;
 
 import java.util.Calendar;
 import java.util.Date;
-
-import static com.yc.love.ui.activity.IdCorrelationSlidingActivity.ID_CORRELATION_STATE_LOGIN;
 
 public class UserInfoActivity extends BasePushPhotoActivity {
 

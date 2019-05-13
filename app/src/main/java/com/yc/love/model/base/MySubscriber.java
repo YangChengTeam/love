@@ -1,9 +1,11 @@
 package com.yc.love.model.base;
 
+import android.content.Context;
 import android.content.DialogInterface;
 import android.os.Message;
 import android.support.v7.app.AlertDialog;
 import android.util.Log;
+import android.view.View;
 
 import com.yc.love.R;
 import com.yc.love.model.bean.AResultInfo;
@@ -18,12 +20,18 @@ import rx.Subscriber;
 
 public abstract class MySubscriber<T> extends Subscriber<T> {
 
-    private final LoadDialog loadDialog;
+    private LoadDialog loadDialog;
+    private Context context;
     private boolean activityDealServiceCode1 = false;
 
     public MySubscriber(LoadDialog loadDialog) {
         this.loadDialog = loadDialog;
     }
+
+    public MySubscriber(Context context) {
+        this.context = context;
+    }
+
 
     /**
      * @param loadDialog               loading图标
@@ -43,19 +51,22 @@ public abstract class MySubscriber<T> extends Subscriber<T> {
             String message = resultInfo.msg;
             if (1 != code && !activityDealServiceCode1) {
                 if (loadDialog != null) {
-                    AlertDialog alertDialog = new AlertDialog.Builder(loadDialog.getContext(),R.style.MyAlertDialogStyle).create();
-//                    alertDialog.setTitle("提示");
-                    alertDialog.setMessage(message);
-                    DialogInterface.OnClickListener listent = null;
-                    alertDialog.setButton(DialogInterface.BUTTON_POSITIVE, "确定", listent);
-                    alertDialog.show();
+                    context = loadDialog.getContext();
                 }
+                AlertDialog alertDialog = new AlertDialog.Builder(context, R.style.MyAlertDialogStyle).create();
+//                    alertDialog.setTitle("提示");
+                alertDialog.setMessage(message);
+                DialogInterface.OnClickListener listent = null;
+                alertDialog.setButton(DialogInterface.BUTTON_POSITIVE, "确定", listent);
+                alertDialog.show();
             }
             Log.d("mylog", "MySubscriber onNext: message " + message + " code " + code);
         } catch (ClassCastException e) {
             Log.d("mylog", "MySubscriber onNext: ClassCastException " + e);
         }
-        loadDialog.dismissLoadingDialog();
+        if (loadDialog != null) {
+            loadDialog.dismissLoadingDialog();
+        }
         onNetNext(t);
     }
 
@@ -63,7 +74,9 @@ public abstract class MySubscriber<T> extends Subscriber<T> {
 
     @Override
     public void onCompleted() {
-        loadDialog.dismissLoadingDialog();
+        if (loadDialog != null) {
+            loadDialog.dismissLoadingDialog();
+        }
         onNetCompleted();
     }
 
@@ -71,7 +84,9 @@ public abstract class MySubscriber<T> extends Subscriber<T> {
     @Override
     public void onError(Throwable e) {
         Log.d("mylog", "MySubscriber onError: " + e);
-        loadDialog.dismissLoadingDialog();
+        if (loadDialog != null) {
+            loadDialog.dismissLoadingDialog();
+        }
         onNetError(e);
     }
 

@@ -98,7 +98,8 @@
         </provider>
 
         <activity android:name=".ui.activity.LoveHealDetailsActivity" />
-        <activity android:name=".ui.activity.LoveByStagesDetailsActivity"></activity>
+        <activity android:name=".ui.activity.LoveByStagesDetailsActivity" />
+        <activity android:name=".ui.activity.ExampleDetailActivity"></activity>
     </application>
 
 </manifest>

@@ -14,17 +14,15 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.alibaba.fastjson.JSON;
-import com.google.gson.Gson;
 import com.kk.securityhttp.domain.ResultInfo;
 import com.yc.love.R;
 import com.yc.love.app.YcApplication;
 import com.yc.love.model.base.MySubscriber;
 import com.yc.love.model.bean.AResultInfo;
-import com.yc.love.model.bean.EventLoginState;
+import com.yc.love.model.bean.event.EventLoginState;
 import com.yc.love.model.bean.IdCorrelationLoginBean;
 import com.yc.love.model.data.BackfillSingle;
 import com.yc.love.model.engin.IdCorrelationEngin;
-import com.yc.love.model.single.YcSingle;
 import com.yc.love.model.util.CheckNumberRegulationsUtil;
 import com.yc.love.model.util.SPUtils;
 import com.yc.love.ui.activity.base.BaseSlidingActivity;
@@ -33,10 +31,6 @@ import com.yc.love.ui.view.LoginEditTextLin;
 import org.greenrobot.eventbus.EventBus;
 
 import java.util.List;
-import java.util.Timer;
-import java.util.TimerTask;
-
-import rx.Subscriber;
 
 public class IdCorrelationSlidingActivity extends BaseSlidingActivity implements View.OnClickListener {
 

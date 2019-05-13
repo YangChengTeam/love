@@ -1,8 +1,6 @@
 package com.yc.love.ui.frament.main;
 
-import android.content.DialogInterface;
 import android.content.Intent;
-import android.support.v7.app.AlertDialog;
 import android.text.TextUtils;
 import android.view.View;
 import android.widget.ImageView;
@@ -10,13 +8,13 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.yc.love.R;
-import com.yc.love.model.bean.EventLoginState;
+import com.yc.love.model.bean.event.EventLoginState;
 import com.yc.love.model.single.YcSingle;
 import com.yc.love.ui.activity.BecomeVipActivity;
+import com.yc.love.ui.activity.CollectActivity;
 import com.yc.love.ui.activity.FeedbackActivity;
 import com.yc.love.ui.activity.IdCorrelationSlidingActivity;
 import com.yc.love.ui.activity.Main4Activity;
-import com.yc.love.ui.activity.MainActivity;
 import com.yc.love.ui.activity.SettingActivity;
 import com.yc.love.ui.activity.UserInfoActivity;
 import com.yc.love.ui.frament.base.BaseMainFragment;
@@ -131,8 +129,8 @@ public class MainT4Fragment extends BaseMainFragment implements View.OnClickList
                 mMainActivity.startActivity(new Intent(mMainActivity, BecomeVipActivity.class));
                 break;
             case R.id.main_t4_ll_item_01:
-//                mMainActivity.startActivity(new Intent(mMainActivity, CollectActivity.class));
-                mMainActivity.startActivity(new Intent(mMainActivity, Main4Activity.class));
+                mMainActivity.startActivity(new Intent(mMainActivity, CollectActivity.class));
+//                mMainActivity.startActivity(new Intent(mMainActivity, Main4Activity.class));
 
                 break;
             case R.id.main_t4_ll_item_02:

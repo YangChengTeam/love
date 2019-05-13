@@ -33,7 +33,6 @@ public class LoveUpDownPhotoFragmentFactory {
     }
 
     private static Fragment createPositionFragment(int position, String dataString) {
-        Log.d("mylog", "createPositionFragment: LoveUpDownPhotoFragment");
         Fragment fragment = new LoveUpDownPhotoFragment();
         Bundle args = new Bundle();
         args.putString("dataString", dataString);

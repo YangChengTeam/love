@@ -2,6 +2,7 @@ package com.yc.love.adaper.rv;
 
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.text.TextUtils;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -26,6 +27,7 @@ public abstract class LoveUpDownPhotoAdapter extends RecyclerView.Adapter<Recycl
     private static final int VIEW_ITEM_MEN = 0;
     private static final int VIEW_ITEM_WOMEN = 2;
     private static final int VIEW_PROG = 1;
+    private static final int VIEW_TITLE = 3;
     private boolean isLoading;
     private int totalItemCount;
     private int lastVisibleItemPosition;
@@ -42,7 +44,6 @@ public abstract class LoveUpDownPhotoAdapter extends RecyclerView.Adapter<Recycl
         if (mPersonList != null) {
             size = mPersonList.size();
         }
-        Log.d("mylog", "getItemCount: mPersonList.size() " + size);
         return size;
     }
 
@@ -54,6 +55,9 @@ public abstract class LoveUpDownPhotoAdapter extends RecyclerView.Adapter<Recycl
             return VIEW_PROG;
         }
         String ansSex = loveHealingDetailBean.ans_sex;
+        if (TextUtils.isEmpty(ansSex) || "null".equals(ansSex)) {
+            return VIEW_TITLE;
+        }
         if ("1".equals(ansSex)) { //1男2女
             return VIEW_ITEM_MEN;
         } else {
@@ -64,6 +68,9 @@ public abstract class LoveUpDownPhotoAdapter extends RecyclerView.Adapter<Recycl
     @Override
     public RecyclerView.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         RecyclerView.ViewHolder holder;
+        if (viewType == VIEW_TITLE) {
+            holder = getUpDownTitleHolder(parent);
+        } else
         if (viewType == VIEW_ITEM_MEN) {
             holder = getMenHolder(parent);
         } else if (viewType == VIEW_ITEM_WOMEN) {
@@ -74,6 +81,8 @@ public abstract class LoveUpDownPhotoAdapter extends RecyclerView.Adapter<Recycl
         }
         return holder;
     }
+
+
 
     @Override
     public void onBindViewHolder(RecyclerView.ViewHolder holder, int position) {
@@ -145,7 +154,7 @@ public abstract class LoveUpDownPhotoAdapter extends RecyclerView.Adapter<Recycl
     public interface OnLoadMoreDataListener {
         void loadMoreData();
     }
-
+    protected abstract RecyclerView.ViewHolder getUpDownTitleHolder(ViewGroup parent);
 
     public abstract BaseViewHolder getMenHolder(ViewGroup parent);
 

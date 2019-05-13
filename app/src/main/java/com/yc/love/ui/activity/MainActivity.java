@@ -75,7 +75,6 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
                 break;
             case R.id.comp_main_tv_tab_4:
                 int id = YcSingle.getInstance().id;
-                //TODO 放开登录
                 if (id <= 0) {
                     showToLoginDialog();
                     return;
@@ -122,20 +121,7 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
         tv_icon.setTextColor(getResources().getColor(R.color.black));
     }
 
-    private void showToLoginDialog() {
-        AlertDialog alertDialog = new AlertDialog.Builder(this).create();
-        alertDialog.setTitle("提示");
-        alertDialog.setMessage("您还未登录，请先登录");
-        alertDialog.setButton(DialogInterface.BUTTON_POSITIVE, "确定", new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialogInterface, int i) {
-                IdCorrelationSlidingActivity.startIdCorrelationActivity(MainActivity.this, IdCorrelationSlidingActivity.ID_CORRELATION_STATE_LOGIN);
-            }
-        });
-        DialogInterface.OnClickListener listent = null;
-        alertDialog.setButton(DialogInterface.BUTTON_NEGATIVE, "取消", listent);
-        alertDialog.show();
-    }
+
 
 
 }

@@ -8,6 +8,8 @@ import com.kk.securityhttp.engin.HttpCoreEngin;
 import com.yc.love.model.base.BaseEngine;
 import com.yc.love.model.bean.AResultInfo;
 import com.yc.love.model.bean.CategoryArticleBean;
+import com.yc.love.model.bean.ExampDataBean;
+import com.yc.love.model.bean.ExampListsBean;
 import com.yc.love.model.bean.ExampleTsBean;
 import com.yc.love.model.bean.LoveByStagesBean;
 import com.yc.love.model.bean.LoveByStagesDetailsBean;
@@ -75,7 +77,7 @@ public class LoveEngin extends BaseEngine {
         return rxpost;
     }
 
-    public Observable<AResultInfo<List<LoveHealingBean>>> recommendLovewords(String page, String page_size, String url) {
+   /* public Observable<AResultInfo<List<LoveHealingBean>>> recommendLovewords(String page, String page_size, String url) {
         Map<String, String> params = new HashMap<>();
         params.put("page", page);
         params.put("page_size", page_size);
@@ -87,7 +89,37 @@ public class LoveEngin extends BaseEngine {
                 true,
                 true, true);
         return rxpost;
+    }*/
+    public Observable<AResultInfo<List<LoveHealingBean>>> recommendLovewords(String userId,String page, String page_size, String url) {
+        Map<String, String> params = new HashMap<>();
+        params.put("user_id", userId);
+        params.put("page", page);
+        params.put("page_size", page_size);
+        requestParams(params);
+        HttpCoreEngin<AResultInfo<List<LoveHealingBean>>> httpCoreEngin = HttpCoreEngin.get(mContext);
+        Observable<AResultInfo<List<LoveHealingBean>>> rxpost = httpCoreEngin.rxpost(URLConfig.getUrl(url), new TypeReference<AResultInfo<List<LoveHealingBean>>>() {
+                }.getType(),
+                params,
+                true,
+                true, true);
+        return rxpost;
     }
+    public Observable<AResultInfo<String>> exampleCollectListList(String userId, String page, String pageSize, String url) {
+        Map<String, String> params = new HashMap<>();
+        params.put("user_id", userId);
+        params.put("page", page);
+        params.put("page_size", pageSize);
+        requestParams(params);
+        HttpCoreEngin<AResultInfo<String>> httpCoreEngin = HttpCoreEngin.get(mContext);
+        Observable<AResultInfo<String>> rxpost = httpCoreEngin.rxpost(URLConfig.getUrl(url), new TypeReference<AResultInfo<String>>() {
+                }.getType(),
+                params,
+                true,
+                true, true);
+        return rxpost;
+    }
+
+
 
     public Observable<AResultInfo<List<ExampleTsBean>>> exampleTs(String url) {
         Map<String, String> params = new HashMap<>();
@@ -95,6 +127,21 @@ public class LoveEngin extends BaseEngine {
         requestParams(params);
         HttpCoreEngin<AResultInfo<List<ExampleTsBean>>> httpCoreEngin = HttpCoreEngin.get(mContext);
         Observable<AResultInfo<List<ExampleTsBean>>> rxpost = httpCoreEngin.rxpost(URLConfig.getUrl(url), new TypeReference<AResultInfo<List<ExampleTsBean>>>() {
+                }.getType(),
+                params,
+                true,
+                true, true);
+        return rxpost;
+    }
+
+    public Observable<AResultInfo<ExampDataBean>> exampLists(String userId,String page, String pageSize, String url) {
+        Map<String, String> params = new HashMap<>();
+        params.put("page", page);
+        params.put("user_id", userId);
+        params.put("page_size", pageSize);
+        requestParams(params);
+        HttpCoreEngin<AResultInfo<ExampDataBean>> httpCoreEngin = HttpCoreEngin.get(mContext);
+        Observable<AResultInfo<ExampDataBean>> rxpost = httpCoreEngin.rxpost(URLConfig.getUrl(url), new TypeReference<AResultInfo<ExampDataBean>>() {
                 }.getType(),
                 params,
                 true,
@@ -130,9 +177,23 @@ public class LoveEngin extends BaseEngine {
         return rxpost;
     }
 
-    public Observable<AResultInfo<LoveByStagesDetailsBean>> detailArticle(String id, String url) {
+    public Observable<AResultInfo<LoveByStagesDetailsBean>> detailArticle(String id,String userId, String url) {
         Map<String, String> params = new HashMap<>();
         params.put("id", id);
+        params.put("user_id", userId);
+        requestParams(params);
+        HttpCoreEngin<AResultInfo<LoveByStagesDetailsBean>> httpCoreEngin = HttpCoreEngin.get(mContext);
+        Observable<AResultInfo<LoveByStagesDetailsBean>> rxpost = httpCoreEngin.rxpost(URLConfig.getUrl(url), new TypeReference<AResultInfo<LoveByStagesDetailsBean>>() {
+                }.getType(),
+                params,
+                true,
+                true, true);
+        return rxpost;
+    }
+    public Observable<AResultInfo<LoveByStagesDetailsBean>> detailExample(String id,String userId, String url) {
+        Map<String, String> params = new HashMap<>();
+        params.put("example_id", id);
+        params.put("user_id", userId);
         requestParams(params);
         HttpCoreEngin<AResultInfo<LoveByStagesDetailsBean>> httpCoreEngin = HttpCoreEngin.get(mContext);
         Observable<AResultInfo<LoveByStagesDetailsBean>> rxpost = httpCoreEngin.rxpost(URLConfig.getUrl(url), new TypeReference<AResultInfo<LoveByStagesDetailsBean>>() {
@@ -160,6 +221,32 @@ public class LoveEngin extends BaseEngine {
         params.put("tag_id", tagId);
         params.put("page", page);
         params.put("page_size", pageSize);
+        requestParams(params);
+        HttpCoreEngin<AResultInfo<String>> httpCoreEngin = HttpCoreEngin.get(mContext);
+        Observable<AResultInfo<String>> rxpost = httpCoreEngin.rxpost(URLConfig.getUrl(url), new TypeReference<AResultInfo<String>>() {
+                }.getType(),
+                params,
+                true,
+                true, true);
+        return rxpost;
+    }
+    public Observable<AResultInfo<String>> collectArticle(String userId,  String articleId, String url) {
+        Map<String, String> params = new HashMap<>();
+        params.put("user_id", userId);
+        params.put("article_id", articleId);
+        requestParams(params);
+        HttpCoreEngin<AResultInfo<String>> httpCoreEngin = HttpCoreEngin.get(mContext);
+        Observable<AResultInfo<String>> rxpost = httpCoreEngin.rxpost(URLConfig.getUrl(url), new TypeReference<AResultInfo<String>>() {
+                }.getType(),
+                params,
+                true,
+                true, true);
+        return rxpost;
+    }
+    public Observable<AResultInfo<String>> collectLovewords(String userId,String lovewordsId, String url) {
+        Map<String, String> params = new HashMap<>();
+        params.put("user_id", userId);
+        params.put("lovewords_id", lovewordsId);
         requestParams(params);
         HttpCoreEngin<AResultInfo<String>> httpCoreEngin = HttpCoreEngin.get(mContext);
         Observable<AResultInfo<String>> rxpost = httpCoreEngin.rxpost(URLConfig.getUrl(url), new TypeReference<AResultInfo<String>>() {

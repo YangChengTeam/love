@@ -28,7 +28,7 @@ public class MainT3TitleViewHolder extends BaseViewHolder<MainT3Bean> {
     @Override
     public void bindData(MainT3Bean mainT3Bean) {
 
-        View viewBar = itemView.findViewById(R.id.item_t3title_view_bar);
+//        View viewBar = itemView.findViewById(R.id.item_t3title_view_bar);
         ImageView ivTitle = itemView.findViewById(R.id.item_t3title_iv_title);
         TextView tvIcon01 = itemView.findViewById(R.id.item_t3title_tv_icon_01);
         TextView tvIcon02 = itemView.findViewById(R.id.item_t3title_tv_icon_02);
@@ -36,7 +36,7 @@ public class MainT3TitleViewHolder extends BaseViewHolder<MainT3Bean> {
         TextView tvIcon04 = itemView.findViewById(R.id.item_t3title_tv_icon_04);
         TextView tvIcon05 = itemView.findViewById(R.id.item_t3title_tv_icon_05);
         MainActivity mainActivity = (MainActivity) context;
-        mainActivity.setStateBarHeight(viewBar);
+//        mainActivity.setStateBarHeight(viewBar);
 
         tvIcon01.setOnClickListener(new View.OnClickListener() {
             @Override

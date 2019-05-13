@@ -17,6 +17,13 @@ public class LoveHealingDetailBean {
     public int id;
     public int lovewords_id;
 
+    public LoveHealingDetailBean(String ans_sex) {
+        this.ans_sex = ans_sex;
+    }
+
+    public LoveHealingDetailBean() {
+    }
+
     @Override
     public String toString() {
         return "LoveHealingDetailBean{" +

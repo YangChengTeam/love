@@ -22,8 +22,15 @@ import com.yc.love.adaper.rv.holder.LoveHealingTitleViewHolder;
 import com.yc.love.model.base.MySubscriber;
 import com.yc.love.model.bean.AResultInfo;
 import com.yc.love.model.bean.LoveHealingBean;
+import com.yc.love.model.bean.event.EventLoginState;
+import com.yc.love.model.bean.event.EventLoveUpDownCollectChangBean;
 import com.yc.love.model.engin.LoveEngin;
+import com.yc.love.model.single.YcSingle;
 import com.yc.love.ui.activity.base.BaseSameActivity;
+
+import org.greenrobot.eventbus.EventBus;
+import org.greenrobot.eventbus.Subscribe;
+import org.greenrobot.eventbus.ThreadMode;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -45,6 +52,7 @@ public class LoveHealingActivity extends BaseSameActivity {
     private ProgressBarViewHolder progressBarViewHolder;
     private LoveEngin mLoveEngin;
     private RecyclerView mRecyclerView;
+//    private int clickToPosition;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -67,7 +75,7 @@ public class LoveHealingActivity extends BaseSameActivity {
 
     private void netData() {
         mLoadingDialog.showLoadingDialog();
-        mLoveEngin.recommendLovewords(String.valueOf(PAGE_NUM), String.valueOf(PAGE_SIZE), "lovewords/recommend")
+        mLoveEngin.recommendLovewords(String.valueOf(YcSingle.getInstance().id),String.valueOf(PAGE_NUM), String.valueOf(PAGE_SIZE), "lovewords/recommend")
                 .subscribe(new MySubscriber<AResultInfo<List<LoveHealingBean>>>(mLoadingDialog) {
                     @Override
                     protected void onNetNext(AResultInfo<List<LoveHealingBean>> listAResultInfo) {
@@ -150,17 +158,10 @@ public class LoveHealingActivity extends BaseSameActivity {
     }
 
     private void netLoadMoreData() {
-        mLoveEngin.recommendLovewords(String.valueOf(PAGE_NUM++), String.valueOf(PAGE_SIZE), "lovewords/recommend")
+        mLoveEngin.recommendLovewords(String.valueOf(YcSingle.getInstance().id),String.valueOf(PAGE_NUM++), String.valueOf(PAGE_SIZE), "lovewords/recommend")
                 .subscribe(new MySubscriber<AResultInfo<List<LoveHealingBean>>>(mLoadingDialog) {
                     @Override
                     protected void onNetNext(AResultInfo<List<LoveHealingBean>> listAResultInfo) {
-                      /*  List<LoveHealingBean> loveHealingBeanList=listAResultInfo.data;
-                        loveHealingBeans.add(new LoveHealingBean(0, "title_img"));
-                        loveHealingBeans.add(new LoveHealingBean(1, "为你推荐 "));
-                        for (int i = 0; i < loveHealingBeanList.size(); i++) {
-                            LoveHealingBean loveHealingBean = loveHealingBeanList.get(i);
-                            loveHealingBeans.add(new LoveHealingBean(2, loveHealingBean.chat_count, loveHealingBean.chat_name, loveHealingBean.id, loveHealingBean.quiz_sex, loveHealingBean.search_type));
-                        }*/
                         List<LoveHealingBean> netLoadMoreData = listAResultInfo.data;
                         showProgressBar = false;
                         loveHealingBeans.remove(loveHealingBeans.size() - 1);
@@ -193,13 +194,10 @@ public class LoveHealingActivity extends BaseSameActivity {
     RecyclerViewItemListener recyclerViewItemListener = new RecyclerViewItemListener() {
         @Override
         public void onItemClick(int position) {
-//            loveHealingBeans.get(position).id
-//            Toast.makeText(LoveHealingActivity.this, "onItemClick " + position, Toast.LENGTH_SHORT).show();
-//            startActivity(new Intent(LoveHealingActivity.this, LoveUpDownPhotoActivity.class));
             if (position >= 2) {
                 LoveUpDownPhotoActivity.startLoveUpDownPhotoActivity(LoveHealingActivity.this, position - 1);
             }
-
+//            LoveHealingActivity.this.clickToPosition = position;
         }
 
         @Override
@@ -207,6 +205,31 @@ public class LoveHealingActivity extends BaseSameActivity {
 
         }
     };
+
+   /* @Subscribe(threadMode = ThreadMode.MAIN)
+    public void onMessageEvent(EventLoveUpDownCollectChangBean event) {
+        boolean isCollectLovewords = event.isCollectLovewords;
+        LoveHealingBean loveHealingBean = loveHealingBeans.get(clickToPosition);
+        Log.d("mylog", "onMessageEvent: isCollectLovewords  " + isCollectLovewords + " clickToPosition " + clickToPosition);
+        if (isCollectLovewords) {
+            loveHealingBean.is_collect = 1;
+        } else {
+            loveHealingBean.is_collect = 0;
+        }
+        mAdapter.notifyItemChanged(clickToPosition);
+    }
+
+    @Override
+    public void onStart() {
+        super.onStart();
+        EventBus.getDefault().register(this);
+    }
+
+    @Override
+    public void onStop() {
+        super.onStop();
+        EventBus.getDefault().unregister(this);
+    }*/
 
     @Override
     protected String offerActivityTitle() {

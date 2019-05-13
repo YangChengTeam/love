@@ -2,11 +2,13 @@ package com.yc.love.ui.activity.base;
 
 import android.app.Activity;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.graphics.Color;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.PersistableBundle;
 import android.support.v4.widget.DrawerLayout;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.View;
@@ -16,6 +18,9 @@ import android.view.WindowManager;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.Toast;
 
+import com.yc.love.model.single.YcSingle;
+import com.yc.love.ui.activity.IdCorrelationSlidingActivity;
+import com.yc.love.ui.activity.MainActivity;
 import com.yc.love.ui.view.LoadDialog;
 
 /**
@@ -25,6 +30,7 @@ import com.yc.love.ui.view.LoadDialog;
 public abstract class BaseActivity extends AppCompatActivity {
 
     public LoadDialog mLoadingDialog;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -90,7 +96,8 @@ public abstract class BaseActivity extends AppCompatActivity {
         viewBar.setLayoutParams(layoutParams);
         Log.d("ClassName", "setStateBarHeight: layoutParams.height " + layoutParams.height);
     }
-    public void setStateBarHeight(View viewBar,int addHeight) {
+
+    public void setStateBarHeight(View viewBar, int addHeight) {
         int result = 0;
         int resourceId = this.getResources().getIdentifier("status_bar_height", "dimen", "android");
         if (resourceId > 0) {
@@ -100,7 +107,7 @@ public abstract class BaseActivity extends AppCompatActivity {
             return;
         }
         ViewGroup.LayoutParams layoutParams = viewBar.getLayoutParams();
-        layoutParams.height = result+addHeight;
+        layoutParams.height = result + addHeight;
         viewBar.setLayoutParams(layoutParams);
         Log.d("ClassName", "setStateBarHeight: layoutParams.height " + layoutParams.height);
     }
@@ -191,10 +198,25 @@ public abstract class BaseActivity extends AppCompatActivity {
         return statusHeight;
     }
 
-    public void hindKeyboard(View view){
-       InputMethodManager inputMethodManager= (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
-       if(inputMethodManager!=null){
-           inputMethodManager.hideSoftInputFromWindow(view.getWindowToken(),0);
-       }
+    public void hindKeyboard(View view) {
+        InputMethodManager inputMethodManager = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
+        if (inputMethodManager != null) {
+            inputMethodManager.hideSoftInputFromWindow(view.getWindowToken(), 0);
+        }
+    }
+
+    public void showToLoginDialog() {
+        AlertDialog alertDialog = new AlertDialog.Builder(this).create();
+        alertDialog.setTitle("提示");
+        alertDialog.setMessage("您还未登录，请先登录");
+        alertDialog.setButton(DialogInterface.BUTTON_POSITIVE, "确定", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialogInterface, int i) {
+                IdCorrelationSlidingActivity.startIdCorrelationActivity(BaseActivity.this, IdCorrelationSlidingActivity.ID_CORRELATION_STATE_LOGIN);
+            }
+        });
+        DialogInterface.OnClickListener listent = null;
+        alertDialog.setButton(DialogInterface.BUTTON_NEGATIVE, "取消", listent);
+        alertDialog.show();
     }
 }

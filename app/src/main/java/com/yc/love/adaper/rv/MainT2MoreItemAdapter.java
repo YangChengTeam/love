@@ -19,19 +19,20 @@ import java.util.List;
  * Created by Administrator on 2017/9/12.
  */
 
-public abstract class MainT2MoreItemAdapter<T> extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
+public abstract class MainT2MoreItemAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
 
-    private final List<T> mPersonList;
+    private final List<MainT2Bean> mPersonList;
     private RecyclerView mRecyclerView;
     private static final int VIEW_TITLE = 0;
     private static final int VIEW_ITEM = 1;
     private static final int VIEW_VIP = 2;
-    private static final int VIEW_PROG = 3;
+    private static final int VIEW_PROG = 4;
+    private static final int VIEW_TO_PAY_VIP = 3;
     private boolean isLoading;
     private int totalItemCount;
     private int lastVisibleItemPosition;
 
-    public MainT2MoreItemAdapter(List<T> personList, RecyclerView recyclerView) {
+    public MainT2MoreItemAdapter(List<MainT2Bean> personList, RecyclerView recyclerView) {
         this.mPersonList = personList;
         this.mRecyclerView = recyclerView;
         addOnScrollListenerPacked();
@@ -48,28 +49,31 @@ public abstract class MainT2MoreItemAdapter<T> extends RecyclerView.Adapter<Recy
     //根据不同的数据返回不同的viewType
     @Override
     public int getItemViewType(int position) {
-        int size = mPersonList.size();
-        MainT2Bean mainT2Bean = null;
-        try {
-            mainT2Bean = (MainT2Bean) mPersonList.get(position);
-        } catch (IndexOutOfBoundsException e) {
-            Log.d("mylog", "getItemViewType: e " + e);
+//        int size = mPersonList.size();
+        MainT2Bean mainT2Bean = mPersonList.get(position);
+        if (mainT2Bean == null) {
+            return VIEW_PROG;
         }
-        if (mainT2Bean != null) {
-            int type = mainT2Bean.type;
-            if (type == VIEW_TITLE) {
+        int type = mainT2Bean.type;
+        switch (type) {
+            case VIEW_TITLE:
                 return VIEW_TITLE;
-            } else if (type == VIEW_VIP) {
+            case VIEW_VIP:
                 return VIEW_VIP;
-            }
+            case VIEW_TO_PAY_VIP:
+                return VIEW_TO_PAY_VIP;
+            case VIEW_ITEM:
+                return VIEW_ITEM;
         }
-        return mPersonList.get(position) != null ? VIEW_ITEM : VIEW_PROG;
+        return VIEW_PROG;
     }
 
     @Override
     public RecyclerView.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         RecyclerView.ViewHolder holder;
-        if (viewType == VIEW_TITLE) {
+        if (viewType == VIEW_TO_PAY_VIP) {
+            holder = getToPayVipHolder(parent);
+        } else if (viewType == VIEW_TITLE) {
             holder = getTitleHolder(parent);
         } else if (viewType == VIEW_VIP) {
             holder = getVipHolder(parent);
@@ -176,6 +180,8 @@ public abstract class MainT2MoreItemAdapter<T> extends RecyclerView.Adapter<Recy
     public abstract BaseViewHolder getHolder(ViewGroup parent);
 
     public abstract BaseViewHolder getTitleHolder(ViewGroup parent);
+
+    public abstract BaseViewHolder getToPayVipHolder(ViewGroup parent);
 
     protected abstract RecyclerView.ViewHolder getBarViewHolder(ViewGroup parent);
 

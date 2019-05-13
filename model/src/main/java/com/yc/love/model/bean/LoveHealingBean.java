@@ -20,6 +20,7 @@ public class LoveHealingBean {
     public String chat_count;
     public String chat_name;
     public int id;
+    public int is_collect;
     public String quiz_sex;
     public String search_type;
     public List<LoveHealingDetailBean> detail;
