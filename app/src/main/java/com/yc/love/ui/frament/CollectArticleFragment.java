@@ -10,41 +10,44 @@ import com.yc.love.R;
 import com.yc.love.adaper.rv.NoThingAdapter;
 import com.yc.love.adaper.rv.base.RecyclerViewItemListener;
 import com.yc.love.adaper.rv.holder.BaseViewHolder;
+import com.yc.love.adaper.rv.holder.CollectArticleViewHolder;
 import com.yc.love.adaper.rv.holder.LoveByStagesViewHolder;
 import com.yc.love.model.base.MySubscriber;
 import com.yc.love.model.bean.AResultInfo;
-import com.yc.love.model.bean.LoveByStagesBean;
+import com.yc.love.model.bean.ExampleTsListBean;
 import com.yc.love.model.engin.LoveEngin;
+import com.yc.love.model.single.YcSingle;
 import com.yc.love.ui.activity.LoveByStagesDetailsActivity;
-import com.yc.love.ui.frament.base.BaseLoveByStagesFragment;
+import com.yc.love.ui.frament.base.BaseCollectFragment;
 import com.yc.love.ui.view.LoadDialog;
 
 import java.util.List;
 
 /**
+ *
  * Created by mayn on 2019/5/5.
  */
 
-public class LoveByStagesFragment extends BaseLoveByStagesFragment {
+public class CollectArticleFragment extends BaseCollectFragment {
 
     private RecyclerView mRecyclerView;
-    private int mCategoryId;
+//    private int mCategoryId;
     private LoveEngin mLoveEngin;
     private int PAGE_SIZE = 10;
     private int PAGE_NUM = 1;
     private LoadDialog mLoadingDialog;
-    private List<LoveByStagesBean> mLoveByStagesBeans;
+    private List<ExampleTsListBean> mExampleTsListBeans;
     private boolean loadMoreEnd;
     private boolean loadDataEnd;
     private boolean showProgressBar = false;
-    private NoThingAdapter<LoveByStagesBean> mAdapter;
+    private NoThingAdapter<ExampleTsListBean> mAdapter;
 
     @Override
     protected void initBundle() {
         Bundle arguments = getArguments();
         if (arguments != null) {
             int position = arguments.getInt("position");
-            mCategoryId = arguments.getInt("category_id", -1);
+//            mCategoryId = arguments.getInt("category_id", -1);
         }
     }
 
@@ -55,16 +58,16 @@ public class LoveByStagesFragment extends BaseLoveByStagesFragment {
 
     @Override
     protected void initViews() {
-        mLoveEngin = new LoveEngin(mLoveByStagesActivity);
-//        LoadingDialog loadingDialog=mLoveByStagesActivity.mLoadingDialog;
-        mLoadingDialog = mLoveByStagesActivity.mLoadingDialog;
+        mLoveEngin = new LoveEngin(mCollectActivity);
+//        LoadingDialog loadingDialog=mCollectActivity.mLoadingDialog;
+        mLoadingDialog = mCollectActivity.mLoadingDialog;
         initRecyclerView();
     }
 
 
     private void initRecyclerView() {
         mRecyclerView = rootView.findViewById(R.id.fragment_love_by_stages_rv);
-        LinearLayoutManager layoutManager = new LinearLayoutManager(mLoveByStagesActivity);
+        LinearLayoutManager layoutManager = new LinearLayoutManager(mCollectActivity);
         mRecyclerView.setLayoutManager(layoutManager);
     }
 
@@ -75,12 +78,18 @@ public class LoveByStagesFragment extends BaseLoveByStagesFragment {
 
 
     private void netData() {
+        int id = YcSingle.getInstance().id;
+        if (id <= 0) {
+            mCollectActivity.showToLoginDialog();
+            return;
+        }
         mLoadingDialog.showLoadingDialog();
-        mLoveEngin.listsArticle(String.valueOf(mCategoryId), String.valueOf(PAGE_NUM), String.valueOf(PAGE_SIZE), "Article/lists").subscribe(new MySubscriber<AResultInfo<List<LoveByStagesBean>>>(mLoadingDialog) {
+        mLoveEngin.collectListsArticle(String.valueOf(id), String.valueOf(PAGE_NUM), String.valueOf(PAGE_SIZE), "Article/collect_list").subscribe(new MySubscriber<AResultInfo<List<ExampleTsListBean>>>(mLoadingDialog) {
+
 
             @Override
-            protected void onNetNext(AResultInfo<List<LoveByStagesBean>> listAResultInfo) {
-                mLoveByStagesBeans = listAResultInfo.data;
+            protected void onNetNext(AResultInfo<List<ExampleTsListBean>> listAResultInfo) {
+                mExampleTsListBeans = listAResultInfo.data;
                 initRecyclerData();
             }
 
@@ -97,14 +106,14 @@ public class LoveByStagesFragment extends BaseLoveByStagesFragment {
     }
 
     private void initRecyclerData() {
-        mAdapter = new NoThingAdapter<LoveByStagesBean>(mLoveByStagesBeans, mRecyclerView) {
+        mAdapter = new NoThingAdapter<ExampleTsListBean>(mExampleTsListBeans, mRecyclerView) {
             @Override
             public BaseViewHolder getHolder(ViewGroup parent) {
-                return new LoveByStagesViewHolder(mLoveByStagesActivity, recyclerViewItemListener, parent);
+                return new CollectArticleViewHolder(mCollectActivity, recyclerViewItemListener, parent);
             }
         };
         mRecyclerView.setAdapter(mAdapter);
-        if (mLoveByStagesBeans.size() < PAGE_SIZE) {
+        if (mExampleTsListBeans.size() < PAGE_SIZE) {
             Log.d("ssss", "loadMoreData: data---end");
         } else {
             mAdapter.setOnMoreDataLoadListener(new NoThingAdapter.OnLoadMoreDataListener() {
@@ -115,7 +124,7 @@ public class LoveByStagesFragment extends BaseLoveByStagesFragment {
                     }
                     if (showProgressBar == false) {
                         //加入null值此时adapter会判断item的type
-                        mLoveByStagesBeans.add(null);
+                        mExampleTsListBeans.add(null);
                         mAdapter.notifyDataSetChanged();
                         showProgressBar = true;
                     }
@@ -123,7 +132,7 @@ public class LoveByStagesFragment extends BaseLoveByStagesFragment {
                         netLoadMore();
                     } else {
                         Log.d("mylog", "loadMoreData: loadMoreEnd end 已加载全部数据 ");
-                        mLoveByStagesBeans.remove(mLoveByStagesBeans.size() - 1);
+                        mExampleTsListBeans.remove(mExampleTsListBeans.size() - 1);
                         mAdapter.notifyDataSetChanged();
                     }
                 }
@@ -133,18 +142,23 @@ public class LoveByStagesFragment extends BaseLoveByStagesFragment {
     }
 
     private void netLoadMore() {
-        mLoveEngin.listsArticle(String.valueOf(mCategoryId), String.valueOf(PAGE_NUM++), String.valueOf(PAGE_SIZE), "Article/lists").subscribe(new MySubscriber<AResultInfo<List<LoveByStagesBean>>>(mLoveByStagesActivity) {
+        int id = YcSingle.getInstance().id;
+        if (id <= 0) {
+            mCollectActivity.showToLoginDialog();
+            return;
+        }
+        mLoveEngin.collectListsArticle(String.valueOf(id), String.valueOf(PAGE_NUM++), String.valueOf(PAGE_SIZE), "Article/collect_list").subscribe(new MySubscriber<AResultInfo<List<ExampleTsListBean>>>(mCollectActivity) {
 
             @Override
-            protected void onNetNext(AResultInfo<List<LoveByStagesBean>> listAResultInfo) {
-                List<LoveByStagesBean> netLoadMoreData = listAResultInfo.data;
+            protected void onNetNext(AResultInfo<List<ExampleTsListBean>> listAResultInfo) {
+                List<ExampleTsListBean> netLoadMoreData = listAResultInfo.data;
                 showProgressBar = false;
-                mLoveByStagesBeans.remove(mLoveByStagesBeans.size() - 1);
+                mExampleTsListBeans.remove(mExampleTsListBeans.size() - 1);
                 mAdapter.notifyDataSetChanged();
                 if (netLoadMoreData.size() < PAGE_SIZE) {
                     loadMoreEnd = true;
                 }
-                mLoveByStagesBeans.addAll(netLoadMoreData);
+                mExampleTsListBeans.addAll(netLoadMoreData);
                 mAdapter.notifyDataSetChanged();
                 mAdapter.setLoaded();
             }
@@ -164,8 +178,8 @@ public class LoveByStagesFragment extends BaseLoveByStagesFragment {
     RecyclerViewItemListener recyclerViewItemListener = new RecyclerViewItemListener() {
         @Override
         public void onItemClick(int position) {
-            LoveByStagesBean loveByStagesBean = mLoveByStagesBeans.get(position);
-            LoveByStagesDetailsActivity.startLoveByStagesDetailsActivity(mLoveByStagesActivity,loveByStagesBean.id,loveByStagesBean.post_title);
+            ExampleTsListBean ExampleTsListBean = mExampleTsListBeans.get(position);
+            LoveByStagesDetailsActivity.startLoveByStagesDetailsActivity(mCollectActivity,ExampleTsListBean.id,ExampleTsListBean.post_title);
         }
 
         @Override

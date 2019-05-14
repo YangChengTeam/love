@@ -20,10 +20,13 @@ import com.yc.love.model.bean.CategoryArticleBean;
 import com.yc.love.model.bean.CategoryArticleChildrenBean;
 import com.yc.love.model.bean.ExampleTsBean;
 import com.yc.love.model.bean.ExampleTsListBean;
+import com.yc.love.model.bean.LoveByStagesBean;
 import com.yc.love.model.bean.LoveHealDetBean;
 import com.yc.love.model.bean.MainT3Bean;
 import com.yc.love.model.engin.LoveEngin;
+import com.yc.love.ui.activity.ExampleDetailActivity;
 import com.yc.love.ui.activity.LoveByStagesActivity;
+import com.yc.love.ui.activity.LoveByStagesDetailsActivity;
 import com.yc.love.ui.activity.LoveIntroductionActivity;
 import com.yc.love.ui.frament.base.BaseMainFragment;
 import com.yc.love.ui.view.LoadDialog;
@@ -213,8 +216,9 @@ public class MainT3Fragment extends BaseMainFragment {
         public void onItemClick(int position) {
             MainT3Bean mainT3Bean = mDatas.get(position);
             int tagId = mainT3Bean.tag_id;
-            LoveIntroductionActivity.startLoveIntroductionActivity(mMainActivity, mainT3Bean.category_name, String.valueOf(tagId));
-//            LoveDialogueActivity.startLoveDialogueActivity(mMainActivity, mDatas.get(position).name);
+//            LoveIntroductionActivity.startLoveIntroductionActivity(mMainActivity, mainT3Bean.category_name, String.valueOf(tagId));
+            ExampleDetailActivity.startExampleDetailActivity(mMainActivity,mainT3Bean.id,mainT3Bean.post_title);
+
         }
 
         @Override

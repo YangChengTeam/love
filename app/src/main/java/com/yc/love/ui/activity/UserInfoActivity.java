@@ -14,6 +14,7 @@ import com.alibaba.fastjson.JSON;
 import com.bigkoo.pickerview.builder.TimePickerBuilder;
 import com.bigkoo.pickerview.listener.OnTimeSelectListener;
 import com.bigkoo.pickerview.view.TimePickerView;
+import com.squareup.picasso.Picasso;
 import com.yc.love.R;
 import com.yc.love.model.base.MySubscriber;
 import com.yc.love.model.bean.AResultInfo;
@@ -26,6 +27,7 @@ import com.yc.love.model.util.SPUtils;
 import com.yc.love.model.util.TimeUtils;
 import com.yc.love.ui.activity.base.BasePushPhotoActivity;
 import com.yc.love.ui.view.CheckBoxSample;
+import com.yc.love.ui.view.CircleTransform;
 
 import org.greenrobot.eventbus.EventBus;
 
@@ -45,15 +47,15 @@ public class UserInfoActivity extends BasePushPhotoActivity {
     private String mStringEtName;
     private ImageView mIvIcon;
     private IdCorrelationEngin mIdCorrelationEngin;
+    private int mYearDefault, mMonthDefault, mDayDefault;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_user_info);
-
+        mIdCorrelationEngin = new IdCorrelationEngin(this);
         initViews();
         initData();
-        mIdCorrelationEngin = new IdCorrelationEngin(this);
     }
 
 
@@ -78,7 +80,7 @@ public class UserInfoActivity extends BasePushPhotoActivity {
         mIsCheckedMen = false;
         isCheckedMen(mIsCheckedMen);
 
-        mTvDate.setText(TimeUtils.dateToYyMmDd(new Date(System.currentTimeMillis())));
+        mTvDate.setText(TimeUtils.dateToYyMmDdDivide(new Date(System.currentTimeMillis())));
 
         TextView tvSub = offerActivitySubTitleView();
         tvSub.setTextColor(getResources().getColor(R.color.red_crimson));
@@ -88,14 +90,75 @@ public class UserInfoActivity extends BasePushPhotoActivity {
     }
 
     private void initData() {
-        YcSingle instance = YcSingle.getInstance();
+       /* YcSingle instance = YcSingle.getInstance();
         String nick_name = instance.nick_name;
         if (!TextUtils.isEmpty(nick_name)) {
             mEtName.setText(nick_name);
             mEtName.setSelection(nick_name.length());
-        }
+        }*/
 
-        //TODO 性别 生日的默认值
+        netData();
+    }
+
+    private void netData() {
+        int id = YcSingle.getInstance().id;
+        if (id <= 0) {
+            return;
+        }
+        mIdCorrelationEngin.userInfo(String.valueOf(id), "user/info").subscribe(new MySubscriber<AResultInfo<IdCorrelationLoginBean>>(mLoadingDialog) {
+
+            @Override
+            protected void onNetNext(AResultInfo<IdCorrelationLoginBean> idCorrelationLoginBeanAResultInfo) {
+                IdCorrelationLoginBean idCorrelationLoginBean = idCorrelationLoginBeanAResultInfo.data;
+                String nickName = idCorrelationLoginBean.nick_name;
+                String birthday = idCorrelationLoginBean.birthday;
+                String face = idCorrelationLoginBean.face;
+                int sex = idCorrelationLoginBean.sex;
+
+                if (!TextUtils.isEmpty(nickName)) {
+                    mEtName.setText(nickName);
+                    mEtName.setSelection(nickName.length());
+                }
+                if (!TextUtils.isEmpty(birthday)) {
+                    int[] ints = TimeUtils.formattingAddDivide(birthday);
+                    if (ints != null && ints.length >= 3) {
+                        StringBuffer stringBuffer = new StringBuffer();
+                        mYearDefault = ints[0];
+                        mMonthDefault = ints[1];
+                        mDayDefault = ints[2];
+                        stringBuffer.append(mYearDefault).append("-");
+                        if (mMonthDefault < 10) {
+                            stringBuffer.append("0").append(mMonthDefault).append("-");
+                        } else {
+                            stringBuffer.append(mMonthDefault).append("-");
+                        }
+                        if (mDayDefault < 10) {
+                            stringBuffer.append("0").append(mDayDefault);
+                        } else {
+                            stringBuffer.append(mDayDefault);
+                        }
+                        mTvDate.setText(stringBuffer.toString());
+                    }
+                }
+                if(sex!=0){
+                    mIsCheckedMen = true;
+                    isCheckedMen(mIsCheckedMen);
+                }
+                if(!TextUtils.isEmpty(face)){
+                    Picasso.with(UserInfoActivity.this).load(face).placeholder(R.mipmap.main_icon_default_head).error(R.mipmap.main_icon_default_head).transform(new CircleTransform()).into(mIvIcon);
+                }
+            }
+
+            @Override
+            protected void onNetError(Throwable e) {
+
+            }
+
+            @Override
+            protected void onNetCompleted() {
+
+            }
+        });
     }
 
     private void isCheckedMen(boolean isCheckedMen) {
@@ -127,8 +190,11 @@ public class UserInfoActivity extends BasePushPhotoActivity {
                 }
                 break;
             case R.id.user_info_ll_item_02:
-                hindKeyboard(mEtName);
-                showDateTimePickerView();
+                if (mYearDefault > 0) {
+                    showDateTimePickerView(mYearDefault, mMonthDefault, mDayDefault);
+                } else {
+                    showDateTimePickerView();
+                }
                 break;
             case R.id.user_info_rl_tit_con:
                 showSelsctPhotoDialog(mIvIcon);
@@ -138,9 +204,6 @@ public class UserInfoActivity extends BasePushPhotoActivity {
                 if (!isCanSub) {
                     return;
                 }
-                Log.d("mylog", "onClick: 是男性吗 mIsCheckedMen " + mIsCheckedMen + " 昵称 mStringEtName" + mStringEtName
-                        + " 生日 mBirthdayString " + mBirthdayString);
-
                 netUpdateInfo();
                 break;
         }
@@ -149,10 +212,15 @@ public class UserInfoActivity extends BasePushPhotoActivity {
     private void netUpdateInfo() {
         String pwd = (String) SPUtils.get(this, SPUtils.LOGIN_PWD, "");
         int id = YcSingle.getInstance().id;
+        if (id <= 0) {
+            showToLoginDialog();
+            return;
+        }
         mLoadingDialog.showLoadingDialog();
         //TODO 图片上传 生日
         String face = "https://avatar.csdn.net/A/1/4/3_lawsonjin.jpg";
-        mIdCorrelationEngin.updateInfo(String.valueOf(id), mStringEtName, face, pwd, "user/update").subscribe(new MySubscriber<AResultInfo<IdCorrelationLoginBean>>(mLoadingDialog) {
+//     String sex=mIsCheckedMen?"1":"0";
+        mIdCorrelationEngin.updateInfo(String.valueOf(id), mStringEtName, mBirthdayString, mIsCheckedMen ? "1" : "0", face, pwd, "user/update").subscribe(new MySubscriber<AResultInfo<IdCorrelationLoginBean>>(mLoadingDialog) {
             @Override
             protected void onNetNext(AResultInfo<IdCorrelationLoginBean> idCorrelationLoginBeanAResultInfo) {
 
@@ -201,13 +269,14 @@ public class UserInfoActivity extends BasePushPhotoActivity {
     }
 
     private void showDateTimePickerView(int year, int month, int day) {
+        hindKeyboard(mEtName);
         if (mPvTime == null) {
             mPvTime = new TimePickerBuilder(this, new OnTimeSelectListener() {
                 @Override
                 public void onTimeSelect(Date date, View v) {
                     mBirthdayString = TimeUtils.dateToYyMmDd(date);
                     mBirthdayLong = TimeUtils.dateToStamp(date);
-                    mTvDate.setText(mBirthdayString);
+                    mTvDate.setText(TimeUtils.dateToYyMmDdDivide(date));
                 }
             })
                     .setOutSideCancelable(false)//点击屏幕，点在控件外部范围时，是否取消显示

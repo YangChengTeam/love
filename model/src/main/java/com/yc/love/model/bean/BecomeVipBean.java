@@ -7,13 +7,14 @@ import java.util.List;
  */
 
 public class BecomeVipBean {
+
+
     public int type;
-    public String name;
     public String subName;
+    public String name;
     public int imgResId;
-    public List<BecomeVipPayBean> payBeans;
-
-
+//    public List<BecomeVipPayBean> payBeans;
+    public List<IndexDoodsBean> payBeans;
 
 
     public BecomeVipBean(int type, String name) {
@@ -28,7 +29,7 @@ public class BecomeVipBean {
         this.imgResId = imgResId;
     }
 
-    public BecomeVipBean(int type, List<BecomeVipPayBean> payBeans) {
+    public BecomeVipBean(int type, List<IndexDoodsBean> payBeans) {
         this.type = type;
         this.payBeans = payBeans;
     }

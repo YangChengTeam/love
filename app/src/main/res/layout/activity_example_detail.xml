@@ -13,6 +13,7 @@
         android:descendantFocusability="blocksDescendants">
 
         <WebView
+
             android:id="@+id/example_detail_webview"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"

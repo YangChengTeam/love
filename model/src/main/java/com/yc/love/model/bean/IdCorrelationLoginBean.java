@@ -8,7 +8,9 @@ public class IdCorrelationLoginBean {
     /**
      * id : 2
      * name :
-     * nick_name : 12345
+     * nick_name : 小明
+     * birthday : 20150514
+     * sex : 1
      * mobile : 15927678095
      * face : https://avatar.csdn.net/A/1/4/3_lawsonjin.jpg
      * vip : 0
@@ -18,21 +20,26 @@ public class IdCorrelationLoginBean {
     public int id;
     public String name;
     public String nick_name;
+    public String birthday;
+    public int sex;
     public String mobile;
     public String face;
     public int vip;
     public int vip_end_time;
 
+
     @Override
     public String toString() {
         return "IdCorrelationLoginBean{" +
-                "face='" + face + '\'' +
-                ", vip_end_time=" + vip_end_time +
-                ", nick_name='" + nick_name + '\'' +
+                "id=" + id +
                 ", name='" + name + '\'' +
+                ", nick_name='" + nick_name + '\'' +
+                ", birthday='" + birthday + '\'' +
+                ", sex=" + sex +
                 ", mobile='" + mobile + '\'' +
-                ", id=" + id +
+                ", face='" + face + '\'' +
                 ", vip=" + vip +
+                ", vip_end_time=" + vip_end_time +
                 '}';
     }
 }

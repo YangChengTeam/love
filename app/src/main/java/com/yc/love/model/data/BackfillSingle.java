@@ -25,11 +25,7 @@ public class BackfillSingle {
         //本地数据
         String idInfoString = (String) SPUtils.get(context, SPUtils.ID_INFO_BEAN, "");
         IdCorrelationLoginBean idCorrelationLogin = new IdCorrelationLoginBean();
-        /*if (TextUtils.isEmpty(idInfoString) || "null".equals(idInfoString)) {
-            idCorrelationLogin = new IdCorrelationLoginBean();
-        } else {
-            idCorrelationLogin = new Gson().fromJson(idInfoString, IdCorrelationLoginBean.class);
-        }*/
+
         if (!TextUtils.isEmpty(idInfoString) && !"null".equals(idInfoString)) {
             try {
                 JSONObject jsonObject = new JSONObject(idInfoString);

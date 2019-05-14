@@ -5,6 +5,7 @@ import android.content.Intent;
 import android.os.Build;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.webkit.JavascriptInterface;
 import android.webkit.WebSettings;
@@ -68,13 +69,24 @@ public class ExampleDetailActivity extends BaseSameActivity {
     private void initWebView(String data) {
         WebSettings settings = webView.getSettings();
 
+        //设置自适应屏幕，两者合用
+        settings.setUseWideViewPort(true); //将图片调整到适合webview的大小
+        settings.setLoadWithOverviewMode(true); // 缩放至屏幕的大小
+
+        /*SMALLEST(50%),
+            SMALLER(75%),
+            NORMAL(100%),
+            LARGER(150%),
+            LARGEST(200%); */
+//        settings.setTextSize(WebSettings.TextSize.NORMAL);
+
         settings.setLoadWithOverviewMode(true);//设置WebView是否使用预览模式加载界面。
         webView.setVerticalScrollBarEnabled(false);//不能垂直滑动
         webView.setHorizontalScrollBarEnabled(false);//不能水平滑动
-        settings.setTextSize(WebSettings.TextSize.LARGEST);//通过设置WebSettings，改变HTML中文字的大小
+//        settings.setTextSize(WebSettings.TextSize.LARGEST);//通过设置WebSettings，改变HTML中文字的大小
         settings.setJavaScriptCanOpenWindowsAutomatically(true);//支持通过JS打开新窗口
         //设置WebView属性，能够执行Javascript脚本
-        webView.getSettings().setJavaScriptEnabled(true);//设置js可用
+        settings.setJavaScriptEnabled(true);//设置js可用
         webView.setWebViewClient(new WebViewClient());
         webView.addJavascriptInterface(new AndroidJavaScript(getApplication()), "android");//设置js接口
         settings.setLayoutAlgorithm(WebSettings.LayoutAlgorithm.SINGLE_COLUMN);//支持内容重新布局

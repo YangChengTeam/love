@@ -11,6 +11,7 @@ import com.yc.love.model.bean.CategoryArticleBean;
 import com.yc.love.model.bean.ExampDataBean;
 import com.yc.love.model.bean.ExampListsBean;
 import com.yc.love.model.bean.ExampleTsBean;
+import com.yc.love.model.bean.ExampleTsListBean;
 import com.yc.love.model.bean.LoveByStagesBean;
 import com.yc.love.model.bean.LoveByStagesDetailsBean;
 import com.yc.love.model.bean.LoveHealDateBean;
@@ -170,6 +171,34 @@ public class LoveEngin extends BaseEngine {
         requestParams(params);
         HttpCoreEngin<AResultInfo<List<LoveByStagesBean>>> httpCoreEngin = HttpCoreEngin.get(mContext);
         Observable<AResultInfo<List<LoveByStagesBean>>> rxpost = httpCoreEngin.rxpost(URLConfig.getUrl(url), new TypeReference<AResultInfo<List<LoveByStagesBean>>>() {
+                }.getType(),
+                params,
+                true,
+                true, true);
+        return rxpost;
+    }
+    public Observable<AResultInfo<List<ExampleTsListBean>>> collectListsArticle(String userId, String page, String pageSize, String url) {
+        Map<String, String> params = new HashMap<>();
+        params.put("user_id", userId);
+        params.put("page", page);
+        params.put("page_size", pageSize);
+        requestParams(params);
+        HttpCoreEngin<AResultInfo<List<ExampleTsListBean>>> httpCoreEngin = HttpCoreEngin.get(mContext);
+        Observable<AResultInfo<List<ExampleTsListBean>>> rxpost = httpCoreEngin.rxpost(URLConfig.getUrl(url), new TypeReference<AResultInfo<List<ExampleTsListBean>>>() {
+                }.getType(),
+                params,
+                true,
+                true, true);
+        return rxpost;
+    }
+    public Observable<AResultInfo<List<LoveHealingBean>>> listsCollectLovewords(String userId, String page, String pageSize, String url) {
+        Map<String, String> params = new HashMap<>();
+        params.put("user_id", userId);
+        params.put("page", page);
+        params.put("page_size", pageSize);
+        requestParams(params);
+        HttpCoreEngin<AResultInfo<List<LoveHealingBean>>> httpCoreEngin = HttpCoreEngin.get(mContext);
+        Observable<AResultInfo<List<LoveHealingBean>>> rxpost = httpCoreEngin.rxpost(URLConfig.getUrl(url), new TypeReference<AResultInfo<List<LoveHealingBean>>>() {
                 }.getType(),
                 params,
                 true,

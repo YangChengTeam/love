@@ -105,7 +105,7 @@ public class LoveByStagesDetailsActivity extends BaseSameActivity {
                 String msg = stringAResultInfo.msg;
                 showToastShort(msg);
                 mIsDigArticle = !mIsDigArticle;
-                changCollectStaty(mIsDigArticle);
+                changLikeStaty(mIsDigArticle);
             }
 
             @Override
@@ -202,6 +202,7 @@ public class LoveByStagesDetailsActivity extends BaseSameActivity {
         webSettings.setDefaultTextEncodingName("utf-8");//设置编码格式
         webSettings.setBlockNetworkImage(true);//设置是否加载网络图片 true 为不加载 false 为加载
 
+        Log.d("mylog", "initWebView: data "+data);
 //        String body = data.getInfo().getBody();
         webView.loadDataWithBaseURL(null, data, "text/html", "utf-8", null);
 

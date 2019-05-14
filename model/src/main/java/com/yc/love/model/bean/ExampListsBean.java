@@ -15,6 +15,7 @@ public class ExampListsBean {
      */
 
     public int create_time;
+    public int collect_time;
     public int id;
     public String image;
     public String post_title;

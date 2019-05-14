@@ -1,5 +1,6 @@
 package com.yc.love.model.util;
 
+import android.text.TextUtils;
 import android.util.Log;
 
 import java.text.ParseException;
@@ -16,9 +17,29 @@ public class TimeUtils {
         if (date == null) {
             return "";
         }
+        String format = "yyyyMMdd";
+        SimpleDateFormat formatter = new SimpleDateFormat(format);
+        return formatter.format(date);
+    }
+
+    public static String dateToYyMmDdDivide(Date date) {
+        if (date == null) {
+            return "";
+        }
         String format = "yyyy-MM-dd";
         SimpleDateFormat formatter = new SimpleDateFormat(format);
         return formatter.format(date);
+    }
+
+    public static int[] formattingAddDivide(String string) {
+        if (!TextUtils.isEmpty(string) && string.length() >= 8) {
+            String y = string.substring(0, 4);
+            String m = string.substring(4, 6);
+            String d = string.substring(6, 8);
+            int[] dtatInt = new int[]{Integer.parseInt(y), Integer.parseInt(m), Integer.parseInt(d)};
+            return dtatInt;
+        }
+        return new int[]{};
     }
 
     public static long dateToStamp(Date date) {

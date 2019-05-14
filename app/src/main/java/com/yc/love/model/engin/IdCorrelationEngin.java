@@ -113,14 +113,28 @@ public class IdCorrelationEngin extends BaseEngine {
         return rxpost;
     }
 
-    public Observable<AResultInfo<IdCorrelationLoginBean>> updateInfo(String user_id, String nick_name, String face, String password, String url) {
+    public Observable<AResultInfo<IdCorrelationLoginBean>> updateInfo(String user_id, String nick_name, String birthday, String sex, String face, String password, String url) {
         Map<String, String> params = new HashMap<>();
         params.put("user_id", user_id);
+        params.put("birthday", birthday);
+        params.put("sex", sex);
         params.put("nick_name", nick_name);
         if (!TextUtils.isEmpty(face)) {
             params.put("face", face);
         }
         params.put("password", password);
+        requestParams(params);
+        HttpCoreEngin<AResultInfo<IdCorrelationLoginBean>> httpCoreEngin = HttpCoreEngin.get(mContext);
+        Observable<AResultInfo<IdCorrelationLoginBean>> rxpost = httpCoreEngin.rxpost(URLConfig.getUrl(url), new TypeReference<AResultInfo<IdCorrelationLoginBean>>() {
+                }.getType(),
+                params,
+                true,
+                true, true);
+        return rxpost;
+    }
+    public Observable<AResultInfo<IdCorrelationLoginBean>> userInfo(String userId,String url) {
+        Map<String, String> params = new HashMap<>();
+        params.put("user_id", userId);
         requestParams(params);
         HttpCoreEngin<AResultInfo<IdCorrelationLoginBean>> httpCoreEngin = HttpCoreEngin.get(mContext);
         Observable<AResultInfo<IdCorrelationLoginBean>> rxpost = httpCoreEngin.rxpost(URLConfig.getUrl(url), new TypeReference<AResultInfo<IdCorrelationLoginBean>>() {
