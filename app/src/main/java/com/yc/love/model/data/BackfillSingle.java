@@ -33,49 +33,49 @@ public class BackfillSingle {
                     String face = jsonObject.getString("face");
                     if (!TextUtils.isEmpty(face)) {
                         ycSingle.face = face;
-                        idCorrelationLogin.setFace(face);
+                        idCorrelationLogin.face = (face);
                     }
                 }
                 if (jsonObject.has("nick_name")) {
                     String nick_name = jsonObject.getString("nick_name");
                     if (!TextUtils.isEmpty(nick_name)) {
                         ycSingle.nick_name = nick_name;
-                        idCorrelationLogin.setNick_name(nick_name);
+                        idCorrelationLogin.nick_name = (nick_name);
                     }
                 }
                 if (jsonObject.has("name")) {
                     String name = jsonObject.getString("name");
                     if (!TextUtils.isEmpty(name)) {
                         ycSingle.name = name;
-                        idCorrelationLogin.setName(name);
+                        idCorrelationLogin.name = (name);
                     }
                 }
                 if (jsonObject.has("mobile")) {
                     String mobile = jsonObject.getString("mobile");
                     if (!TextUtils.isEmpty(mobile)) {
                         ycSingle.mobile = mobile;
-                        idCorrelationLogin.setMobile(mobile);
+                        idCorrelationLogin.mobile = (mobile);
                     }
                 }
                 if (jsonObject.has("vip_end_time")) {
                     int vip_end_time = jsonObject.getInt("vip_end_time");
                     if (vip_end_time > 0) {
                         ycSingle.vip_end_time = vip_end_time;
-                        idCorrelationLogin.setVip_end_time(vip_end_time);
+                        idCorrelationLogin.vip_end_time = (vip_end_time);
                     }
                 }
                 if (jsonObject.has("id")) {
                     int id = jsonObject.getInt("id");
                     if (id > 0) {
                         ycSingle.id = id;
-                        idCorrelationLogin.setId(id);
+                        idCorrelationLogin.id = id;
                     }
                 }
                 if (jsonObject.has("vip")) {
                     int vip = jsonObject.getInt("vip");
                     if (vip > 0) {
                         ycSingle.vip = vip;
-                        idCorrelationLogin.setVip(vip);
+                        idCorrelationLogin.vip = vip;
                     }
                 }
             } catch (JSONException e) {

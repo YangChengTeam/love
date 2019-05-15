@@ -325,19 +325,19 @@ public abstract class BasePushPhotoActivity extends BaseSameActivity {
                         MultipartBody.Builder builder1 = new MultipartBody.Builder();//构建者模式
                         builder1.setType(MultipartBody.FORM);//传输类型
 //                        builder1.addFormDataPart("image", file.getName());
-                        builder1.addFormDataPart("image", byte2hex(bytes));
+                        builder1.addFormDataPart("image", "image", RequestBody.create(MediaType.parse
+                                ("multipart/form-data"), file));
 //                        RequestBody.create(MediaType.parse("application/octet-stream"), file);
-                        RequestBody.create(MediaType.parse("application/octet-stream"), byte2hex(bytes));
+//                        RequestBody.create(MediaType.parse("application/octet-stream"), byte2hex(bytes));
                         Log.d("mylog", "onSuccess: file.getName() " + file.getName());
                         Log.d("mylog", "onSuccess: byte2hex(bytes) " + byte2hex(bytes));
 
 
                         //表单数据参数填入
-                        RequestBody body = new FormBody.Builder().add("image", file.getPath()).build();
                         final Request request = new Request.Builder()
                                 .url(url)
-//                                .post(builder1.build())
-                                .post(body)
+                                .post(builder1.build())
+//                                .post(body)
                                 .build();
                         Call call = okHttpClient.newCall(request);
                         call.enqueue(new Callback() {
