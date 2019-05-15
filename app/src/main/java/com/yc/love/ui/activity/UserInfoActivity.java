@@ -4,6 +4,7 @@ import android.os.Bundle;
 import android.text.TextUtils;
 import android.util.Log;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -16,8 +17,14 @@ import com.bigkoo.pickerview.listener.OnTimeSelectListener;
 import com.bigkoo.pickerview.view.TimePickerView;
 import com.squareup.picasso.Picasso;
 import com.yc.love.R;
+import com.yc.love.adaper.rv.CreateAdapter;
+import com.yc.love.adaper.rv.holder.BaseViewHolder;
+import com.yc.love.adaper.rv.holder.LoveHealItemViewHolder;
+import com.yc.love.adaper.rv.holder.LoveHealTitleViewHolder;
 import com.yc.love.model.base.MySubscriber;
 import com.yc.love.model.bean.AResultInfo;
+import com.yc.love.model.bean.LoveHealBean;
+import com.yc.love.model.bean.LoveHealDateBean;
 import com.yc.love.model.bean.event.EventLoginState;
 import com.yc.love.model.bean.IdCorrelationLoginBean;
 import com.yc.love.model.data.BackfillSingle;
@@ -31,8 +38,10 @@ import com.yc.love.ui.view.CircleTransform;
 
 import org.greenrobot.eventbus.EventBus;
 
+import java.io.File;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.List;
 
 public class UserInfoActivity extends BasePushPhotoActivity {
 
@@ -138,13 +147,14 @@ public class UserInfoActivity extends BasePushPhotoActivity {
                             stringBuffer.append(mDayDefault);
                         }
                         mTvDate.setText(stringBuffer.toString());
+                        mBirthdayString = birthday;
                     }
                 }
-                if(sex!=0){
+                if (sex != 0) {
                     mIsCheckedMen = true;
                     isCheckedMen(mIsCheckedMen);
                 }
-                if(!TextUtils.isEmpty(face)){
+                if (!TextUtils.isEmpty(face)) {
                     Picasso.with(UserInfoActivity.this).load(face).placeholder(R.mipmap.main_icon_default_head).error(R.mipmap.main_icon_default_head).transform(new CircleTransform()).into(mIvIcon);
                 }
             }
@@ -305,5 +315,40 @@ public class UserInfoActivity extends BasePushPhotoActivity {
     @Override
     protected String offerActivityTitle() {
         return "个人信息";
+    }
+
+    @Override
+    protected void onLubanFileSuccess(File file) {
+        byte[] bytes = new byte[]{};
+        try {
+            bytes = readStream(file.toString());
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        String s = String.valueOf(bytes);
+//        netSSSSData(s);
+    }
+
+    private void netSSSSData(String sss) {
+        mLoadingDialog.showLoadingDialog();
+        mIdCorrelationEngin.uploadUommon(sss, "common/upload").subscribe(new MySubscriber<AResultInfo<String>>(mLoadingDialog) {
+
+
+            @Override
+            protected void onNetNext(AResultInfo<String> stringAResultInfo) {
+                String data = stringAResultInfo.data;
+                Log.d("mylog", "onNetNext: data " + data);
+            }
+
+            @Override
+            protected void onNetError(Throwable e) {
+
+            }
+
+            @Override
+            protected void onNetCompleted() {
+
+            }
+        });
     }
 }

@@ -144,4 +144,19 @@ public class IdCorrelationEngin extends BaseEngine {
                 true, true);
         return rxpost;
     }
+
+    public Observable<AResultInfo<String>> uploadUommon(String image , String url) {
+        Map<String, String> params = new HashMap<>();
+        params.put("image", image );
+//        params.put("mobile", mobile);
+//        params.put("new_password", password);
+        requestParams(params);
+        HttpCoreEngin<AResultInfo<String>> httpCoreEngin = HttpCoreEngin.get(mContext);
+        Observable<AResultInfo<String>> rxpost = httpCoreEngin.rxpost(URLConfig.getUrl(url), new TypeReference<AResultInfo<String>>() {
+                }.getType(),
+                params,
+                true,
+                true, true);
+        return rxpost;
+    }
 }
