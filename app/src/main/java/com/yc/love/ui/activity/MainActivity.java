@@ -1,8 +1,10 @@
 package com.yc.love.ui.activity;
 
 import android.app.Activity;
+import android.content.DialogInterface;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.widget.TextView;
@@ -10,6 +12,7 @@ import android.widget.TextView;
 import com.yc.love.R;
 import com.yc.love.adaper.vp.MainPagerAdapter;
 import com.yc.love.factory.MainFragmentFactory;
+import com.yc.love.model.single.YcSingle;
 import com.yc.love.ui.activity.base.BaseActivity;
 import com.yc.love.ui.view.ControlScrollViewPager;
 
@@ -46,6 +49,13 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
 
         MainPagerAdapter mainPagerAdapter = new MainPagerAdapter(getSupportFragmentManager());
         mVpFragment.setAdapter(mainPagerAdapter);
+
+
+    }
+
+    public void scroolToHomeFragment(){
+        mVpFragment.setCurrentItem(MainFragmentFactory.MAIN_FRAGMENT_0, false);
+        iconSelect(MainFragmentFactory.MAIN_FRAGMENT_0);
     }
 
     @Override
@@ -64,6 +74,11 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
                 iconSelect(MainFragmentFactory.MAIN_FRAGMENT_2);
                 break;
             case R.id.comp_main_tv_tab_4:
+                int id = YcSingle.getInstance().id;
+                if (id <= 0) {
+                    showToLoginDialog();
+                    return;
+                }
                 mVpFragment.setCurrentItem(MainFragmentFactory.MAIN_FRAGMENT_3, false);
                 iconSelect(MainFragmentFactory.MAIN_FRAGMENT_3);
                 break;
@@ -105,6 +120,8 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
         tv_icon.setCompoundDrawablesWithIntrinsicBounds(null, top22, null, null);
         tv_icon.setTextColor(getResources().getColor(R.color.black));
     }
+
+
 
 
 }

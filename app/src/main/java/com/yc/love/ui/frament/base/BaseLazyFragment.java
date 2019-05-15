@@ -18,10 +18,15 @@ public abstract class BaseLazyFragment extends BaseFragment {
     @Override
     protected View onFragmentCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         rootView =  inflater.inflate(setContentView(), container, false);
+        initBundle();
         initViews();
         isInitView = true;
         isCanLoadData();
         return rootView;
+    }
+
+    protected void initBundle() {
+
     }
 
 

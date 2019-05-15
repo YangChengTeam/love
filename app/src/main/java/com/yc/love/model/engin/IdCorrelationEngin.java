@@ -1,6 +1,7 @@
 package com.yc.love.model.engin;
 
 import android.content.Context;
+import android.text.TextUtils;
 import android.util.Log;
 
 import com.alibaba.fastjson.TypeReference;
@@ -54,15 +55,6 @@ public class IdCorrelationEngin extends BaseEngine {
         return rxpost;
     }
 
-    private void requestParams(Map<String, String> params) {
-        StringBuffer stringBuffer = new StringBuffer();
-        for (String s : params.keySet()
-                ) {
-            stringBuffer.append(s).append(":").append(params.get(s)).append("   ");
-        }
-        Log.d("mylog", "requestParams: " + stringBuffer.toString());
-    }
-
     public Observable<AResultInfo<IdCorrelationLoginBean>> register(String code, String mobile, String password, String url) {
         Map<String, String> params = new HashMap<>();
         params.put("code", code);
@@ -85,6 +77,22 @@ public class IdCorrelationEngin extends BaseEngine {
         requestParams(params);
         HttpCoreEngin<ResultInfo<IdCorrelationLoginBean>> httpCoreEngin = HttpCoreEngin.get(mContext);
         Observable<ResultInfo<IdCorrelationLoginBean>> rxpost = httpCoreEngin.rxpost(URLConfig.getUrl(url), new TypeReference<ResultInfo<IdCorrelationLoginBean>>() {
+
+                }.getType(),
+                params,
+                true,
+                true, true);
+        return rxpost;
+    }
+
+    public Observable<AResultInfo<String>> myLogin(String mobile, String password, String url) {
+        Map<String, String> params = new HashMap<>();
+        params.put("mobile", mobile);
+        params.put("password", password);
+        requestParams(params);
+        HttpCoreEngin<AResultInfo<String>> httpCoreEngin = HttpCoreEngin.get(mContext);
+        Observable<AResultInfo<String>> rxpost = httpCoreEngin.rxpost(URLConfig.getUrl(url), new TypeReference<AResultInfo<String>>() {
+
                 }.getType(),
                 params,
                 true,
@@ -96,7 +104,54 @@ public class IdCorrelationEngin extends BaseEngine {
         Map<String, String> params = new HashMap<>();
         params.put("code", code);
         params.put("mobile", mobile);
+        params.put("new_password", password);
+        requestParams(params);
+        HttpCoreEngin<AResultInfo<String>> httpCoreEngin = HttpCoreEngin.get(mContext);
+        Observable<AResultInfo<String>> rxpost = httpCoreEngin.rxpost(URLConfig.getUrl(url), new TypeReference<AResultInfo<String>>() {
+                }.getType(),
+                params,
+                true,
+                true, true);
+        return rxpost;
+    }
+
+    public Observable<AResultInfo<IdCorrelationLoginBean>> updateInfo(String user_id, String nick_name, String birthday, String sex, String face, String password, String url) {
+        Map<String, String> params = new HashMap<>();
+        params.put("user_id", user_id);
+        params.put("birthday", birthday);
+        params.put("sex", sex);
+        params.put("nick_name", nick_name);
+        if (!TextUtils.isEmpty(face)) {
+            params.put("face", face);
+        }
         params.put("password", password);
+        requestParams(params);
+        HttpCoreEngin<AResultInfo<IdCorrelationLoginBean>> httpCoreEngin = HttpCoreEngin.get(mContext);
+        Observable<AResultInfo<IdCorrelationLoginBean>> rxpost = httpCoreEngin.rxpost(URLConfig.getUrl(url), new TypeReference<AResultInfo<IdCorrelationLoginBean>>() {
+                }.getType(),
+                params,
+                true,
+                true, true);
+        return rxpost;
+    }
+    public Observable<AResultInfo<IdCorrelationLoginBean>> userInfo(String userId,String url) {
+        Map<String, String> params = new HashMap<>();
+        params.put("user_id", userId);
+        requestParams(params);
+        HttpCoreEngin<AResultInfo<IdCorrelationLoginBean>> httpCoreEngin = HttpCoreEngin.get(mContext);
+        Observable<AResultInfo<IdCorrelationLoginBean>> rxpost = httpCoreEngin.rxpost(URLConfig.getUrl(url), new TypeReference<AResultInfo<IdCorrelationLoginBean>>() {
+                }.getType(),
+                params,
+                true,
+                true, true);
+        return rxpost;
+    }
+
+    public Observable<AResultInfo<String>> uploadUommon(String image , String url) {
+        Map<String, String> params = new HashMap<>();
+        params.put("image", image );
+//        params.put("mobile", mobile);
+//        params.put("new_password", password);
         requestParams(params);
         HttpCoreEngin<AResultInfo<String>> httpCoreEngin = HttpCoreEngin.get(mContext);
         Observable<AResultInfo<String>> rxpost = httpCoreEngin.rxpost(URLConfig.getUrl(url), new TypeReference<AResultInfo<String>>() {

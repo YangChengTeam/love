@@ -6,13 +6,12 @@
     android:background="@color/love_background"
     android:orientation="vertical">
 
-    <View
+    <include
         android:id="@+id/main_t4_view_bar"
-        android:layout_width="match_parent"
-        android:layout_height="25dp"
-        android:background="@color/white" />
+        layout="@layout/layout_view_bar" />
 
     <LinearLayout
+        android:id="@+id/main_t4_ll_title"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_gravity="center_vertical"
@@ -29,15 +28,16 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center_vertical"
-            android:layout_marginLeft="12dp"
+            android:layout_marginLeft="14dp"
             android:orientation="vertical">
 
             <TextView
+                android:id="@+id/main_t4_tv_name"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="1234"
+                android:text="未登录"
                 android:textColor="@color/black"
-                android:textSize="@dimen/size_26"
+                android:textSize="@dimen/size_22"
                 android:textStyle="bold" />
 
             <View
@@ -51,9 +51,9 @@
                 android:background="@drawable/selectot_btn_red_crimson"
                 android:gravity="center"
                 android:paddingLeft="24dp"
-                android:paddingTop="6dp"
+                android:paddingTop="4dp"
                 android:paddingRight="24dp"
-                android:paddingBottom="6dp"
+                android:paddingBottom="4dp"
                 android:text="信息未完善"
                 android:textColor="@color/select_color_red_crimson"
                 android:textSize="@dimen/size_14" />

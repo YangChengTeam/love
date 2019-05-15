@@ -19,9 +19,9 @@ import java.util.List;
  * Created by Administrator on 2017/9/12.
  */
 
-public abstract class LoveHealingAdapter<T> extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
+public abstract class LoveHealingAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
 
-    private final List<T> mPersonList;
+    private final List<LoveHealingBean> mPersonList;
     private RecyclerView mRecyclerView;
     private static final int VIEW_TITLE = 0;
     private static final int VIEW_ITEM_ITEM = 1;
@@ -31,7 +31,7 @@ public abstract class LoveHealingAdapter<T> extends RecyclerView.Adapter<Recycle
     private int totalItemCount;
     private int lastVisibleItemPosition;
 
-    public LoveHealingAdapter(List<T> personList, RecyclerView recyclerView) {
+    public LoveHealingAdapter(List<LoveHealingBean> personList, RecyclerView recyclerView) {
         this.mPersonList = personList;
         this.mRecyclerView = recyclerView;
         addOnScrollListenerPacked();
@@ -40,7 +40,7 @@ public abstract class LoveHealingAdapter<T> extends RecyclerView.Adapter<Recycle
     @Override
     public int getItemCount() {
         if (mPersonList != null) {
-            return mPersonList.size() ;
+            return mPersonList.size();
         }
         return 0;
     }
@@ -49,26 +49,20 @@ public abstract class LoveHealingAdapter<T> extends RecyclerView.Adapter<Recycle
     @Override
     public int getItemViewType(int position) {
         int size = mPersonList.size();
-        LoveHealingBean loveHealingBean = null;
-        try {
-            loveHealingBean = (LoveHealingBean) mPersonList.get(position);
-        } catch (IndexOutOfBoundsException e) {
-            Log.d("mylog", "getItemViewType: e " + e);
+        LoveHealingBean loveHealingBean = mPersonList.get(position);
+        if (loveHealingBean == null) {
+            return VIEW_PROG;
         }
-        if (loveHealingBean != null) {
-            int type = loveHealingBean.type;
-            switch (type) {
-                case VIEW_ITEM:
-                    return VIEW_ITEM;
-                case VIEW_ITEM_ITEM:
-                    return VIEW_ITEM_ITEM;
-                case VIEW_TITLE:
-                    return VIEW_TITLE;
-                default:
-                    return VIEW_PROG;
-            }
+        int type = loveHealingBean.type;
+        switch (type) {
+            case VIEW_ITEM:
+                return VIEW_ITEM;
+            case VIEW_ITEM_ITEM:
+                return VIEW_ITEM_ITEM;
+            case VIEW_TITLE:
+                return VIEW_TITLE;
         }
-        return mPersonList.get(position) != null ? VIEW_ITEM : VIEW_PROG;
+        return VIEW_PROG;
     }
 
     @Override
@@ -111,9 +105,6 @@ public abstract class LoveHealingAdapter<T> extends RecyclerView.Adapter<Recycle
 
             totalItemCount = linearLayoutManager.getItemCount();
             lastVisibleItemPosition = linearLayoutManager.findLastVisibleItemPosition();
-            Log.d("mylog", "onScrolled totalItemCount =  全部数据条数 " + totalItemCount + "-----");
-            Log.d("mylog", "onScrolled: " + "lastVisibleItemPosition 可见的最后一条  222 =" + lastVisibleItemPosition);
-
             if (totalItemCount == lastVisibleItemPosition + 1) {
                 if (totalItemCount == 0) {
                     return;
@@ -128,7 +119,6 @@ public abstract class LoveHealingAdapter<T> extends RecyclerView.Adapter<Recycle
                     }
                     isLoading = true;
                     // 加载数据
-                    Log.d("mylog", "onScrolled: mMoreDataListener.loadMoreData");
                     mMoreDataListener.loadMoreData();
                 }
             }

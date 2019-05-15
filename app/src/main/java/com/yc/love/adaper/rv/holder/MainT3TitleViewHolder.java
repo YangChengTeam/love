@@ -28,7 +28,7 @@ public class MainT3TitleViewHolder extends BaseViewHolder<MainT3Bean> {
     @Override
     public void bindData(MainT3Bean mainT3Bean) {
 
-        View viewBar = itemView.findViewById(R.id.item_t3title_view_bar);
+//        View viewBar = itemView.findViewById(R.id.item_t3title_view_bar);
         ImageView ivTitle = itemView.findViewById(R.id.item_t3title_iv_title);
         TextView tvIcon01 = itemView.findViewById(R.id.item_t3title_tv_icon_01);
         TextView tvIcon02 = itemView.findViewById(R.id.item_t3title_tv_icon_02);
@@ -36,50 +36,50 @@ public class MainT3TitleViewHolder extends BaseViewHolder<MainT3Bean> {
         TextView tvIcon04 = itemView.findViewById(R.id.item_t3title_tv_icon_04);
         TextView tvIcon05 = itemView.findViewById(R.id.item_t3title_tv_icon_05);
         MainActivity mainActivity = (MainActivity) context;
-        mainActivity.setStateBarHeight(viewBar);
+//        mainActivity.setStateBarHeight(viewBar);
 
         tvIcon01.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                onClickTitleIconListener.clickTitleIcon01();
+                onClickTitleIconListener.clickTitleIcon(0);
             }
         });
         tvIcon02.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                onClickTitleIconListener.clickTitleIcon02();
+                onClickTitleIconListener.clickTitleIcon(1);
             }
         });
         tvIcon03.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                onClickTitleIconListener.clickTitleIcon03();
+                onClickTitleIconListener.clickTitleIcon(2);
             }
         });
         tvIcon04.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                onClickTitleIconListener.clickTitleIcon04();
+                onClickTitleIconListener.clickTitleIcon(3);
             }
         });
         tvIcon05.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                onClickTitleIconListener.clickTitleIcon05();
+                onClickTitleIconListener.clickTitleIcon(4);
             }
         });
     }
 
     public interface OnClickTitleIconListener {
-        void clickTitleIcon01();
+        void clickTitleIcon(int position);
 
-        void clickTitleIcon02();
+        /*void clickTitleIcon02();
 
         void clickTitleIcon03();
 
         void clickTitleIcon04();
 
-        void clickTitleIcon05();
+        void clickTitleIcon05();*/
     }
 
     public void setOnClickTitleIconListener(OnClickTitleIconListener onClickTitleIconListener) {

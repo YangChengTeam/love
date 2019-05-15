@@ -15,20 +15,22 @@ import java.util.List;
  */
 
 public class LoveByStagesPagerAdapter extends FragmentPagerAdapter {
+    private final List<Integer> mIdLists;
     private List<String> titleList;
 //    private List<String> titleJobTypeList;
     private final FragmentManager fm;
 
-    public LoveByStagesPagerAdapter(FragmentManager fm, List<String> titleList) {
+    public LoveByStagesPagerAdapter(FragmentManager fm, List<String> titleList,List<Integer> idLists) {
         super(fm);
         this.fm = fm;
         this.titleList = titleList;
+        this.mIdLists = idLists;
 //        this.titleJobTypeList = titleJobTypeList;
     }
 
     @Override
     public Fragment getItem(int position) {
-        Fragment fragment = LoveByStagesFactory.createFragment(position, titleList.get(position));
+        Fragment fragment = LoveByStagesFactory.createFragment(position, mIdLists.get(position));
         return fragment;
     }
 
@@ -37,10 +39,6 @@ public class LoveByStagesPagerAdapter extends FragmentPagerAdapter {
         return titleList.size();
     }
 
-   /* @Override
-    public int getItemPosition(Object object) {
-        return PagerAdapter.POSITION_NONE;
-    }*/
 
     @Override
     public CharSequence getPageTitle(int position) {

@@ -6,6 +6,7 @@ import android.os.Bundle;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.text.TextUtils;
 import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
@@ -14,6 +15,8 @@ import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
+import com.google.gson.JsonArray;
+import com.google.gson.JsonObject;
 import com.yc.love.R;
 import com.yc.love.adaper.rv.BecomeVipAdapter;
 import com.yc.love.adaper.rv.CreateMainT3Adapter;
@@ -25,15 +28,25 @@ import com.yc.love.adaper.rv.holder.BecomeVipTitleViewHolder;
 import com.yc.love.adaper.rv.holder.MainT3ItemTitleViewHolder;
 import com.yc.love.adaper.rv.holder.MainT3ItemViewHolder;
 import com.yc.love.adaper.rv.holder.MainT3TitleViewHolder;
+import com.yc.love.model.base.MySubscriber;
+import com.yc.love.model.bean.AResultInfo;
 import com.yc.love.model.bean.BecomeVipBean;
 import com.yc.love.model.bean.BecomeVipPayBean;
+import com.yc.love.model.bean.ExampleTsListBean;
+import com.yc.love.model.bean.IndexDoodsBean;
 import com.yc.love.model.bean.MainT3Bean;
+import com.yc.love.model.bean.OrdersInitBean;
+import com.yc.love.model.engin.OrderEngin;
+import com.yc.love.model.single.YcSingle;
 import com.yc.love.ui.activity.base.BaseSlidingActivity;
+import com.yc.love.ui.activity.base.PayActivity;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
-public class BecomeVipActivity extends BaseSlidingActivity implements View.OnClickListener {
+public class BecomeVipActivity extends PayActivity implements View.OnClickListener {
     private int[] imgResIds = {R.mipmap.become_vip_icon_01, R.mipmap.become_vip_icon_02, R.mipmap.become_vip_icon_03,
             R.mipmap.become_vip_icon_04, R.mipmap.become_vip_icon_05, R.mipmap.become_vip_icon_06};
     private String[] names = {"20W+话术免费搜索", "海量话术实战免费查看", "海量话术技巧免费阅读",
@@ -46,16 +59,51 @@ public class BecomeVipActivity extends BaseSlidingActivity implements View.OnCli
     private String[] payDes = {"最低1.2元/天", "最低0.6元/天", "最低0.5元/天", "一次开通永久免费限时免费"};
     private RecyclerView mRecyclerView;
     private LinearLayout mLlTitleCon;
+    private OrderEngin mOrderEngin;
+    private List<BecomeVipBean> mDatas;
+    private List<IndexDoodsBean> mIndexDoodsBeans;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_become_vip);
-
+        mOrderEngin = new OrderEngin(this);
         invadeStatusBar(); //侵入状态栏
         setAndroidNativeLightStatusBar(); //状态栏字体颜色改变
         initViews();
-        initRecyclerData();
+        netData();
+
+    }
+
+    private void netData() {
+        mOrderEngin.indexDoods("goods/index").subscribe(new MySubscriber<AResultInfo<List<IndexDoodsBean>>>(mLoadingDialog) {
+
+            @Override
+            protected void onNetNext(AResultInfo<List<IndexDoodsBean>> listAResultInfo) {
+                mIndexDoodsBeans = listAResultInfo.data;
+
+                mDatas = new ArrayList<>();
+                mDatas.add(new BecomeVipBean(1, "升级VIP解锁全部聊天话术及20W+条话术免费搜索"));
+                for (int i = 0; i < imgResIds.length; i++) {
+                    mDatas.add(new BecomeVipBean(2, names[i], subNames[i], imgResIds[i]));
+                }
+                if (mIndexDoodsBeans == null) {
+                    mIndexDoodsBeans = new ArrayList<>();
+                }
+                mDatas.add(new BecomeVipBean(3, mIndexDoodsBeans));
+                initRecyclerData();
+            }
+
+            @Override
+            protected void onNetError(Throwable e) {
+
+            }
+
+            @Override
+            protected void onNetCompleted() {
+
+            }
+        });
     }
 
     protected void initViews() {
@@ -88,19 +136,7 @@ public class BecomeVipActivity extends BaseSlidingActivity implements View.OnCli
     }
 
     private void initRecyclerData() {
-        List<BecomeVipBean> datas = new ArrayList<>();
-        datas.add(new BecomeVipBean(1, "升级VIP解锁全部聊天话术及20W+条话术免费搜索"));
-        for (int i = 0; i < imgResIds.length; i++) {
-            datas.add(new BecomeVipBean(2, names[i], subNames[i], imgResIds[i]));
-        }
-        List<BecomeVipPayBean> list = new ArrayList<>();
-        for (int i = 0; i < payName.length; i++) {
-            BecomeVipPayBean payBean = new BecomeVipPayBean(payName[i], payMoney[i], payDes[i]);
-            list.add(payBean);
-        }
-        datas.add(new BecomeVipBean(3, list));
-
-        BecomeVipAdapter becomeVipAdapter = new BecomeVipAdapter(datas, mRecyclerView, mLlTitleCon) {
+        BecomeVipAdapter becomeVipAdapter = new BecomeVipAdapter(mDatas, mRecyclerView, mLlTitleCon) {
             @Override
             public BaseViewHolder getTitleHolder(ViewGroup parent) {
                 return new BecomeVipTitleViewHolder(BecomeVipActivity.this, null, parent);
@@ -116,8 +152,14 @@ public class BecomeVipActivity extends BaseSlidingActivity implements View.OnCli
                 BecomeVipTailViewHolder becomeVipTailViewHolder = new BecomeVipTailViewHolder(BecomeVipActivity.this, null, parent);
                 becomeVipTailViewHolder.setOnClickTailListener(new BecomeVipTailViewHolder.OnClickTailListener() {
                     @Override
-                    public void onClickTailNext(int payType, int selectMoney) {
-                        Log.d("mylog", "onClickTailNext: payType " + payType + " selectMoney " + selectMoney);
+                    public void onClickTailNext(int payType, int selectPosition) {
+                        if (mIndexDoodsBeans == null || mIndexDoodsBeans.size() < selectPosition + 1) {
+                            showToastShort("数据错误 002001");
+                            return;
+                        }
+                        Log.d("mylog", "onClickTailNext: payType " + payType + " selectPosition " + selectPosition);
+                        IndexDoodsBean indexDoodsBean = mIndexDoodsBeans.get(selectPosition);
+                        nextOrders(payType, indexDoodsBean);
                     }
                 });
                 return becomeVipTailViewHolder;
@@ -125,6 +167,65 @@ public class BecomeVipActivity extends BaseSlidingActivity implements View.OnCli
         };
         mRecyclerView.setAdapter(becomeVipAdapter);
     }
+
+    private void nextOrders(int payType, IndexDoodsBean indexDoodsBean) { // PAY_TYPE_ZFB=0   PAY_TYPE_WX=1;
+        int id = YcSingle.getInstance().id;
+        String name = YcSingle.getInstance().name;
+        if (id <= 0) {
+            showToLoginDialog();
+            return;
+        }
+        String payWayName;
+        if (payType == 0) {
+            payWayName = "alipay";
+        } else {
+            payWayName = "wxpay";
+        }
+        Map<String, String> params = new HashMap<>();
+        params.put("user_id", String.valueOf(id));
+        if (!TextUtils.isEmpty(name)) {
+            params.put("user_name", name);
+        }
+//        params.put("app_id", String.valueOf(indexDoodsBean.app_id));
+        params.put("title", "会员购买"); //订单标题，会员购买，商品购买等
+        params.put("price_total", String.valueOf(indexDoodsBean.m_price));
+        params.put("money", String.valueOf(indexDoodsBean.m_price));
+//        params.put("imeil","2");
+        params.put("pay_way_name", payWayName);
+
+        JsonObject jsonObject = new JsonObject();
+        int goodId = indexDoodsBean.id;
+        jsonObject.addProperty("goods_id", goodId);
+        jsonObject.addProperty("num", 1);
+        JsonArray jsonArray = new JsonArray();
+        jsonArray.add(jsonObject);
+        params.put("goods_list", jsonArray.toString());
+
+        mOrderEngin.initOrders(params, "orders/init").subscribe(new MySubscriber<AResultInfo<OrdersInitBean>>(mLoadingDialog) {
+
+
+            @Override
+            protected void onNetNext(AResultInfo<OrdersInitBean> ordersInitBeanAResultInfo) {
+                OrdersInitBean ordersInitBean = ordersInitBeanAResultInfo.data;
+                Log.d("mylog", "onNetNext: ordersInitBean " + ordersInitBean);
+                String orderInfo = "";
+                toZfbPay(orderInfo);
+
+            }
+
+            @Override
+            protected void onNetError(Throwable e) {
+
+            }
+
+            @Override
+            protected void onNetCompleted() {
+
+            }
+        });
+    }
+
+
 
     @Override
     public void onClick(View v) {

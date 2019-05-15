@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_marginLeft="10dp"
+    android:layout_marginTop="8dp"
+    android:layout_marginRight="10dp"
+    android:layout_marginBottom="4dp"
+    android:background="@drawable/shape_bg_white_gray_brim_det"
+    android:paddingTop="12dp"
+    android:paddingBottom="12dp">
+
+    <android.support.v7.widget.RecyclerView
+        android:id="@+id/item_love_heal_rv"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"/>
+
+</android.support.constraint.ConstraintLayout>

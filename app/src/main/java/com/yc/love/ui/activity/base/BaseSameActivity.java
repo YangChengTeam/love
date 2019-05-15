@@ -2,6 +2,7 @@ package com.yc.love.ui.activity.base;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.annotation.DrawableRes;
 import android.support.constraint.ConstraintLayout;
 import android.util.Log;
 import android.view.View;
@@ -18,7 +19,8 @@ import com.yc.love.R;
 
 public abstract class BaseSameActivity extends BaseSlidingActivity implements View.OnClickListener {
 
-    private TextView mTvSub;
+    public TextView mBaseSameTvSub;
+    private TextView mTvTitle;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -52,8 +54,8 @@ public abstract class BaseSameActivity extends BaseSlidingActivity implements Vi
         View viewBar = findViewById(R.id.activity_base_same_view_bar);
         RelativeLayout rlTitleCon = findViewById(R.id.activity_base_same_rl_title_con);
         ImageView ivBack = findViewById(R.id.activity_base_same_iv_back);
-        TextView tvTitle = findViewById(R.id.activity_base_same_tv_title);
-        mTvSub = findViewById(R.id.activity_base_same_tv_sub);
+        mTvTitle = findViewById(R.id.activity_base_same_tv_title);
+        mBaseSameTvSub = findViewById(R.id.activity_base_same_tv_sub);
         boolean isHind = hindActivityTitle();
         if (isHind) {
             rlTitleCon.setVisibility(View.GONE);
@@ -66,13 +68,21 @@ public abstract class BaseSameActivity extends BaseSlidingActivity implements Vi
             setStateBarHeight(viewBar);
         }
 
-        tvTitle.setText(offerActivityTitle());
-        mTvSub.setText(offerActivitySubTitle());
+        mTvTitle.setText(offerActivityTitle());
+        mBaseSameTvSub.setText(offerActivitySubTitle());
 
         ivBack.setOnClickListener(this);
 //        tvSub.setOnClickListener(this);
 
         linearLayout.addView(view, new ConstraintLayout.LayoutParams(ConstraintLayout.LayoutParams.MATCH_PARENT, ConstraintLayout.LayoutParams.MATCH_PARENT));
+    }
+
+  /*  protected void setSubIcon(@DrawableRes int right) {
+        mBaseSameTvSub.setCompoundDrawablesWithIntrinsicBounds(0, 0, right, 0);
+    }*/
+
+    public void setBarTitle(String barTitle) {
+        mTvTitle.setText(barTitle);
     }
 
     protected boolean hindActivityTitle() {
@@ -86,8 +96,9 @@ public abstract class BaseSameActivity extends BaseSlidingActivity implements Vi
     protected String offerActivitySubTitle() {
         return "";
     }
+
     protected TextView offerActivitySubTitleView() {
-        return mTvSub;
+        return mBaseSameTvSub;
     }
 
     protected abstract String offerActivityTitle();

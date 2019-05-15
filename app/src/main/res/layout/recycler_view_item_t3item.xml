@@ -9,7 +9,7 @@
     <ImageView
         android:id="@+id/item_t3item_iv"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="120dp"
         android:scaleType="fitXY"
         android:src="@mipmap/main_bg_t3_01"
         app:layout_constraintEnd_toEndOf="parent"
@@ -40,8 +40,9 @@
         android:paddingTop="8dp"
         android:paddingBottom="2dp"
         android:text="666"
+        android:maxLines="1"
         android:textColor="@color/text_gray"
-        android:textSize="@dimen/size_12"
+        android:textSize="@dimen/size_14"
         app:layout_constraintTop_toBottomOf="@+id/item_t3item_iv" />
 
 

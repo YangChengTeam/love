@@ -13,14 +13,20 @@ import com.yc.love.R;
 import com.yc.love.adaper.rv.NoThingAdapter;
 import com.yc.love.adaper.rv.holder.BaseViewHolder;
 import com.yc.love.adaper.rv.holder.StringBeanViewHolder;
+import com.yc.love.model.base.MySubscriber;
+import com.yc.love.model.bean.AResultInfo;
+import com.yc.love.model.bean.ExampleTsBean;
+import com.yc.love.model.bean.ExampleTsListBean;
+import com.yc.love.model.bean.MainT3Bean;
 import com.yc.love.model.bean.StringBean;
+import com.yc.love.model.engin.LoveEngin;
 import com.yc.love.ui.activity.base.BaseSameActivity;
 
 import java.util.ArrayList;
 import java.util.List;
 
 /**
- * 入门秘籍
+ * 入门秘籍 提升列表
  */
 public class LoveIntroductionActivity extends BaseSameActivity {
 
@@ -28,16 +34,21 @@ public class LoveIntroductionActivity extends BaseSameActivity {
     private RecyclerView mRecyclerView;
     private NoThingAdapter<StringBean> mAdapter;
     private List<StringBean> mDatas;
-    private int PAGE_NUM = 10;
+    //    private int PAGE_NUM = 10;
+    private int PAGE_SIZE = 10;
+    private int PAGE_NUM = 1;
     private boolean loadMoreEnd;
     private boolean loadDataEnd;
     private boolean showProgressBar = false;
     private int num = 10;
+    LoveEngin mLoveEngin;
+    private String mTagId;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_love_introduction);
+        mLoveEngin = new LoveEngin(this);
         initViews();
         initDatas();
     }
@@ -52,7 +63,9 @@ public class LoveIntroductionActivity extends BaseSameActivity {
         mRecyclerView.setLayoutManager(layoutManager);
     }
 
+
     private void initDatas() {
+        netData();
         mDatas = new ArrayList<>();
         for (int i = 0; i < 15; i++) {
             StringBean stringBean = new StringBean("name " + i);
@@ -117,15 +130,40 @@ public class LoveIntroductionActivity extends BaseSameActivity {
         loadDataEnd = true;
     }
 
+    private void netData() {
+        mLoadingDialog.showLoadingDialog();
+        mLoveEngin.exampleTsList(mTagId, String.valueOf(PAGE_NUM), String.valueOf(PAGE_SIZE), "example/ts_lists").subscribe(new MySubscriber<AResultInfo<String>>(mLoadingDialog) {
+
+
+            @Override
+            protected void onNetNext(AResultInfo<String> stringAResultInfo) {
+
+            }
+
+            @Override
+            protected void onNetError(Throwable e) {
+
+            }
+
+            @Override
+            protected void onNetCompleted() {
+
+            }
+        });
+    }
+
+
     @Override
     protected void initIntentData() {
         Intent intent = getIntent();
         mActivityTitle = intent.getStringExtra("title");
+        mTagId = intent.getStringExtra("tag_id");
     }
 
-    public static void startLoveIntroductionActivity(Context context, String title) {
+    public static void startLoveIntroductionActivity(Context context, String title, String tagId) {
         Intent intent = new Intent(context, LoveIntroductionActivity.class);
         intent.putExtra("title", title);
+        intent.putExtra("tag_id", tagId);
         context.startActivity(intent);
     }
 

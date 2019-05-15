@@ -7,6 +7,7 @@
     android:background="@color/love_background"
     tools:context=".ui.activity.SettingActivity">
 
+
     <com.yc.love.ui.view.MainMyItemLin
         android:id="@+id/setting_ll_item_01"
         android:layout_width="match_parent"
@@ -40,4 +41,34 @@
         app:imgSrc="@mipmap/seting_icon_04"
         app:layout_constraintTop_toBottomOf="@+id/setting_ll_item_03"
         app:textNameMyItem="清除缓存" />
+
+    <com.yc.love.ui.view.MainMyItemLin
+        android:id="@+id/setting_ll_exit"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:imgSrc="@mipmap/seting_icon_04"
+        app:layout_constraintTop_toBottomOf="@+id/setting_ll_item_04"
+        app:textNameMyItem="清除缓存" />
+
+
+    <FrameLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/white"
+        app:layout_constraintBottom_toBottomOf="parent">
+
+        <TextView
+            android:id="@+id/setting_tv_exit"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="?android:attr/selectableItemBackground"
+            android:gravity="center_horizontal"
+            android:padding="10dp"
+            android:text="退出登录"
+            android:textColor="@color/red_crimson"
+            android:textSize="@dimen/size_18"
+            android:visibility="gone" />
+    </FrameLayout>
+
+
 </android.support.constraint.ConstraintLayout>

@@ -8,12 +8,18 @@ import com.yc.love.model.bean.FrontpageBean;
 import com.yc.love.model.bean.IdCorrelationSmsBean;
 import com.yc.love.model.bean.JobBean;
 
+import java.util.List;
+
 import io.reactivex.Flowable;
 import io.reactivex.Observable;
+import okhttp3.MultipartBody;
+import retrofit2.Call;
 import retrofit2.http.Field;
 import retrofit2.http.FormUrlEncoded;
 import retrofit2.http.GET;
+import retrofit2.http.Multipart;
 import retrofit2.http.POST;
+import retrofit2.http.Part;
 import retrofit2.http.Path;
 import retrofit2.http.Query;
 
@@ -62,5 +68,11 @@ public interface HttpClient {
     Observable<IdCorrelationSmsBean> idCorrelationSms();
    /* @GET("user/code?mobile={mobile}&user_id={user_id}&debug=qwe123")
     Observable<IdCorrelationSmsBean> idCorrelationSms();*/
+
+   /* @Multipart                          //这里用Multipart
+    @POST("url/myurl")                //请求方法为POST，里面为你要上传的url
+    Call<Result> myUpload(@Part List<MultipartBody.Part> partLis);*/
+    //注释用@Part，参数类型为List<MultipartBody.Part> 方便上传其它需要的参数或多张图片
+    //Result为我自定义的一个类
 
 }

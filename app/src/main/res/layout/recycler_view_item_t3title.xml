@@ -5,22 +5,16 @@
     android:layout_height="wrap_content"
     android:background="@color/white">
 
-    <View
-        android:id="@+id/item_t3title_view_bar"
-        android:layout_width="match_parent"
-        android:layout_height="25dp"
-        android:background="@color/white" />
-
     <ImageView
         android:id="@+id/item_t3title_iv_title"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:paddingLeft="12dp"
+        android:paddingTop="4dp"
         android:paddingRight="12dp"
         android:paddingBottom="12dp"
         android:scaleType="fitXY"
-        android:src="@mipmap/main_bg_t3_title"
-        app:layout_constraintTop_toBottomOf="@+id/item_t3title_view_bar" />
+        android:src="@mipmap/main_bg_t3_title" />
 
     <LinearLayout
         android:layout_width="match_parent"

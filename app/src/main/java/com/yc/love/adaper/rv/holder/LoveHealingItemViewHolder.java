@@ -21,6 +21,6 @@ public class LoveHealingItemViewHolder extends BaseViewHolder<LoveHealingBean> {
     @Override
     public void bindData(LoveHealingBean loveHealingBean) {
         TextView tvName = itemView.findViewById(R.id.item_love_healing_tv_name);
-        tvName.setText(loveHealingBean.name);
+        tvName.setText(loveHealingBean.chat_name);
     }
 }

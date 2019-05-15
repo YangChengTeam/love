@@ -8,7 +8,6 @@ import android.widget.TextView;
 import com.yc.love.R;
 import com.yc.love.adaper.rv.base.RecyclerViewItemListener;
 import com.yc.love.model.bean.BecomeVipBean;
-import com.yc.love.model.bean.LoveHealingBean;
 
 
 

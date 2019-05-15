@@ -20,5 +20,7 @@ public  abstract class BaseLoveByStagesFragment  extends BaseLazyFragment {
         mLoveByStagesActivity = (LoveByStagesActivity) getActivity();
         return super.onFragmentCreateView(inflater, container, savedInstanceState);
     }
+
+
 }
 

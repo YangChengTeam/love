@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:gravity="center_vertical"
+    android:orientation="horizontal"
+    android:padding="4dp">
+
+    <ImageView
+        android:id="@+id/item_details_bean_iv_sex"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:padding="8dp"
+        android:src="@mipmap/icon_dialogue_men" />
+
+    <TextView
+        android:id="@+id/item_details_bean_tv_name"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="4dp"
+        android:layout_marginRight="4dp"
+        android:layout_weight="10"
+        android:maxLines="1"
+        android:text="555"
+        android:textColor="@color/black"
+        android:textSize="@dimen/size_16" />
+
+
+    <ImageView
+        android:id="@+id/item_details_bean_iv_copy"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:background="?attr/selectableItemBackgroundBorderless"
+        android:padding="8dp"
+        android:src="@mipmap/icon_dialogue_copy" />
+
+</LinearLayout>

@@ -11,7 +11,7 @@ import com.yc.love.R;
 import com.yc.love.adaper.rv.base.RecyclerViewItemListener;
 import com.yc.love.model.bean.BecomeVipBean;
 import com.yc.love.model.bean.BecomeVipPayBean;
-import com.yc.love.model.bean.LoveHealingBean;
+import com.yc.love.model.bean.IndexDoodsBean;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -22,6 +22,8 @@ public class BecomeVipTailViewHolder extends BaseViewHolder<BecomeVipBean> {
     private final Context context;
     private int mSelectPosition;
     private int mSelectPayType;
+    public int PAY_TYPE_ZFB=0;
+    public int PAY_TYPE_WX=1;
     private ConstraintLayout[] clCons;
     private ImageView[] ivSels;
     private TextView[] tvUnits;
@@ -29,7 +31,9 @@ public class BecomeVipTailViewHolder extends BaseViewHolder<BecomeVipBean> {
     private ImageView mIvPayZfb;
     private ImageView mIvPayWx;
     private TextView mTvNext;
-    private List<BecomeVipPayBean> mPayBeans;
+//    private List<BecomeVipPayBean> mPayBeans;
+    private List<IndexDoodsBean>  mPayBeans;
+
     private OnClickTailListener onClickTailListener;
 
     public BecomeVipTailViewHolder(Context context, RecyclerViewItemListener listener, ViewGroup parent) {
@@ -84,10 +88,10 @@ public class BecomeVipTailViewHolder extends BaseViewHolder<BecomeVipBean> {
 
         mPayBeans = becomeVipBean.payBeans;
         for (int i = 0; i < mPayBeans.size(); i++) {
-            BecomeVipPayBean becomeVipPayBean = mPayBeans.get(i);
-            tvTits[i].setText(becomeVipPayBean.payName);
-            tvMoneys[i].setText(String.valueOf(becomeVipPayBean.payMoney));
-            tvDess[i].setText(becomeVipPayBean.payDes);
+            IndexDoodsBean indexDoodsBean = mPayBeans.get(i);
+            tvTits[i].setText(indexDoodsBean.name);
+            tvMoneys[i].setText(String.valueOf(indexDoodsBean.m_price));
+            tvDess[i].setText(indexDoodsBean.desp);
         }
 
         /*clCon01.setBackground(context.getResources().getDrawable(R.mipmap.become_vip_bg_pay_s));
@@ -105,7 +109,7 @@ public class BecomeVipTailViewHolder extends BaseViewHolder<BecomeVipBean> {
         mIvPayWx.setOnClickListener(this);
         mTvNext.setOnClickListener(this);
 
-        mSelectPayType = 0;
+        mSelectPayType = PAY_TYPE_ZFB;
         selectPayType(mSelectPayType);
 
     }
@@ -144,14 +148,14 @@ public class BecomeVipTailViewHolder extends BaseViewHolder<BecomeVipBean> {
                 }
                 break;
             case R.id.item_become_vip_tail_iv_pay_zfb:
-                clickPosition = 0;
+                clickPosition = PAY_TYPE_ZFB;
                 if (clickPosition != mSelectPayType) {
                     mSelectPayType = clickPosition;
                     selectPayType(clickPosition);
                 }
                 break;
             case R.id.item_become_vip_tail_iv_pay_wx:
-                clickPosition = 1;
+                clickPosition = PAY_TYPE_WX;
                 if (clickPosition != mSelectPayType) {
                     mSelectPayType = clickPosition;
                     selectPayType(clickPosition);
@@ -188,12 +192,12 @@ public class BecomeVipTailViewHolder extends BaseViewHolder<BecomeVipBean> {
         } else {
             nextDes.append("支付宝");
         }
-        nextDes.append("支付").append(mPayBeans.get(mSelectPosition).payMoney).append("元");
+        nextDes.append("支付").append(mPayBeans.get(mSelectPosition).m_price).append("元");
         mTvNext.setText(nextDes.toString());
     }
 
     private void selectPayType(int selectPayType) {
-        if (selectPayType == 0) {
+        if (selectPayType == PAY_TYPE_ZFB) {
             mIvPayZfb.setImageDrawable(context.getResources().getDrawable(R.mipmap.become_vip_icon_pay_zfb_s));
             mIvPayWx.setImageDrawable(context.getResources().getDrawable(R.mipmap.become_vip_icon_pay_wx));
         } else {
@@ -204,7 +208,7 @@ public class BecomeVipTailViewHolder extends BaseViewHolder<BecomeVipBean> {
     }
 
     public interface OnClickTailListener {
-        void onClickTailNext(int payType, int selectMoney);
+        void onClickTailNext(int payType, int selectPosition);
     }
 
     public void setOnClickTailListener(OnClickTailListener onClickTailListener) {

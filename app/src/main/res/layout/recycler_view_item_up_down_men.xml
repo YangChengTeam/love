@@ -1,0 +1,83 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="@color/red_crimson_im_bg"
+    android:padding="4dp">
+
+    <TextView
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_weight="1" />
+
+    <RelativeLayout
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_weight="10">
+
+        <TextView
+            android:id="@+id/item_up_down_women_tv_name"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentRight="true"
+            android:layout_marginRight="8dp"
+            android:background="@drawable/icon_up_down_dia_men"
+            android:gravity="center_vertical"
+            android:paddingLeft="8dp"
+            android:paddingTop="10dp"
+            android:paddingRight="16dp"
+            android:paddingBottom="10dp"
+            android:text="123"
+            android:textColor="@color/black"
+            android:textSize="@dimen/size_16" />
+    </RelativeLayout>
+
+
+    <ImageView
+        android:paddingTop="2dp"
+        android:paddingRight="6dp"
+        android:paddingBottom="2dp"
+        android:id="@+id/item_up_down_women_iv_icon"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:src="@mipmap/icon_up_down_men" />
+
+    <!--   <View
+           android:layout_width="0dp"
+           android:layout_height="1dp"
+           android:layout_weight="1" />
+
+       <View
+           android:layout_width="52dp"
+           android:layout_height="1dp" />
+
+
+       &lt;!&ndash;  android:background="@mipmap/icon_up_down_dia_women"&ndash;&gt;
+       <TextView
+           android:id="@+id/item_up_down_women_tv_name"
+           android:layout_width="wrap_content"
+           android:layout_height="wrap_content"
+           android:layout_marginRight="8dp"
+           android:background="@drawable/icon_up_down_dia_men"
+           android:gravity="center_vertical"
+           android:paddingLeft="8dp"
+           android:paddingTop="10dp"
+           android:paddingRight="16dp"
+           android:paddingBottom="10dp"
+           android:text="5"
+           android:textColor="@color/black"
+           android:textSize="@dimen/size_16"
+           app:layout_constraintRight_toLeftOf="@+id/item_up_down_women_iv_icon" />
+
+       <ImageView
+           android:id="@+id/item_up_down_women_iv_icon"
+           android:layout_width="wrap_content"
+           android:layout_height="wrap_content"
+           android:paddingLeft="8dp"
+           android:paddingTop="2dp"
+           android:paddingRight="6dp"
+           android:paddingBottom="2dp"
+           android:src="@mipmap/icon_up_down_women" />-->
+
+</LinearLayout>

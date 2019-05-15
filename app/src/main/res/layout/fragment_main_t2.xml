@@ -1,12 +1,18 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
 
+    <include
+        android:id="@+id/main_t2_view_bar"
+        layout="@layout/layout_view_bar" />
 
     <android.support.v7.widget.RecyclerView
+        app:layout_constraintTop_toBottomOf="@+id/main_t2_view_bar"
+        android:background="@color/white"
         android:id="@+id/main_t2_rl"
         android:layout_width="match_parent"
         android:layout_height="wrap_content" />
 
-</LinearLayout>
+</android.support.constraint.ConstraintLayout>

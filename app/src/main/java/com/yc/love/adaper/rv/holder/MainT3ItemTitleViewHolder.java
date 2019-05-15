@@ -21,7 +21,7 @@ public class MainT3ItemTitleViewHolder extends BaseViewHolder<MainT3Bean> {
     public void bindData(MainT3Bean mainT3Bean) {
 
         TextView tvName = itemView.findViewById(R.id.item_t3item_title_tv_name);
-        tvName.setText(mainT3Bean.name);
+        tvName.setText(mainT3Bean.titleName);
 
     }
 }

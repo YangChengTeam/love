@@ -6,22 +6,13 @@ import android.util.Log;
 
 import com.alibaba.fastjson.JSON;
 import com.google.gson.Gson;
-import com.google.gson.JsonObject;
 import com.yc.love.model.bean.IdCorrelationLoginBean;
 import com.yc.love.model.single.YcSingle;
 import com.yc.love.model.util.SPUtils;
-import com.yc.love.ui.activity.IdCorrelationSlidingActivity;
 
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.lang.reflect.Method;
-import java.util.HashMap;
-import java.util.Map;
-import java.lang.reflect.Field;
-import java.lang.reflect.Method;
-import java.util.HashMap;
-import java.util.Map;
 
 /**
  * Created by mayn on 2019/5/8.
@@ -30,12 +21,14 @@ import java.util.Map;
 public class BackfillSingle {
 
     public static void backfillLoginData(Context context, String stringBean) {
-        String idInfoString = (String) SPUtils.get(context, SPUtils.ID_INFO_BEAN, "");
-        IdCorrelationLoginBean idCorrelationLogin = new Gson().fromJson(idInfoString, IdCorrelationLoginBean.class);
         YcSingle ycSingle = YcSingle.getInstance();
-        if (!TextUtils.isEmpty(stringBean)) {
+        //本地数据
+        String idInfoString = (String) SPUtils.get(context, SPUtils.ID_INFO_BEAN, "");
+        IdCorrelationLoginBean idCorrelationLogin = new IdCorrelationLoginBean();
+
+        if (!TextUtils.isEmpty(idInfoString) && !"null".equals(idInfoString)) {
             try {
-                JSONObject jsonObject = new JSONObject(stringBean);
+                JSONObject jsonObject = new JSONObject(idInfoString);
                 if (jsonObject.has("face")) {
                     String face = jsonObject.getString("face");
                     if (!TextUtils.isEmpty(face)) {
@@ -87,8 +80,56 @@ public class BackfillSingle {
                 }
             } catch (JSONException e) {
                 e.printStackTrace();
+                Log.d("mylog", "backfillLoginData: " + e);
             }
         }
-        SPUtils.put(context, SPUtils.ID_INFO_BEAN, JSON.toJSONString(idCorrelationLogin));
+
+        Log.d("mylog", "backfillLoginData: idCorrelationLogin " + idCorrelationLogin.toString());
+
+        //新取到的数据
+        if (!TextUtils.isEmpty(stringBean) && !"null".equals(stringBean)) {
+            IdCorrelationLoginBean idCorrelationLoginBean = new Gson().fromJson(stringBean, IdCorrelationLoginBean.class);
+
+            String face = idCorrelationLoginBean.face;
+            String nick_name = idCorrelationLoginBean.nick_name;
+            String name = idCorrelationLoginBean.name;
+            String mobile = idCorrelationLoginBean.mobile;
+            int vip_end_time = idCorrelationLoginBean.vip_end_time;
+            int id = idCorrelationLoginBean.id;
+            int vip = idCorrelationLoginBean.vip;
+            if (!TextUtils.isEmpty(face)) {
+                ycSingle.face = face;
+                idCorrelationLogin.face = face;
+            }
+            if (!TextUtils.isEmpty(nick_name)) {
+                ycSingle.nick_name = nick_name;
+                idCorrelationLogin.nick_name = nick_name;
+            }
+            if (!TextUtils.isEmpty(name)) {
+                ycSingle.name = name;
+                idCorrelationLogin.name = name;
+            }
+            if (!TextUtils.isEmpty(mobile)) {
+                ycSingle.mobile = mobile;
+                idCorrelationLogin.mobile = mobile;
+            }
+            if (vip_end_time > 0) {
+                ycSingle.vip_end_time = vip_end_time;
+                idCorrelationLogin.vip_end_time = vip_end_time;
+            }
+            if (id > 0) {
+                ycSingle.id = id;
+                idCorrelationLogin.id = id;
+            }
+            if (vip > 0) {
+                ycSingle.vip = vip;
+                idCorrelationLogin.vip = vip;
+            }
+            Log.d("mylog", "backfillLoginData: idCorrelationLoginBean " + idCorrelationLoginBean.toString());
+            Log.d("mylog", "backfillLoginData: idCorrelationLogin " + idCorrelationLogin.toString());
+        }
+        String string = JSON.toJSONString(idCorrelationLogin);
+        Log.d("mylog", "backfillLoginData: JSON.toJSONString(idCorrelationLogin " + string);
+        SPUtils.put(context, SPUtils.ID_INFO_BEAN, string);
     }
 }

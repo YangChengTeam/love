@@ -1,5 +1,7 @@
 package com.yc.love.ui.activity;
 
+import android.content.Context;
+import android.content.Intent;
 import android.os.Bundle;
 
 import com.yc.love.R;
@@ -13,6 +15,21 @@ import cn.youngkaaa.yviewpager.YViewPager;
 
 public class LoveUpDownPhotoActivity extends BaseSameActivity {
 
+
+    private int mClickPosition;
+
+    @Override
+    protected void initIntentData() {
+        Intent intent = getIntent();
+        mClickPosition = intent.getIntExtra("position", -1);
+    }
+
+    public static void startLoveUpDownPhotoActivity(Context context, int position) {
+        Intent intent = new Intent(context, LoveUpDownPhotoActivity.class);
+        intent.putExtra("position", position);
+        context.startActivity(intent);
+    }
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -24,13 +41,13 @@ public class LoveUpDownPhotoActivity extends BaseSameActivity {
     private void initViews() {
 
         List<String> datas = new ArrayList<>();
-        for (int i = 0; i < 20; i++) {
+        for (int i = 0; i < 10000; i++) {
             datas.add("itme " + i);
         }
         YViewPager viewPager = findViewById(R.id.love_up_down_photo_viewpager);
         LoveUpDownPhotoPagerAdapter loveUpDownPhotoPagerAdapter = new LoveUpDownPhotoPagerAdapter(getSupportFragmentManager(), datas);
         viewPager.setAdapter(loveUpDownPhotoPagerAdapter);
-        viewPager.setCurrentItem(10);
+        viewPager.setCurrentItem(mClickPosition);
     }
 
     @Override

@@ -1,14 +1,14 @@
 package com.yc.love.ui.frament.main;
 
-import android.content.DialogInterface;
 import android.content.Intent;
-import android.support.v7.app.AlertDialog;
+import android.text.TextUtils;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.yc.love.R;
+import com.yc.love.model.bean.event.EventLoginState;
 import com.yc.love.model.single.YcSingle;
 import com.yc.love.ui.activity.BecomeVipActivity;
 import com.yc.love.ui.activity.CollectActivity;
@@ -19,12 +19,18 @@ import com.yc.love.ui.activity.SettingActivity;
 import com.yc.love.ui.activity.UserInfoActivity;
 import com.yc.love.ui.frament.base.BaseMainFragment;
 
+import org.greenrobot.eventbus.EventBus;
+import org.greenrobot.eventbus.Subscribe;
+import org.greenrobot.eventbus.ThreadMode;
+
 /**
  * Created by mayn on 2019/4/23.
  */
 
 public class MainT4Fragment extends BaseMainFragment implements View.OnClickListener {
     private TextView tvName;
+    private TextView mTvName;
+    private TextView mTvBtnInfo;
 
 
     @Override
@@ -32,18 +38,32 @@ public class MainT4Fragment extends BaseMainFragment implements View.OnClickList
         return R.layout.fragment_main_t4;
     }
 
+    @Override
+    public void onStart() {
+        super.onStart();
+        EventBus.getDefault().register(this);
+    }
+
+    @Override
+    public void onStop() {
+        super.onStop();
+        EventBus.getDefault().unregister(this);
+    }
 
     @Override
     protected void initViews() {
         View viewBar = rootView.findViewById(R.id.main_t4_view_bar);
-        TextView tvBtnInfo = rootView.findViewById(R.id.main_t4_tv_btn_info);
+        mTvBtnInfo = rootView.findViewById(R.id.main_t4_tv_btn_info);
+        mTvName = rootView.findViewById(R.id.main_t4_tv_name);
         ImageView ivVip = rootView.findViewById(R.id.main_t4_ll_iv_vip);
+        LinearLayout llTitle = rootView.findViewById(R.id.main_t4_ll_title);
         LinearLayout llItem01 = rootView.findViewById(R.id.main_t4_ll_item_01);
         LinearLayout llItem02 = rootView.findViewById(R.id.main_t4_ll_item_02);
         LinearLayout llItem03 = rootView.findViewById(R.id.main_t4_ll_item_03);
         LinearLayout llItem04 = rootView.findViewById(R.id.main_t4_ll_item_04);
 
-        tvBtnInfo.setOnClickListener(this);
+        mTvBtnInfo.setOnClickListener(this);
+        llTitle.setOnClickListener(this);
         ivVip.setOnClickListener(this);
         llItem01.setOnClickListener(this);
         llItem02.setOnClickListener(this);
@@ -51,6 +71,8 @@ public class MainT4Fragment extends BaseMainFragment implements View.OnClickList
         llItem04.setOnClickListener(this);
 
         mMainActivity.setStateBarHeight(viewBar, 14);
+
+        setTitleName();
     }
 
     @Override
@@ -59,30 +81,46 @@ public class MainT4Fragment extends BaseMainFragment implements View.OnClickList
     }
 
     private void isCanLoadData() {
-        int id = YcSingle.getInstance().id;
-        if (id <= 0) {
-            showToLoginDialog();
+
+    }
+
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    public void onMessageEvent(EventLoginState event) {
+        switch (event.state) {
+            case EventLoginState.STATE_EXIT:
+                mTvName.setText("未登录");
+                mMainActivity.scroolToHomeFragment();
+                IdCorrelationSlidingActivity.startIdCorrelationActivity(mMainActivity, IdCorrelationSlidingActivity.ID_CORRELATION_STATE_LOGIN);
+                break;
+            case EventLoginState.STATE_LOGINED:
+                setTitleName();
+                break;
+            case EventLoginState.STATE_UPDATE_INFO:
+                mTvBtnInfo.setText("信息已完善");
+                break;
         }
     }
 
-    private void showToLoginDialog() {
-        AlertDialog alertDialog = new AlertDialog.Builder(mMainActivity).create();
-        alertDialog.setTitle("提示");
-        alertDialog.setMessage("您还未登录，请先登录");
-        alertDialog.setButton(DialogInterface.BUTTON_POSITIVE, "确定", new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialogInterface, int i) {
-                IdCorrelationSlidingActivity.startIdCorrelationActivity(mMainActivity, IdCorrelationSlidingActivity.ID_CORRELATION_STATE_LOGIN);
+    private void setTitleName() {
+        String nick_name = YcSingle.getInstance().nick_name;
+        String name = YcSingle.getInstance().name;
+        String mobile = YcSingle.getInstance().mobile;
+        if (!TextUtils.isEmpty(mobile)) {
+            mTvName.setText(mobile);
+            if (!TextUtils.isEmpty(name)) {
+                mTvName.setText(name);
+                if (!TextUtils.isEmpty(nick_name)) {
+                    mTvName.setText(nick_name);
+                }
             }
-        });
-        DialogInterface.OnClickListener listent = null;
-        alertDialog.setButton(DialogInterface.BUTTON_NEGATIVE, "取消", listent);
-        alertDialog.show();
+        }
     }
+
 
     @Override
     public void onClick(View v) {
         switch (v.getId()) {
+            case R.id.main_t4_ll_title:
             case R.id.main_t4_tv_btn_info:
                 mMainActivity.startActivity(new Intent(mMainActivity, UserInfoActivity.class));
 //                IdCorrelationSlidingActivity.startIdCorrelationActivity(mMainActivity, IdCorrelationSlidingActivity.ID_CORRELATION_STATE_LOGIN);
@@ -91,8 +129,8 @@ public class MainT4Fragment extends BaseMainFragment implements View.OnClickList
                 mMainActivity.startActivity(new Intent(mMainActivity, BecomeVipActivity.class));
                 break;
             case R.id.main_t4_ll_item_01:
-//                mMainActivity.startActivity(new Intent(mMainActivity, CollectActivity.class));
-                mMainActivity.startActivity(new Intent(mMainActivity, Main4Activity.class));
+                mMainActivity.startActivity(new Intent(mMainActivity, CollectActivity.class));
+//                mMainActivity.startActivity(new Intent(mMainActivity, Main4Activity.class));
 
                 break;
             case R.id.main_t4_ll_item_02:
