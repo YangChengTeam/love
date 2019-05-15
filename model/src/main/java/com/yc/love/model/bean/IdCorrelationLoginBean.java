@@ -15,13 +15,69 @@ public class IdCorrelationLoginBean {
      * vip : 0
      */
 
-    public String face;
-    public int vip_end_time;
-    public String nick_name;
-    public String name;
-    public String mobile;
-    public int id;
-    public int vip;
+    private String face;
+    private String nick_name;
+    private String name;
+    private String mobile;
+    private int vip_end_time;
+    private int id;
+    private int vip;
+
+    public String getFace() {
+        return face;
+    }
+
+    public void setFace(String face) {
+        this.face = face;
+    }
+
+    public String getNick_name() {
+        return nick_name;
+    }
+
+    public void setNick_name(String nick_name) {
+        this.nick_name = nick_name;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public String getMobile() {
+        return mobile;
+    }
+
+    public void setMobile(String mobile) {
+        this.mobile = mobile;
+    }
+
+    public int getVip_end_time() {
+        return vip_end_time;
+    }
+
+    public void setVip_end_time(int vip_end_time) {
+        this.vip_end_time = vip_end_time;
+    }
+
+    public int getId() {
+        return id;
+    }
+
+    public void setId(int id) {
+        this.id = id;
+    }
+
+    public int getVip() {
+        return vip;
+    }
+
+    public void setVip(int vip) {
+        this.vip = vip;
+    }
 
     @Override
     public String toString() {

@@ -48,7 +48,7 @@ public class LoginEditTextLin extends LinearLayout {
         mTvCode = inflate.findViewById(R.id.login_et_lin_tv_code);
         mTvCodeWait = inflate.findViewById(R.id.login_et_lin_tv_code_await);
         boolean isWait=true;
-        waitCode(isWait);
+//        waitCode(isWait);
 
         mEt.setFilters(new InputFilter[]{new InputFilter.LengthFilter(maxLength)}); //最大输入长度
 //        mEt.setInputType(InputType.TYPE_CLASS_NUMBER); //输入类型

@@ -4,6 +4,7 @@ import android.content.Context;
 import android.util.Log;
 
 import com.alibaba.fastjson.TypeReference;
+import com.kk.securityhttp.domain.ResultInfo;
 import com.kk.securityhttp.engin.HttpCoreEngin;
 import com.yc.love.model.base.BaseEngine;
 import com.yc.love.model.bean.AResultInfo;
@@ -77,13 +78,13 @@ public class IdCorrelationEngin extends BaseEngine {
         return rxpost;
     }
 
-    public Observable<AResultInfo<IdCorrelationLoginBean>> login(String mobile, String password, String url) {
+    public Observable<ResultInfo<IdCorrelationLoginBean>> login(String mobile, String password, String url) {
         Map<String, String> params = new HashMap<>();
         params.put("mobile", mobile);
         params.put("password", password);
         requestParams(params);
-        HttpCoreEngin<AResultInfo<IdCorrelationLoginBean>> httpCoreEngin = HttpCoreEngin.get(mContext);
-        Observable<AResultInfo<IdCorrelationLoginBean>> rxpost = httpCoreEngin.rxpost(URLConfig.getUrl(url), new TypeReference<AResultInfo<IdCorrelationLoginBean>>() {
+        HttpCoreEngin<ResultInfo<IdCorrelationLoginBean>> httpCoreEngin = HttpCoreEngin.get(mContext);
+        Observable<ResultInfo<IdCorrelationLoginBean>> rxpost = httpCoreEngin.rxpost(URLConfig.getUrl(url), new TypeReference<ResultInfo<IdCorrelationLoginBean>>() {
                 }.getType(),
                 params,
                 true,

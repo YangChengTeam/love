@@ -9,6 +9,7 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.yc.love.R;
+import com.yc.love.model.single.YcSingle;
 import com.yc.love.ui.activity.BecomeVipActivity;
 import com.yc.love.ui.activity.CollectActivity;
 import com.yc.love.ui.activity.FeedbackActivity;
@@ -58,6 +59,13 @@ public class MainT4Fragment extends BaseMainFragment implements View.OnClickList
     }
 
     private void isCanLoadData() {
+        int id = YcSingle.getInstance().id;
+        if (id <= 0) {
+            showToLoginDialog();
+        }
+    }
+
+    private void showToLoginDialog() {
         AlertDialog alertDialog = new AlertDialog.Builder(mMainActivity).create();
         alertDialog.setTitle("提示");
         alertDialog.setMessage("您还未登录，请先登录");
@@ -70,7 +78,6 @@ public class MainT4Fragment extends BaseMainFragment implements View.OnClickList
         DialogInterface.OnClickListener listent = null;
         alertDialog.setButton(DialogInterface.BUTTON_NEGATIVE, "取消", listent);
         alertDialog.show();
-
     }
 
     @Override

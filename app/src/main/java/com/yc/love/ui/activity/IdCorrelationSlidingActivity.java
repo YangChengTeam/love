@@ -1,5 +1,6 @@
 package com.yc.love.ui.activity;
 
+import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
@@ -14,6 +15,7 @@ import android.widget.TextView;
 
 import com.alibaba.fastjson.JSON;
 import com.google.gson.Gson;
+import com.kk.securityhttp.domain.ResultInfo;
 import com.yc.love.R;
 import com.yc.love.app.YcApplication;
 import com.yc.love.model.base.MySubscriber;
@@ -21,13 +23,17 @@ import com.yc.love.model.bean.AResultInfo;
 import com.yc.love.model.bean.IdCorrelationLoginBean;
 import com.yc.love.model.data.BackfillSingle;
 import com.yc.love.model.engin.IdCorrelationEngin;
+import com.yc.love.model.single.YcSingle;
 import com.yc.love.model.util.CheckNumberRegulationsUtil;
 import com.yc.love.model.util.SPUtils;
 import com.yc.love.ui.activity.base.BaseSlidingActivity;
 import com.yc.love.ui.view.LoginEditTextLin;
 
+import java.util.List;
 import java.util.Timer;
 import java.util.TimerTask;
+
+import rx.Subscriber;
 
 public class IdCorrelationSlidingActivity extends BaseSlidingActivity implements View.OnClickListener {
 
@@ -51,6 +57,7 @@ public class IdCorrelationSlidingActivity extends BaseSlidingActivity implements
 //    private Timer mTimer = new Timer();
     private LoginEditTextLin mEtPhone, mEtCode, mEtPwd;
     private String mInputPhoneString, mInputPwdString, mInputCodeString;
+    private CountDownTimer mCountDownTimer;
 
 
     @Override
@@ -82,6 +89,10 @@ public class IdCorrelationSlidingActivity extends BaseSlidingActivity implements
     }
 
     private void initState(int state) {
+        String mobile = YcSingle.getInstance().mobile;
+        if (!TextUtils.isEmpty(mobile)) {
+            mEtPhone.setEditText(mobile);
+        }
         switch (state) {
             case ID_CORRELATION_STATE_LOGIN:
                 setTiele("登录", "注册");
@@ -89,6 +100,8 @@ public class IdCorrelationSlidingActivity extends BaseSlidingActivity implements
                 mLlKeepPwdCon.setVisibility(View.VISIBLE);
                 mEtCode.setVisibility(View.GONE);
                 mTvProtocolDes.setText("登录即表示您同意");
+                String pwd = (String) SPUtils.get(this, SPUtils.LOGIN_PWD, "");
+                mEtPwd.setEditText(pwd);
                 break;
             case ID_CORRELATION_STATE_REGISTER:
                 setTiele("注册", "登录");
@@ -128,6 +141,7 @@ public class IdCorrelationSlidingActivity extends BaseSlidingActivity implements
         mEtCode.mEt.setInputType(InputType.TYPE_CLASS_NUMBER);
         mEtPwd.mEt.setInputType(0x81);
 //        mEtCode.registerTvCodeListent();
+        mEtCode.waitCode(false);
 
 
         mLlProtocolCon = findViewById(R.id.id_correlation_ll_protocol_con);
@@ -173,7 +187,8 @@ public class IdCorrelationSlidingActivity extends BaseSlidingActivity implements
                     String data = myIdCorrelationSmsBeanAResultInfo.data;
                     mEtCode.waitCode(true);
                     mEtCode.setEditCodeWaitText("60秒后重试");
-                    CountDownTimer countDownTimer = new CountDownTimer(millisInFuture, countDoenInterval) {
+                    //                                    tv_count_down.setText(String.valueOf(countDown - 1) + "  跳过");
+                    mCountDownTimer = new CountDownTimer(millisInFuture, countDoenInterval) {
 
                         @Override
                         public void onTick(long millisUntilFinished) {
@@ -183,7 +198,7 @@ public class IdCorrelationSlidingActivity extends BaseSlidingActivity implements
                                 mEtCode.waitCode(false);
                             } else {
                                 if (countDown != 1) {
-                                    mEtCode.setEditCodeWaitText(countDown--+"秒后重试");
+                                    mEtCode.setEditCodeWaitText(countDown-- + "秒后重试");
 //                                    tv_count_down.setText(String.valueOf(countDown - 1) + "  跳过");
                                 }
                             }
@@ -253,36 +268,14 @@ public class IdCorrelationSlidingActivity extends BaseSlidingActivity implements
         return true;
     }
 
- /*   @Override
+    @Override
     protected void onDestroy() {
         super.onDestroy();
-        if (mTimer != null) {
-            mTimer.cancel();
+        if (mCountDownTimer != null) {
+            mCountDownTimer.cancel();
+            mCountDownTimer = null;
         }
-        if (mMyTimerTask != null) {
-            mMyTimerTask.cancel();
-        }
-    }*/
-
-    /*class MyTimerTask extends TimerTask {
-
-        @Override
-        public void run() {
-            runOnUiThread(new Runnable() {      // UI thread
-                @Override
-                public void run() {
-                    recLen--;
-                    mEtCode.setEditCodeText(recLen + "秒后重试");
-                    if (recLen <= 0) {
-                        recLen = RECLEN_TIME;
-                        mEtCode.registerTvCodeListent();
-                        mEtCode.setEditCodeText("验证码");
-                        cancel();
-                    }
-                }
-            });
-        }
-    }*/
+    }
 
     @Override
     public void onClick(View v) {
@@ -353,6 +346,10 @@ public class IdCorrelationSlidingActivity extends BaseSlidingActivity implements
                 int code = myIdCorrelationSmsBeanAResultInfo.code;
                 String data = myIdCorrelationSmsBeanAResultInfo.data;
                 Log.d("mylog", "onNetNext: myIdCorrelationSmsBeanAResultInfo " + myIdCorrelationSmsBeanAResultInfo.toString());
+
+                SPUtils.put(IdCorrelationSlidingActivity.this, SPUtils.LOGIN_PWD, "");
+                IdCorrelationSlidingActivity.startIdCorrelationActivity(IdCorrelationSlidingActivity.this, ID_CORRELATION_STATE_LOGIN);
+                finishAllIdCorActivity();
             }
 
 
@@ -378,10 +375,8 @@ public class IdCorrelationSlidingActivity extends BaseSlidingActivity implements
                 int code = myIdCorrelationSmsBeanAResultInfo.code;
                 //{"vip_end_time":0,"mobile":"15927678095","id":"2","vip":0}
                 IdCorrelationLoginBean data = myIdCorrelationSmsBeanAResultInfo.data;
-                Log.d("mylog", "onNetNext: myIdCorrelationSmsBeanAResultInfo " + myIdCorrelationSmsBeanAResultInfo.toString());
-                String str = JSON.toJSONString(data);// java对象转为jsonString
-                SPUtils.put(IdCorrelationSlidingActivity.this, SPUtils.LOGIN_BEAN, str);
-                BackfillSingle.backfillLoginData(str);
+
+                loginSuccess(data);
             }
 
 
@@ -399,31 +394,62 @@ public class IdCorrelationSlidingActivity extends BaseSlidingActivity implements
 
     private void netLogin() {
         mLoadingDialog.show();
-        mIdCorrelationEngin.login(mInputPhoneString, mInputPwdString, "user/login").subscribe(new MySubscriber<AResultInfo<IdCorrelationLoginBean>>(mLoadingDialog) {
+        mIdCorrelationEngin.login(mInputPhoneString, mInputPwdString, "user/login").subscribe(new Subscriber<ResultInfo<IdCorrelationLoginBean>>() {
 
             @Override
-            protected void onNetNext(AResultInfo<IdCorrelationLoginBean> myIdCorrelationSmsBeanAResultInfo) {
-                String msg = myIdCorrelationSmsBeanAResultInfo.msg;
-                int code = myIdCorrelationSmsBeanAResultInfo.code;
-                IdCorrelationLoginBean data = myIdCorrelationSmsBeanAResultInfo.data;
+            public void onCompleted() {
+
+            }
+
+            @Override
+            public void onError(Throwable e) {
+                Log.e("TAG", "onError: "+e.getMessage() );
+            }
+
+            @Override
+            public void onNext(ResultInfo<IdCorrelationLoginBean> idCorrelationLoginBeanAResultInfo) {
+                String msg = idCorrelationLoginBeanAResultInfo.message;
+                int code = idCorrelationLoginBeanAResultInfo.code;
+                IdCorrelationLoginBean data = idCorrelationLoginBeanAResultInfo.data;
+
 //                String str = JSON.toJSONString(data);// java对象转为jsonString
 //                SPUtils.put(IdCorrelationSlidingActivity.this, SPUtils.LOGIN_BEAN, str);
 //                BackfillSingle.backfillLoginData(str);
 //                IdCorrelationLoginBean idCorrelationLoginBean = new Gson().fromJson(str, IdCorrelationLoginBean.class);
                 Log.d("mylog", "onNetNext: idCorrelationLoginBean " + data.toString());
+
+                Log.e("TAG", data.getMobile());
+
+
+                loginSuccess(data);
             }
 
-
-            @Override
-            protected void onNetError(Throwable e) {
-
-            }
-
-            @Override
-            protected void onNetCompleted() {
-
-            }
         });
+    }
+
+    private void loginSuccess(IdCorrelationLoginBean data) {
+        if (mIsKeepPwd) {
+            SPUtils.put(this, SPUtils.LOGIN_PWD, mInputPwdString);
+        } else {
+            SPUtils.put(this, SPUtils.LOGIN_PWD, "");
+        }
+        String str = JSON.toJSONString(data);// java对象转为jsonString
+//        SPUtils.put(IdCorrelationSlidingActivity.this, SPUtils.ID_INFO_BEAN, str);
+//        IdCorrelationLoginBean idCorrelationLoginBean = new Gson().fromJson(str, IdCorrelationLoginBean.class);
+        BackfillSingle.backfillLoginData(this, str);
+
+        finishAllIdCorActivity();
+    }
+
+    private void finishAllIdCorActivity() {
+        YcApplication instance = YcApplication.getInstance();
+        List<Activity> activities = instance.activityIdCorList;
+        for (Activity activitie : activities
+                ) {
+            if (activitie != null && activitie.isFinishing()) {
+                activitie.finish();
+            }
+        }
     }
 
     private void changChecked(boolean isKeepPwd) {
