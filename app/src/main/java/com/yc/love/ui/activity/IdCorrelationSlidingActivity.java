@@ -50,6 +50,7 @@ public class IdCorrelationSlidingActivity extends BaseSlidingActivity implements
     private boolean mIsKeepPwd = true;
     private TextView mTvKeepPwdCheck;
     private IdCorrelationEngin mIdCorrelationEngin;
+
     //    private MyTimerTask mMyTimerTask;
 //    private Timer mTimer = new Timer();
     private LoginEditTextLin mEtPhone, mEtCode, mEtPwd;
@@ -61,7 +62,7 @@ public class IdCorrelationSlidingActivity extends BaseSlidingActivity implements
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_id_correlation);
-
+        mIdCorrelationEngin = new IdCorrelationEngin(this);
 
 //        setContentView(R.layout.activity_id_correlation_xiaomi);
 
@@ -71,9 +72,6 @@ public class IdCorrelationSlidingActivity extends BaseSlidingActivity implements
         initViews();
         Log.d("mylog", "onCreate: mInitentState " + mInitentState);
         initState(mInitentState);
-
-        mIdCorrelationEngin = new IdCorrelationEngin(this);
-
         YcApplication ycApplication = (YcApplication) getApplication();
         ycApplication.activityIdCorList.add(this);
     }

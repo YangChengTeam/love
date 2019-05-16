@@ -85,6 +85,25 @@ public class IdCorrelationEngin extends BaseEngine {
         return rxpost;
     }
 
+    public Observable<ResultInfo<String>> addSuggestion(String userId, String content, String qq, String wechat, String url) {
+        Map<String, String> params = new HashMap<>();
+        params.put("user_id", userId);
+        params.put("content", content);
+        params.put("qq", qq);
+        if (!TextUtils.isEmpty(wechat) && !"null".equals(wechat)) {
+            params.put("wechat", wechat);
+        }
+        requestParams(params);
+        HttpCoreEngin<ResultInfo<String>> httpCoreEngin = HttpCoreEngin.get(mContext);
+        Observable<ResultInfo<String>> rxpost = httpCoreEngin.rxpost(URLConfig.getUrl(url), new TypeReference<ResultInfo<String>>() {
+
+                }.getType(),
+                params,
+                true,
+                true, true);
+        return rxpost;
+    }
+
     public Observable<AResultInfo<String>> myLogin(String mobile, String password, String url) {
         Map<String, String> params = new HashMap<>();
         params.put("mobile", mobile);
@@ -134,7 +153,8 @@ public class IdCorrelationEngin extends BaseEngine {
                 true, true);
         return rxpost;
     }
-    public Observable<AResultInfo<IdCorrelationLoginBean>> userInfo(String userId,String url) {
+
+    public Observable<AResultInfo<IdCorrelationLoginBean>> userInfo(String userId, String url) {
         Map<String, String> params = new HashMap<>();
         params.put("user_id", userId);
         requestParams(params);
@@ -147,9 +167,9 @@ public class IdCorrelationEngin extends BaseEngine {
         return rxpost;
     }
 
-    public Observable<AResultInfo<String>> uploadUommon(String image , String url) {
+    public Observable<AResultInfo<String>> uploadUommon(String image, String url) {
         Map<String, String> params = new HashMap<>();
-        params.put("image", image );
+        params.put("image", image);
 //        params.put("mobile", mobile);
 //        params.put("new_password", password);
         requestParams(params);

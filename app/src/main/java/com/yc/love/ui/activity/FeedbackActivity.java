@@ -10,7 +10,12 @@ import android.view.View;
 import android.widget.EditText;
 import android.widget.TextView;
 
+import com.kk.securityhttp.domain.ResultInfo;
 import com.yc.love.R;
+import com.yc.love.model.base.MySubscriber;
+import com.yc.love.model.bean.IdCorrelationLoginBean;
+import com.yc.love.model.engin.IdCorrelationEngin;
+import com.yc.love.model.single.YcSingle;
 import com.yc.love.ui.activity.base.BaseSameActivity;
 
 public class FeedbackActivity extends BaseSameActivity {
@@ -20,19 +25,27 @@ public class FeedbackActivity extends BaseSameActivity {
     private String mTrimEtWorkContent;
     private EditText mEtQq;
     private String mTrimEtQq;
+    private EditText mEtWx;
+    private IdCorrelationEngin mIdCorrelationEngin;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_feedback);
+        mIdCorrelationEngin = new IdCorrelationEngin(this);
         initViews();
+        initDatas();
+    }
+
+    private void initDatas() {
+
     }
 
     private void initViews() {
 
 
         mEtQq = findViewById(R.id.feedback_et_qq);
-        EditText etWx = findViewById(R.id.feedback_et_wx);
+        mEtWx = findViewById(R.id.feedback_et_wx);
         mTvQqNum = findViewById(R.id.feedback_tv_qq_num);
         TextView tvCopyQq = findViewById(R.id.feedback_tv_cope);
         TextView tvNext = findViewById(R.id.feedback_tv_next);
@@ -87,11 +100,39 @@ public class FeedbackActivity extends BaseSameActivity {
                 String trimQqNum = mTvQqNum.getText().toString().trim();
                 break;
             case R.id.feedback_tv_next:
-               if (checkInput()){
-                   Log.d("mylog", "onClick: mTrimEtQq qq号"+mTrimEtQq+" mTrimEtWorkContent 输入内容"+mTrimEtWorkContent);
-               }
+                if (checkInput()) {
+                    Log.d("mylog", "onClick: mTrimEtQq qq号" + mTrimEtQq + " mTrimEtWorkContent 输入内容" + mTrimEtWorkContent);
+                    netNext();
+                }
                 break;
         }
+    }
+
+    private void netNext() {
+        int id = YcSingle.getInstance().id;
+        if (id <= 0) {
+            showToLoginDialog();
+            return;
+        }
+        String mTrimEtWx = mEtWx.getText().toString();
+        mIdCorrelationEngin.addSuggestion(String.valueOf(id), mTrimEtWorkContent, mTrimEtQq, mTrimEtWx, "Suggestion/add").subscribe(new MySubscriber<ResultInfo<String>>(mLoadingDialog) {
+            @Override
+            protected void onNetNext(ResultInfo<String> stringResultInfo) {
+                String message = stringResultInfo.message;
+                showToastShort(message);
+                finish();
+            }
+
+            @Override
+            protected void onNetError(Throwable e) {
+
+            }
+
+            @Override
+            protected void onNetCompleted() {
+
+            }
+        });
     }
 
     @Override
