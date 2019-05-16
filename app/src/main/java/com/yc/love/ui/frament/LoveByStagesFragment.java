@@ -133,7 +133,7 @@ public class LoveByStagesFragment extends BaseLoveByStagesFragment {
     }
 
     private void netLoadMore() {
-        mLoveEngin.listsArticle(String.valueOf(mCategoryId), String.valueOf(PAGE_NUM++), String.valueOf(PAGE_SIZE), "Article/lists").subscribe(new MySubscriber<AResultInfo<List<LoveByStagesBean>>>(mLoveByStagesActivity) {
+        mLoveEngin.listsArticle(String.valueOf(mCategoryId), String.valueOf(++PAGE_NUM), String.valueOf(PAGE_SIZE), "Article/lists").subscribe(new MySubscriber<AResultInfo<List<LoveByStagesBean>>>(mLoveByStagesActivity) {
 
             @Override
             protected void onNetNext(AResultInfo<List<LoveByStagesBean>> listAResultInfo) {

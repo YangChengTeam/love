@@ -11,6 +11,7 @@ import com.yc.love.model.bean.CategoryArticleBean;
 import com.yc.love.model.bean.ExampDataBean;
 import com.yc.love.model.bean.ExampListsBean;
 import com.yc.love.model.bean.ExampleTsBean;
+import com.yc.love.model.bean.ExampleTsCategory;
 import com.yc.love.model.bean.ExampleTsListBean;
 import com.yc.love.model.bean.LoveByStagesBean;
 import com.yc.love.model.bean.LoveByStagesDetailsBean;
@@ -134,6 +135,44 @@ public class LoveEngin extends BaseEngine {
                 true, true);
         return rxpost;
     }
+    public Observable<AResultInfo<ExampleTsCategory>> exampleTsCategory(String url) {
+        Map<String, String> params = new HashMap<>();
+//        params.put("password", password);
+        requestParams(params);
+        HttpCoreEngin<AResultInfo<ExampleTsCategory>> httpCoreEngin = HttpCoreEngin.get(mContext);
+        Observable<AResultInfo<ExampleTsCategory>> rxpost = httpCoreEngin.rxpost(URLConfig.getUrl(url), new TypeReference<AResultInfo<ExampleTsCategory>>() {
+                }.getType(),
+                params,
+                true,
+                true, true);
+        return rxpost;
+    }
+   /* public Observable<AResultInfo<List<ExampleTsBean>>> indexExample(String page,String pageSize, String url) {
+        Map<String, String> params = new HashMap<>();
+        params.put("page", page);
+        params.put("page_size", pageSize);
+        requestParams(params);
+        HttpCoreEngin<AResultInfo<List<ExampleTsBean>>> httpCoreEngin = HttpCoreEngin.get(mContext);
+        Observable<AResultInfo<List<ExampleTsBean>>> rxpost = httpCoreEngin.rxpost(URLConfig.getUrl(url), new TypeReference<AResultInfo<List<ExampleTsBean>>>() {
+                }.getType(),
+                params,
+                true,
+                true, true);
+        return rxpost;
+    }*/
+    public Observable<AResultInfo<ExampDataBean>> indexExample(String page, String pageSize, String url) {
+        Map<String, String> params = new HashMap<>();
+        params.put("page", page);
+        params.put("page_size", pageSize);
+        requestParams(params);
+        HttpCoreEngin<AResultInfo<ExampDataBean>> httpCoreEngin = HttpCoreEngin.get(mContext);
+        Observable<AResultInfo<ExampDataBean>> rxpost = httpCoreEngin.rxpost(URLConfig.getUrl(url), new TypeReference<AResultInfo<ExampDataBean>>() {
+                }.getType(),
+                params,
+                true,
+                true, true);
+        return rxpost;
+    }
 
     public Observable<AResultInfo<ExampDataBean>> exampLists(String userId,String page, String pageSize, String url) {
         Map<String, String> params = new HashMap<>();
@@ -245,14 +284,14 @@ public class LoveEngin extends BaseEngine {
         return rxpost;
     }
 
-    public Observable<AResultInfo<String>> exampleTsList(String tagId, String page, String pageSize, String url) {
+    public Observable<AResultInfo<ExampDataBean>> exampleTsList(String id, String page, String pageSize, String url) {
         Map<String, String> params = new HashMap<>();
-        params.put("tag_id", tagId);
+        params.put("category_id", id);
         params.put("page", page);
         params.put("page_size", pageSize);
         requestParams(params);
-        HttpCoreEngin<AResultInfo<String>> httpCoreEngin = HttpCoreEngin.get(mContext);
-        Observable<AResultInfo<String>> rxpost = httpCoreEngin.rxpost(URLConfig.getUrl(url), new TypeReference<AResultInfo<String>>() {
+        HttpCoreEngin<AResultInfo<ExampDataBean>> httpCoreEngin = HttpCoreEngin.get(mContext);
+        Observable<AResultInfo<ExampDataBean>> rxpost = httpCoreEngin.rxpost(URLConfig.getUrl(url), new TypeReference<AResultInfo<ExampDataBean>>() {
                 }.getType(),
                 params,
                 true,

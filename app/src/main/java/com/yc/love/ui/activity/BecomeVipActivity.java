@@ -36,10 +36,15 @@ import com.yc.love.model.bean.ExampleTsListBean;
 import com.yc.love.model.bean.IndexDoodsBean;
 import com.yc.love.model.bean.MainT3Bean;
 import com.yc.love.model.bean.OrdersInitBean;
+import com.yc.love.model.bean.event.EventBusWxPayResult;
 import com.yc.love.model.engin.OrderEngin;
 import com.yc.love.model.single.YcSingle;
 import com.yc.love.ui.activity.base.BaseSlidingActivity;
 import com.yc.love.ui.activity.base.PayActivity;
+
+import org.greenrobot.eventbus.EventBus;
+import org.greenrobot.eventbus.Subscribe;
+import org.greenrobot.eventbus.ThreadMode;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -168,7 +173,7 @@ public class BecomeVipActivity extends PayActivity implements View.OnClickListen
         mRecyclerView.setAdapter(becomeVipAdapter);
     }
 
-    private void nextOrders(int payType, IndexDoodsBean indexDoodsBean) { // PAY_TYPE_ZFB=0   PAY_TYPE_WX=1;
+    private void nextOrders(final int payType, IndexDoodsBean indexDoodsBean) { // PAY_TYPE_ZFB=0   PAY_TYPE_WX=1;
         int id = YcSingle.getInstance().id;
         String name = YcSingle.getInstance().name;
         if (id <= 0) {
@@ -207,10 +212,12 @@ public class BecomeVipActivity extends PayActivity implements View.OnClickListen
             @Override
             protected void onNetNext(AResultInfo<OrdersInitBean> ordersInitBeanAResultInfo) {
                 OrdersInitBean ordersInitBean = ordersInitBeanAResultInfo.data;
-                Log.d("mylog", "onNetNext: ordersInitBean " + ordersInitBean);
-                String orderInfo = "";
-                toZfbPay(orderInfo);
-
+                OrdersInitBean.ParamsBean paramsBean = ordersInitBean.params;
+                if (payType == 0) {
+                    toZfbPay(paramsBean.info);
+                } else {
+                    toWxPay(paramsBean);
+                }
             }
 
             @Override
@@ -225,7 +232,33 @@ public class BecomeVipActivity extends PayActivity implements View.OnClickListen
         });
     }
 
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    public void onMessageEvent(EventBusWxPayResult event) {
+        switch (event.code) {
+            case 0://支付成功
+                //TODO  微信支付成功
+                break;
+            case -1://错误
+                break;
+            case -2://用户取消
+                break;
+            default:
+                break;
+        }
+    }
 
+
+    @Override
+    public void onStart() {
+        super.onStart();
+        EventBus.getDefault().register(this);
+    }
+
+    @Override
+    public void onStop() {
+        super.onStop();
+        EventBus.getDefault().unregister(this);
+    }
 
     @Override
     public void onClick(View v) {

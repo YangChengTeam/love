@@ -7,8 +7,10 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 
 import com.yc.love.adaper.rv.holder.BaseViewHolder;
+import com.yc.love.adaper.rv.holder.MainT1ItemHolder;
 import com.yc.love.adaper.rv.holder.ProgressBarViewHolder;
 import com.yc.love.adaper.rv.holder.TitleT1ViewHolder;
+import com.yc.love.model.bean.ExampListsBean;
 
 import java.util.List;
 
@@ -17,9 +19,9 @@ import java.util.List;
  * Created by Administrator on 2017/9/12.
  */
 
-public abstract class MainT1MoreItemAdapter<T> extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
+public abstract class MainT1MoreItemAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
 
-    private final List<T> mPersonList;
+    private final List<ExampListsBean> mPersonList;
     private RecyclerView mRecyclerView;
     private static final int VIEW_ITEM = 0;
     private static final int VIEW_PROG = 1;
@@ -30,7 +32,7 @@ public abstract class MainT1MoreItemAdapter<T> extends RecyclerView.Adapter<Recy
     //当前滚动的position下面最小的items的临界值
 //    private int visibleThreshold = 5;
 
-    public MainT1MoreItemAdapter(List<T> personList, RecyclerView recyclerView) {
+    public MainT1MoreItemAdapter(List<ExampListsBean> personList, RecyclerView recyclerView) {
         this.mPersonList = personList;
         this.mRecyclerView = recyclerView;
         addOnScrollListenerPacked();
@@ -47,10 +49,17 @@ public abstract class MainT1MoreItemAdapter<T> extends RecyclerView.Adapter<Recy
     //根据不同的数据返回不同的viewType
     @Override
     public int getItemViewType(int position) {
-        if (position == 0) {
-            return VIEW_TITLE;
+        ExampListsBean exampListsBean = mPersonList.get(position);
+        if (exampListsBean == null) {
+            return VIEW_PROG;
         }
-        return mPersonList.get(position) != null ? VIEW_ITEM : VIEW_PROG;
+        switch (exampListsBean.type) {
+            case 0:
+                return VIEW_TITLE;
+            case 1:
+                return VIEW_ITEM;
+        }
+        return VIEW_PROG;
     }
 
     @Override
@@ -62,8 +71,6 @@ public abstract class MainT1MoreItemAdapter<T> extends RecyclerView.Adapter<Recy
             holder = getHolder(parent);
         } else {
             holder = getBarViewHolder(parent);
-            /*View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.recycler_view_test_item_footer, parent, false);
-            holder = new ProgressBarViewHolder(view);*/
         }
         return holder;
     }
@@ -73,8 +80,8 @@ public abstract class MainT1MoreItemAdapter<T> extends RecyclerView.Adapter<Recy
     public void onBindViewHolder(RecyclerView.ViewHolder holder, int position) {
         if (holder instanceof TitleT1ViewHolder) {
             ((BaseViewHolder) holder).bindData(mPersonList.get(position));
-        } else if (holder instanceof BaseViewHolder) {
-            ((BaseViewHolder) holder).bindData(mPersonList.get(position - 1));
+        } else if (holder instanceof MainT1ItemHolder) {
+            ((BaseViewHolder) holder).bindData(mPersonList.get(position));
         } else if (holder instanceof ProgressBarViewHolder) {
             ProgressBarViewHolder viewHolder = (ProgressBarViewHolder) holder;
             viewHolder.pb.setIndeterminate(true);
@@ -87,26 +94,9 @@ public abstract class MainT1MoreItemAdapter<T> extends RecyclerView.Adapter<Recy
             super.onScrolled(recyclerView, dx, dy);
             final LinearLayoutManager linearLayoutManager = (LinearLayoutManager) mRecyclerView.getLayoutManager();
 
-            int currentposition = linearLayoutManager.getPosition(linearLayoutManager.getChildAt(0));
-            int firstVisibleItemPosition = linearLayoutManager.findFirstVisibleItemPosition();
-           /* if (firstVisibleItemPosition >= 1) {
-                ll_toolbar.setVisibility(View.VISIBLE);
-            } else {
-                ll_toolbar.setVisibility(View.GONE);
-            }*/
-
 
             totalItemCount = linearLayoutManager.getItemCount();
             lastVisibleItemPosition = linearLayoutManager.findLastVisibleItemPosition();
-            Log.d("ssss", "onScrolled totalItemCount =  全部数据条数 " + totalItemCount + "-----");
-//            Log.d("ssss", "onScrolled: visibleThreshold  伐值 :" + visibleThreshold);
-
-//            int firstCompletelyVisibleItemPosition = linearLayoutManager.findFirstCompletelyVisibleItemPosition();
-//            int lastCompletelyVisibleItemPosition = linearLayoutManager.findLastCompletelyVisibleItemPosition();
-
-
-            Log.d("ssss", "onScrolled: " + "lastVisibleItemPosition 可见的最后一条  222 =" + lastVisibleItemPosition);
-
             if (totalItemCount == lastVisibleItemPosition + 1) {
                 if (totalItemCount == 0) {
                     return;

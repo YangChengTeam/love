@@ -11,13 +11,14 @@ import android.widget.TextView;
 
 import com.yc.love.R;
 import com.yc.love.adaper.rv.base.RecyclerViewItemListener;
+import com.yc.love.model.bean.ExampListsBean;
 import com.yc.love.model.bean.StringBean;
 
 /**
  * Created by mayn on 2019/4/26.
  */
 
-public class TitleT1ViewHolder extends BaseViewHolder<StringBean> {
+public class TitleT1ViewHolder extends BaseViewHolder<ExampListsBean> {
 
     private final Context context;
     private OnClickMainT1TitleListent onClickMainT1TitleListent;
@@ -29,7 +30,7 @@ public class TitleT1ViewHolder extends BaseViewHolder<StringBean> {
     }
 
     @Override
-    public void bindData(StringBean stringBean) {
+    public void bindData(ExampListsBean exampListsBean) {
         ImageView ivTitle = itemView.findViewById(R.id.item_title_view_iv_title);
         ImageView ivShare = itemView.findViewById(R.id.item_title_view_iv_share);
         mTvShare = itemView.findViewById(R.id.item_title_view_tv_share);

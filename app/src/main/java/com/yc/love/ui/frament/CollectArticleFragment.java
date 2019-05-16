@@ -147,7 +147,7 @@ public class CollectArticleFragment extends BaseCollectFragment {
             mCollectActivity.showToLoginDialog();
             return;
         }
-        mLoveEngin.collectListsArticle(String.valueOf(id), String.valueOf(PAGE_NUM++), String.valueOf(PAGE_SIZE), "Article/collect_list").subscribe(new MySubscriber<AResultInfo<List<ExampleTsListBean>>>(mCollectActivity) {
+        mLoveEngin.collectListsArticle(String.valueOf(id), String.valueOf(++PAGE_NUM), String.valueOf(PAGE_SIZE), "Article/collect_list").subscribe(new MySubscriber<AResultInfo<List<ExampleTsListBean>>>(mCollectActivity) {
 
             @Override
             protected void onNetNext(AResultInfo<List<ExampleTsListBean>> listAResultInfo) {

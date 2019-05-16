@@ -1,5 +1,7 @@
 package com.yc.love.ui.activity;
 
+import android.content.ClipData;
+import android.content.ClipboardManager;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.text.Editable;
@@ -27,6 +29,7 @@ public class FeedbackActivity extends BaseSameActivity {
     private String mTrimEtQq;
     private EditText mEtWx;
     private IdCorrelationEngin mIdCorrelationEngin;
+    private String mMTrimEtWx;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -85,9 +88,20 @@ public class FeedbackActivity extends BaseSameActivity {
             showToastShort("QQ号不能为空");
             return false;
         }
+        if (mTrimEtQq.length() < 6) {
+            showToastShort("QQ号格式错误");
+            return false;
+        }
         if (mTrimEtWorkContent.length() < 6) {
             showToastShort("最少输入一句话反馈");
             return false;
+        }
+        mMTrimEtWx = mEtWx.getText().toString();
+        if (!TextUtils.isEmpty(mMTrimEtWx) && !"null".equals(mMTrimEtWx)) {
+            if (mTrimEtQq.length() < 2) {
+                showToastShort("微信号格式错误");
+                return false;
+            }
         }
         return true;
     }
@@ -98,6 +112,10 @@ public class FeedbackActivity extends BaseSameActivity {
         switch (v.getId()) {
             case R.id.feedback_tv_cope:
                 String trimQqNum = mTvQqNum.getText().toString().trim();
+                ClipboardManager myClipboard = (ClipboardManager) getSystemService(CLIPBOARD_SERVICE);
+                ClipData myClip = ClipData.newPlainText("text", trimQqNum);
+                myClipboard.setPrimaryClip(myClip);
+                showToastShort("复制客服QQ号成功");
                 break;
             case R.id.feedback_tv_next:
                 if (checkInput()) {
@@ -114,8 +132,7 @@ public class FeedbackActivity extends BaseSameActivity {
             showToLoginDialog();
             return;
         }
-        String mTrimEtWx = mEtWx.getText().toString();
-        mIdCorrelationEngin.addSuggestion(String.valueOf(id), mTrimEtWorkContent, mTrimEtQq, mTrimEtWx, "Suggestion/add").subscribe(new MySubscriber<ResultInfo<String>>(mLoadingDialog) {
+        mIdCorrelationEngin.addSuggestion(String.valueOf(id), mTrimEtWorkContent, mTrimEtQq, mMTrimEtWx, "Suggestion/add").subscribe(new MySubscriber<ResultInfo<String>>(mLoadingDialog) {
             @Override
             protected void onNetNext(ResultInfo<String> stringResultInfo) {
                 String message = stringResultInfo.message;

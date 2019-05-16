@@ -166,7 +166,7 @@ public class LoveHealDetailsActivity extends BaseSameActivity {
     }
 
     private void netLoadMore() {
-        mLoveEngin.loveListCategory(mCategoryId, String.valueOf(PAGE_NUM++), String.valueOf(PAGE_SIZE), "Dialogue/lists").subscribe(new MySubscriber<AResultInfo<List<LoveHealDetBean>>>(mLoadingDialog) {
+        mLoveEngin.loveListCategory(mCategoryId, String.valueOf(++PAGE_NUM), String.valueOf(PAGE_SIZE), "Dialogue/lists").subscribe(new MySubscriber<AResultInfo<List<LoveHealDetBean>>>(mLoadingDialog) {
 
 
             @Override

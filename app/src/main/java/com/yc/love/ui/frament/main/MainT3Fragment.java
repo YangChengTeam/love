@@ -19,6 +19,8 @@ import com.yc.love.model.bean.AResultInfo;
 import com.yc.love.model.bean.CategoryArticleBean;
 import com.yc.love.model.bean.CategoryArticleChildrenBean;
 import com.yc.love.model.bean.ExampleTsBean;
+import com.yc.love.model.bean.ExampleTsCategory;
+import com.yc.love.model.bean.ExampleTsCategoryList;
 import com.yc.love.model.bean.ExampleTsListBean;
 import com.yc.love.model.bean.LoveByStagesBean;
 import com.yc.love.model.bean.LoveHealDetBean;
@@ -119,27 +121,29 @@ public class MainT3Fragment extends BaseMainFragment {
     private void netData() {
         LoadDialog loadDialog = new LoadDialog(mMainActivity);
         loadDialog.show();
-        mLoveEngin.exampleTs("example/ts").subscribe(new MySubscriber<AResultInfo<List<ExampleTsBean>>>(loadDialog) {
+//        mLoveEngin.exampleTs("example/ts").subscribe(new MySubscriber<AResultInfo<List<ExampleTsBean>>>(loadDialog) {
+        mLoveEngin.exampleTsCategory("example/ts_category").subscribe(new MySubscriber<AResultInfo<ExampleTsCategory>>(loadDialog) {
 
 
             @Override
-            protected void onNetNext(AResultInfo<List<ExampleTsBean>> listAResultInfo) {
+            protected void onNetNext(AResultInfo<ExampleTsCategory> exampleTsCategoryAResultInfo) {
                 mDatas = new ArrayList<>();
                 mDatas.add(new MainT3Bean(1));
                 mDatas.add(new MainT3Bean(2, "入门秘籍"));
-                List<ExampleTsBean> exampleTsBeans = listAResultInfo.data;
-                for (ExampleTsBean exampleTsBean : exampleTsBeans
-                        ) {
-                    List<ExampleTsListBean> list1 = exampleTsBean.list1;
+                ExampleTsCategory exampleTsCategory = exampleTsCategoryAResultInfo.data;
+                List<ExampleTsCategoryList> list1 = exampleTsCategory.list1;
+                List<ExampleTsCategoryList> list2 = exampleTsCategory.list1;
+                if (list1 != null) {
                     for (int i = 0; i < list1.size(); i++) {
-                        ExampleTsListBean listBean = list1.get(i);
-                        mDatas.add(new MainT3Bean(3, listBean.id, listBean.post_title, listBean.image, listBean.tag, listBean.tag_id, listBean.category_name));
+                        ExampleTsCategoryList categoryList = list1.get(i);
+                        mDatas.add(new MainT3Bean(3, categoryList._level, categoryList.desp, categoryList.id, categoryList.image, categoryList.name, categoryList.parent_id));
                     }
-                    mDatas.add(new MainT3Bean(2, "进阶秘籍"));
-                    List<ExampleTsListBean> list2 = exampleTsBean.list2;
+                }
+                mDatas.add(new MainT3Bean(2, "进阶秘籍"));
+                if (list2 != null) {
                     for (int i = 0; i < list2.size(); i++) {
-                        ExampleTsListBean listBean = list2.get(i);
-                        mDatas.add(new MainT3Bean(3, listBean.id, listBean.post_title, listBean.image, listBean.tag, listBean.tag_id, listBean.category_name));
+                        ExampleTsCategoryList categoryList = list2.get(i);
+                        mDatas.add(new MainT3Bean(3, categoryList._level, categoryList.desp, categoryList.id, categoryList.image, categoryList.name, categoryList.parent_id));
                     }
                 }
                 initRecyclerViewData();
@@ -215,9 +219,9 @@ public class MainT3Fragment extends BaseMainFragment {
         @Override
         public void onItemClick(int position) {
             MainT3Bean mainT3Bean = mDatas.get(position);
-            int tagId = mainT3Bean.tag_id;
-//            LoveIntroductionActivity.startLoveIntroductionActivity(mMainActivity, mainT3Bean.category_name, String.valueOf(tagId));
-            ExampleDetailActivity.startExampleDetailActivity(mMainActivity,mainT3Bean.id,mainT3Bean.post_title);
+            int tagId = mainT3Bean.id;
+            LoveIntroductionActivity.startLoveIntroductionActivity(mMainActivity, mainT3Bean.name, String.valueOf(mainT3Bean.id));
+//            ExampleDetailActivity.startExampleDetailActivity(mMainActivity, mainT3Bean.id, mainT3Bean.desp);
 
         }
 

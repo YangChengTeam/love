@@ -29,8 +29,8 @@ public class MainT3ItemViewHolder extends BaseViewHolder<MainT3Bean> {
         ImageView imageView = itemView.findViewById(R.id.item_t3item_iv);
         TextView tvTitle= itemView.findViewById(R.id.item_t3item_tv_title);
         TextView tvDes= itemView.findViewById(R.id.item_t3item_tv_des);
-        tvTitle.setText(mainT3Bean.category_name);
-        tvDes.setText(mainT3Bean.post_title);
+        tvTitle.setText(mainT3Bean.name);
+        tvDes.setText(mainT3Bean.desp);
 //        imageView.setImageResource(mainT3Bean.imgResId);
         String image=mainT3Bean.image;
         if(TextUtils.isEmpty(image)){

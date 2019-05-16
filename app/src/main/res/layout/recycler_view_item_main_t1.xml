@@ -1,0 +1,87 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="@color/white">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
+
+        <LinearLayout
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_vertical"
+            android:layout_marginLeft="12dp"
+            android:layout_weight="10"
+            android:orientation="vertical">
+
+            <TextView
+                android:id="@+id/item_main_t1_tv_name"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:ellipsize="end"
+                android:maxLines="1"
+                android:text="中文"
+                android:textColor="@color/black"
+                android:textSize="@dimen/size_16" />
+
+            <View
+                android:layout_width="1dp"
+                android:layout_height="8dp" />
+
+            <android.support.constraint.ConstraintLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+
+                <TextView
+                    android:id="@+id/item_main_t1_tv_label"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:background="@drawable/shape_btn_red_crimson_empty_thin"
+                    android:paddingLeft="8dp"
+                    android:paddingTop="3dp"
+                    android:paddingRight="8dp"
+                    android:paddingBottom="3dp"
+                    android:text="5555"
+                    android:textColor="@color/red_crimson" />
+
+                <TextView
+                    android:id="@+id/item_main_t1_tv_des"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="12dp"
+                    android:maxLines="1"
+                    android:text="155"
+                    android:textColor="@color/text_gray"
+                    android:textSize="@dimen/size_14"
+                    app:layout_constraintBottom_toBottomOf="@+id/item_main_t1_tv_label"
+                    app:layout_constraintLeft_toRightOf="@+id/item_main_t1_tv_label"
+                    app:layout_constraintTop_toTopOf="@+id/item_main_t1_tv_label" />
+            </android.support.constraint.ConstraintLayout>
+
+        </LinearLayout>
+
+
+        <ImageView
+            android:id="@+id/item_main_t1_iv_icon"
+            android:layout_width="108dp"
+            android:layout_height="70dp"
+            android:layout_margin="12dp"
+            android:scaleType="fitXY"
+            android:src="@mipmap/main_bg_t3_placeholder"
+            app:layout_constraintRight_toRightOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+
+    </LinearLayout>
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:background="@color/love_background"
+        app:layout_constraintBottom_toBottomOf="parent" />
+
+</android.support.constraint.ConstraintLayout>

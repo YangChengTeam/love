@@ -12,11 +12,15 @@ import android.view.ViewGroup;
 import com.yc.love.R;
 import com.yc.love.adaper.rv.NoThingAdapter;
 import com.yc.love.adaper.rv.holder.BaseViewHolder;
+import com.yc.love.adaper.rv.holder.LoveIntroHolder;
 import com.yc.love.adaper.rv.holder.StringBeanViewHolder;
 import com.yc.love.model.base.MySubscriber;
 import com.yc.love.model.bean.AResultInfo;
+import com.yc.love.model.bean.ExampDataBean;
+import com.yc.love.model.bean.ExampListsBean;
 import com.yc.love.model.bean.ExampleTsBean;
 import com.yc.love.model.bean.ExampleTsListBean;
+import com.yc.love.model.bean.MainT2Bean;
 import com.yc.love.model.bean.MainT3Bean;
 import com.yc.love.model.bean.StringBean;
 import com.yc.love.model.engin.LoveEngin;
@@ -32,8 +36,8 @@ public class LoveIntroductionActivity extends BaseSameActivity {
 
     private String mActivityTitle;
     private RecyclerView mRecyclerView;
-    private NoThingAdapter<StringBean> mAdapter;
-    private List<StringBean> mDatas;
+    private NoThingAdapter<ExampListsBean> mAdapter;
+//    private List<StringBean> mExampListsBeans;
     //    private int PAGE_NUM = 10;
     private int PAGE_SIZE = 10;
     private int PAGE_NUM = 1;
@@ -42,7 +46,8 @@ public class LoveIntroductionActivity extends BaseSameActivity {
     private boolean showProgressBar = false;
     private int num = 10;
     LoveEngin mLoveEngin;
-    private String mTagId;
+    private List<ExampListsBean> mExampListsBeans;
+    private String mId;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -66,19 +71,44 @@ public class LoveIntroductionActivity extends BaseSameActivity {
 
     private void initDatas() {
         netData();
-        mDatas = new ArrayList<>();
+    }
+
+    private void netData() {
+        mLoadingDialog.showLoadingDialog();
+        mLoveEngin.exampleTsList(mId, String.valueOf(PAGE_NUM), String.valueOf(PAGE_SIZE), "example/ts_lists").subscribe(new MySubscriber<AResultInfo<ExampDataBean>>(mLoadingDialog) {
+            @Override
+            protected void onNetNext(AResultInfo<ExampDataBean> exampDataBeanAResultInfo) {
+                ExampDataBean exampDataBean = exampDataBeanAResultInfo.data;
+                mExampListsBeans = exampDataBean.lists;
+
+                initRecyclerViewData();
+            }
+
+            @Override
+            protected void onNetError(Throwable e) {
+
+            }
+
+            @Override
+            protected void onNetCompleted() {
+
+            }
+        });
+    }
+    private void initRecyclerViewData() {
+      /*  mExampListsBeans = new ArrayList<>();
         for (int i = 0; i < 15; i++) {
             StringBean stringBean = new StringBean("name " + i);
-            mDatas.add(stringBean);
-        }
-        mAdapter = new NoThingAdapter<StringBean>(mDatas, mRecyclerView) {
+            mExampListsBeans.add(stringBean);
+        }*/
+        mAdapter = new NoThingAdapter<ExampListsBean>(mExampListsBeans, mRecyclerView) {
             @Override
             public BaseViewHolder getHolder(ViewGroup parent) {
-                return new StringBeanViewHolder(LoveIntroductionActivity.this, null, parent);
+                return new LoveIntroHolder(LoveIntroductionActivity.this, null, parent);
             }
         };
         mRecyclerView.setAdapter(mAdapter);
-        if (mDatas.size() < PAGE_NUM) {
+        if (mExampListsBeans.size() < PAGE_SIZE) {
             Log.d("ssss", "loadMoreData: data---end");
         } else {
             mAdapter.setOnMoreDataLoadListener(new NoThingAdapter.OnLoadMoreDataListener() {
@@ -89,39 +119,15 @@ public class LoveIntroductionActivity extends BaseSameActivity {
                     }
                     if (showProgressBar == false) {
                         //加入null值此时adapter会判断item的type
-                        mDatas.add(null);
+                        mExampListsBeans.add(null);
                         mAdapter.notifyDataSetChanged();
                         showProgressBar = true;
                     }
                     if (!loadMoreEnd) {
-                        mRecyclerView.postDelayed(new Runnable() {
-                            @Override
-                            public void run() {
-
-                                /*if (num >= 41) {
-//                                    progressBarViewHolder.removePbChangDes("已加载全部数据");
-                                    return;
-                                }*/
-
-                                List<StringBean> netLoadMoreData = new ArrayList<>();
-                                for (int i = 0; i < 10; i++) {
-                                    netLoadMoreData.add(new StringBean("name " + (i + num)));
-                                }
-                                num += 10;
-                                showProgressBar = false;
-                                mDatas.remove(mDatas.size() - 1);
-                                mAdapter.notifyDataSetChanged();
-                                if (netLoadMoreData.size() < PAGE_NUM) {
-                                    loadMoreEnd = true;
-                                }
-                                mDatas.addAll(netLoadMoreData);
-                                mAdapter.notifyDataSetChanged();
-                                mAdapter.setLoaded();
-                            }
-                        }, 1000);
+                        netLoadMore();
                     } else {
                         Log.d("mylog", "loadMoreData: loadMoreEnd end 已加载全部数据 ");
-                        mDatas.remove(mDatas.size() - 1);
+                        mExampListsBeans.remove(mExampListsBeans.size() - 1);
                         mAdapter.notifyDataSetChanged();
                     }
                 }
@@ -129,15 +135,25 @@ public class LoveIntroductionActivity extends BaseSameActivity {
         }
         loadDataEnd = true;
     }
-
-    private void netData() {
-        mLoadingDialog.showLoadingDialog();
-        mLoveEngin.exampleTsList(mTagId, String.valueOf(PAGE_NUM), String.valueOf(PAGE_SIZE), "example/ts_lists").subscribe(new MySubscriber<AResultInfo<String>>(mLoadingDialog) {
-
-
+    private void netLoadMore() {
+//        mLoveEngin.indexExample(String.valueOf(++PAGE_NUM), String.valueOf(PAGE_SIZE), "example/index").subscribe(new MySubscriber<AResultInfo<ExampDataBean>>(mMainActivity) {
+        mLoveEngin.exampleTsList(mId, String.valueOf(++PAGE_NUM), String.valueOf(PAGE_SIZE), "example/ts_lists").subscribe(new MySubscriber<AResultInfo<ExampDataBean>>(this) {
             @Override
-            protected void onNetNext(AResultInfo<String> stringAResultInfo) {
+            protected void onNetNext(AResultInfo<ExampDataBean> exampDataBeanAResultInfo) {
 
+                ExampDataBean exampDataBean = exampDataBeanAResultInfo.data;
+                if (exampDataBean != null) {
+                    List<ExampListsBean> netLoadMoreData = exampDataBean.lists;
+                    showProgressBar = false;
+                    mExampListsBeans.remove(mExampListsBeans.size() - 1);
+                    mAdapter.notifyDataSetChanged();
+                    if (netLoadMoreData.size() < PAGE_SIZE) {
+                        loadMoreEnd = true;
+                    }
+                    mExampListsBeans.addAll(netLoadMoreData);
+                    mAdapter.notifyDataSetChanged();
+                    mAdapter.setLoaded();
+                }
             }
 
             @Override
@@ -157,13 +173,13 @@ public class LoveIntroductionActivity extends BaseSameActivity {
     protected void initIntentData() {
         Intent intent = getIntent();
         mActivityTitle = intent.getStringExtra("title");
-        mTagId = intent.getStringExtra("tag_id");
+        mId = intent.getStringExtra("id");
     }
 
     public static void startLoveIntroductionActivity(Context context, String title, String tagId) {
         Intent intent = new Intent(context, LoveIntroductionActivity.class);
         intent.putExtra("title", title);
-        intent.putExtra("tag_id", tagId);
+        intent.putExtra("id", tagId);
         context.startActivity(intent);
     }
 

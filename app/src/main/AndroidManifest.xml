@@ -23,6 +23,15 @@
         android:supportsRtl="true"
         android:theme="@style/JK.SwipeBack.Transparent.Theme">
         <activity
+            android:name=".wxapi.WXEntryActivity"
+            android:exported="true"
+            android:launchMode="singleTop"
+            android:theme="@android:style/Theme.Translucent" />
+        <activity
+            android:name=".wxapi.WXPayEntryActivity"
+            android:exported="true"
+            android:launchMode="singleTop" />
+        <activity
             android:name=".ui.activity.SpecializedActivity"
             android:screenOrientation="portrait"
             android:theme="@style/SplashTheme">
@@ -100,7 +109,8 @@
 
         <activity android:name=".ui.activity.LoveHealDetailsActivity" />
         <activity android:name=".ui.activity.LoveByStagesDetailsActivity" />
-        <activity android:name=".ui.activity.ExampleDetailActivity"></activity>
+        <activity android:name=".ui.activity.ExampleDetailActivity" />
+        <activity android:name=".ui.activity.ShareActivity"></activity>
     </application>
 
 </manifest>
