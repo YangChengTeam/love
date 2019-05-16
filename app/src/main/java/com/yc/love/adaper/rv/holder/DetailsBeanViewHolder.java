@@ -27,7 +27,6 @@ public class DetailsBeanViewHolder extends BaseViewHolder<LoveHealDetDetailsBean
 
     @Override
     public void bindData(final LoveHealDetDetailsBean detailsBean) {
-
         ImageView ivSex = itemView.findViewById(R.id.item_details_bean_iv_sex);
         TextView tvName = itemView.findViewById(R.id.item_details_bean_tv_name);
         ImageView ivCopy = itemView.findViewById(R.id.item_details_bean_iv_copy);

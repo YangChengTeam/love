@@ -37,6 +37,9 @@ public class LoveHealDetItemHolder extends BaseViewHolder<LoveHealDetBean> {
         layoutManager.setOrientation(OrientationHelper.VERTICAL);
 
         List<LoveHealDetDetailsBean> details = loveHealDetBean.details;
+        if(details==null||details.size()==0){
+            details = loveHealDetBean.detail;
+        }
 
         NoThingAdapter<LoveHealDetDetailsBean> adapter = new NoThingAdapter<LoveHealDetDetailsBean>(details, recyclerView) {
             @Override

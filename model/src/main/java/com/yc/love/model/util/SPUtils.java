@@ -17,6 +17,9 @@ public class SPUtils {
     public static final String ID_INFO_BEAN = "ID_INFO_BEAN";
     public static final String LOGIN_PWD = "LOGIN_PWD";
     public static final String LOGIN_MOBILE = "LOGIN_MOBILE";
+
+    public static final String SHARE_HISTORY = "SHARE_HISTORY";
+
 //    public static final String LOGIN_ = "LOGIN_BEAN";
 
 

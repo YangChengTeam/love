@@ -33,6 +33,7 @@ import com.yc.love.model.single.YcSingle;
 import com.yc.love.ui.activity.LoveByStagesDetailsActivity;
 import com.yc.love.ui.activity.LoveHealActivity;
 import com.yc.love.ui.activity.LoveHealingActivity;
+import com.yc.love.ui.activity.ShareActivity;
 import com.yc.love.ui.frament.base.BaseMainFragment;
 import com.yc.love.ui.view.LoadDialog;
 
@@ -145,7 +146,8 @@ public class MainT1Fragment extends BaseMainFragment {
                 titleT1ViewHolder.setOnClickShareListent(new TitleT1ViewHolder.OnClickMainT1TitleListent() {
                     @Override
                     public void clickShareListent() {
-                        Toast.makeText(mMainActivity, "clickShare", Toast.LENGTH_SHORT).show();
+                        mMainActivity.startActivity(new Intent(mMainActivity,ShareActivity.class));
+//                        Toast.makeText(mMainActivity, "clickShare", Toast.LENGTH_SHORT).show();
                     }
 
                     @Override

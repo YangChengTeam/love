@@ -29,6 +29,7 @@ public class LoveHealDetBean {
     public String is_open;
     public String search_type;
     public List<LoveHealDetDetailsBean> details;
+    public List<LoveHealDetDetailsBean> detail;
 
   /*  public static class DetailsBean {
         *//**

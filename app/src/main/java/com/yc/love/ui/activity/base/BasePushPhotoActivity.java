@@ -16,43 +16,30 @@ import android.util.Log;
 import android.widget.ImageView;
 import android.widget.Toast;
 
-import com.bumptech.glide.Glide;
 import com.squareup.picasso.Picasso;
 import com.yc.love.R;
-import com.yc.love.cont.http.HttpClient;
-import com.yc.love.model.util.CropPhotoUtlis;
-import com.yc.love.model.util.UploadUtils;
 import com.yc.love.ui.view.CircleTransform;
 import com.yc.love.ui.view.SelectPhotoDialog;
-import com.yc.love.ui.view.imgs.ISCameraConfig;
 import com.yc.love.ui.view.imgs.ISListConfig;
 import com.yc.love.ui.view.imgs.ISNav;
 import com.yc.love.ui.view.imgs.ImageLoader;
-/*import com.yuyh.library.imgsel.ISNav;
-import com.yuyh.library.imgsel.common.ImageLoader;
-import com.yuyh.library.imgsel.config.ISCameraConfig;
-import com.yuyh.library.imgsel.config.ISListConfig;*/
 
 import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.List;
 
 import okhttp3.Call;
 import okhttp3.Callback;
-import okhttp3.FormBody;
 import okhttp3.MediaType;
 import okhttp3.MultipartBody;
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
 import okhttp3.RequestBody;
 import okhttp3.Response;
-import retrofit2.Retrofit;
 import top.zibin.luban.Luban;
 import top.zibin.luban.OnCompressListener;
-import retrofit2.adapter.rxjava2.Result;
 
 /**
  * Created by mayn on 2019/5/7.
@@ -80,7 +67,9 @@ public abstract class BasePushPhotoActivity extends BaseSameActivity {
             mInstance.init(new ImageLoader() {
                 @Override
                 public void displayImage(Context context, String path, ImageView imageView) {
-                    Glide.with(context).load(path).into(imageView);
+                    Picasso.with(context).load("file://" + path).into(imageView);
+                    Log.d("mylog", "displayImage: path " + path);
+//                    Glide.with(context).load(path).into(imageView);
                 }
             });
         }

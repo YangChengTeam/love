@@ -26,4 +26,19 @@
         <attr name="color_border" format="color" />
         <attr name="color_background" format="color" />
     </declare-styleable>
+    <declare-styleable name="FluidLayout">
+        <attr name="fluid_layout_gravity">
+            <flag name="top" value="0x30" />
+            <flag name="bottom" value="0x50" />
+            <flag name="center" value="0x11" />
+        </attr>
+        <attr name="maxlinecount" format="integer">0</attr>
+    </declare-styleable>
+    <declare-styleable name="FluidLayout_Layout">
+        <attr name="fluid_layout_layout_gravity">
+            <flag name="top" value="0x30" />
+            <flag name="bottom" value="0x50" />
+            <flag name="center" value="0x11" />
+        </attr>
+    </declare-styleable>
 </resources>
