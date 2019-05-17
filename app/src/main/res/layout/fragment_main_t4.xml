@@ -20,8 +20,9 @@
         android:padding="12dp">
 
         <ImageView
-            android:layout_width="wrap_content"
-            android:layout_height="match_parent"
+            android:id="@+id/main_t4_iv_icon"
+            android:layout_width="75dp"
+            android:layout_height="75dp"
             android:src="@mipmap/main_icon_default_head" />
 
         <LinearLayout

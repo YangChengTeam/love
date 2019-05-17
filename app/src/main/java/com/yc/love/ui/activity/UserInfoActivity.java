@@ -15,6 +15,7 @@ import com.alibaba.fastjson.JSON;
 import com.bigkoo.pickerview.builder.TimePickerBuilder;
 import com.bigkoo.pickerview.listener.OnTimeSelectListener;
 import com.bigkoo.pickerview.view.TimePickerView;
+import com.google.gson.Gson;
 import com.squareup.picasso.Picasso;
 import com.yc.love.R;
 import com.yc.love.adaper.rv.CreateAdapter;
@@ -25,10 +26,12 @@ import com.yc.love.model.base.MySubscriber;
 import com.yc.love.model.bean.AResultInfo;
 import com.yc.love.model.bean.LoveHealBean;
 import com.yc.love.model.bean.LoveHealDateBean;
+import com.yc.love.model.bean.UploadPhotoBean;
 import com.yc.love.model.bean.event.EventLoginState;
 import com.yc.love.model.bean.IdCorrelationLoginBean;
 import com.yc.love.model.data.BackfillSingle;
 import com.yc.love.model.engin.IdCorrelationEngin;
+import com.yc.love.model.engin.UploadPhotoEngin;
 import com.yc.love.model.single.YcSingle;
 import com.yc.love.model.util.SPUtils;
 import com.yc.love.model.util.TimeUtils;
@@ -39,9 +42,14 @@ import com.yc.love.ui.view.CircleTransform;
 import org.greenrobot.eventbus.EventBus;
 
 import java.io.File;
+import java.io.IOException;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
+
+import okhttp3.Call;
+import okhttp3.Callback;
+import okhttp3.Response;
 
 public class UserInfoActivity extends BasePushPhotoActivity {
 
@@ -57,6 +65,7 @@ public class UserInfoActivity extends BasePushPhotoActivity {
     private ImageView mIvIcon;
     private IdCorrelationEngin mIdCorrelationEngin;
     private int mYearDefault, mMonthDefault, mDayDefault;
+    private String mPhotoUrl;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -156,6 +165,7 @@ public class UserInfoActivity extends BasePushPhotoActivity {
                 }
                 if (!TextUtils.isEmpty(face)) {
                     Picasso.with(UserInfoActivity.this).load(face).placeholder(R.mipmap.main_icon_default_head).error(R.mipmap.main_icon_default_head).transform(new CircleTransform()).into(mIvIcon);
+                    mPhotoUrl = face;
                 }
             }
 
@@ -227,10 +237,7 @@ public class UserInfoActivity extends BasePushPhotoActivity {
             return;
         }
         mLoadingDialog.showLoadingDialog();
-        //TODO 图片上传 生日
-        String face = "https://avatar.csdn.net/A/1/4/3_lawsonjin.jpg";
-//     String sex=mIsCheckedMen?"1":"0";
-        mIdCorrelationEngin.updateInfo(String.valueOf(id), mStringEtName, mBirthdayString, mIsCheckedMen ? "1" : "0", face, pwd, "user/update").subscribe(new MySubscriber<AResultInfo<IdCorrelationLoginBean>>(mLoadingDialog) {
+        mIdCorrelationEngin.updateInfo(String.valueOf(id), mStringEtName, mBirthdayString, mIsCheckedMen ? "1" : "0", mPhotoUrl, pwd, "user/update").subscribe(new MySubscriber<AResultInfo<IdCorrelationLoginBean>>(mLoadingDialog) {
             @Override
             protected void onNetNext(AResultInfo<IdCorrelationLoginBean> idCorrelationLoginBeanAResultInfo) {
 
@@ -319,36 +326,31 @@ public class UserInfoActivity extends BasePushPhotoActivity {
 
     @Override
     protected void onLubanFileSuccess(File file) {
-        byte[] bytes = new byte[]{};
-        try {
-            bytes = readStream(file.toString());
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-        String s = String.valueOf(bytes);
+
+        new UploadPhotoEngin(file, new Callback() {
+            @Override
+            public void onFailure(Call call, IOException e) {
+
+            }
+
+            @Override
+            public void onResponse(Call call, Response response) throws IOException {
+//                Log.d("mylog", "onFailure: " + response.body().string());
+                String string = response.body().string();
+                Log.d("securityhttp", "onResponse: response body "+string);
+                Log.d("mylog", "onResponse: response body "+string);
+                if (!TextUtils.isEmpty(string)) {
+                    UploadPhotoBean uploadPhotoBean = new Gson().fromJson(string, UploadPhotoBean.class);
+                    List<UploadPhotoBean.DataBean> data = uploadPhotoBean.data;
+                    if (data != null && data.size() > 0) {
+                        UploadPhotoBean.DataBean dataBean = data.get(0);
+                        mPhotoUrl = dataBean.url;
+                    }
+                }
+            }
+        });
+
 //        netSSSSData(s);
     }
 
-    private void netSSSSData(String sss) {
-        mLoadingDialog.showLoadingDialog();
-        mIdCorrelationEngin.uploadUommon(sss, "common/upload").subscribe(new MySubscriber<AResultInfo<String>>(mLoadingDialog) {
-
-
-            @Override
-            protected void onNetNext(AResultInfo<String> stringAResultInfo) {
-                String data = stringAResultInfo.data;
-                Log.d("mylog", "onNetNext: data " + data);
-            }
-
-            @Override
-            protected void onNetError(Throwable e) {
-
-            }
-
-            @Override
-            protected void onNetCompleted() {
-
-            }
-        });
-    }
 }

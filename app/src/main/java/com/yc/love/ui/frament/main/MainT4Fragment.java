@@ -7,6 +7,7 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import com.squareup.picasso.Picasso;
 import com.yc.love.R;
 import com.yc.love.model.bean.event.EventLoginState;
 import com.yc.love.model.single.YcSingle;
@@ -17,7 +18,9 @@ import com.yc.love.ui.activity.IdCorrelationSlidingActivity;
 import com.yc.love.ui.activity.Main4Activity;
 import com.yc.love.ui.activity.SettingActivity;
 import com.yc.love.ui.activity.UserInfoActivity;
+import com.yc.love.ui.activity.base.BasePushPhotoActivity;
 import com.yc.love.ui.frament.base.BaseMainFragment;
+import com.yc.love.ui.view.CircleTransform;
 
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
@@ -31,6 +34,7 @@ public class MainT4Fragment extends BaseMainFragment implements View.OnClickList
     private TextView tvName;
     private TextView mTvName;
     private TextView mTvBtnInfo;
+    private ImageView mIvIcon;
 
 
     @Override
@@ -54,6 +58,7 @@ public class MainT4Fragment extends BaseMainFragment implements View.OnClickList
     protected void initViews() {
         View viewBar = rootView.findViewById(R.id.main_t4_view_bar);
         mTvBtnInfo = rootView.findViewById(R.id.main_t4_tv_btn_info);
+        mIvIcon = rootView.findViewById(R.id.main_t4_iv_icon);
         mTvName = rootView.findViewById(R.id.main_t4_tv_name);
         ImageView ivVip = rootView.findViewById(R.id.main_t4_ll_iv_vip);
         LinearLayout llTitle = rootView.findViewById(R.id.main_t4_ll_title);
@@ -97,22 +102,26 @@ public class MainT4Fragment extends BaseMainFragment implements View.OnClickList
                 break;
             case EventLoginState.STATE_UPDATE_INFO:
                 mTvBtnInfo.setText("信息已完善");
+                String face = YcSingle.getInstance().face;
+                if (face != null) {
+                    Picasso.with(mMainActivity).load(face).transform(new CircleTransform()).into(mIvIcon);
+                }
                 break;
         }
     }
 
     private void setTitleName() {
         String nick_name = YcSingle.getInstance().nick_name;
-        String name = YcSingle.getInstance().name;
         String mobile = YcSingle.getInstance().mobile;
-        if (!TextUtils.isEmpty(mobile)) {
+        String face = YcSingle.getInstance().face;
+        if (!TextUtils.isEmpty(nick_name)) {
+            mTvBtnInfo.setText("信息已完善");
+            mTvName.setText(nick_name);
+        } else {
             mTvName.setText(mobile);
-            if (!TextUtils.isEmpty(name)) {
-                mTvName.setText(name);
-                if (!TextUtils.isEmpty(nick_name)) {
-                    mTvName.setText(nick_name);
-                }
-            }
+        }
+        if (face != null) {
+            Picasso.with(mMainActivity).load(face).error(R.mipmap.main_icon_default_head).transform(new CircleTransform()).into(mIvIcon);
         }
     }
 

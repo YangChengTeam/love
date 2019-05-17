@@ -132,7 +132,7 @@ public class MainT3Fragment extends BaseMainFragment {
                 mDatas.add(new MainT3Bean(2, "入门秘籍"));
                 ExampleTsCategory exampleTsCategory = exampleTsCategoryAResultInfo.data;
                 List<ExampleTsCategoryList> list1 = exampleTsCategory.list1;
-                List<ExampleTsCategoryList> list2 = exampleTsCategory.list1;
+                List<ExampleTsCategoryList> list2 = exampleTsCategory.list2;
                 if (list1 != null) {
                     for (int i = 0; i < list1.size(); i++) {
                         ExampleTsCategoryList categoryList = list1.get(i);

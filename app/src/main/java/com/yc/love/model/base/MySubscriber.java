@@ -49,6 +49,7 @@ public abstract class MySubscriber<T> extends Subscriber<T> {
             AResultInfo resultInfo = (AResultInfo) t;
             int code = resultInfo.code;
             String message = resultInfo.msg;
+            Log.d("mylog", "MySubscriber onNext: code " + code + " message " + message + " activityDealServiceCode1 " + activityDealServiceCode1);
             if (1 != code && !activityDealServiceCode1) {
                 if (loadDialog != null) {
                     context = loadDialog.getContext();
@@ -59,8 +60,8 @@ public abstract class MySubscriber<T> extends Subscriber<T> {
                 DialogInterface.OnClickListener listent = null;
                 alertDialog.setButton(DialogInterface.BUTTON_POSITIVE, "确定", listent);
                 alertDialog.show();
+                return;
             }
-            Log.d("mylog", "MySubscriber onNext: message " + message + " code " + code);
         } catch (ClassCastException e) {
             Log.d("mylog", "MySubscriber onNext: ClassCastException " + e);
         }

@@ -416,12 +416,12 @@ public class IdCorrelationSlidingActivity extends BaseSlidingActivity implements
             protected void onNetCompleted() {
             }
         });*/
-        mIdCorrelationEngin.login(mInputPhoneString, mInputPwdString, "user/login").subscribe(new MySubscriber<ResultInfo<IdCorrelationLoginBean>>(mLoadingDialog) {
+        mIdCorrelationEngin.login(mInputPhoneString, mInputPwdString, "user/login").subscribe(new MySubscriber<AResultInfo<IdCorrelationLoginBean>>(mLoadingDialog) {
 
             @Override
-            protected void onNetNext(ResultInfo<IdCorrelationLoginBean> myIdCorrelationSmsBeanAResultInfo) {
+            protected void onNetNext(AResultInfo<IdCorrelationLoginBean> myIdCorrelationSmsBeanAResultInfo) {
 
-                String msg = myIdCorrelationSmsBeanAResultInfo.message;
+                String msg = myIdCorrelationSmsBeanAResultInfo.msg;
                 int code = myIdCorrelationSmsBeanAResultInfo.code;
                 final IdCorrelationLoginBean data = myIdCorrelationSmsBeanAResultInfo.data;
                 Log.d("mylog", "onNetNext: data " + data.toString());

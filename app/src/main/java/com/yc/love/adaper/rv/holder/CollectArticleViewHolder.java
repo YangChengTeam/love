@@ -28,17 +28,8 @@ public class CollectArticleViewHolder extends BaseViewHolder<ExampleTsListBean> 
 
         TextView tvName = itemView.findViewById(R.id.item_collect_article_tv_name);
         TextView tvDes = itemView.findViewById(R.id.item_collect_article_tv_des);
-        TextView tvLabel = itemView.findViewById(R.id.item_collect_article_tv_label);
-        ImageView ivIcon  = itemView.findViewById(R.id.item_collect_article_iv_icon);
         tvName.setText(exampleTsListBean.post_title);
-        tvLabel.setText("5555");
         tvDes.setText(String.valueOf(exampleTsListBean.feeluseful).concat("人觉得有用"));
-
-        String image=exampleTsListBean.image;
-        if(TextUtils.isEmpty(image)){
-            image="image";
-        }
-        Picasso.with(context).load(image).transform(new CropSquareTransformation()).error(R.mipmap.main_bg_t3_placeholder).placeholder(R.mipmap.main_bg_t3_placeholder).into(ivIcon);
 
 
     }

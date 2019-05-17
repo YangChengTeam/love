@@ -6,23 +6,109 @@
     android:layout_height="match_parent"
     tools:context=".ui.activity.ExampleDetailActivity">
 
+    <ProgressBar
+        android:id="@+id/example_detail_pb_progress"
+        style="?android:attr/progressBarStyleHorizontal"
+        android:layout_width="match_parent"
+        android:layout_height="3dp"
+        android:layout_alignParentTop="true"
+        android:max="100"
+        android:progress="0"
+        android:progressDrawable="@drawable/process_bg" />
+
     <com.yc.love.ui.view.NewsScrollView
         android:id="@+id/example_detail_scroll_view"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:descendantFocusability="blocksDescendants">
+        android:descendantFocusability="blocksDescendants"
+        app:layout_constraintBottom_toBottomOf="@+id/example_detail_pb_progress">
 
-        <WebView
-
-            android:id="@+id/example_detail_webview"
+        <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:focusable="true"
-            android:focusableInTouchMode="true"
-            android:paddingLeft="8dp"
-            android:paddingTop="18dp"
-            android:paddingRight="8dp"
-            android:paddingBottom="14dp" />
+            android:layout_height="match_parent"
+            android:orientation="vertical">
 
+            <WebView
+                android:id="@+id/example_detail_webview"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:focusable="true"
+                android:focusableInTouchMode="true"
+                android:paddingLeft="8dp"
+                android:paddingTop="18dp"
+                android:paddingRight="8dp"
+                android:paddingBottom="14dp" />
+
+            <android.support.constraint.ConstraintLayout
+                android:id="@+id/example_detail_cl_like_con"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:paddingLeft="8dp"
+                android:paddingTop="25dp"
+                android:paddingRight="8dp"
+                android:paddingBottom="35dp"
+                android:visibility="invisible">
+
+                <ImageView
+                    android:id="@+id/example_detail_iv_like"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:src="@mipmap/icon_like_gray"
+                    app:layout_constraintLeft_toLeftOf="parent"
+                    app:layout_constraintRight_toRightOf="parent" />
+
+                <LinearLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintTop_toTopOf="parent">
+
+                    <ImageView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:src="@mipmap/icon_line_stages" />
+
+                    <View
+                        android:layout_width="1dp"
+                        android:layout_height="15dp" />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center_horizontal"
+                        android:text="觉得有用"
+                        android:textColor="@color/text_gray"
+                        android:textSize="@dimen/size_14" />
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintRight_toRightOf="parent"
+                    app:layout_constraintTop_toTopOf="parent">
+
+                    <ImageView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:src="@mipmap/icon_line_stages" />
+
+                    <View
+                        android:layout_width="1dp"
+                        android:layout_height="15dp" />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center_horizontal"
+                        android:text="不妨点个赞"
+                        android:textColor="@color/text_gray"
+                        android:textSize="@dimen/size_14" />
+                </LinearLayout>
+
+            </android.support.constraint.ConstraintLayout>
+        </LinearLayout>
     </com.yc.love.ui.view.NewsScrollView>
 </android.support.constraint.ConstraintLayout>

@@ -70,13 +70,13 @@ public class IdCorrelationEngin extends BaseEngine {
         return rxpost;
     }
 
-    public Observable<ResultInfo<IdCorrelationLoginBean>> login(String mobile, String password, String url) {
+    public Observable<AResultInfo<IdCorrelationLoginBean>> login(String mobile, String password, String url) {
         Map<String, String> params = new HashMap<>();
         params.put("mobile", mobile);
         params.put("password", password);
         requestParams(params);
-        HttpCoreEngin<ResultInfo<IdCorrelationLoginBean>> httpCoreEngin = HttpCoreEngin.get(mContext);
-        Observable<ResultInfo<IdCorrelationLoginBean>> rxpost = httpCoreEngin.rxpost(URLConfig.getUrl(url), new TypeReference<ResultInfo<IdCorrelationLoginBean>>() {
+        HttpCoreEngin<AResultInfo<IdCorrelationLoginBean>> httpCoreEngin = HttpCoreEngin.get(mContext);
+        Observable<AResultInfo<IdCorrelationLoginBean>> rxpost = httpCoreEngin.rxpost(URLConfig.getUrl(url), new TypeReference<AResultInfo<IdCorrelationLoginBean>>() {
 
                 }.getType(),
                 params,
@@ -85,7 +85,7 @@ public class IdCorrelationEngin extends BaseEngine {
         return rxpost;
     }
 
-    public Observable<ResultInfo<String>> addSuggestion(String userId, String content, String qq, String wechat, String url) {
+    public Observable<AResultInfo<String>> addSuggestion(String userId, String content, String qq, String wechat, String url) {
         Map<String, String> params = new HashMap<>();
         params.put("user_id", userId);
         params.put("content", content);
@@ -94,8 +94,8 @@ public class IdCorrelationEngin extends BaseEngine {
             params.put("wechat", wechat);
         }
         requestParams(params);
-        HttpCoreEngin<ResultInfo<String>> httpCoreEngin = HttpCoreEngin.get(mContext);
-        Observable<ResultInfo<String>> rxpost = httpCoreEngin.rxpost(URLConfig.getUrl(url), new TypeReference<ResultInfo<String>>() {
+        HttpCoreEngin<AResultInfo<String>> httpCoreEngin = HttpCoreEngin.get(mContext);
+        Observable<AResultInfo<String>> rxpost = httpCoreEngin.rxpost(URLConfig.getUrl(url), new TypeReference<AResultInfo<String>>() {
 
                 }.getType(),
                 params,

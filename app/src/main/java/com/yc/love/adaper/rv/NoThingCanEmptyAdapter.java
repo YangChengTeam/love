@@ -3,35 +3,33 @@ package com.yc.love.adaper.rv;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
+import android.view.LayoutInflater;
+import android.view.View;
 import android.view.ViewGroup;
 
+import com.yc.love.R;
 import com.yc.love.adaper.rv.holder.BaseViewHolder;
-import com.yc.love.adaper.rv.holder.LoveHealDetItemHolder;
-import com.yc.love.adaper.rv.holder.LoveHealDetVipHolder;
-import com.yc.love.adaper.rv.holder.MainT2ViewHolder;
+import com.yc.love.adaper.rv.holder.EmptyViewHolder;
+import com.yc.love.adaper.rv.holder.LoveByStagesViewHolder;
 import com.yc.love.adaper.rv.holder.ProgressBarViewHolder;
-import com.yc.love.model.bean.LoveHealDetBean;
 
 import java.util.List;
 
-
 /**
- * Created by Administrator on 2017/9/12.
+ * Created by mayn on 2019/5/5.
  */
 
-public abstract class LoveHealDetailsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
-
-    private final List<LoveHealDetBean> mPersonList;
+public abstract class NoThingCanEmptyAdapter<T> extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
+    private final List<T> mPersonList;
     private RecyclerView mRecyclerView;
-    private static final int VIEW_VIP = 1;  // 1 显示VIP  0 不显示VIP,显示ITEM
     private static final int VIEW_ITEM = 0;
-    private static final int VIEW_PROG = 2;
-    private static final int VIEW_EMPTY = 3;
+    private static final int VIEW_PROG = 1;
+    private static final int VIEW_EMPTY = 2;
     private boolean isLoading;
     private int totalItemCount;
     private int lastVisibleItemPosition;
 
-    public LoveHealDetailsAdapter(List<LoveHealDetBean> personList, RecyclerView recyclerView) {
+    public NoThingCanEmptyAdapter(List<T> personList, RecyclerView recyclerView) {
         this.mPersonList = personList;
         this.mRecyclerView = recyclerView;
         addOnScrollListenerPacked();
@@ -51,44 +49,30 @@ public abstract class LoveHealDetailsAdapter extends RecyclerView.Adapter<Recycl
         if (mPersonList == null || mPersonList.size() == 0) {
             return VIEW_EMPTY;
         }
-        LoveHealDetBean loveHealDetBean = mPersonList.get(position);
-        if (loveHealDetBean == null) {
-            return VIEW_PROG;
-        }
-        int type = loveHealDetBean.is_vip;
-        switch (type) {
-            case VIEW_ITEM:
-                return VIEW_ITEM;
-            case VIEW_VIP:
-                return VIEW_VIP;
-            default:
-                return VIEW_PROG;
-        }
+        return mPersonList.get(position) != null ? VIEW_ITEM : VIEW_PROG;
     }
 
     @Override
     public RecyclerView.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         RecyclerView.ViewHolder holder;
-        if (viewType == VIEW_VIP) {
-            holder = getPayVipHolder(parent);
-        } else if (viewType == VIEW_ITEM) {
+        if (viewType == VIEW_ITEM) {
             holder = getHolder(parent);
-        }  else if (viewType == VIEW_EMPTY) {
+        } else if (viewType == VIEW_EMPTY) {
             holder = getEmptyHolder(parent);
+            if (holder == null) {
+                holder = new EmptyViewHolder(parent.getContext(), parent, "");  //默认的空视图  需要修改重写getEmptyHolder自定义
+            }
         } else {
-            holder = getBarViewHolder(parent);
+            View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.recycler_view_test_item_footer, parent, false);
+            holder = new ProgressBarViewHolder(view);
         }
         return holder;
     }
 
 
-
-
     @Override
     public void onBindViewHolder(RecyclerView.ViewHolder holder, int position) {
-        if (holder instanceof LoveHealDetVipHolder) {
-            ((BaseViewHolder) holder).bindData(mPersonList.get(position));
-        } else if (holder instanceof LoveHealDetItemHolder) {
+        if (holder instanceof BaseViewHolder) {
             ((BaseViewHolder) holder).bindData(mPersonList.get(position));
         } else if (holder instanceof ProgressBarViewHolder) {
             ProgressBarViewHolder viewHolder = (ProgressBarViewHolder) holder;
@@ -101,7 +85,6 @@ public abstract class LoveHealDetailsAdapter extends RecyclerView.Adapter<Recycl
         public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
             super.onScrolled(recyclerView, dx, dy);
             final LinearLayoutManager linearLayoutManager = (LinearLayoutManager) mRecyclerView.getLayoutManager();
-
             totalItemCount = linearLayoutManager.getItemCount();
             lastVisibleItemPosition = linearLayoutManager.findLastVisibleItemPosition();
             if (totalItemCount == lastVisibleItemPosition + 1) {
@@ -116,10 +99,9 @@ public abstract class LoveHealDetailsAdapter extends RecyclerView.Adapter<Recycl
                         return;
                     }
                     isLoading = true;
-                    // 加载数据
                     mMoreDataListener.loadMoreData();
+                    Log.d("ssss", "onScrolled: 触发加载数据 --------");
                 }
-//                isLoading = true;
             }
         }
     };
@@ -155,11 +137,7 @@ public abstract class LoveHealDetailsAdapter extends RecyclerView.Adapter<Recycl
 
     public abstract BaseViewHolder getHolder(ViewGroup parent);
 
-//    public abstract BaseViewHolder getTitleHolder(ViewGroup parent);
-
-    protected abstract RecyclerView.ViewHolder getBarViewHolder(ViewGroup parent);
-
-    protected abstract RecyclerView.ViewHolder getPayVipHolder(ViewGroup parent);
-
-    protected abstract RecyclerView.ViewHolder getEmptyHolder(ViewGroup parent);
+    protected RecyclerView.ViewHolder getEmptyHolder(ViewGroup parent) {
+        return null;
+    }
 }

@@ -30,6 +30,7 @@ import com.yc.love.model.bean.MainT3Bean;
 import com.yc.love.model.bean.StringBean;
 import com.yc.love.model.engin.LoveEngin;
 import com.yc.love.model.single.YcSingle;
+import com.yc.love.ui.activity.ExampleDetailActivity;
 import com.yc.love.ui.activity.LoveByStagesDetailsActivity;
 import com.yc.love.ui.activity.LoveHealActivity;
 import com.yc.love.ui.activity.LoveHealingActivity;
@@ -82,10 +83,11 @@ public class MainT1Fragment extends BaseMainFragment {
     RecyclerViewItemListener recyclerViewItemListener = new RecyclerViewItemListener() {
         @Override
         public void onItemClick(int position) {
-//            Toast.makeText(mMainActivity, "onItemClick " + position, Toast.LENGTH_SHORT).show();
-            ExampListsBean exampListsBean = mExampListsBeans.get(position);
-            LoveByStagesDetailsActivity.startLoveByStagesDetailsActivity(mMainActivity, exampListsBean.id, exampListsBean.post_title);
+//            ExampListsBean exampListsBean = mExampListsBeans.get(position);
+//            LoveByStagesDetailsActivity.startLoveByStagesDetailsActivity(mMainActivity, exampListsBean.id, exampListsBean.post_title);
 
+            ExampListsBean exampListsBean = mExampListsBeans.get(position);
+            ExampleDetailActivity.startExampleDetailActivity(mMainActivity,exampListsBean.id,exampListsBean.post_title);
         }
 
         @Override

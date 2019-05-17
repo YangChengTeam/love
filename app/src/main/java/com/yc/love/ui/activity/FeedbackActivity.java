@@ -15,6 +15,7 @@ import android.widget.TextView;
 import com.kk.securityhttp.domain.ResultInfo;
 import com.yc.love.R;
 import com.yc.love.model.base.MySubscriber;
+import com.yc.love.model.bean.AResultInfo;
 import com.yc.love.model.bean.IdCorrelationLoginBean;
 import com.yc.love.model.engin.IdCorrelationEngin;
 import com.yc.love.model.single.YcSingle;
@@ -132,10 +133,10 @@ public class FeedbackActivity extends BaseSameActivity {
             showToLoginDialog();
             return;
         }
-        mIdCorrelationEngin.addSuggestion(String.valueOf(id), mTrimEtWorkContent, mTrimEtQq, mMTrimEtWx, "Suggestion/add").subscribe(new MySubscriber<ResultInfo<String>>(mLoadingDialog) {
+        mIdCorrelationEngin.addSuggestion(String.valueOf(id), mTrimEtWorkContent, mTrimEtQq, mMTrimEtWx, "Suggestion/add").subscribe(new MySubscriber<AResultInfo<String>>(mLoadingDialog) {
             @Override
-            protected void onNetNext(ResultInfo<String> stringResultInfo) {
-                String message = stringResultInfo.message;
+            protected void onNetNext(AResultInfo<String> stringResultInfo) {
+                String message = stringResultInfo.msg;
                 showToastShort(message);
                 finish();
             }

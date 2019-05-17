@@ -13,6 +13,7 @@ import com.yc.love.R;
 import com.yc.love.adaper.rv.LoveHealDetailsAdapter;
 import com.yc.love.adaper.rv.base.RecyclerViewItemListener;
 import com.yc.love.adaper.rv.holder.BaseViewHolder;
+import com.yc.love.adaper.rv.holder.EmptyViewHolder;
 import com.yc.love.adaper.rv.holder.LoveHealDetItemHolder;
 import com.yc.love.adaper.rv.holder.LoveHealDetVipHolder;
 import com.yc.love.adaper.rv.holder.ProgressBarViewHolder;
@@ -33,7 +34,7 @@ import java.util.List;
  * Created by mayn on 2019/5/5.
  */
 
-public   class BaseShareFragment extends BaseLazyFragment {
+public class BaseShareFragment extends BaseLazyFragment {
 
     public ShareActivity mShareActivity;
     private RecyclerView mRecyclerView;
@@ -70,6 +71,7 @@ public   class BaseShareFragment extends BaseLazyFragment {
     protected void lazyLoad() {
 
     }
+
     private void initRecyclerView() {
         mRecyclerView = rootView.findViewById(R.id.base_share_rv);
         LinearLayoutManager layoutManager = new LinearLayoutManager(mShareActivity);
@@ -77,19 +79,18 @@ public   class BaseShareFragment extends BaseLazyFragment {
     }
 
     /**
-     *
      * @param searchType 1模糊  2精准
      * @param keyword
      */
     public void netData(String searchType, String keyword) {
-        this.keyword=keyword;
+        this.keyword = keyword;
         int id = YcSingle.getInstance().id;
         if (id <= 0) {
             mShareActivity.showToLoginDialog();
             return;
         }
         mLoadingDialog.showLoadingDialog();
-        mLoveEngin.searchDialogue(searchType, keyword, String.valueOf(PAGE_NUM), String.valueOf(PAGE_SIZE), "Dialogue/search").subscribe(new MySubscriber<AResultInfo<List<LoveHealDetBean>>>(mLoadingDialog) {
+        mLoveEngin.searchDialogue(String.valueOf(id), searchType, keyword, String.valueOf(PAGE_NUM), String.valueOf(PAGE_SIZE), "Dialogue/search").subscribe(new MySubscriber<AResultInfo<List<LoveHealDetBean>>>(mLoadingDialog) {
 
 
             @Override
@@ -128,6 +129,11 @@ public   class BaseShareFragment extends BaseLazyFragment {
             @Override
             protected RecyclerView.ViewHolder getPayVipHolder(ViewGroup parent) {
                 return new LoveHealDetVipHolder(mShareActivity, recyclerViewItemListener, parent);
+            }
+
+            @Override
+            protected RecyclerView.ViewHolder getEmptyHolder(ViewGroup parent) {
+                return new EmptyViewHolder(mShareActivity, parent, "此关键字无数据，请更换");
             }
 
             @Override
@@ -172,7 +178,7 @@ public   class BaseShareFragment extends BaseLazyFragment {
             mShareActivity.showToLoginDialog();
             return;
         }
-        mLoveEngin.searchDialogue("1", keyword, String.valueOf(++PAGE_NUM), String.valueOf(PAGE_SIZE), "Dialogue/search").subscribe(new MySubscriber<AResultInfo<List<LoveHealDetBean>>>(mShareActivity) {
+        mLoveEngin.searchDialogue(String.valueOf(id), "1", keyword, String.valueOf(++PAGE_NUM), String.valueOf(PAGE_SIZE), "Dialogue/search").subscribe(new MySubscriber<AResultInfo<List<LoveHealDetBean>>>(mShareActivity) {
 
             @Override
             protected void onNetNext(AResultInfo<List<LoveHealDetBean>> listAResultInfo) {
@@ -212,6 +218,12 @@ public   class BaseShareFragment extends BaseLazyFragment {
 
         }
     };
+
+    public void recoverData() {
+        if(PAGE_NUM!=1){
+            PAGE_NUM=1;
+        }
+    }
 
 }
 

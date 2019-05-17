@@ -6,12 +6,22 @@
     android:layout_height="match_parent"
     tools:context=".ui.activity.LoveByStagesDetailsActivity">
 
+    <ProgressBar
+        android:id="@+id/love_by_stages_details_pb_progress"
+        style="?android:attr/progressBarStyleHorizontal"
+        android:layout_width="match_parent"
+        android:layout_height="3dp"
+        android:layout_alignParentTop="true"
+        android:max="100"
+        android:progress="0"
+        android:progressDrawable="@drawable/process_bg" />
 
     <com.yc.love.ui.view.NewsScrollView
         android:id="@+id/love_by_stages_details_scroll_view"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:descendantFocusability="blocksDescendants">
+        android:descendantFocusability="blocksDescendants"
+        app:layout_constraintBottom_toBottomOf="@+id/love_by_stages_details_pb_progress">
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -70,14 +80,14 @@
                 android:paddingBottom="14dp" />
 
             <android.support.constraint.ConstraintLayout
-                android:visibility="gone"
                 android:id="@+id/love_by_stages_details_cl_like_con"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:paddingTop="25dp"
                 android:paddingLeft="8dp"
+                android:paddingTop="25dp"
                 android:paddingRight="8dp"
-                android:paddingBottom="35dp">
+                android:paddingBottom="35dp"
+                android:visibility="invisible">
 
                 <ImageView
                     android:id="@+id/love_by_stages_details_iv_like"

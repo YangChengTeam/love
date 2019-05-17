@@ -18,6 +18,7 @@ import com.yc.love.R;
 import com.yc.love.adaper.rv.LoveHealDetailsAdapter;
 import com.yc.love.adaper.rv.base.RecyclerViewItemListener;
 import com.yc.love.adaper.rv.holder.BaseViewHolder;
+import com.yc.love.adaper.rv.holder.EmptyViewHolder;
 import com.yc.love.adaper.rv.holder.LoveHealDetItemHolder;
 import com.yc.love.adaper.rv.holder.LoveHealDetVipHolder;
 import com.yc.love.adaper.rv.holder.ProgressBarViewHolder;
@@ -26,6 +27,7 @@ import com.yc.love.model.bean.AResultInfo;
 import com.yc.love.model.bean.LoveHealDetBean;
 import com.yc.love.model.bean.LoveHealDetDetailsBean;
 import com.yc.love.model.engin.LoveEngin;
+import com.yc.love.model.single.YcSingle;
 import com.yc.love.ui.activity.base.BaseSameActivity;
 
 import java.util.List;
@@ -87,8 +89,9 @@ public class LoveHealDetailsActivity extends BaseSameActivity {
     }
 
     private void netData() {
+        int id = YcSingle.getInstance().id;
         mLoadingDialog.showLoadingDialog();
-        mLoveEngin.loveListCategory(mCategoryId, String.valueOf(PAGE_NUM), String.valueOf(PAGE_SIZE), "Dialogue/lists").subscribe(new MySubscriber<AResultInfo<List<LoveHealDetBean>>>(mLoadingDialog) {
+        mLoveEngin.loveListCategory(String.valueOf(id), mCategoryId, String.valueOf(PAGE_NUM), String.valueOf(PAGE_SIZE), "Dialogue/lists").subscribe(new MySubscriber<AResultInfo<List<LoveHealDetBean>>>(mLoadingDialog) {
 
 
             @Override
@@ -129,11 +132,17 @@ public class LoveHealDetailsActivity extends BaseSameActivity {
             protected RecyclerView.ViewHolder getPayVipHolder(ViewGroup parent) {
                 return new LoveHealDetVipHolder(LoveHealDetailsActivity.this, recyclerViewItemListener, parent);
             }
+
             @Override
             protected RecyclerView.ViewHolder getBarViewHolder(ViewGroup parent) {
                 View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.recycler_view_test_item_footer, parent, false);
                 ProgressBarViewHolder progressBarViewHolder = new ProgressBarViewHolder(view);
                 return progressBarViewHolder;
+            }
+
+            @Override
+            protected RecyclerView.ViewHolder getEmptyHolder(ViewGroup parent) {
+                return new EmptyViewHolder(LoveHealDetailsActivity.this, parent, "");
             }
         };
         mRecyclerView.setAdapter(mAdapter);
@@ -166,7 +175,8 @@ public class LoveHealDetailsActivity extends BaseSameActivity {
     }
 
     private void netLoadMore() {
-        mLoveEngin.loveListCategory(mCategoryId, String.valueOf(++PAGE_NUM), String.valueOf(PAGE_SIZE), "Dialogue/lists").subscribe(new MySubscriber<AResultInfo<List<LoveHealDetBean>>>(mLoadingDialog) {
+        int id = YcSingle.getInstance().id;
+        mLoveEngin.loveListCategory(String.valueOf(id), mCategoryId, String.valueOf(++PAGE_NUM), String.valueOf(PAGE_SIZE), "Dialogue/lists").subscribe(new MySubscriber<AResultInfo<List<LoveHealDetBean>>>(mLoadingDialog) {
 
 
             @Override

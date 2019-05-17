@@ -1,6 +1,8 @@
 package com.yc.love.ui.activity;
 
+import android.content.DialogInterface;
 import android.graphics.Color;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.GridLayoutManager;
@@ -8,6 +10,7 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.text.TextUtils;
 import android.util.Log;
+import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
@@ -41,6 +44,7 @@ import com.yc.love.model.engin.OrderEngin;
 import com.yc.love.model.single.YcSingle;
 import com.yc.love.ui.activity.base.BaseSlidingActivity;
 import com.yc.love.ui.activity.base.PayActivity;
+import com.yc.love.ui.view.LoadDialog;
 
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
@@ -129,6 +133,7 @@ public class BecomeVipActivity extends PayActivity implements View.OnClickListen
         tvTitle.setTextColor(Color.WHITE);
         tvTitle.setText("开通会员");
         setStateBarHeight(viewBar, 25);
+
     }
 
     public void initRecyclerView() {
@@ -206,9 +211,10 @@ public class BecomeVipActivity extends PayActivity implements View.OnClickListen
         jsonArray.add(jsonObject);
         params.put("goods_list", jsonArray.toString());
 
+        if (mLoadingDialog == null) {
+            mLoadingDialog = new LoadDialog(this);
+        }
         mOrderEngin.initOrders(params, "orders/init").subscribe(new MySubscriber<AResultInfo<OrdersInitBean>>(mLoadingDialog) {
-
-
             @Override
             protected void onNetNext(AResultInfo<OrdersInitBean> ordersInitBeanAResultInfo) {
                 OrdersInitBean ordersInitBean = ordersInitBeanAResultInfo.data;
@@ -238,17 +244,55 @@ public class BecomeVipActivity extends PayActivity implements View.OnClickListen
     public void onMessageEvent(EventBusWxPayResult event) {
         switch (event.code) {
             case 0://支付成功
-                //TODO  微信支付成功
+                //  微信支付成功
+                showPaySuccessDialog(true);
                 break;
             case -1://错误
-                break;
             case -2://用户取消
+                showPaySuccessDialog(false);
                 break;
             default:
                 break;
         }
     }
 
+
+    //  支付宝支付成功
+    @Override
+    protected void onZfbPauResult(boolean result) {
+        showPaySuccessDialog(result);
+    }
+
+    private void showPaySuccessDialog(boolean result) {
+        AlertDialog alertDialog = new AlertDialog.Builder(this).create();
+        alertDialog.setCancelable(false);
+        alertDialog.setTitle("提示");
+        if (result) {
+//            alertDialog.setView(LayoutInflater.from(this).inflate(R.layout.dialog_pay_success, null));
+            alertDialog.setMessage("支付成功");
+            DialogInterface.OnClickListener listent = null;
+            alertDialog.setButton(DialogInterface.BUTTON_NEGATIVE, "确定", new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialog, int which) {
+                    finish();
+                }
+            });
+        } else {
+            alertDialog.setMessage("支付失败");
+//            alertDialog.setView(LayoutInflater.from(this).inflate(R.layout.dialog_pay_error, null));
+            DialogInterface.OnClickListener listent = null;
+            alertDialog.setButton(DialogInterface.BUTTON_NEGATIVE, "确定", listent);
+        }
+        alertDialog.show();
+
+    /*    alertDialog.setOnDismissListener(new DialogInterface.OnDismissListener() {
+            @Override
+            public void onDismiss(DialogInterface dialogInterface) {
+//                setResult(RESULT_CODE_PAY_XIAO_FENG_CLASS);
+                finish();
+            }
+        });*/
+    }
 
     @Override
     public void onStart() {

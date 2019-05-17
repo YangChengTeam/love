@@ -22,16 +22,18 @@ public class LoveUpDownPhotoPagerAdapter extends YFragmentPagerAdapter  {
 
     private final FragmentManager fm;
     private final List<String> datas;
+    private final String childUrl;
 
-    public LoveUpDownPhotoPagerAdapter(FragmentManager fm, List<String> datas) {
+    public LoveUpDownPhotoPagerAdapter(FragmentManager fm,String childUrl, List<String> datas) {
         super(fm);
         this.fm = fm;
         this.datas = datas;
+        this.childUrl = childUrl;
     }
 
     @Override
     public Fragment getItem(int position) {//指定Fragmemt
-        Fragment fragment = LoveUpDownPhotoFragmentFactory.createFragment(position, datas.get(position));
+        Fragment fragment = LoveUpDownPhotoFragmentFactory.createFragment(position, childUrl,datas.get(position));
         return fragment;
     }
 

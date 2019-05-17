@@ -1,6 +1,7 @@
 package com.yc.love.ui.activity;
 
 import android.content.Context;
+import android.content.Intent;
 import android.graphics.Color;
 import android.support.constraint.ConstraintLayout;
 import android.support.v4.app.Fragment;
@@ -20,6 +21,7 @@ import com.yc.love.R;
 import com.yc.love.adaper.vp.CollectPagerAdapter;
 import com.yc.love.adaper.vp.SharePagerAdapter;
 import com.yc.love.model.util.SPUtils;
+import com.yc.love.model.util.TimeUtils;
 import com.yc.love.ui.activity.base.BaseSameActivity;
 import com.yc.love.ui.frament.ShareT1Fragment;
 import com.yc.love.ui.frament.ShareT2Fragment;
@@ -37,6 +39,7 @@ import net.lucode.hackware.magicindicator.buildins.commonnavigator.indicators.Li
 import net.lucode.hackware.magicindicator.buildins.commonnavigator.titles.SimplePagerTitleView;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 public class ShareActivity extends BaseSameActivity {
@@ -49,6 +52,7 @@ public class ShareActivity extends BaseSameActivity {
     private ConstraintLayout mClInfo;
     private ConstraintLayout mClItemCon;
     private FluidLayout mFluidLayout;
+    private SearchView mSearchView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -58,10 +62,20 @@ public class ShareActivity extends BaseSameActivity {
         initViews();
     }
 
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        if (mSearchView != null) {
+            mSearchView = null;
+        }
+    }
 
     private void initViews() {
-        final SearchView searchView = findViewById(R.id.share_searview);
+        mSearchView = findViewById(R.id.share_searview);
         TextView tvNext = findViewById(R.id.share_tv_next);
+        TextView tvTodayAdd = findViewById(R.id.share_tv_today_add);
+        String sDay = String.valueOf(TimeUtils.dateToStamp(new Date(System.currentTimeMillis())));
+        tvTodayAdd.setText("今日新增".concat(sDay.substring(5, 8).replace("0", "1")).concat("条话术")); //.contains("条话术")
 
         mClInfo = findViewById(R.id.share_cons_lay_info);
         TextView tvDelete = findViewById(R.id.share_tv_delete);
@@ -80,8 +94,8 @@ public class ShareActivity extends BaseSameActivity {
         initSwitchPagerData();
 
         //监听关闭按钮点击事件
-        ImageView mCloseButton = searchView.findViewById(android.support.v7.appcompat.R.id.search_close_btn);
-        final TextView textView = searchView.findViewById(android.support.v7.appcompat.R.id.search_src_text);
+        ImageView mCloseButton = mSearchView.findViewById(android.support.v7.appcompat.R.id.search_close_btn);
+        final TextView textView = mSearchView.findViewById(android.support.v7.appcompat.R.id.search_src_text);
         if (mCloseButton.isClickable()) {
             mCloseButton.setOnClickListener(new View.OnClickListener() {
                 @Override
@@ -92,7 +106,7 @@ public class ShareActivity extends BaseSameActivity {
                 }
             });
         }
-        searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
+        mSearchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
             @Override
             public boolean onQueryTextSubmit(String query) { //搜索按钮回调
                 staryShare(query);
@@ -123,6 +137,9 @@ public class ShareActivity extends BaseSameActivity {
         }
         if (mClItemCon.getVisibility() == View.VISIBLE) {
             mClItemCon.setVisibility(View.INVISIBLE);
+
+            mFragmentT1.recoverData();
+            mFragmentT2.recoverData();
         }
     }
 
@@ -176,9 +193,15 @@ public class ShareActivity extends BaseSameActivity {
         }
         mFluidLayout.removeAllViews();
         for (int i = 0; i < historyList.size(); i++) {
-            TextView textView = new TextView(this);
+            final TextView textView = new TextView(this);
             textView.setText(historyList.get(i));
-            textView.setPadding(0, 8, 35, 8);
+            textView.setPadding(0, 8, 38, 8);
+            textView.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    mSearchView.setQuery(textView.getText(), true);
+                }
+            });
             mFluidLayout.addView(textView);
         }
     }
@@ -191,10 +214,12 @@ public class ShareActivity extends BaseSameActivity {
                 staryShare(shareTextString);
                 break;
             case R.id.share_tv_delete:
-
+                SPUtils.put(this, SPUtils.SHARE_HISTORY, "");
+                changHistoryFluidLayout("");
                 break;
             case R.id.share_iv_to_vip:
-
+                //TODO 购买VIP刷新数据
+                startActivity(new Intent(ShareActivity.this, BecomeVipActivity.class));
                 break;
         }
     }

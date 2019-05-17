@@ -12,6 +12,8 @@ public class URLConfig {
     private static String baseUrl = "http://love.bshu.com/v1/";
     private static String debugBaseUrl = "http://en.qqtn.com/api/";
 
+    public static String uploadPhotoUrl = baseUrl.concat("common/upload");
+
 
 
     public static final String ID_INFO_SMS = getBaseUrl() + "user/code";

@@ -195,7 +195,7 @@ public class LoveHealingActivity extends BaseSameActivity {
         @Override
         public void onItemClick(int position) {
             if (position >= 2) {
-                LoveUpDownPhotoActivity.startLoveUpDownPhotoActivity(LoveHealingActivity.this, position - 1);
+                LoveUpDownPhotoActivity.startLoveUpDownPhotoActivity(LoveHealingActivity.this, position-2,"lovewords/recommend" );
             }
 //            LoveHealingActivity.this.clickToPosition = position;
         }

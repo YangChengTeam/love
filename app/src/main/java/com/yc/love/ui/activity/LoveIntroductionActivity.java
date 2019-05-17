@@ -11,6 +11,7 @@ import android.view.ViewGroup;
 
 import com.yc.love.R;
 import com.yc.love.adaper.rv.NoThingAdapter;
+import com.yc.love.adaper.rv.base.RecyclerViewItemListener;
 import com.yc.love.adaper.rv.holder.BaseViewHolder;
 import com.yc.love.adaper.rv.holder.LoveIntroHolder;
 import com.yc.love.adaper.rv.holder.StringBeanViewHolder;
@@ -104,7 +105,7 @@ public class LoveIntroductionActivity extends BaseSameActivity {
         mAdapter = new NoThingAdapter<ExampListsBean>(mExampListsBeans, mRecyclerView) {
             @Override
             public BaseViewHolder getHolder(ViewGroup parent) {
-                return new LoveIntroHolder(LoveIntroductionActivity.this, null, parent);
+                return new LoveIntroHolder(LoveIntroductionActivity.this, recyclerViewItemListener, parent);
             }
         };
         mRecyclerView.setAdapter(mAdapter);
@@ -167,7 +168,21 @@ public class LoveIntroductionActivity extends BaseSameActivity {
             }
         });
     }
+    RecyclerViewItemListener recyclerViewItemListener = new RecyclerViewItemListener() {
+        @Override
+        public void onItemClick(int position) {
+//            ExampListsBean exampListsBean = mExampListsBeans.get(position);
+//            LoveByStagesDetailsActivity.startLoveByStagesDetailsActivity(mMainActivity, exampListsBean.id, exampListsBean.post_title);
 
+            ExampListsBean exampListsBean = mExampListsBeans.get(position);
+            ExampleDetailActivity.startExampleDetailActivity(LoveIntroductionActivity.this,exampListsBean.id,exampListsBean.post_title);
+        }
+
+        @Override
+        public void onItemLongClick(int position) {
+
+        }
+    };
 
     @Override
     protected void initIntentData() {

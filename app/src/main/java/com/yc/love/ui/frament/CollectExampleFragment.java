@@ -7,28 +7,28 @@ import android.util.Log;
 import android.view.ViewGroup;
 
 import com.yc.love.R;
+import com.yc.love.adaper.rv.NoThingCanEmptyAdapter;
 import com.yc.love.adaper.rv.base.RecyclerViewItemListener;
 import com.yc.love.adaper.rv.holder.BaseViewHolder;
-import com.yc.love.adaper.rv.holder.CollectArticleViewHolder;
-import com.yc.love.adaper.rv.NoThingCanEmptyAdapter;
+import com.yc.love.adaper.rv.holder.CollectExampleItemViewHolder;
 import com.yc.love.adaper.rv.holder.EmptyViewHolder;
 import com.yc.love.model.base.MySubscriber;
 import com.yc.love.model.bean.AResultInfo;
-import com.yc.love.model.bean.ExampleTsListBean;
+import com.yc.love.model.bean.ExampListsBean;
 import com.yc.love.model.engin.LoveEngin;
 import com.yc.love.model.single.YcSingle;
-import com.yc.love.ui.activity.LoveByStagesDetailsActivity;
+import com.yc.love.ui.activity.ExampleDetailActivity;
 import com.yc.love.ui.frament.base.BaseCollectFragment;
 import com.yc.love.ui.view.LoadDialog;
 
 import java.util.List;
 
 /**
- * 收藏 问答
+ * 收藏 实例（文章）
  * Created by mayn on 2019/5/5.
  */
 
-public class CollectArticleFragment extends BaseCollectFragment {
+public class CollectExampleFragment extends BaseCollectFragment {
 
     private RecyclerView mRecyclerView;
     //    private int mCategoryId;
@@ -36,11 +36,12 @@ public class CollectArticleFragment extends BaseCollectFragment {
     private int PAGE_SIZE = 10;
     private int PAGE_NUM = 1;
     private LoadDialog mLoadingDialog;
-    private List<ExampleTsListBean> mExampleTsListBeans;
     private boolean loadMoreEnd;
     private boolean loadDataEnd;
     private boolean showProgressBar = false;
-    private NoThingCanEmptyAdapter<ExampleTsListBean> mAdapter;
+    private NoThingCanEmptyAdapter<ExampListsBean> mAdapter;
+    private boolean mUserIsVip = false;
+    private List<ExampListsBean> mExampListsBeans;
 
     @Override
     protected void initBundle() {
@@ -59,7 +60,6 @@ public class CollectArticleFragment extends BaseCollectFragment {
     @Override
     protected void initViews() {
         mLoveEngin = new LoveEngin(mCollectActivity);
-//        LoadingDialog loadingDialog=mCollectActivity.mLoadingDialog;
         mLoadingDialog = mCollectActivity.mLoadingDialog;
         initRecyclerView();
     }
@@ -84,13 +84,13 @@ public class CollectArticleFragment extends BaseCollectFragment {
             return;
         }
         mLoadingDialog.showLoadingDialog();
-        mLoveEngin.collectListsArticle(String.valueOf(id), String.valueOf(PAGE_NUM), String.valueOf(PAGE_SIZE), "Article/collect_list").subscribe(new MySubscriber<AResultInfo<List<ExampleTsListBean>>>(mLoadingDialog) {
+        mLoveEngin.exampleCollectList(String.valueOf(YcSingle.getInstance().id), String.valueOf(PAGE_NUM), String.valueOf(PAGE_SIZE), "Example/collect_list").subscribe(new MySubscriber<AResultInfo<List<ExampListsBean>>>(mLoadingDialog) {
 
 
             @Override
-            protected void onNetNext(AResultInfo<List<ExampleTsListBean>> listAResultInfo) {
-                mExampleTsListBeans = listAResultInfo.data;
-                initRecyclerData();
+            protected void onNetNext(AResultInfo<List<ExampListsBean>> listAResultInfo) {
+                mExampListsBeans = listAResultInfo.data;
+                initRecyclerViewData();
             }
 
             @Override
@@ -105,15 +105,20 @@ public class CollectArticleFragment extends BaseCollectFragment {
         });
     }
 
-    private void initRecyclerData() {
-        mAdapter = new NoThingCanEmptyAdapter<ExampleTsListBean>(mExampleTsListBeans, mRecyclerView) {
+    private void initRecyclerViewData() {
+        mAdapter = new NoThingCanEmptyAdapter<ExampListsBean>(mExampListsBeans, mRecyclerView) {
             @Override
             public BaseViewHolder getHolder(ViewGroup parent) {
-                return new CollectArticleViewHolder(mCollectActivity, recyclerViewItemListener, parent);
+                return new CollectExampleItemViewHolder(mCollectActivity, recyclerViewItemListener, parent);
+            }
+
+            @Override
+            protected RecyclerView.ViewHolder getEmptyHolder(ViewGroup parent) {
+                return new EmptyViewHolder(mCollectActivity, parent, "");
             }
         };
         mRecyclerView.setAdapter(mAdapter);
-        if (mExampleTsListBeans.size() < PAGE_SIZE) {
+        if (mExampListsBeans.size() < PAGE_SIZE) {
             Log.d("ssss", "loadMoreData: data---end");
         } else {
             mAdapter.setOnMoreDataLoadListener(new NoThingCanEmptyAdapter.OnLoadMoreDataListener() {
@@ -124,7 +129,7 @@ public class CollectArticleFragment extends BaseCollectFragment {
                     }
                     if (showProgressBar == false) {
                         //加入null值此时adapter会判断item的type
-                        mExampleTsListBeans.add(null);
+                        mExampListsBeans.add(null);
                         mAdapter.notifyDataSetChanged();
                         showProgressBar = true;
                     }
@@ -132,7 +137,7 @@ public class CollectArticleFragment extends BaseCollectFragment {
                         netLoadMore();
                     } else {
                         Log.d("mylog", "loadMoreData: loadMoreEnd end 已加载全部数据 ");
-                        mExampleTsListBeans.remove(mExampleTsListBeans.size() - 1);
+                        mExampListsBeans.remove(mExampListsBeans.size() - 1);
                         mAdapter.notifyDataSetChanged();
                     }
                 }
@@ -147,25 +152,24 @@ public class CollectArticleFragment extends BaseCollectFragment {
             mCollectActivity.showToLoginDialog();
             return;
         }
-        mLoveEngin.collectListsArticle(String.valueOf(id), String.valueOf(++PAGE_NUM), String.valueOf(PAGE_SIZE), "Article/collect_list").subscribe(new MySubscriber<AResultInfo<List<ExampleTsListBean>>>(mCollectActivity) {
-
+//        mLoveEngin.listsCollectLovewords(String.valueOf(id), String.valueOf(PAGE_NUM), String.valueOf(PAGE_SIZE), "Lovewords/collect_list").subscribe(new MySubscriber<AResultInfo<List<LoveHealingBean>>>(mCollectActivity) {
+        mLoveEngin.exampleCollectList(String.valueOf(YcSingle.getInstance().id), String.valueOf(++PAGE_NUM), String.valueOf(PAGE_SIZE), "Example/collect_list").subscribe(new MySubscriber<AResultInfo<List<ExampListsBean>>>(mCollectActivity) {
             @Override
-            protected void onNetNext(AResultInfo<List<ExampleTsListBean>> listAResultInfo) {
-                List<ExampleTsListBean> netLoadMoreData = listAResultInfo.data;
+            protected void onNetNext(AResultInfo<List<ExampListsBean>> listAResultInfo) {
+                List<ExampListsBean> netLoadMoreData = listAResultInfo.data;
                 showProgressBar = false;
-                mExampleTsListBeans.remove(mExampleTsListBeans.size() - 1);
+                mExampListsBeans.remove(mExampListsBeans.size() - 1);
                 mAdapter.notifyDataSetChanged();
                 if (netLoadMoreData.size() < PAGE_SIZE) {
                     loadMoreEnd = true;
                 }
-                mExampleTsListBeans.addAll(netLoadMoreData);
+                mExampListsBeans.addAll(netLoadMoreData);
                 mAdapter.notifyDataSetChanged();
                 mAdapter.setLoaded();
             }
 
             @Override
             protected void onNetError(Throwable e) {
-
             }
 
             @Override
@@ -178,8 +182,8 @@ public class CollectArticleFragment extends BaseCollectFragment {
     RecyclerViewItemListener recyclerViewItemListener = new RecyclerViewItemListener() {
         @Override
         public void onItemClick(int position) {
-            ExampleTsListBean exampleTsListBean = mExampleTsListBeans.get(position);
-            LoveByStagesDetailsActivity.startLoveByStagesDetailsActivity(mCollectActivity,exampleTsListBean.id,exampleTsListBean.post_title);
+            ExampListsBean exampListsBean = mExampListsBeans.get(position);
+            ExampleDetailActivity.startExampleDetailActivity(mCollectActivity, exampListsBean.id, exampListsBean.post_title);
 
         }
 
@@ -188,4 +192,5 @@ public class CollectArticleFragment extends BaseCollectFragment {
 
         }
     };
+
 }

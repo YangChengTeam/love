@@ -48,7 +48,7 @@
         android:layout_height="wrap_content"
         app:imgSrc="@mipmap/seting_icon_04"
         app:layout_constraintTop_toBottomOf="@+id/setting_ll_item_04"
-        app:textNameMyItem="清除缓存" />
+        app:textNameMyItem="退出" />
 
 
     <FrameLayout

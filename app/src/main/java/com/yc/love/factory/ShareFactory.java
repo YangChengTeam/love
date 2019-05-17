@@ -2,8 +2,6 @@ package com.yc.love.factory;
 
 import android.support.v4.app.Fragment;
 
-import com.yc.love.ui.frament.CollectArticleFragment;
-import com.yc.love.ui.frament.CollectLoveHealingFragment;
 import com.yc.love.ui.frament.ShareT1Fragment;
 import com.yc.love.ui.frament.ShareT2Fragment;
 

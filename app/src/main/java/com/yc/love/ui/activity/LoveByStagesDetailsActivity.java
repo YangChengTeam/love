@@ -12,11 +12,13 @@ import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
 import android.webkit.JavascriptInterface;
+import android.webkit.WebChromeClient;
 import android.webkit.WebSettings;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import com.kk.utils.LogUtil;
@@ -42,6 +44,7 @@ public class LoveByStagesDetailsActivity extends BaseSameActivity {
     private boolean mIsDigArticle;
     private int mCategoryId;
     private ConstraintLayout mClLikeCon;
+    private ProgressBar mProgressBar;
     private String mUrl = "";
     private ImageView mIvLike;
 
@@ -78,7 +81,7 @@ public class LoveByStagesDetailsActivity extends BaseSameActivity {
                 netCollectArticle(mIsCollectArticle);
                 break;
             case R.id.love_by_stages_details_iv_like:
-                netDigArticle(mIsDigArticle);  //TODO 点赞 收藏
+                netDigArticle(mIsDigArticle);
                 break;
         }
     }
@@ -157,6 +160,7 @@ public class LoveByStagesDetailsActivity extends BaseSameActivity {
     }
 
     private void initViews() {
+        mProgressBar = findViewById(R.id.love_by_stages_details_pb_progress);
         mClLikeCon = findViewById(R.id.love_by_stages_details_cl_like_con);
         mIvLike = findViewById(R.id.love_by_stages_details_iv_like);
 
@@ -213,6 +217,23 @@ public class LoveByStagesDetailsActivity extends BaseSameActivity {
             public void onPageFinished(WebView view, String url) {
             }
         });
+        webView.setWebChromeClient(new WebChromeClient() {
+            @Override
+            public void onProgressChanged(WebView view, int newProgress) {
+                //首先我们的进度条是隐藏的
+                mProgressBar.setVisibility(View.VISIBLE);//把网页加载的进度传给我们的进度条
+                mProgressBar.setProgress(newProgress);
+                if(newProgress>=95){ //加载完毕让进度条消失
+                    if(mProgressBar.getVisibility()!=View.GONE){
+                        mProgressBar.setVisibility(View.GONE);
+                    }
+                    if(mClLikeCon.getVisibility()!=View.VISIBLE){
+                        mClLikeCon.setVisibility(View.VISIBLE);
+                    }
+                }
+                super.onProgressChanged(view, newProgress);
+            }
+        });
 
 
         webView.setOnLongClickListener(new View.OnLongClickListener() {
@@ -267,9 +288,9 @@ public class LoveByStagesDetailsActivity extends BaseSameActivity {
                         break;
                 }
                 changLikeStaty(mIsDigArticle);
-                mClLikeCon.setVisibility(View.VISIBLE);
+//                mClLikeCon.setVisibility(View.VISIBLE);
 
-                mCategoryId = loveByStagesDetailsBean.category_id;
+                mCategoryId = loveByStagesDetailsBean.id;
 
                 String postContent = loveByStagesDetailsBean.post_content;
                 initWebView(postContent);

@@ -24,7 +24,7 @@ public class YcSingle {
     public String name;
     public String mobile;  //登录界面手机号取SP 其他用内存数据
     public int vip_end_time;
-    public int id;
+    public int id=0;
     public int vip;
 
     public void clearAllData() {

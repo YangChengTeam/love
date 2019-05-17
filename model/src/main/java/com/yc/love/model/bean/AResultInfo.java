@@ -4,7 +4,7 @@ package com.yc.love.model.bean;
  * Created by mayn on 2019/5/8.
  */
 
-public class AResultInfo <T> {
+public class AResultInfo <T>  {
     public int code;
 
 //    @JSONField(name = "msg")

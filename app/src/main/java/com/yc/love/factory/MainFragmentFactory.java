@@ -47,10 +47,6 @@ public class MainFragmentFactory {
                 fragment = new MainT4Fragment();
                 fragments.put(MAIN_FRAGMENT_3, fragment);
                 break;
-            /*case MAIN_FRAGMENT_4:
-                fragment = new MainT5Fragment();
-                fragments.put(MAIN_FRAGMENT_4, fragment);
-                break;*/
         }
         return fragment;
     }

@@ -36,7 +36,7 @@
             android:layout_centerVertical="true"
             android:ellipsize="end"
             android:maxLines="1"
-            android:paddingLeft="52dp"
+            android:paddingLeft="58dp"
             android:paddingRight="58dp"
             android:text="中文中文中文中文中文中文中文中文"
             android:textColor="@color/black"
