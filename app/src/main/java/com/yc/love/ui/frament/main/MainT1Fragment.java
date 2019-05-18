@@ -9,6 +9,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.LinearLayout;
 import android.widget.Toast;
 
 import com.yc.love.R;
@@ -28,6 +29,8 @@ import com.yc.love.model.bean.ExampleTsListBean;
 import com.yc.love.model.bean.MainT2Bean;
 import com.yc.love.model.bean.MainT3Bean;
 import com.yc.love.model.bean.StringBean;
+import com.yc.love.model.bean.event.EventBusWxPayResult;
+import com.yc.love.model.bean.event.NetWorkChangBean;
 import com.yc.love.model.engin.LoveEngin;
 import com.yc.love.model.single.YcSingle;
 import com.yc.love.ui.activity.ExampleDetailActivity;
@@ -37,6 +40,10 @@ import com.yc.love.ui.activity.LoveHealingActivity;
 import com.yc.love.ui.activity.ShareActivity;
 import com.yc.love.ui.frament.base.BaseMainFragment;
 import com.yc.love.ui.view.LoadDialog;
+
+import org.greenrobot.eventbus.EventBus;
+import org.greenrobot.eventbus.Subscribe;
+import org.greenrobot.eventbus.ThreadMode;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -58,8 +65,8 @@ public class MainT1Fragment extends BaseMainFragment {
     private LoveEngin mLoveEngin;
     private List<ExampListsBean> mExampListsBeans;
     private RecyclerView mRecyclerView;
-
-    //    private TextView tvName;
+    private LinearLayout mLlNotNet;
+    private boolean mIsNetData=false;
 
     @Override
     protected int setContentView() {
@@ -70,7 +77,8 @@ public class MainT1Fragment extends BaseMainFragment {
     @Override
     protected void initViews() {
         mLoveEngin = new LoveEngin(mMainActivity);
-//        tvName = rootView.findViewById(R.id.main_t1_tv_name);
+
+        mLlNotNet = rootView.findViewById(R.id.main_t1_not_net);
 
         mRecyclerView = rootView.findViewById(R.id.main_t1_rl);
         LinearLayoutManager layoutManager = new LinearLayoutManager(mMainActivity);
@@ -87,7 +95,7 @@ public class MainT1Fragment extends BaseMainFragment {
 //            LoveByStagesDetailsActivity.startLoveByStagesDetailsActivity(mMainActivity, exampListsBean.id, exampListsBean.post_title);
 
             ExampListsBean exampListsBean = mExampListsBeans.get(position);
-            ExampleDetailActivity.startExampleDetailActivity(mMainActivity,exampListsBean.id,exampListsBean.post_title);
+            ExampleDetailActivity.startExampleDetailActivity(mMainActivity, exampListsBean.id, exampListsBean.post_title);
         }
 
         @Override
@@ -95,11 +103,38 @@ public class MainT1Fragment extends BaseMainFragment {
 
         }
     };
+    @Override
+    public void onStart() {
+        super.onStart();
+        EventBus.getDefault().register(this);
+    }
+
+    @Override
+    public void onStop() {
+        super.onStop();
+        EventBus.getDefault().unregister(this);
+    }
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    public void onMessageEvent(NetWorkChangBean netWorkChangBean) {
+        List<String> connectionTypeList = netWorkChangBean.connectionTypeList;
+        if (connectionTypeList == null || connectionTypeList.size() == 0) {
+            if (mLlNotNet.getVisibility() != View.VISIBLE) {
+                mLlNotNet.setVisibility(View.VISIBLE);
+            }
+        } else {
+            if (mLlNotNet.getVisibility() != View.GONE) {
+                mLlNotNet.setVisibility(View.GONE);
+                if(!mIsNetData){
+                    netData();
+                }
+            }
+        }
+    }
 
 
     @Override
     protected void lazyLoad() {
-
+//        mIsNetData = false;
         netData();
     }
 
@@ -109,6 +144,7 @@ public class MainT1Fragment extends BaseMainFragment {
         mLoveEngin.indexExample(String.valueOf(PAGE_NUM), String.valueOf(PAGE_SIZE), "example/index").subscribe(new MySubscriber<AResultInfo<ExampDataBean>>(loadDialog) {
             @Override
             protected void onNetNext(AResultInfo<ExampDataBean> exampDataBeanAResultInfo) {
+                mIsNetData=true;
                 ExampDataBean exampDataBean = exampDataBeanAResultInfo.data;
                 if (exampDataBean != null) {
                     mExampListsBeans = exampDataBean.lists;
@@ -134,8 +170,6 @@ public class MainT1Fragment extends BaseMainFragment {
     }
 
     private void initRecyclerViewData() {
-
-
         mAdapter = new MainT1MoreItemAdapter(mExampListsBeans, mRecyclerView) {
             @Override
             public BaseViewHolder getHolder(ViewGroup parent) {
@@ -148,7 +182,7 @@ public class MainT1Fragment extends BaseMainFragment {
                 titleT1ViewHolder.setOnClickShareListent(new TitleT1ViewHolder.OnClickMainT1TitleListent() {
                     @Override
                     public void clickShareListent() {
-                        mMainActivity.startActivity(new Intent(mMainActivity,ShareActivity.class));
+                        mMainActivity.startActivity(new Intent(mMainActivity, ShareActivity.class));
 //                        Toast.makeText(mMainActivity, "clickShare", Toast.LENGTH_SHORT).show();
                     }
 
@@ -211,21 +245,16 @@ public class MainT1Fragment extends BaseMainFragment {
                 ExampDataBean exampDataBean = exampDataBeanAResultInfo.data;
                 if (exampDataBean != null) {
                     List<ExampListsBean> netLoadMoreData = exampDataBean.lists;
-                    showProgressBar = false;
-                    mExampListsBeans.remove(mExampListsBeans.size() - 1);
-                    mAdapter.notifyDataSetChanged();
-                    if (netLoadMoreData.size() < PAGE_SIZE) {
-                        loadMoreEnd = true;
-                    }
-                    mExampListsBeans.addAll(netLoadMoreData);
-                    mAdapter.notifyDataSetChanged();
-                    mAdapter.setLoaded();
+                    changLoadMoreView(netLoadMoreData);
                 }
             }
 
             @Override
             protected void onNetError(Throwable e) {
-
+                if(PAGE_NUM!=1){
+                    PAGE_NUM--;
+                }
+                changLoadMoreView(null);
             }
 
             @Override
@@ -233,5 +262,19 @@ public class MainT1Fragment extends BaseMainFragment {
 
             }
         });
+    }
+
+    private void changLoadMoreView(List<ExampListsBean> netLoadMoreData) {
+        showProgressBar = false;
+        mExampListsBeans.remove(mExampListsBeans.size() - 1);
+        mAdapter.notifyDataSetChanged();
+        if (netLoadMoreData != null) {
+            if (netLoadMoreData.size() < PAGE_SIZE) {
+                loadMoreEnd = true;
+            }
+            mExampListsBeans.addAll(netLoadMoreData);
+            mAdapter.notifyDataSetChanged();
+        }
+        mAdapter.setLoaded();
     }
 }

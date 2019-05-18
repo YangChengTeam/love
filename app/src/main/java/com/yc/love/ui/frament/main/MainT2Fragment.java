@@ -10,6 +10,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.LinearLayout;
 import android.widget.Toast;
 
 import com.yc.love.R;
@@ -30,6 +31,7 @@ import com.yc.love.model.bean.ExampleTsListBean;
 import com.yc.love.model.bean.LoveByStagesBean;
 import com.yc.love.model.bean.MainT2Bean;
 import com.yc.love.model.bean.MainT3Bean;
+import com.yc.love.model.bean.event.NetWorkChangBean;
 import com.yc.love.model.engin.LoveEngin;
 import com.yc.love.model.single.YcSingle;
 import com.yc.love.ui.activity.BecomeVipActivity;
@@ -37,6 +39,10 @@ import com.yc.love.ui.activity.ExampleDetailActivity;
 import com.yc.love.ui.activity.LoveHealDetailsActivity;
 import com.yc.love.ui.frament.base.BaseMainFragment;
 import com.yc.love.ui.view.LoadDialog;
+
+import org.greenrobot.eventbus.EventBus;
+import org.greenrobot.eventbus.Subscribe;
+import org.greenrobot.eventbus.ThreadMode;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -65,11 +71,16 @@ public class MainT2Fragment extends BaseMainFragment {
     }
 
     private LoveEngin mLoveEngin;
+    private LinearLayout mLlNotNet;
+    private boolean mIsNetData = false;
 
     @Override
     protected void initViews() {
         mLoveEngin = new LoveEngin(mMainActivity);
         View viewBar = rootView.findViewById(R.id.main_t2_view_bar);
+
+        mLlNotNet = rootView.findViewById(R.id.main_t2_not_net);
+
         mMainActivity.setStateBarHeight(viewBar, 1);
         initRecyclerView();
     }
@@ -85,14 +96,38 @@ public class MainT2Fragment extends BaseMainFragment {
 //        mRecyclerView.addItemDecoration(new DividerItemDecoration(mMainActivity,DividerItemDecoration.VERTICAL));
     }
 
+    @Override
+    public void onStart() {
+        super.onStart();
+        EventBus.getDefault().register(this);
+    }
+
+    @Override
+    public void onStop() {
+        super.onStop();
+        EventBus.getDefault().unregister(this);
+    }
+
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    public void onMessageEvent(NetWorkChangBean netWorkChangBean) {
+        List<String> connectionTypeList = netWorkChangBean.connectionTypeList;
+        if (connectionTypeList == null || connectionTypeList.size() == 0) {
+            if (mLlNotNet.getVisibility() != View.VISIBLE) {
+                mLlNotNet.setVisibility(View.VISIBLE);
+            }
+        } else {
+            if (mLlNotNet.getVisibility() != View.GONE) {
+                mLlNotNet.setVisibility(View.GONE);
+                if (!mIsNetData) {
+                    netData();
+                }
+            }
+        }
+    }
 
 
     @Override
     protected void lazyLoad() {
-        isCanLoadData();
-    }
-
-    private void isCanLoadData() {
         netData();
     }
 
@@ -102,6 +137,7 @@ public class MainT2Fragment extends BaseMainFragment {
         mLoveEngin.exampLists(String.valueOf(YcSingle.getInstance().id), String.valueOf(PAGE_NUM), String.valueOf(PAGE_SIZE), "example/lists").subscribe(new MySubscriber<AResultInfo<ExampDataBean>>(loadDialog) {
             @Override
             protected void onNetNext(AResultInfo<ExampDataBean> exampDataBeanAResultInfo) {
+                mIsNetData = true;
                 ExampDataBean exampDataBean = exampDataBeanAResultInfo.data;
                 int isVip = exampDataBean.is_vip;
                 if (isVip > 0) {
@@ -232,7 +268,8 @@ public class MainT2Fragment extends BaseMainFragment {
                         netLoadMoreData.add(new MainT2Bean(1, exampListsBean.create_time, exampListsBean.id, exampListsBean.image, exampListsBean.post_title));
                     }
                 }
-                showProgressBar = false;
+                changLoadMoreView(netLoadMoreData);
+              /*  showProgressBar = false;
                 mMainT2Beans.remove(mMainT2Beans.size() - 1);
                 mAdapter.notifyDataSetChanged();
                 if (netLoadMoreData.size() < PAGE_SIZE) {
@@ -240,12 +277,15 @@ public class MainT2Fragment extends BaseMainFragment {
                 }
                 mMainT2Beans.addAll(netLoadMoreData);
                 mAdapter.notifyDataSetChanged();
-                mAdapter.setLoaded();
+                mAdapter.setLoaded();*/
             }
 
             @Override
             protected void onNetError(Throwable e) {
-
+                if (PAGE_NUM != 1) {
+                    PAGE_NUM--;
+                }
+                changLoadMoreView(null);
             }
 
             @Override
@@ -254,12 +294,27 @@ public class MainT2Fragment extends BaseMainFragment {
             }
         });
     }
+
+    private void changLoadMoreView(List<MainT2Bean> netLoadMoreData) {
+        showProgressBar = false;
+        mMainT2Beans.remove(mMainT2Beans.size() - 1);
+        mAdapter.notifyDataSetChanged();
+        if (netLoadMoreData != null) {
+            if (netLoadMoreData.size() < PAGE_SIZE) {
+                loadMoreEnd = true;
+            }
+            mMainT2Beans.addAll(netLoadMoreData);
+            mAdapter.notifyDataSetChanged();
+        }
+        mAdapter.setLoaded();
+    }
+
     RecyclerViewItemListener recyclerViewItemListener = new RecyclerViewItemListener() {
         @Override
         public void onItemClick(int position) {
 //            Toast.makeText(mMainActivity, "onItemClick " + position, Toast.LENGTH_SHORT).show();
             MainT2Bean mainT2Bean = mMainT2Beans.get(position);
-            ExampleDetailActivity.startExampleDetailActivity(mMainActivity,mainT2Bean.id,mainT2Bean.post_title);
+            ExampleDetailActivity.startExampleDetailActivity(mMainActivity, mainT2Bean.id, mainT2Bean.post_title);
         }
 
         @Override
@@ -270,7 +325,6 @@ public class MainT2Fragment extends BaseMainFragment {
     RecyclerViewItemListener recyclerViewToVipListener = new RecyclerViewItemListener() {
         @Override
         public void onItemClick(int position) {
-            //TODO 购买VIP后 刷新数据
             startActivity(new Intent(mMainActivity, BecomeVipActivity.class));
         }
 

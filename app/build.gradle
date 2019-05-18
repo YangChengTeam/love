@@ -31,7 +31,7 @@ dependencies {
     testImplementation 'junit:junit:4.12'
     androidTestImplementation 'com.android.support.test:runner:1.0.2'
     androidTestImplementation 'com.android.support.test.espresso:espresso-core:3.0.2'
-    implementation project(':http')
+//    implementation project(':http')
     implementation project(':model')
     implementation 'com.android.support:multidex:1.0.3'
 //    implementation 'com.github.bumptech.glide:glide:4.9.0'

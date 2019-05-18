@@ -1,4 +1,4 @@
-package com.yc.love.http.utils;
+package com.yc.love.model.util;
 
 import android.content.Context;
 import android.net.ConnectivityManager;
@@ -30,10 +30,11 @@ public class CheckNetwork {
             e.printStackTrace();
             return false;
         }
-
-
     }
 
+    /**
+     * 判断WiFi是否连通
+     */
     public static boolean isWifiConnected(Context context) {
         if (context != null) {
             ConnectivityManager cm = (ConnectivityManager) context

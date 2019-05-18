@@ -111,6 +111,13 @@
         <activity android:name=".ui.activity.LoveByStagesDetailsActivity" />
         <activity android:name=".ui.activity.ExampleDetailActivity" />
         <activity android:name=".ui.activity.ShareActivity"></activity>
+        <!--<receiver android:name=".receiver.NetWorkChangReceiver">
+            <intent-filter>
+                <action android:name="android.net.conn.CONNECTIVITY_CHANGE" />
+                <action android:name="android.net.wifi.WIFI_STATE_CHANGED" />
+                <action android:name="android.net.wifi.STATE_CHANGE" />
+            </intent-filter>
+        </receiver>-->
     </application>
 
 </manifest>

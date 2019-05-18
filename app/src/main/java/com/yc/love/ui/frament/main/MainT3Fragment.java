@@ -5,6 +5,7 @@ import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.yc.love.R;
@@ -25,7 +26,9 @@ import com.yc.love.model.bean.ExampleTsListBean;
 import com.yc.love.model.bean.LoveByStagesBean;
 import com.yc.love.model.bean.LoveHealDetBean;
 import com.yc.love.model.bean.MainT3Bean;
+import com.yc.love.model.bean.event.NetWorkChangBean;
 import com.yc.love.model.engin.LoveEngin;
+import com.yc.love.model.single.YcSingle;
 import com.yc.love.ui.activity.ExampleDetailActivity;
 import com.yc.love.ui.activity.LoveByStagesActivity;
 import com.yc.love.ui.activity.LoveByStagesDetailsActivity;
@@ -33,6 +36,10 @@ import com.yc.love.ui.activity.LoveIntroductionActivity;
 import com.yc.love.ui.frament.base.BaseMainFragment;
 import com.yc.love.ui.view.LoadDialog;
 import com.yc.love.ui.view.LoadingDialog;
+
+import org.greenrobot.eventbus.EventBus;
+import org.greenrobot.eventbus.Subscribe;
+import org.greenrobot.eventbus.ThreadMode;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -57,6 +64,8 @@ public class MainT3Fragment extends BaseMainFragment {
     private List<MainT3Bean> mDatas;
     //    private LoadDialog mLoadingDialog;
     private List<CategoryArticleBean> mCategoryArticleBeans;
+    private LinearLayout mLlNotNet;
+    private boolean mIsNetData=false;
 
     @Override
     protected int setContentView() {
@@ -68,6 +77,7 @@ public class MainT3Fragment extends BaseMainFragment {
     @Override
     protected void initViews() {
         mLoveEngin = new LoveEngin(mMainActivity);
+        mLlNotNet = rootView.findViewById(R.id.main_t3_not_net);
         View viewBar = rootView.findViewById(R.id.main_t3_view_bar);
         mMainActivity.setStateBarHeight(viewBar, 1);
 //        mLoadingDialog = mMainActivity.mLoadingDialog;
@@ -80,11 +90,44 @@ public class MainT3Fragment extends BaseMainFragment {
         mRecyclerView.setLayoutManager(gridLayoutManager);
 //        mRecyclerView.setItemAnimator(new DefaultItemAnimator());
     }
+    @Override
+    public void onStart() {
+        super.onStart();
+        EventBus.getDefault().register(this);
+    }
+
+    @Override
+    public void onStop() {
+        super.onStop();
+        EventBus.getDefault().unregister(this);
+    }
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    public void onMessageEvent(NetWorkChangBean netWorkChangBean) {
+        List<String> connectionTypeList = netWorkChangBean.connectionTypeList;
+        checkNetChangUI(connectionTypeList);
+    }
+
+    private void checkNetChangUI(List<String> connectionTypeList) {
+        if (connectionTypeList == null || connectionTypeList.size() == 0) {
+            if (mLlNotNet.getVisibility() != View.VISIBLE) {
+                mLlNotNet.setVisibility(View.VISIBLE);
+            }
+        } else {
+            if (mLlNotNet.getVisibility() != View.GONE) {
+                mLlNotNet.setVisibility(View.GONE);
+                if (!mIsNetData) {
+                    isCanLoadData();
+                }
+            }
+        }
+    }
 
 
     @Override
     protected void lazyLoad() {
-        isCanLoadData();
+        List<String> connectionTypeList=YcSingle.getInstance().connectionTypeList;
+        checkNetChangUI(connectionTypeList);
+//        isCanLoadData();
     }
 
     private void isCanLoadData() {
@@ -99,6 +142,7 @@ public class MainT3Fragment extends BaseMainFragment {
         mLoveEngin.categoryArticle("Article/category").subscribe(new MySubscriber<AResultInfo<List<CategoryArticleBean>>>(loadDialog) {
             @Override
             protected void onNetNext(AResultInfo<List<CategoryArticleBean>> listAResultInfo) {
+                mIsNetData=true;
                 mCategoryArticleBeans = listAResultInfo.data;
                 for (CategoryArticleBean categoryArticleBean : mCategoryArticleBeans
                         ) {
@@ -127,6 +171,7 @@ public class MainT3Fragment extends BaseMainFragment {
 
             @Override
             protected void onNetNext(AResultInfo<ExampleTsCategory> exampleTsCategoryAResultInfo) {
+                mIsNetData=true;
                 mDatas = new ArrayList<>();
                 mDatas.add(new MainT3Bean(1));
                 mDatas.add(new MainT3Bean(2, "入门秘籍"));

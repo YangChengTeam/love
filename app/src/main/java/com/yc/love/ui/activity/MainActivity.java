@@ -2,10 +2,14 @@ package com.yc.love.ui.activity;
 
 import android.app.Activity;
 import android.content.DialogInterface;
+import android.content.IntentFilter;
 import android.graphics.drawable.Drawable;
+import android.net.ConnectivityManager;
+import android.net.wifi.WifiManager;
 import android.os.Bundle;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
 import android.view.View;
 import android.widget.TextView;
 
@@ -13,6 +17,7 @@ import com.yc.love.R;
 import com.yc.love.adaper.vp.MainPagerAdapter;
 import com.yc.love.factory.MainFragmentFactory;
 import com.yc.love.model.single.YcSingle;
+import com.yc.love.receiver.NetWorkChangReceiver;
 import com.yc.love.ui.activity.base.BaseActivity;
 import com.yc.love.ui.view.ControlScrollViewPager;
 
@@ -20,22 +25,46 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
 
     private ControlScrollViewPager mVpFragment;
     private TextView mTvTab1, mTvTab2, mTvTab3, mTvTab4;
+    private boolean isRegistered = false;
+    private NetWorkChangReceiver netWorkChangReceiver;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+
+
         invadeStatusBar(); //侵入状态栏
         setAndroidNativeLightStatusBar(); //状态栏字体颜色改变
-
-//        setStatusBarFullTransparent();
-//        setFitSystemWindow(false);
 
         initView();
     }
 
+    private void initNetWorkChangReceiver() {
+        //注册网络状态监听广播
+        netWorkChangReceiver = new NetWorkChangReceiver();
+        IntentFilter filter = new IntentFilter();
+        filter.addAction(WifiManager.WIFI_STATE_CHANGED_ACTION);
+        filter.addAction(WifiManager.NETWORK_STATE_CHANGED_ACTION);
+        filter.addAction(ConnectivityManager.CONNECTIVITY_ACTION);
+        registerReceiver(netWorkChangReceiver, filter);
+        isRegistered = true;
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        //解绑
+        if (isRegistered) {
+            unregisterReceiver(netWorkChangReceiver);
+        }
+    }
+
     private void initView() {
+
+
         mVpFragment = findViewById(R.id.comp_main_vp_fragment);
         mTvTab1 = findViewById(R.id.comp_main_tv_tab_1);
         mTvTab2 = findViewById(R.id.comp_main_tv_tab_2);
@@ -51,6 +80,13 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
         mVpFragment.setAdapter(mainPagerAdapter);
 
 
+        mTvTab1.postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                Log.d("mylog", "run: postDelayed postDelayed ");
+                initNetWorkChangReceiver();
+            }
+        }, 200);
     }
 
     public void scroolToHomeFragment(){

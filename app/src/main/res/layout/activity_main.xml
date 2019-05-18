@@ -1,66 +1,63 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
+    android:orientation="vertical"
     android:layout_height="match_parent"
     android:background="@color/love_background">
 
+    <com.yc.love.ui.view.ControlScrollViewPager
+        android:id="@+id/comp_main_vp_fragment"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="100"
+        app:layout_constraintBottom_toTopOf="@+id/comp_main_ll_con" />
+
 
     <LinearLayout
+        android:id="@+id/comp_main_ll_con"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:orientation="vertical">
-
-        <com.yc.love.ui.view.ControlScrollViewPager
-            android:id="@+id/comp_main_vp_fragment"
-            android:layout_width="match_parent"
-            android:layout_height="0dp"
-            android:layout_weight="100" />
+        android:layout_height="54dp"
+        android:background="@color/love_background"
+        android:orientation="horizontal"
+        app:layout_constraintBottom_toBottomOf="parent">
 
 
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="54dp"
-            android:background="@color/love_background"
-            android:orientation="horizontal">
+        <TextView
+            android:id="@+id/comp_main_tv_tab_1"
+            style="@style/tv_main_icon_bottom"
+            android:background="?attr/selectableItemBackgroundBorderless"
+            android:drawableTop="@mipmap/main_icon_tab_01_s"
+            android:text="首页"
+            android:textColor="@color/black" />
+
+        <TextView
+            android:id="@+id/comp_main_tv_tab_2"
+            style="@style/tv_main_icon_bottom"
+            android:background="?attr/selectableItemBackgroundBorderless"
+            android:drawableTop="@mipmap/main_icon_tab_02"
+            android:text="实例"
+            android:textColor="@color/text_gray" />
+
+        <TextView
+            android:id="@+id/comp_main_tv_tab_3"
+            style="@style/tv_main_icon_bottom"
+            android:background="?attr/selectableItemBackgroundBorderless"
+            android:drawableTop="@mipmap/main_icon_tab_03"
+            android:text="提升"
+            android:textColor="@color/text_gray" />
+
+        <TextView
+            android:id="@+id/comp_main_tv_tab_4"
+            style="@style/tv_main_icon_bottom"
+            android:background="?attr/selectableItemBackgroundBorderless"
+            android:drawableTop="@mipmap/main_icon_tab_04"
+            android:text="我的"
+            android:textColor="@color/text_gray" />
 
 
-            <TextView
-                android:id="@+id/comp_main_tv_tab_1"
-                style="@style/tv_main_icon_bottom"
-                android:background="?attr/selectableItemBackgroundBorderless"
-                android:drawableTop="@mipmap/main_icon_tab_01_s"
-                android:text="首页"
-                android:textColor="@color/black" />
-
-            <TextView
-                android:id="@+id/comp_main_tv_tab_2"
-                style="@style/tv_main_icon_bottom"
-                android:background="?attr/selectableItemBackgroundBorderless"
-                android:drawableTop="@mipmap/main_icon_tab_02"
-                android:text="实例"
-                android:textColor="@color/text_gray" />
-
-            <TextView
-                android:id="@+id/comp_main_tv_tab_3"
-                style="@style/tv_main_icon_bottom"
-                android:background="?attr/selectableItemBackgroundBorderless"
-                android:drawableTop="@mipmap/main_icon_tab_03"
-                android:text="提升"
-                android:textColor="@color/text_gray" />
-
-            <TextView
-                android:id="@+id/comp_main_tv_tab_4"
-                style="@style/tv_main_icon_bottom"
-                android:background="?attr/selectableItemBackgroundBorderless"
-                android:drawableTop="@mipmap/main_icon_tab_04"
-                android:text="我的"
-                android:textColor="@color/text_gray" />
-
-
-        </LinearLayout>
     </LinearLayout>
 
 
-</RelativeLayout>
+</LinearLayout>
