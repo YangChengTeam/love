@@ -1,4 +1,4 @@
-package com.yc.love.ui.frament.base;
+package com.yc.love.ui.frament;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -24,8 +24,8 @@ import com.yc.love.model.bean.LoveHealDetDetailsBean;
 import com.yc.love.model.engin.LoveEngin;
 import com.yc.love.model.single.YcSingle;
 import com.yc.love.ui.activity.BecomeVipActivity;
-import com.yc.love.ui.activity.CollectActivity;
 import com.yc.love.ui.activity.ShareActivity;
+import com.yc.love.ui.frament.base.BaseLazyFragment;
 import com.yc.love.ui.view.LoadDialog;
 
 import java.util.List;
@@ -34,7 +34,7 @@ import java.util.List;
  * Created by mayn on 2019/5/5.
  */
 
-public class BaseShareFragment extends BaseLazyFragment {
+public class ShareFragment extends BaseLazyFragment {
 
     public ShareActivity mShareActivity;
     private RecyclerView mRecyclerView;
@@ -79,10 +79,9 @@ public class BaseShareFragment extends BaseLazyFragment {
     }
 
     /**
-     * @param searchType 1模糊  2精准
      * @param keyword
      */
-    public void netData(String searchType, String keyword) {
+    public void netData( String keyword) {
         this.keyword = keyword;
         int id = YcSingle.getInstance().id;
         if (id <= 0) {
@@ -90,7 +89,7 @@ public class BaseShareFragment extends BaseLazyFragment {
             return;
         }
         mLoadingDialog.showLoadingDialog();
-        mLoveEngin.searchDialogue(String.valueOf(id), searchType, keyword, String.valueOf(PAGE_NUM), String.valueOf(PAGE_SIZE), "Dialogue/search").subscribe(new MySubscriber<AResultInfo<List<LoveHealDetBean>>>(mLoadingDialog) {
+        mLoveEngin.searchDialogue(String.valueOf(id), keyword, String.valueOf(PAGE_NUM), String.valueOf(PAGE_SIZE), "Dialogue/search").subscribe(new MySubscriber<AResultInfo<List<LoveHealDetBean>>>(mLoadingDialog) {
 
 
             @Override

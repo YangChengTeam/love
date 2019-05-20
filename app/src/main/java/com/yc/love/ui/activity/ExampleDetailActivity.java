@@ -175,7 +175,7 @@ public class ExampleDetailActivity extends BaseSameActivity {
                     if(mProgressBar.getVisibility()!=View.GONE){
                         mProgressBar.setVisibility(View.GONE);
                     }
-                    if(mClLikeCon.getVisibility()!=View.INVISIBLE){
+                    if(mClLikeCon.getVisibility()!=View.VISIBLE){
                         mClLikeCon.setVisibility(View.VISIBLE);
                     }
                 }

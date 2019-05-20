@@ -124,7 +124,6 @@ public class EasyRVHolder   extends RecyclerView.ViewHolder implements ViewHelpe
 
     @Override
     public EasyRVHolder setImageUrl(int viewId, String imgUrl) {
-        // TODO: Use Glide/Picasso/ImageLoader/Fresco
         return this;
     }
 

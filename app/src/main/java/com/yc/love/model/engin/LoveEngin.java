@@ -262,6 +262,23 @@ public class LoveEngin extends BaseEngine {
                 true, true);
         return rxpost;
     }
+    public Observable<AResultInfo<List<LoveHealDetBean>>> searchDialogue(String userId,String keyword,String page, String pageSize, String url) {
+        Map<String, String> params = new HashMap<>();
+        params.put("user_id", userId);
+//        params.put("search_type", searchType);
+//        params.put("user_id", userId);
+        params.put("page", page);
+        params.put("keyword", keyword);
+        params.put("page_size", pageSize);
+        requestParams(params);
+        HttpCoreEngin<AResultInfo<List<LoveHealDetBean>>> httpCoreEngin = HttpCoreEngin.get(mContext);
+        Observable<AResultInfo<List<LoveHealDetBean>>> rxpost = httpCoreEngin.rxpost(URLConfig.getUrl(url), new TypeReference<AResultInfo<List<LoveHealDetBean>>>() {
+                }.getType(),
+                params,
+                true,
+                true, true);
+        return rxpost;
+    }
 
 
     public Observable<AResultInfo<List<LoveHealingBean>>> listsCollectLovewords(String userId, String page, String pageSize, String url) {

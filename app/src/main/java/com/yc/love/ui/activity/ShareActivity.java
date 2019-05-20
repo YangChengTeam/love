@@ -5,6 +5,8 @@ import android.content.Intent;
 import android.graphics.Color;
 import android.support.constraint.ConstraintLayout;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentManager;
+import android.support.v4.app.FragmentTransaction;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -14,6 +16,7 @@ import android.util.Log;
 import android.view.View;
 import android.view.animation.AccelerateInterpolator;
 import android.view.animation.DecelerateInterpolator;
+import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -23,6 +26,7 @@ import com.yc.love.adaper.vp.SharePagerAdapter;
 import com.yc.love.model.util.SPUtils;
 import com.yc.love.model.util.TimeUtils;
 import com.yc.love.ui.activity.base.BaseSameActivity;
+import com.yc.love.ui.frament.ShareFragment;
 import com.yc.love.ui.frament.ShareT1Fragment;
 import com.yc.love.ui.frament.ShareT2Fragment;
 import com.yc.love.ui.view.ColorFlipPagerTitleView;
@@ -53,6 +57,7 @@ public class ShareActivity extends BaseSameActivity {
     private ConstraintLayout mClItemCon;
     private FluidLayout mFluidLayout;
     private SearchView mSearchView;
+    private ShareFragment mHome_fragment1;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -80,8 +85,9 @@ public class ShareActivity extends BaseSameActivity {
         mClInfo = findViewById(R.id.share_cons_lay_info);
         TextView tvDelete = findViewById(R.id.share_tv_delete);
         mFluidLayout = findViewById(R.id.share_fluid_layout);
-        changHistoryFluidLayout("");
+        changHistoryFluidLayout("");  //初始化搜索记录
         ImageView ivToVip = findViewById(R.id.share_iv_to_vip);
+
 
         mClItemCon = findViewById(R.id.share_cons_lay_item_con);
         mTabLayout = findViewById(R.id.share_pager_tabs);
@@ -119,6 +125,14 @@ public class ShareActivity extends BaseSameActivity {
                 return false;
             }
         });
+        FrameLayout frameLayout = findViewById(R.id.share_frame_layout);
+
+        //获取管理者
+        FragmentManager supportFragmentManager = getSupportFragmentManager();//开启事务
+        FragmentTransaction fragmentTransaction = supportFragmentManager.beginTransaction();//碎片
+        //提交事务
+        mHome_fragment1 = new ShareFragment();
+        fragmentTransaction.add(R.id.share_frame_layout, mHome_fragment1).commit();
 
     }
 
@@ -126,9 +140,9 @@ public class ShareActivity extends BaseSameActivity {
         if (mClInfo.getVisibility() == View.VISIBLE) {
             mClInfo.setVisibility(View.INVISIBLE);
         }
-        if (mClItemCon.getVisibility() == View.INVISIBLE) {
+        /*if (mClItemCon.getVisibility() == View.INVISIBLE) {
             mClItemCon.setVisibility(View.VISIBLE);
-        }
+        }*/
     }
 
     private void hindShareItemShowInfo() {
@@ -143,7 +157,12 @@ public class ShareActivity extends BaseSameActivity {
         }
     }
 
-    private void staryShare(String query) {
+    /**
+     * 启动搜索
+     *
+     * @param query 搜索关键字
+     */
+   /* private void staryShare(String query) {
         if (TextUtils.isEmpty(query)) {
             return;
         }
@@ -151,6 +170,9 @@ public class ShareActivity extends BaseSameActivity {
         if (TextUtils.isEmpty(query) || mViewPager == null || mFragmentT1 == null || mFragmentT2 == null) {
             return;
         }
+
+        mFragmentT1.recoverData();
+        mFragmentT2.recoverData();
 
         changHistoryFluidLayout(query);
 
@@ -165,8 +187,45 @@ public class ShareActivity extends BaseSameActivity {
                 mFragmentT2.netShareT2Data(query);
                 break;
         }
+    }*/
+    private void staryShare(String query) {
+        if (TextUtils.isEmpty(query)) {
+            return;
+        }
+        query = query.trim();
+        if (TextUtils.isEmpty(query) || mViewPager == null || mFragmentT1 == null || mFragmentT2 == null) {
+            return;
+        }
+
+        mHome_fragment1.recoverData();
+//        mFragmentT2.recoverData();
+
+        changHistoryFluidLayout(query);
+
+        hindKeyboard(mViewPager);
+
+        mHome_fragment1.netData(query);
+        if (3 > 0) {
+            return;
+        }
+
+        showShareItemHindInfo();
+        int currentItem = mViewPager.getCurrentItem();
+        switch (currentItem) {
+            case 0:
+                mHome_fragment1.netData(query);
+                break;
+            case 1:
+                mFragmentT2.netShareT2Data(query);
+                break;
+        }
     }
 
+    /**
+     * 增加搜索历史
+     *
+     * @param query 最新的一条历史
+     */
     private void changHistoryFluidLayout(String query) {
         String shareHistory = (String) SPUtils.get(this, SPUtils.SHARE_HISTORY, "");
         List<String> historyList = new ArrayList<>();
@@ -195,7 +254,9 @@ public class ShareActivity extends BaseSameActivity {
         for (int i = 0; i < historyList.size(); i++) {
             final TextView textView = new TextView(this);
             textView.setText(historyList.get(i));
-            textView.setPadding(0, 8, 38, 8);
+            textView.setPadding(0, 12, 38, 12);
+            textView.setClickable(true);
+            textView.setTextColor(getResources().getColor(R.color.select_color_text_gray_dark));
             textView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {

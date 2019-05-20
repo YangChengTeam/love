@@ -52,6 +52,13 @@ public class SPUtils {
 
         SharedPreferencesCompat.apply(editor);
     }
+    public static void putLong(Context context, String key, long longData) {
+        SharedPreferences sp = context.getSharedPreferences(FILE_NAME,
+                Context.MODE_PRIVATE);
+        SharedPreferences.Editor editor = sp.edit();
+        editor.putLong(key, longData);
+        SharedPreferencesCompat.apply(editor);
+    }
 
     /**
      * 得到保存数据的方法，我们根据默认值得到保存的数据的具体类型，然后调用相对于的方法获取值

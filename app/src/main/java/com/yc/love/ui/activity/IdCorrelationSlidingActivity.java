@@ -171,7 +171,7 @@ public class IdCorrelationSlidingActivity extends BaseSlidingActivity implements
 //    private int recLen = RECLEN_TIME;
 
     private long countDoenInterval = 980;
-    private long millisInFuture = 1000 * 9 + 300;
+    private long millisInFuture = 1000 * 60 + 500;
 
     private LoginEditTextLin.OnClickEtCodeListent clickEtCodeListent = new LoginEditTextLin.OnClickEtCodeListent() {
         @Override
@@ -297,7 +297,6 @@ public class IdCorrelationSlidingActivity extends BaseSlidingActivity implements
                 }
                 break;
             case R.id.id_correlation_tv_next:
-                //TODO  mIsKeepPwd true-->记住密码  false-->不用记住密码
                 switch (mInitentState) {
                     case ID_CORRELATION_STATE_LOGIN:
                         boolean isCanLogin = checkInputLogin();
@@ -339,8 +338,6 @@ public class IdCorrelationSlidingActivity extends BaseSlidingActivity implements
     }
 
     private void netResetPassword() {
-
-        // TODO 重置密码的接口用不了
         mLoadingDialog.showLoadingDialog();
         mIdCorrelationEngin.resetPassword(mInputCodeString, mInputPhoneString, mInputPwdString, "user/reset").subscribe(new MySubscriber<AResultInfo<String>>(mLoadingDialog) {
 
