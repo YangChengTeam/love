@@ -7,6 +7,7 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 
 import com.yc.love.adaper.rv.holder.BaseViewHolder;
+import com.yc.love.adaper.rv.holder.MainT1CategoryViewHolder;
 import com.yc.love.adaper.rv.holder.MainT1ItemHolder;
 import com.yc.love.adaper.rv.holder.ProgressBarViewHolder;
 import com.yc.love.adaper.rv.holder.TitleT1ViewHolder;
@@ -26,6 +27,7 @@ public abstract class MainT1MoreItemAdapter extends RecyclerView.Adapter<Recycle
     private static final int VIEW_ITEM = 0;
     private static final int VIEW_PROG = 1;
     private static final int VIEW_TITLE = 2;
+    private static final int VIEW_CATEGORY = 3;
     private boolean isLoading;
     private int totalItemCount;
     private int lastVisibleItemPosition;
@@ -58,6 +60,8 @@ public abstract class MainT1MoreItemAdapter extends RecyclerView.Adapter<Recycle
                 return VIEW_TITLE;
             case 1:
                 return VIEW_ITEM;
+            case 3:
+                return VIEW_CATEGORY;
         }
         return VIEW_PROG;
     }
@@ -74,6 +78,8 @@ public abstract class MainT1MoreItemAdapter extends RecyclerView.Adapter<Recycle
         }
         return holder;
     }
+
+
 
 
     @Override
@@ -146,7 +152,6 @@ public abstract class MainT1MoreItemAdapter extends RecyclerView.Adapter<Recycle
     public interface OnLoadMoreDataListener {
         void loadMoreData();
     }
-
 
     public abstract BaseViewHolder getHolder(ViewGroup parent);
 

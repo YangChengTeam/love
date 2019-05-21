@@ -1,13 +1,23 @@
 package com.yc.love.ui.frament;
 
+import android.content.ClipData;
+import android.content.ClipboardManager;
 import android.content.Intent;
+import android.content.pm.PackageManager;
+import android.graphics.Color;
+import android.graphics.drawable.ColorDrawable;
+import android.graphics.drawable.Drawable;
 import android.os.Bundle;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.Window;
+import android.widget.LinearLayout;
+import android.widget.TextView;
 
 import com.yc.love.R;
 import com.yc.love.adaper.rv.LoveHealDetailsAdapter;
@@ -21,13 +31,19 @@ import com.yc.love.model.base.MySubscriber;
 import com.yc.love.model.bean.AResultInfo;
 import com.yc.love.model.bean.LoveHealDetBean;
 import com.yc.love.model.bean.LoveHealDetDetailsBean;
+import com.yc.love.model.bean.MyAppInfo;
+import com.yc.love.model.bean.OpenApkPkgInfo;
 import com.yc.love.model.engin.LoveEngin;
 import com.yc.love.model.single.YcSingle;
+import com.yc.love.model.util.ApkToolUtils;
+import com.yc.love.model.util.PackageUtils;
 import com.yc.love.ui.activity.BecomeVipActivity;
 import com.yc.love.ui.activity.ShareActivity;
 import com.yc.love.ui.frament.base.BaseLazyFragment;
 import com.yc.love.ui.view.LoadDialog;
+import com.yc.love.ui.view.OpenAkpDialog;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -76,12 +92,14 @@ public class ShareFragment extends BaseLazyFragment {
         mRecyclerView = rootView.findViewById(R.id.base_share_rv);
         LinearLayoutManager layoutManager = new LinearLayoutManager(mShareActivity);
         mRecyclerView.setLayoutManager(layoutManager);
+
+
     }
 
     /**
      * @param keyword
      */
-    public void netData( String keyword) {
+    public void netData(String keyword) {
         this.keyword = keyword;
         int id = YcSingle.getInstance().id;
         if (id <= 0) {
@@ -111,7 +129,7 @@ public class ShareFragment extends BaseLazyFragment {
     }
 
     private void initRecyclerData() {
-        mLoveHealDetBeans=addTitle(mLoveHealDetBeans);
+        mLoveHealDetBeans = addTitle(mLoveHealDetBeans);
 
         mAdapter = new LoveHealDetailsAdapter(mLoveHealDetBeans, mRecyclerView) {
             @Override
@@ -120,8 +138,7 @@ public class ShareFragment extends BaseLazyFragment {
                 loveHealDetItemHolder.setOnClickCopyListent(new LoveHealDetItemHolder.OnClickCopyListent() {
                     @Override
                     public void onClickCopy(LoveHealDetDetailsBean detailsBean) {
-                        Log.d("mylog", "onClickCopy: detailsBean " + detailsBean.toString());
-                        mShareActivity.showToastShort(detailsBean.content);
+                        toCopy(detailsBean.content);
                     }
                 });
                 return loveHealDetItemHolder;
@@ -171,6 +188,42 @@ public class ShareFragment extends BaseLazyFragment {
             });
         }
         loadDataEnd = true;
+    }
+
+    private void toCopy(String content) {
+        ClipboardManager myClipboard = (ClipboardManager) mShareActivity.getSystemService(mShareActivity.CLIPBOARD_SERVICE);
+        ClipData myClip = ClipData.newPlainText("text", content);
+        myClipboard.setPrimaryClip(myClip);
+        showOpenAkpDialog();
+    }
+
+    private void showOpenAkpDialog() {
+        List<OpenApkPkgInfo> openApkPkgInfos = new ArrayList<>();
+        OpenApkPkgInfo qq = new OpenApkPkgInfo(1, "", "QQ", mShareActivity.getResources().getDrawable(R.mipmap.icon_d_qq));
+        OpenApkPkgInfo wx = new OpenApkPkgInfo(2, "", "微信", mShareActivity.getResources().getDrawable(R.mipmap.icon_d_wx));
+        OpenApkPkgInfo mm = new OpenApkPkgInfo(3, "", "陌陌", mShareActivity.getResources().getDrawable(R.mipmap.icon_d_momo));
+        OpenApkPkgInfo tt = new OpenApkPkgInfo(4, "", "探探", mShareActivity.getResources().getDrawable(R.mipmap.icon_d_tt));
+
+        List<String> apkList = PackageUtils.getApkList(mShareActivity);
+        for (int i = 0; i < apkList.size(); i++) {
+            String apkPkgName = apkList.get(i);
+            if ("com.tencent.mobileqq".equals(apkPkgName)) {
+                qq.pkg = apkPkgName;
+            } else if ("com.tencent.mm".equals(apkPkgName)) {
+                wx.pkg = apkPkgName;
+            } else if ("com.immomo.momo".equals(apkPkgName)) {
+                mm.pkg = apkPkgName;
+            } else if ("com.p1.mobile.putong".equals(apkPkgName)) {
+                tt.pkg = apkPkgName;
+            }
+        }
+
+        openApkPkgInfos.add(qq);
+        openApkPkgInfos.add(wx);
+        openApkPkgInfos.add(mm);
+        openApkPkgInfos.add(tt);
+        OpenAkpDialog openAkpDialog = new OpenAkpDialog(mShareActivity, openApkPkgInfos);
+        openAkpDialog.show();
     }
 
     private List<LoveHealDetBean> addTitle(List<LoveHealDetBean> loveHealDetBeans) {

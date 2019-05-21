@@ -17,10 +17,6 @@ buildscript {
 
 allprojects {
     repositories {
-     /*   // 支付宝 SDK AAR 包所需的配置
-        flatDir {
-            dirs 'libs'
-        }*/
         google()
         jcenter()
         maven { url "https://jitpack.io" }

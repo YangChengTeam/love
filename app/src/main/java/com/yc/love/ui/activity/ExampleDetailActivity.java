@@ -161,7 +161,7 @@ public class ExampleDetailActivity extends BaseSameActivity {
         webView.setWebViewClient(new WebViewClient());
         webView.addJavascriptInterface(new AndroidJavaScript(getApplication()), "android");//设置js接口
         settings.setLayoutAlgorithm(WebSettings.LayoutAlgorithm.SINGLE_COLUMN);//支持内容重新布局
-
+        data = formatting(data);
         webView.loadDataWithBaseURL(null, data, "text/html", "utf-8", null);
 
         webView.setWebChromeClient(new WebChromeClient() {
@@ -171,17 +171,27 @@ public class ExampleDetailActivity extends BaseSameActivity {
                 mProgressBar.setVisibility(View.VISIBLE);//把网页加载的进度传给我们的进度条
                 mProgressBar.setProgress(newProgress);
 
-                if(newProgress>=95){ //加载完毕让进度条消失
-                    if(mProgressBar.getVisibility()!=View.GONE){
+                if (newProgress >= 95) { //加载完毕让进度条消失
+                    if (mProgressBar.getVisibility() != View.GONE) {
                         mProgressBar.setVisibility(View.GONE);
                     }
-                    if(mClLikeCon.getVisibility()!=View.VISIBLE){
+                    if (mClLikeCon.getVisibility() != View.VISIBLE) {
                         mClLikeCon.setVisibility(View.VISIBLE);
                     }
                 }
                 super.onProgressChanged(view, newProgress);
             }
         });
+    }
+
+    private String formatting(String data) {
+        StringBuilder stringBuilder = new StringBuilder();
+        stringBuilder.append("<html>");
+        stringBuilder.append("<head><style>img{max-width: 100%!important;height:auto!important;}body{background:#fff;position: relative;line-height:1.6;font-family:Microsoft YaHei,Helvetica,Tahoma,Arial,\\5FAE\\8F6F\\96C5\\9ED1,sans-serif}</style></head>");
+        stringBuilder.append("<body>");
+        stringBuilder.append(data);
+        stringBuilder.append("</body></html>");
+        return stringBuilder.toString();
     }
 
 

@@ -1,6 +1,7 @@
 package com.yc.love.ui.frament.base;
 
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -21,6 +22,7 @@ public abstract class BaseLazyFragment extends BaseFragment {
         initBundle();
         initViews();
         isInitView = true;
+        Log.d("mylog", "onFragmentCreateView: isInitView "+isInitView);
         isCanLoadData();
         return rootView;
     }
@@ -34,6 +36,7 @@ public abstract class BaseLazyFragment extends BaseFragment {
     public void setUserVisibleHint(boolean isVisibleToUser) {
         super.setUserVisibleHint(isVisibleToUser);
         //isVisibleToUser这个boolean值表示:该Fragment的UI 用户是否可见，获取该标志记录下来
+        Log.d("mylog", "onFragmentCreateView: isVisibleToUser "+isVisibleToUser);
         if (isVisibleToUser) {
             isVisible = true;
             isCanLoadData();

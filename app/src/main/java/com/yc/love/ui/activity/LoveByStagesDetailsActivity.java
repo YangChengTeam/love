@@ -187,7 +187,7 @@ public class LoveByStagesDetailsActivity extends BaseSameActivity {
     }
 
 
-    private void initWebView(final String data) {
+    private void initWebView(String data) {
 
         final WebSettings webSettings = webView.getSettings();
         webSettings.setJavaScriptEnabled(true);
@@ -206,8 +206,8 @@ public class LoveByStagesDetailsActivity extends BaseSameActivity {
         webSettings.setDefaultTextEncodingName("utf-8");//设置编码格式
         webSettings.setBlockNetworkImage(true);//设置是否加载网络图片 true 为不加载 false 为加载
 
-        Log.d("mylog", "initWebView: data "+data);
-//        String body = data.getInfo().getBody();
+        Log.d("mylog", "initWebView: data " + data);
+        data = formatting(data);
         webView.loadDataWithBaseURL(null, data, "text/html", "utf-8", null);
 
 
@@ -223,11 +223,11 @@ public class LoveByStagesDetailsActivity extends BaseSameActivity {
                 //首先我们的进度条是隐藏的
                 mProgressBar.setVisibility(View.VISIBLE);//把网页加载的进度传给我们的进度条
                 mProgressBar.setProgress(newProgress);
-                if(newProgress>=95){ //加载完毕让进度条消失
-                    if(mProgressBar.getVisibility()!=View.GONE){
+                if (newProgress >= 95) { //加载完毕让进度条消失
+                    if (mProgressBar.getVisibility() != View.GONE) {
                         mProgressBar.setVisibility(View.GONE);
                     }
-                    if(mClLikeCon.getVisibility()!=View.VISIBLE){
+                    if (mClLikeCon.getVisibility() != View.VISIBLE) {
                         mClLikeCon.setVisibility(View.VISIBLE);
                     }
                 }
@@ -258,6 +258,15 @@ public class LoveByStagesDetailsActivity extends BaseSameActivity {
         });
     }
 
+    private String formatting(String data) {
+        StringBuilder stringBuilder = new StringBuilder();
+        stringBuilder.append("<html>");
+        stringBuilder.append("<head><style>img{max-width: 100%!important;height:auto!important;}body{background:#fff;position: relative;line-height:1.6;font-family:Microsoft YaHei,Helvetica,Tahoma,Arial,\\5FAE\\8F6F\\96C5\\9ED1,sans-serif}</style></head>");
+        stringBuilder.append("<body>");
+        stringBuilder.append(data);
+        stringBuilder.append("</body></html>");
+        return stringBuilder.toString();
+    }
 
     private void netData() {
         mLoadingDialog.showLoadingDialog();

@@ -58,6 +58,7 @@ public class ShareActivity extends BaseSameActivity {
     private FluidLayout mFluidLayout;
     private SearchView mSearchView;
     private ShareFragment mHome_fragment1;
+    private FrameLayout mFrameLayout;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -125,7 +126,7 @@ public class ShareActivity extends BaseSameActivity {
                 return false;
             }
         });
-        FrameLayout frameLayout = findViewById(R.id.share_frame_layout);
+        mFrameLayout = findViewById(R.id.share_frame_layout);
 
         //获取管理者
         FragmentManager supportFragmentManager = getSupportFragmentManager();//开启事务
@@ -137,23 +138,29 @@ public class ShareActivity extends BaseSameActivity {
     }
 
     private void showShareItemHindInfo() {
-        if (mClInfo.getVisibility() == View.VISIBLE) {
-            mClInfo.setVisibility(View.INVISIBLE);
+        if (mClInfo.getVisibility() != View.GONE) {
+            mClInfo.setVisibility(View.GONE);
         }
         /*if (mClItemCon.getVisibility() == View.INVISIBLE) {
             mClItemCon.setVisibility(View.VISIBLE);
         }*/
+        if (mFrameLayout.getVisibility() != View.VISIBLE) {
+            mFrameLayout.setVisibility(View.VISIBLE);
+        }
     }
 
     private void hindShareItemShowInfo() {
-        if (mClInfo.getVisibility() == View.INVISIBLE) {
+        if (mClInfo.getVisibility() != View.VISIBLE) {
             mClInfo.setVisibility(View.VISIBLE);
         }
-        if (mClItemCon.getVisibility() == View.VISIBLE) {
+       /* if (mClItemCon.getVisibility() == View.VISIBLE) {
             mClItemCon.setVisibility(View.INVISIBLE);
 
             mFragmentT1.recoverData();
             mFragmentT2.recoverData();
+        }*/
+        if (mFrameLayout.getVisibility() != View.GONE) {
+            mFrameLayout.setVisibility(View.GONE);
         }
     }
 
@@ -205,11 +212,11 @@ public class ShareActivity extends BaseSameActivity {
         hindKeyboard(mViewPager);
 
         mHome_fragment1.netData(query);
+        showShareItemHindInfo();
+
         if (3 > 0) {
             return;
         }
-
-        showShareItemHindInfo();
         int currentItem = mViewPager.getCurrentItem();
         switch (currentItem) {
             case 0:
@@ -352,5 +359,15 @@ public class ShareActivity extends BaseSameActivity {
     @Override
     protected boolean isSupportSwipeBack() {
         return false;
+    }
+
+    @Override
+    protected boolean childDisposeOnBack() {
+        if (mFrameLayout.getVisibility() != View.GONE) {
+            hindShareItemShowInfo();
+        } else {
+            finish();
+        }
+        return true;
     }
 }

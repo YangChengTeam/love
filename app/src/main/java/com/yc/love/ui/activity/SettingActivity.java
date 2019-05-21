@@ -1,15 +1,20 @@
 package com.yc.love.ui.activity;
 
 import android.content.DialogInterface;
+import android.content.pm.PackageManager;
+import android.graphics.drawable.Drawable;
 import android.support.v7.app.AlertDialog;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.yc.love.R;
+import com.yc.love.model.bean.MyAppInfo;
 import com.yc.love.model.bean.event.EventLoginState;
 import com.yc.love.model.single.YcSingle;
+import com.yc.love.model.util.ApkToolUtils;
 import com.yc.love.model.util.DataCleanManagerUtils;
 import com.yc.love.model.util.SPUtils;
 import com.yc.love.ui.activity.base.BaseSameActivity;
@@ -17,6 +22,9 @@ import com.yc.love.ui.view.LoadingDialog;
 import com.yc.love.ui.view.MainMyItemLin;
 
 import org.greenrobot.eventbus.EventBus;
+
+import java.util.ArrayList;
+import java.util.List;
 
 public class SettingActivity extends BaseSameActivity {
 

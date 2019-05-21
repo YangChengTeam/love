@@ -1,5 +1,7 @@
 package com.yc.love.ui.activity;
 
+import android.content.ClipData;
+import android.content.ClipboardManager;
 import android.content.Context;
 import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
@@ -26,10 +28,14 @@ import com.yc.love.model.base.MySubscriber;
 import com.yc.love.model.bean.AResultInfo;
 import com.yc.love.model.bean.LoveHealDetBean;
 import com.yc.love.model.bean.LoveHealDetDetailsBean;
+import com.yc.love.model.bean.OpenApkPkgInfo;
 import com.yc.love.model.engin.LoveEngin;
 import com.yc.love.model.single.YcSingle;
+import com.yc.love.model.util.PackageUtils;
 import com.yc.love.ui.activity.base.BaseSameActivity;
+import com.yc.love.ui.view.OpenAkpDialog;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class LoveHealDetailsActivity extends BaseSameActivity {
@@ -121,8 +127,9 @@ public class LoveHealDetailsActivity extends BaseSameActivity {
                 loveHealDetItemHolder.setOnClickCopyListent(new LoveHealDetItemHolder.OnClickCopyListent() {
                     @Override
                     public void onClickCopy(LoveHealDetDetailsBean detailsBean) {
-                        Log.d("mylog", "onClickCopy: detailsBean " + detailsBean.toString());
-                        LoveHealDetailsActivity.this.showToastShort(detailsBean.content);
+//                        Log.d("mylog", "onClickCopy: detailsBean " + detailsBean.toString());
+//                        LoveHealDetailsActivity.this.showToastShort(detailsBean.content);
+                        toCopy(detailsBean.content);
                     }
                 });
                 return loveHealDetItemHolder;
@@ -172,6 +179,42 @@ public class LoveHealDetailsActivity extends BaseSameActivity {
             });
         }
         loadDataEnd = true;
+    }
+
+    private void toCopy(String content) {
+        ClipboardManager myClipboard = (ClipboardManager) getSystemService(CLIPBOARD_SERVICE);
+        ClipData myClip = ClipData.newPlainText("text", content);
+        myClipboard.setPrimaryClip(myClip);
+        showOpenAkpDialog();
+    }
+
+    private void showOpenAkpDialog() {
+        List<OpenApkPkgInfo> openApkPkgInfos = new ArrayList<>();
+        OpenApkPkgInfo qq = new OpenApkPkgInfo(1, "", "QQ", getResources().getDrawable(R.mipmap.icon_d_qq));
+        OpenApkPkgInfo wx = new OpenApkPkgInfo(2, "", "微信", getResources().getDrawable(R.mipmap.icon_d_wx));
+        OpenApkPkgInfo mm = new OpenApkPkgInfo(3, "", "陌陌", getResources().getDrawable(R.mipmap.icon_d_momo));
+        OpenApkPkgInfo tt = new OpenApkPkgInfo(4, "", "探探", getResources().getDrawable(R.mipmap.icon_d_tt));
+
+        List<String> apkList = PackageUtils.getApkList(this);
+        for (int i = 0; i < apkList.size(); i++) {
+            String apkPkgName = apkList.get(i);
+            if ("com.tencent.mobileqq".equals(apkPkgName)) {
+                qq.pkg = apkPkgName;
+            } else if ("com.tencent.mm".equals(apkPkgName)) {
+                wx.pkg = apkPkgName;
+            } else if ("com.immomo.momo".equals(apkPkgName)) {
+                mm.pkg = apkPkgName;
+            } else if ("com.p1.mobile.putong".equals(apkPkgName)) {
+                tt.pkg = apkPkgName;
+            }
+        }
+
+        openApkPkgInfos.add(qq);
+        openApkPkgInfos.add(wx);
+        openApkPkgInfos.add(mm);
+        openApkPkgInfos.add(tt);
+        OpenAkpDialog openAkpDialog = new OpenAkpDialog(this, openApkPkgInfos);
+        openAkpDialog.show();
     }
 
     private void netLoadMore() {

@@ -10,31 +10,25 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.LinearLayout;
-import android.widget.Toast;
 
 import com.yc.love.R;
 import com.yc.love.adaper.rv.MainT1MoreItemAdapter;
 import com.yc.love.adaper.rv.base.RecyclerViewItemListener;
 import com.yc.love.adaper.rv.holder.BaseViewHolder;
+import com.yc.love.adaper.rv.holder.MainT1CategoryViewHolder;
 import com.yc.love.adaper.rv.holder.MainT1ItemHolder;
 import com.yc.love.adaper.rv.holder.ProgressBarViewHolder;
-import com.yc.love.adaper.rv.holder.StringBeanViewHolder;
 import com.yc.love.adaper.rv.holder.TitleT1ViewHolder;
 import com.yc.love.model.base.MySubscriber;
 import com.yc.love.model.bean.AResultInfo;
+import com.yc.love.model.bean.CategoryArticleBean;
+import com.yc.love.model.bean.CategoryArticleChildrenBean;
 import com.yc.love.model.bean.ExampDataBean;
 import com.yc.love.model.bean.ExampListsBean;
-import com.yc.love.model.bean.ExampleTsBean;
-import com.yc.love.model.bean.ExampleTsListBean;
-import com.yc.love.model.bean.MainT2Bean;
-import com.yc.love.model.bean.MainT3Bean;
-import com.yc.love.model.bean.StringBean;
-import com.yc.love.model.bean.event.EventBusWxPayResult;
 import com.yc.love.model.bean.event.NetWorkChangBean;
 import com.yc.love.model.engin.LoveEngin;
-import com.yc.love.model.single.YcSingle;
 import com.yc.love.ui.activity.ExampleDetailActivity;
-import com.yc.love.ui.activity.LoveByStagesDetailsActivity;
+import com.yc.love.ui.activity.LoveByStagesActivity;
 import com.yc.love.ui.activity.LoveHealActivity;
 import com.yc.love.ui.activity.LoveHealingActivity;
 import com.yc.love.ui.activity.ShareActivity;
@@ -45,6 +39,8 @@ import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
 import org.greenrobot.eventbus.ThreadMode;
 
+import java.net.SocketTimeoutException;
+import java.net.UnknownHostException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -59,14 +55,15 @@ public class MainT1Fragment extends BaseMainFragment {
     private boolean loadMoreEnd;
     private boolean loadDataEnd;
     private boolean showProgressBar = false;
-    private int num = 10;
     private MainT1MoreItemAdapter mAdapter;
     private ProgressBarViewHolder progressBarViewHolder;
     private LoveEngin mLoveEngin;
     private List<ExampListsBean> mExampListsBeans;
     private RecyclerView mRecyclerView;
     private LinearLayout mLlNotNet;
-    private boolean mIsNetData=false;
+    private boolean mIsNetData = false;
+    private boolean mIsNetTitleData = false;
+    private List<CategoryArticleBean> mCategoryArticleBeans;
 
     @Override
     protected int setContentView() {
@@ -103,6 +100,7 @@ public class MainT1Fragment extends BaseMainFragment {
 
         }
     };
+
     @Override
     public void onStart() {
         super.onStart();
@@ -114,8 +112,9 @@ public class MainT1Fragment extends BaseMainFragment {
         super.onStop();
         EventBus.getDefault().unregister(this);
     }
+
     @Subscribe(threadMode = ThreadMode.MAIN)
-    public void onMessageEvent(NetWorkChangBean netWorkChangBean) {
+    public void onMessageEvent(NetWorkChangBean netWorkChangBean) {  //无网状态
         List<String> connectionTypeList = netWorkChangBean.connectionTypeList;
         if (connectionTypeList == null || connectionTypeList.size() == 0) {
             if (mLlNotNet.getVisibility() != View.VISIBLE) {
@@ -124,7 +123,7 @@ public class MainT1Fragment extends BaseMainFragment {
         } else {
             if (mLlNotNet.getVisibility() != View.GONE) {
                 mLlNotNet.setVisibility(View.GONE);
-                if(!mIsNetData){
+                if (!mIsNetData) {
                     netData();
                 }
             }
@@ -136,6 +135,7 @@ public class MainT1Fragment extends BaseMainFragment {
     protected void lazyLoad() {
 //        mIsNetData = false;
         netData();
+        netTitleData();
     }
 
     private void netData() {
@@ -144,7 +144,7 @@ public class MainT1Fragment extends BaseMainFragment {
         mLoveEngin.indexExample(String.valueOf(PAGE_NUM), String.valueOf(PAGE_SIZE), "example/index").subscribe(new MySubscriber<AResultInfo<ExampDataBean>>(loadDialog) {
             @Override
             protected void onNetNext(AResultInfo<ExampDataBean> exampDataBeanAResultInfo) {
-                mIsNetData=true;
+
                 ExampDataBean exampDataBean = exampDataBeanAResultInfo.data;
                 if (exampDataBean != null) {
                     mExampListsBeans = exampDataBean.lists;
@@ -152,9 +152,43 @@ public class MainT1Fragment extends BaseMainFragment {
                         mExampListsBeans = new ArrayList<>();
                     }
                 }
+//                mExampListsBeans.add(0, new ExampListsBean(3, "Article_Category"));
                 mExampListsBeans.add(0, new ExampListsBean(0, "title"));
+                mIsNetData = true;
+                if (mIsNetData && mIsNetTitleData) {
+                    initRecyclerViewData();
+                }
+            }
 
-                initRecyclerViewData();
+            @Override
+            protected void onNetError(Throwable e) {
+//                java.net.SocketTimeoutException: timeout
+//                java.net.UnknownHostException: Unable to resolve host "love.bshu.com": No address associated with hostname
+                if (e instanceof SocketTimeoutException || e instanceof UnknownHostException) {
+                    //TODO 网络超时
+
+
+                }
+            }
+
+            @Override
+            protected void onNetCompleted() {
+
+            }
+        });
+    }
+
+    private void netTitleData() {
+        LoadDialog loadDialog = new LoadDialog(mMainActivity);
+        loadDialog.show();
+        mLoveEngin.categoryArticle("Article/category").subscribe(new MySubscriber<AResultInfo<List<CategoryArticleBean>>>(loadDialog) {
+            @Override
+            protected void onNetNext(AResultInfo<List<CategoryArticleBean>> listAResultInfo) {
+                mCategoryArticleBeans = listAResultInfo.data;
+                mIsNetTitleData = true;
+                if (mIsNetData && mIsNetTitleData) {
+                    initRecyclerViewData();
+                }
             }
 
             @Override
@@ -170,7 +204,9 @@ public class MainT1Fragment extends BaseMainFragment {
     }
 
     private void initRecyclerViewData() {
+        Log.d("mylog", "initRecyclerViewData: ");
         mAdapter = new MainT1MoreItemAdapter(mExampListsBeans, mRecyclerView) {
+
             @Override
             public BaseViewHolder getHolder(ViewGroup parent) {
                 return new MainT1ItemHolder(mMainActivity, recyclerViewItemListener, parent);
@@ -179,7 +215,38 @@ public class MainT1Fragment extends BaseMainFragment {
             @Override
             public BaseViewHolder getTitleHolder(ViewGroup parent) {
                 TitleT1ViewHolder titleT1ViewHolder = new TitleT1ViewHolder(mMainActivity, null, parent);
-                titleT1ViewHolder.setOnClickShareListent(new TitleT1ViewHolder.OnClickMainT1TitleListent() {
+                titleT1ViewHolder.setOnClickTitleIconListener(new TitleT1ViewHolder.OnClickTitleIconListener() {
+                    @Override
+                    public void clickTitleIcon(int position) {
+                        switch (position) {
+                            case 0:
+                                startLoveByStagesActivity(0, "单身期");
+                                break;
+                            case 1:
+                                startLoveByStagesActivity(1, "追求期");
+                                break;
+                            case 2:
+                                startLoveByStagesActivity(2, "热恋期");
+                                break;
+                            case 3:
+                                startLoveByStagesActivity(3, "失恋期");
+                                break;
+                            case 4:
+                                startLoveByStagesActivity(4, "婚后期");
+                                break;
+                            case 5:
+                                startActivity(new Intent(mMainActivity, LoveHealActivity.class));
+                                break;
+                            case 6:
+                                startActivity(new Intent(mMainActivity, LoveHealingActivity.class));
+                                break;
+                            case 7:
+                                mMainActivity.startActivity(new Intent(mMainActivity, ShareActivity.class));
+                                break;
+                        }
+                    }
+                });
+              /*  titleT1ViewHolder.setOnClickShareListent(new TitleT1ViewHolder.OnClickMainT1TitleListent() {
                     @Override
                     public void clickShareListent() {
                         mMainActivity.startActivity(new Intent(mMainActivity, ShareActivity.class));
@@ -197,7 +264,7 @@ public class MainT1Fragment extends BaseMainFragment {
                         startActivity(new Intent(mMainActivity, LoveHealingActivity.class));
 //                        Toast.makeText(mMainActivity, "clickIvModule03", Toast.LENGTH_SHORT).show();
                     }
-                });
+                });*/
                 return titleT1ViewHolder;
             }
 
@@ -237,6 +304,16 @@ public class MainT1Fragment extends BaseMainFragment {
         loadDataEnd = true;
     }
 
+    private void startLoveByStagesActivity(int position, String title) {
+        if (mCategoryArticleBeans == null || mCategoryArticleBeans.size() < position + 1) {
+            return;
+        }
+        CategoryArticleBean categoryArticleBean = mCategoryArticleBeans.get(position);
+        ArrayList<CategoryArticleChildrenBean> children = categoryArticleBean.children;
+        LoveByStagesActivity.startLoveByStagesActivity(mMainActivity, title, children);
+    }
+
+
     private void netLoadMore() {
         mLoveEngin.indexExample(String.valueOf(++PAGE_NUM), String.valueOf(PAGE_SIZE), "example/index").subscribe(new MySubscriber<AResultInfo<ExampDataBean>>(mMainActivity) {
             @Override
@@ -251,7 +328,7 @@ public class MainT1Fragment extends BaseMainFragment {
 
             @Override
             protected void onNetError(Throwable e) {
-                if(PAGE_NUM!=1){
+                if (PAGE_NUM != 1) {
                     PAGE_NUM--;
                 }
                 changLoadMoreView(null);

@@ -55,52 +55,8 @@ public class DetailsBeanViewHolder extends BaseViewHolder<LoveHealDetDetailsBean
             @Override
             public void onClick(View v) {
                 onClickCopyListent.onClickCopy(detailsBean);
-               /* List<String> apkList = PackageUtils.getApkList(context);
-                for (int i = 0; i < apkList.size(); i++) {
-                    Log.d("mylog", "getMapApk: " + apkList.get(i).toString());
-                }
-                openWeiXin();*/
             }
         });
-
-    }
-
-    private void openQQ() {
-
-        List<String> list=new ArrayList<>();
-//        list.add()
-        //同AndroidManifest中主入口Activity一样
-        Intent intent = new Intent(Intent.ACTION_MAIN, null);
-        intent.addCategory(Intent.CATEGORY_LAUNCHER);
-
-        //得到一个PackageManager的对象
-        PackageManager packageManager = context.getApplicationContext().getPackageManager();
-        //获取到主入口的Activity集合
-        List<ResolveInfo> mlist = packageManager.queryIntentActivities(intent, 0);
-
-        Collections.sort(mlist, new ResolveInfo.DisplayNameComparator(packageManager));
-
-        for (ResolveInfo res : mlist) {
-            String pkg = res.activityInfo.packageName;
-            String cls = res.activityInfo.name;
-            if (pkg.contains("com.tencent.mm")) {
-                ComponentName componentName = new ComponentName(pkg, cls);
-                Intent intent1 = new Intent();
-                intent1.setComponent(componentName);
-                intent1.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-                context.startActivity(intent1);
-            }
-        }
-    }
-
-    private void openWeiXin() {
-        Intent intent = new Intent();
-        ComponentName cmp = new ComponentName("com.tencent.mm", "com.tencent.mm.ui.LauncherUI");
-        intent.setAction(Intent.ACTION_MAIN);
-        intent.addCategory(Intent.CATEGORY_LAUNCHER);
-        intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-        intent.setComponent(cmp);
-        context.startActivity(intent);
     }
 
     public interface OnClickCopyListent {

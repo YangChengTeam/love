@@ -111,11 +111,19 @@ public abstract class BaseSameActivity extends BaseSlidingActivity implements Vi
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.activity_base_same_iv_back:
+                boolean onBack=childDisposeOnBack();
+                if(onBack){
+                    return;
+                }
                 finish();
                 break;
             /*case R.id.activity_base_same_tv_sub:
 
                 break;*/
         }
+    }
+
+    protected boolean childDisposeOnBack() {
+        return false;
     }
 }

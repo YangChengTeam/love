@@ -32,17 +32,19 @@
                 android:id="@+id/example_detail_webview"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:layout_marginLeft="12dp"
+                android:layout_marginRight="10dp"
                 android:focusable="true"
                 android:focusableInTouchMode="true"
-                android:paddingLeft="8dp"
                 android:paddingTop="18dp"
-                android:paddingRight="8dp"
                 android:paddingBottom="14dp" />
 
             <android.support.constraint.ConstraintLayout
                 android:id="@+id/example_detail_cl_like_con"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:layout_marginLeft="15dp"
+                android:layout_marginRight="15dp"
                 android:paddingLeft="8dp"
                 android:paddingTop="25dp"
                 android:paddingRight="8dp"

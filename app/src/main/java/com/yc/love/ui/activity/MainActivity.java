@@ -3,6 +3,7 @@ package com.yc.love.ui.activity;
 import android.app.DownloadManager;
 import android.content.Context;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.content.IntentFilter;
 import android.database.ContentObserver;
 import android.database.Cursor;
@@ -15,6 +16,7 @@ import android.os.Environment;
 import android.os.Handler;
 import android.support.v7.app.AlertDialog;
 import android.util.Log;
+import android.view.KeyEvent;
 import android.view.View;
 import android.widget.TextView;
 
@@ -45,7 +47,6 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-
         invadeStatusBar(); //侵入状态栏
         setAndroidNativeLightStatusBar(); //状态栏字体颜色改变
 
@@ -53,6 +54,29 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
 
         checkUpdate();
     }
+    /*@Override
+    public boolean onKeyDown(int keyCode, KeyEvent event) {
+        if (keyCode == KeyEvent.KEYCODE_BACK) {
+            if (mBinding.drawerLayout.isDrawerOpen(GravityCompat.START)) {
+                mBinding.drawerLayout.closeDrawer(GravityCompat.START);
+            } else {
+                // 不退出程序，进入后台
+                moveTaskToBack(true);
+            }
+            return true;
+        }
+        return super.onKeyDown(keyCode, event);
+    }*/
+
+    //后台运行而不退出程序
+    @Override
+    public void onBackPressed() { //重写的Activity返回
+        Intent intent = new Intent();
+        intent.setAction("android.intent.action.MAIN");
+        intent.addCategory("android.intent.category.HOME");
+        startActivity(intent);
+    }
+
 
 
     private void initNetWorkChangReceiver() {
@@ -212,7 +236,7 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
         DownloadManager dowanloadmanager = (DownloadManager) getSystemService(DOWNLOAD_SERVICE);
 
 
-        long spDownloadId = (long) SPUtils.get(this, DownloadedApkUtlis.DOWNLOAD_ID, (long)-1);
+        long spDownloadId = (long) SPUtils.get(this, DownloadedApkUtlis.DOWNLOAD_ID, (long) -1);
    /*
         下载管理器中有很多下载项，怎么知道一个资源已经下载过，避免重复下载呢？
         我的项目中的需求就是apk更新下载，用户点击更新确定按钮，第一次是直接下载，

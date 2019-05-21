@@ -65,7 +65,7 @@ public class MainT3Fragment extends BaseMainFragment {
     //    private LoadDialog mLoadingDialog;
     private List<CategoryArticleBean> mCategoryArticleBeans;
     private LinearLayout mLlNotNet;
-    private boolean mIsNetData=false;
+    private boolean mIsNetData = false;
 
     @Override
     protected int setContentView() {
@@ -90,6 +90,7 @@ public class MainT3Fragment extends BaseMainFragment {
         mRecyclerView.setLayoutManager(gridLayoutManager);
 //        mRecyclerView.setItemAnimator(new DefaultItemAnimator());
     }
+
     @Override
     public void onStart() {
         super.onStart();
@@ -101,6 +102,7 @@ public class MainT3Fragment extends BaseMainFragment {
         super.onStop();
         EventBus.getDefault().unregister(this);
     }
+
     @Subscribe(threadMode = ThreadMode.MAIN)
     public void onMessageEvent(NetWorkChangBean netWorkChangBean) {
         List<String> connectionTypeList = netWorkChangBean.connectionTypeList;
@@ -125,14 +127,14 @@ public class MainT3Fragment extends BaseMainFragment {
 
     @Override
     protected void lazyLoad() {
-        List<String> connectionTypeList=YcSingle.getInstance().connectionTypeList;
+        List<String> connectionTypeList = YcSingle.getInstance().connectionTypeList;
         checkNetChangUI(connectionTypeList);
 //        isCanLoadData();
     }
 
     private void isCanLoadData() {
         netData();
-        netTitleData();
+//        netTitleData();
 
     }
 
@@ -142,7 +144,7 @@ public class MainT3Fragment extends BaseMainFragment {
         mLoveEngin.categoryArticle("Article/category").subscribe(new MySubscriber<AResultInfo<List<CategoryArticleBean>>>(loadDialog) {
             @Override
             protected void onNetNext(AResultInfo<List<CategoryArticleBean>> listAResultInfo) {
-                mIsNetData=true;
+                mIsNetData = true;
                 mCategoryArticleBeans = listAResultInfo.data;
                 for (CategoryArticleBean categoryArticleBean : mCategoryArticleBeans
                         ) {
@@ -171,10 +173,10 @@ public class MainT3Fragment extends BaseMainFragment {
 
             @Override
             protected void onNetNext(AResultInfo<ExampleTsCategory> exampleTsCategoryAResultInfo) {
-                mIsNetData=true;
+                mIsNetData = true;
                 mDatas = new ArrayList<>();
                 mDatas.add(new MainT3Bean(1));
-                mDatas.add(new MainT3Bean(2, "入门秘籍"));
+//                mDatas.add(new MainT3Bean(2, "入门秘籍"));
                 ExampleTsCategory exampleTsCategory = exampleTsCategoryAResultInfo.data;
                 List<ExampleTsCategoryList> list1 = exampleTsCategory.list1;
                 List<ExampleTsCategoryList> list2 = exampleTsCategory.list2;
@@ -217,30 +219,7 @@ public class MainT3Fragment extends BaseMainFragment {
 
             @Override
             public BaseViewHolder getTitleHolder(ViewGroup parent) {
-                MainT3TitleViewHolder mainT3TitleViewHolder = new MainT3TitleViewHolder(mMainActivity, null, parent);
-                mainT3TitleViewHolder.setOnClickTitleIconListener(new MainT3TitleViewHolder.OnClickTitleIconListener() {
-                    @Override
-                    public void clickTitleIcon(int position) {
-                        switch (position) {
-                            case 0:
-                                startLoveByStagesActivity(0, "单身期");
-                                break;
-                            case 1:
-                                startLoveByStagesActivity(1, "追求期");
-                                break;
-                            case 2:
-                                startLoveByStagesActivity(2, "热恋期");
-                                break;
-                            case 3:
-                                startLoveByStagesActivity(3, "失恋期");
-                                break;
-                            case 4:
-                                startLoveByStagesActivity(4, "婚后期");
-                                break;
-                        }
-                    }
-                });
-                return mainT3TitleViewHolder;
+                return new MainT3TitleViewHolder(mMainActivity, null, parent);
             }
 
             @Override
