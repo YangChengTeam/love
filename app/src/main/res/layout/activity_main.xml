@@ -3,9 +3,9 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:orientation="vertical"
     android:layout_height="match_parent"
-    android:background="@color/love_background">
+    android:background="@color/love_background"
+    android:orientation="vertical">
 
     <com.yc.love.ui.view.ControlScrollViewPager
         android:id="@+id/comp_main_vp_fragment"
@@ -53,6 +53,14 @@
             style="@style/tv_main_icon_bottom"
             android:background="?attr/selectableItemBackgroundBorderless"
             android:drawableTop="@mipmap/main_icon_tab_04"
+            android:text="福利"
+            android:textColor="@color/text_gray" />
+
+        <TextView
+            android:id="@+id/comp_main_tv_tab_5"
+            style="@style/tv_main_icon_bottom"
+            android:background="?attr/selectableItemBackgroundBorderless"
+            android:drawableTop="@mipmap/main_icon_tab_05"
             android:text="我的"
             android:textColor="@color/text_gray" />
 

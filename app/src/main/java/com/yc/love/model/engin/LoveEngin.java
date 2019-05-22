@@ -13,6 +13,7 @@ import com.yc.love.model.bean.ExampListsBean;
 import com.yc.love.model.bean.ExampleTsBean;
 import com.yc.love.model.bean.ExampleTsCategory;
 import com.yc.love.model.bean.ExampleTsListBean;
+import com.yc.love.model.bean.IdCorrelationLoginBean;
 import com.yc.love.model.bean.LoveByStagesBean;
 import com.yc.love.model.bean.LoveByStagesDetailsBean;
 import com.yc.love.model.bean.LoveHealDateBean;
@@ -35,6 +36,19 @@ public class LoveEngin extends BaseEngine {
 
     public LoveEngin(Context context) {
         super(context);
+    }
+
+    public Observable<AResultInfo<IdCorrelationLoginBean>> userInfo(String userId, String url) {
+        Map<String, String> params = new HashMap<>();
+        params.put("user_id", userId);
+        requestParams(params);
+        HttpCoreEngin<AResultInfo<IdCorrelationLoginBean>> httpCoreEngin = HttpCoreEngin.get(mContext);
+        Observable<AResultInfo<IdCorrelationLoginBean>> rxpost = httpCoreEngin.rxpost(URLConfig.getUrl(url), new TypeReference<AResultInfo<IdCorrelationLoginBean>>() {
+                }.getType(),
+                params,
+                true,
+                true, true);
+        return rxpost;
     }
 
     public Observable<AResultInfo<List<String>>> abc(String url) {
@@ -64,7 +78,7 @@ public class LoveEngin extends BaseEngine {
         return rxpost;
     }
 
-    public Observable<AResultInfo<List<LoveHealDetBean>>> loveListCategory(String userId,String category_id, String page, String page_size, String url) {
+    public Observable<AResultInfo<List<LoveHealDetBean>>> loveListCategory(String userId, String category_id, String page, String page_size, String url) {
         Map<String, String> params = new HashMap<>();
         params.put("user_id", userId);
         params.put("category_id", category_id);
@@ -80,20 +94,20 @@ public class LoveEngin extends BaseEngine {
         return rxpost;
     }
 
-   /* public Observable<AResultInfo<List<LoveHealingBean>>> recommendLovewords(String page, String page_size, String url) {
-        Map<String, String> params = new HashMap<>();
-        params.put("page", page);
-        params.put("page_size", page_size);
-        requestParams(params);
-        HttpCoreEngin<AResultInfo<List<LoveHealingBean>>> httpCoreEngin = HttpCoreEngin.get(mContext);
-        Observable<AResultInfo<List<LoveHealingBean>>> rxpost = httpCoreEngin.rxpost(URLConfig.getUrl(url), new TypeReference<AResultInfo<List<LoveHealingBean>>>() {
-                }.getType(),
-                params,
-                true,
-                true, true);
-        return rxpost;
-    }*/
-    public Observable<AResultInfo<List<LoveHealingBean>>> recommendLovewords(String userId,String page, String page_size, String url) {
+    /* public Observable<AResultInfo<List<LoveHealingBean>>> recommendLovewords(String page, String page_size, String url) {
+         Map<String, String> params = new HashMap<>();
+         params.put("page", page);
+         params.put("page_size", page_size);
+         requestParams(params);
+         HttpCoreEngin<AResultInfo<List<LoveHealingBean>>> httpCoreEngin = HttpCoreEngin.get(mContext);
+         Observable<AResultInfo<List<LoveHealingBean>>> rxpost = httpCoreEngin.rxpost(URLConfig.getUrl(url), new TypeReference<AResultInfo<List<LoveHealingBean>>>() {
+                 }.getType(),
+                 params,
+                 true,
+                 true, true);
+         return rxpost;
+     }*/
+    public Observable<AResultInfo<List<LoveHealingBean>>> recommendLovewords(String userId, String page, String page_size, String url) {
         Map<String, String> params = new HashMap<>();
         params.put("user_id", userId);
         params.put("page", page);
@@ -107,6 +121,7 @@ public class LoveEngin extends BaseEngine {
                 true, true);
         return rxpost;
     }
+
     public Observable<AResultInfo<String>> exampleCollectListList(String userId, String page, String pageSize, String url) {
         Map<String, String> params = new HashMap<>();
         params.put("user_id", userId);
@@ -123,7 +138,6 @@ public class LoveEngin extends BaseEngine {
     }
 
 
-
     public Observable<AResultInfo<List<ExampleTsBean>>> exampleTs(String url) {
         Map<String, String> params = new HashMap<>();
 //        params.put("password", password);
@@ -136,6 +150,7 @@ public class LoveEngin extends BaseEngine {
                 true, true);
         return rxpost;
     }
+
     public Observable<AResultInfo<ExampleTsCategory>> exampleTsCategory(String url) {
         Map<String, String> params = new HashMap<>();
 //        params.put("password", password);
@@ -148,19 +163,20 @@ public class LoveEngin extends BaseEngine {
                 true, true);
         return rxpost;
     }
-   /* public Observable<AResultInfo<List<ExampleTsBean>>> indexExample(String page,String pageSize, String url) {
-        Map<String, String> params = new HashMap<>();
-        params.put("page", page);
-        params.put("page_size", pageSize);
-        requestParams(params);
-        HttpCoreEngin<AResultInfo<List<ExampleTsBean>>> httpCoreEngin = HttpCoreEngin.get(mContext);
-        Observable<AResultInfo<List<ExampleTsBean>>> rxpost = httpCoreEngin.rxpost(URLConfig.getUrl(url), new TypeReference<AResultInfo<List<ExampleTsBean>>>() {
-                }.getType(),
-                params,
-                true,
-                true, true);
-        return rxpost;
-    }*/
+
+    /* public Observable<AResultInfo<List<ExampleTsBean>>> indexExample(String page,String pageSize, String url) {
+         Map<String, String> params = new HashMap<>();
+         params.put("page", page);
+         params.put("page_size", pageSize);
+         requestParams(params);
+         HttpCoreEngin<AResultInfo<List<ExampleTsBean>>> httpCoreEngin = HttpCoreEngin.get(mContext);
+         Observable<AResultInfo<List<ExampleTsBean>>> rxpost = httpCoreEngin.rxpost(URLConfig.getUrl(url), new TypeReference<AResultInfo<List<ExampleTsBean>>>() {
+                 }.getType(),
+                 params,
+                 true,
+                 true, true);
+         return rxpost;
+     }*/
     public Observable<AResultInfo<ExampDataBean>> indexExample(String page, String pageSize, String url) {
         Map<String, String> params = new HashMap<>();
         params.put("page", page);
@@ -175,7 +191,7 @@ public class LoveEngin extends BaseEngine {
         return rxpost;
     }
 
-    public Observable<AResultInfo<ExampDataBean>> exampLists(String userId,String page, String pageSize, String url) {
+    public Observable<AResultInfo<ExampDataBean>> exampLists(String userId, String page, String pageSize, String url) {
         Map<String, String> params = new HashMap<>();
         params.put("page", page);
         params.put("user_id", userId);
@@ -189,7 +205,8 @@ public class LoveEngin extends BaseEngine {
                 true, true);
         return rxpost;
     }
-    public Observable<AResultInfo<List<ExampListsBean>>> exampleCollectList(String userId,String page, String pageSize, String url) {
+
+    public Observable<AResultInfo<List<ExampListsBean>>> exampleCollectList(String userId, String page, String pageSize, String url) {
         Map<String, String> params = new HashMap<>();
         params.put("page", page);
         params.put("user_id", userId);
@@ -231,6 +248,7 @@ public class LoveEngin extends BaseEngine {
                 true, true);
         return rxpost;
     }
+
     public Observable<AResultInfo<List<ExampleTsListBean>>> collectListsArticle(String userId, String page, String pageSize, String url) {
         Map<String, String> params = new HashMap<>();
         params.put("user_id", userId);
@@ -245,7 +263,8 @@ public class LoveEngin extends BaseEngine {
                 true, true);
         return rxpost;
     }
-    public Observable<AResultInfo<List<LoveHealDetBean>>> searchDialogue(String userId,String searchType,String keyword,String page, String pageSize, String url) {
+
+    public Observable<AResultInfo<List<LoveHealDetBean>>> searchDialogue(String userId, String searchType, String keyword, String page, String pageSize, String url) {
         Map<String, String> params = new HashMap<>();
         params.put("user_id", userId);
         params.put("search_type", searchType);
@@ -262,7 +281,8 @@ public class LoveEngin extends BaseEngine {
                 true, true);
         return rxpost;
     }
-    public Observable<AResultInfo<List<LoveHealDetBean>>> searchDialogue(String userId,String keyword,String page, String pageSize, String url) {
+
+    public Observable<AResultInfo<List<LoveHealDetBean>>> searchDialogue(String userId, String keyword, String page, String pageSize, String url) {
         Map<String, String> params = new HashMap<>();
         params.put("user_id", userId);
 //        params.put("search_type", searchType);
@@ -296,7 +316,7 @@ public class LoveEngin extends BaseEngine {
         return rxpost;
     }
 
-    public Observable<AResultInfo<LoveByStagesDetailsBean>> detailArticle(String id,String userId, String url) {
+    public Observable<AResultInfo<LoveByStagesDetailsBean>> detailArticle(String id, String userId, String url) {
         Map<String, String> params = new HashMap<>();
         params.put("id", id);
         params.put("user_id", userId);
@@ -309,7 +329,8 @@ public class LoveEngin extends BaseEngine {
                 true, true);
         return rxpost;
     }
-    public Observable<AResultInfo<LoveByStagesDetailsBean>> detailExample(String id,String userId, String url) {
+
+    public Observable<AResultInfo<LoveByStagesDetailsBean>> detailExample(String id, String userId, String url) {
         Map<String, String> params = new HashMap<>();
         params.put("example_id", id);
         params.put("user_id", userId);
@@ -322,6 +343,7 @@ public class LoveEngin extends BaseEngine {
                 true, true);
         return rxpost;
     }
+
     public Observable<AResultInfo<LoveUpDownPhotoBean>> detailLovewords(String lovewordsId, String url) {
         Map<String, String> params = new HashMap<>();
         params.put("lovewords_id", lovewordsId);
@@ -349,7 +371,8 @@ public class LoveEngin extends BaseEngine {
                 true, true);
         return rxpost;
     }
-    public Observable<AResultInfo<String>> collectArticle(String userId,  String articleId, String url) {
+
+    public Observable<AResultInfo<String>> collectArticle(String userId, String articleId, String url) {
         Map<String, String> params = new HashMap<>();
         params.put("user_id", userId);
         params.put("article_id", articleId);
@@ -362,7 +385,8 @@ public class LoveEngin extends BaseEngine {
                 true, true);
         return rxpost;
     }
-    public Observable<AResultInfo<String>> likeExample(String userId,  String articleId, String url) {
+
+    public Observable<AResultInfo<String>> likeExample(String userId, String articleId, String url) {
         Map<String, String> params = new HashMap<>();
         params.put("user_id", userId);
         params.put("article_id", articleId);
@@ -375,7 +399,8 @@ public class LoveEngin extends BaseEngine {
                 true, true);
         return rxpost;
     }
-    public Observable<AResultInfo<String>> collectLovewords(String userId,String lovewordsId, String url) {
+
+    public Observable<AResultInfo<String>> collectLovewords(String userId, String lovewordsId, String url) {
         Map<String, String> params = new HashMap<>();
         params.put("user_id", userId);
         params.put("lovewords_id", lovewordsId);
@@ -388,7 +413,8 @@ public class LoveEngin extends BaseEngine {
                 true, true);
         return rxpost;
     }
-    public Observable<AResultInfo<String>> collectExample(String userId,String exampleId, String url) {
+
+    public Observable<AResultInfo<String>> collectExample(String userId, String exampleId, String url) {
         Map<String, String> params = new HashMap<>();
         params.put("user_id", userId);
         params.put("example_id", exampleId);

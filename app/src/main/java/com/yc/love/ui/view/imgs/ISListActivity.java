@@ -7,6 +7,7 @@ import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.database.Cursor;
 import android.graphics.Bitmap;
+import android.graphics.Color;
 import android.net.Uri;
 import android.os.Build;
 import android.provider.MediaStore;
@@ -16,7 +17,9 @@ import android.support.v4.app.Fragment;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
+import android.view.ViewGroup;
 import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.ImageView;
@@ -65,10 +68,59 @@ public class ISListActivity extends AppCompatActivity implements View.OnClickLis
         fragment.startActivityForResult(intent, RequestCode);
     }
 
+    /**
+     * 移除状态栏
+     */
+    public void removeStatusBar() {
+        //顶掉系统状态栏的空间
+        View decorView = getWindow().getDecorView();
+        int option = View.SYSTEM_UI_FLAG_FULLSCREEN;
+        decorView.setSystemUiVisibility(option);
+        getSupportActionBar().hide();
+    }
+
+    /**
+     * 获取状态栏高度 直接获取属性，通过getResource
+     *
+     * @return
+     */
+    public void setStateBarHeight(View viewBar) {
+        int result = 0;
+        int resourceId = this.getResources().getIdentifier("status_bar_height", "dimen", "android");
+        if (resourceId > 0) {
+            result = this.getResources().getDimensionPixelSize(resourceId);
+        }
+        if (result <= 0) {
+            return;
+        }
+        ViewGroup.LayoutParams layoutParams = viewBar.getLayoutParams();
+        layoutParams.height = result;
+        viewBar.setLayoutParams(layoutParams);
+    }
+
+    /**
+     * 谷歌原生方式改变状态栏文字颜色
+     *
+     * @param dark 一旦用谷歌原生设置状态栏文字颜色的方法进行设置的话，因为一直会携带SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN这个flag，
+     *             那么默认界面会变成全屏模式，需要在根布局中设置FitsSystemWindows属性为true
+     */
+    public void setAndroidNativeLightStatusBar(boolean dark) {
+        View decor = getWindow().getDecorView();
+        if (dark) {
+            decor.setSystemUiVisibility(View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN | View.SYSTEM_UI_FLAG_LIGHT_STATUS_BAR);
+        } else {
+            decor.setSystemUiVisibility(View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN | View.SYSTEM_UI_FLAG_LAYOUT_STABLE);
+        }
+    }
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_img_sel);
+        removeStatusBar(); //侵入状态栏
+        View viewBar = findViewById(R.id.img_sel_view_bar);
+        setStateBarHeight(viewBar);
+        setAndroidNativeLightStatusBar(true);
 
         config = (ISListConfig) getIntent().getSerializableExtra("config");
 

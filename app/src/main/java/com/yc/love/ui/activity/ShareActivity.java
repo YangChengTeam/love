@@ -23,6 +23,7 @@ import android.widget.TextView;
 import com.yc.love.R;
 import com.yc.love.adaper.vp.CollectPagerAdapter;
 import com.yc.love.adaper.vp.SharePagerAdapter;
+import com.yc.love.model.single.YcSingle;
 import com.yc.love.model.util.SPUtils;
 import com.yc.love.model.util.TimeUtils;
 import com.yc.love.ui.activity.base.BaseSameActivity;
@@ -197,6 +198,11 @@ public class ShareActivity extends BaseSameActivity {
     }*/
     private void staryShare(String query) {
         if (TextUtils.isEmpty(query)) {
+            return;
+        }
+        int id = YcSingle.getInstance().id;
+        if (id <= 0) {
+            showToLoginDialog();
             return;
         }
         query = query.trim();

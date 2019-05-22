@@ -5,6 +5,9 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.IntentFilter;
+import android.content.pm.ActivityInfo;
+import android.content.pm.PackageInfo;
+import android.content.pm.PackageManager;
 import android.database.ContentObserver;
 import android.database.Cursor;
 import android.graphics.drawable.Drawable;
@@ -16,7 +19,6 @@ import android.os.Environment;
 import android.os.Handler;
 import android.support.v7.app.AlertDialog;
 import android.util.Log;
-import android.view.KeyEvent;
 import android.view.View;
 import android.widget.TextView;
 
@@ -25,7 +27,7 @@ import com.yc.love.adaper.vp.MainPagerAdapter;
 import com.yc.love.factory.MainFragmentFactory;
 import com.yc.love.model.domain.URLConfig;
 import com.yc.love.model.single.YcSingle;
-import com.yc.love.model.util.DownloadedApkUtlis;
+import com.yc.love.utils.DownloadedApkUtlis;
 import com.yc.love.model.util.SPUtils;
 import com.yc.love.receiver.NetWorkChangReceiver;
 import com.yc.love.ui.activity.base.BaseActivity;
@@ -37,18 +39,31 @@ import com.yc.love.utils.InstallApkUtlis;
 public class MainActivity extends BaseActivity implements View.OnClickListener {
 
     private ControlScrollViewPager mVpFragment;
-    private TextView mTvTab1, mTvTab2, mTvTab3, mTvTab4;
+    private TextView mTvTab1, mTvTab2, mTvTab3, mTvTab4, mTvTab5;
     private boolean isRegistered = false;
     private NetWorkChangReceiver netWorkChangReceiver;
+    private String mPackageVersionName;
+    private String mDownloadIdKey="mDownloadIdKey";
 
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-
+        setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
         invadeStatusBar(); //侵入状态栏
         setAndroidNativeLightStatusBar(); //状态栏字体颜色改变
+
+        try {
+            // 判断当前的版本与服务器上的最版版本是否一致
+            PackageInfo packageInfo = getPackageManager().getPackageInfo(getApplication().getPackageName(), 0);
+            mPackageVersionName = packageInfo.versionName;
+        } catch (PackageManager.NameNotFoundException e) {
+            e.printStackTrace();
+            Log.d("mylog", "run: getPackageManager " + e.toString());
+            mPackageVersionName = "1.0";
+        }
+        mDownloadIdKey = "download_id".concat(mPackageVersionName);
 
         initView();
 
@@ -76,7 +91,6 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
         intent.addCategory("android.intent.category.HOME");
         startActivity(intent);
     }
-
 
 
     private void initNetWorkChangReceiver() {
@@ -107,11 +121,13 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
         mTvTab2 = findViewById(R.id.comp_main_tv_tab_2);
         mTvTab3 = findViewById(R.id.comp_main_tv_tab_3);
         mTvTab4 = findViewById(R.id.comp_main_tv_tab_4);
+        mTvTab5 = findViewById(R.id.comp_main_tv_tab_5);
 
         mTvTab1.setOnClickListener(this);
         mTvTab2.setOnClickListener(this);
         mTvTab3.setOnClickListener(this);
         mTvTab4.setOnClickListener(this);
+        mTvTab5.setOnClickListener(this);
 
         MainPagerAdapter mainPagerAdapter = new MainPagerAdapter(getSupportFragmentManager());
         mVpFragment.setAdapter(mainPagerAdapter);
@@ -147,13 +163,17 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
                 iconSelect(MainFragmentFactory.MAIN_FRAGMENT_2);
                 break;
             case R.id.comp_main_tv_tab_4:
+                mVpFragment.setCurrentItem(MainFragmentFactory.MAIN_FRAGMENT_3, false);
+                iconSelect(MainFragmentFactory.MAIN_FRAGMENT_3);
+                break;
+            case R.id.comp_main_tv_tab_5:
                 int id = YcSingle.getInstance().id;
                 if (id <= 0) {
                     showToLoginDialog();
                     return;
                 }
-                mVpFragment.setCurrentItem(MainFragmentFactory.MAIN_FRAGMENT_3, false);
-                iconSelect(MainFragmentFactory.MAIN_FRAGMENT_3);
+                mVpFragment.setCurrentItem(MainFragmentFactory.MAIN_FRAGMENT_4, false);
+                iconSelect(MainFragmentFactory.MAIN_FRAGMENT_4);
                 break;
         }
     }
@@ -173,6 +193,9 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
             case MainFragmentFactory.MAIN_FRAGMENT_3:
                 setCompoundDrawablesTop(mTvTab4, R.mipmap.main_icon_tab_04_s);
                 break;
+            case MainFragmentFactory.MAIN_FRAGMENT_4:
+                setCompoundDrawablesTop(mTvTab5, R.mipmap.main_icon_tab_05_s);
+                break;
         }
     }
 
@@ -181,11 +204,13 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
         setCompoundDrawablesTop(mTvTab2, R.mipmap.main_icon_tab_02);
         setCompoundDrawablesTop(mTvTab3, R.mipmap.main_icon_tab_03);
         setCompoundDrawablesTop(mTvTab4, R.mipmap.main_icon_tab_04);
+        setCompoundDrawablesTop(mTvTab5, R.mipmap.main_icon_tab_05);
 
         mTvTab1.setTextColor(getResources().getColor(R.color.text_gray));
         mTvTab2.setTextColor(getResources().getColor(R.color.text_gray));
         mTvTab3.setTextColor(getResources().getColor(R.color.text_gray));
         mTvTab4.setTextColor(getResources().getColor(R.color.text_gray));
+        mTvTab5.setTextColor(getResources().getColor(R.color.text_gray));
     }
 
     public void setCompoundDrawablesTop(TextView tv_icon, int id) {
@@ -203,6 +228,10 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
 //        showUpdateDialog();
     }
 
+
+
+
+    private String netUrl = URLConfig.download_apk_url;
     private void showUpdateDialog() {
         AlertDialog alertDialog = new AlertDialog.Builder(this).create();
         alertDialog.setCancelable(false);
@@ -213,7 +242,7 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
         alertDialog.setButton(DialogInterface.BUTTON_POSITIVE, "立即下载", new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialogInterface, int i) {
-                downLoadApk();
+                DownloadedApkUtlis.downLoadApk(MainActivity.this, mDownloadIdKey, netUrl, contentObserver);
             }
         });
         alertDialog.show();
@@ -222,27 +251,27 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
     }
 
 
-    private DownloadChangeObserver downloadObserver;
-    private long lastDownloadId = 0;
+     /* private long lastDownloadId = 0;
+  private DownloadChangeObserver downloadObserver;
     //"content://downloads/my_downloads"必须这样写不可更改
     public static final Uri CONTENT_URI = Uri.parse("content://downloads/my_downloads");
-    private String netUrl = URLConfig.download_apk_url;
+    private String netUrl = URLConfig.download_apk_url;*/
     //    private String netUrl = "http://toppic-mszs.oss-cn-hangzhou.aliyuncs.com/xiaofeng_android_alpha.apk";
 //    ProgressDialog pd; // 进度条对话框
 
-    private void downLoadApk() {
+   /* private void downLoadApk(String downloadIdKey) {
 
         //1.得到下载对象
         DownloadManager dowanloadmanager = (DownloadManager) getSystemService(DOWNLOAD_SERVICE);
 
 
-        long spDownloadId = (long) SPUtils.get(this, DownloadedApkUtlis.DOWNLOAD_ID, (long) -1);
-   /*
+        long spDownloadId = (long) SPUtils.get(this, downloadIdKey, (long) -1);
+   *//*
         下载管理器中有很多下载项，怎么知道一个资源已经下载过，避免重复下载呢？
         我的项目中的需求就是apk更新下载，用户点击更新确定按钮，第一次是直接下载，
         后面如果用户连续点击更新确定按钮，就不要重复下载了。
         可以看出来查询和操作数据库查询一样的
-         */
+         *//*
         if (spDownloadId > 0) {
             DownloadManager.Query query = new DownloadManager.Query();
             query.setFilterById(spDownloadId);
@@ -256,15 +285,6 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
                 return;
             }
         }
-//        SPUtils.put(SelectCompOrStudentActivity.this, SPUtils.version, this.version);
-
-        /*pd = new ProgressDialog(this);
-        pd.setProgressStyle(ProgressDialog.STYLE_HORIZONTAL);
-        pd.setMessage("正在下载更新");
-        pd.setMax(100);
-        pd.show();
-        pd.setCancelable(false);*/
-
         //2.创建下载请求对象，并且把下载的地址放进去
         DownloadManager.Request request = new DownloadManager.Request(Uri.parse(netUrl));
         //3.给下载的文件指定路径
@@ -282,14 +302,36 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
         request.setVisibleInDownloadsUi(true);
         lastDownloadId = dowanloadmanager.enqueue(request);
         //9.保存id到缓存
-        SPUtils.putLong(this, DownloadedApkUtlis.DOWNLOAD_ID, lastDownloadId);
-//        PreferencesUtils.putLong(this, DOWNLOAD_ID, lastDownloadId);
+        SPUtils.putLong(this, downloadIdKey, lastDownloadId);
         //10.采用内容观察者模式实现进度
         downloadObserver = new DownloadChangeObserver(null);
         getContentResolver().registerContentObserver(CONTENT_URI, true, downloadObserver);
-    }
+    }*/
 
-    //用于显示下载进度
+    private ContentObserver contentObserver = new ContentObserver(null) {
+        @Override
+        public void onChange(boolean selfChange) {
+            DownloadManager.Query query = new DownloadManager.Query();
+            long spDownloadId = (long) SPUtils.get(MainActivity.this, mDownloadIdKey, (long) -1);
+            query.setFilterById(spDownloadId);
+            DownloadManager dManager = (DownloadManager) getSystemService(Context.DOWNLOAD_SERVICE);
+            final Cursor cursor = dManager.query(query);
+            if (cursor != null && cursor.moveToFirst()) {
+                final int totalColumn = cursor.getColumnIndex(DownloadManager.COLUMN_TOTAL_SIZE_BYTES);
+                final int currentColumn = cursor.getColumnIndex(DownloadManager.COLUMN_BYTES_DOWNLOADED_SO_FAR);
+                int totalSize = cursor.getInt(totalColumn);
+                int currentSize = cursor.getInt(currentColumn);
+                float percent = (float) currentSize / (float) totalSize;
+                int progress = Math.round(percent * 100);
+               /* pd.setProgress(progress);
+                if (progress == 100) {
+                    pd.dismiss();
+                }*/
+            }
+        }
+    };
+
+   /* //用于显示下载进度
     class DownloadChangeObserver extends ContentObserver {
 
         public DownloadChangeObserver(Handler handler) {
@@ -309,12 +351,12 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
                 int currentSize = cursor.getInt(currentColumn);
                 float percent = (float) currentSize / (float) totalSize;
                 int progress = Math.round(percent * 100);
-               /* pd.setProgress(progress);
+               *//* pd.setProgress(progress);
                 if (progress == 100) {
                     pd.dismiss();
-                }*/
+                }*//*
             }
         }
-    }
+    }*/
 
 }

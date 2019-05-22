@@ -46,7 +46,8 @@ public class LoveUpDownPhotoFragment extends BaseLazyFragment implements View.On
     private boolean mIsVisibleFragment;
     private RecyclerView mRecyclerView;
 
-    private String[] names = {"正在小鹿乱撞", "正在输入", "正在不知所措", "笑容逐渐浮现", "正在害羞", "心中一愣"};
+    private String[] names = {"正在小鹿乱撞", "正在输入", "正在不知所措", "笑容逐渐浮现", "正在害羞", "心中一愣",
+            "正在小鹿乱撞", "正在输入", "正在不知所措", "笑容逐渐浮现", "正在害羞", "心中一愣"};
     private TextView mTvSub;
     private int mLovewordsId = 0;
     private boolean mIsCollectLovewords = false;
@@ -139,7 +140,6 @@ public class LoveUpDownPhotoFragment extends BaseLazyFragment implements View.On
                         }
 
                         int isCollect = loveHealingBean.is_collect;
-                        Log.d("mylog", "onNetNext: isCollect " + isCollect + " loveHealingBean.chat_name " + loveHealingBean.chat_name);
                         if (isCollect > 0) { //是否收藏
                             mIsCollectLovewords = true;
                         }

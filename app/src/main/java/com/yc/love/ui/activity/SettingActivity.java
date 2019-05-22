@@ -14,7 +14,6 @@ import com.yc.love.R;
 import com.yc.love.model.bean.MyAppInfo;
 import com.yc.love.model.bean.event.EventLoginState;
 import com.yc.love.model.single.YcSingle;
-import com.yc.love.model.util.ApkToolUtils;
 import com.yc.love.model.util.DataCleanManagerUtils;
 import com.yc.love.model.util.SPUtils;
 import com.yc.love.ui.activity.base.BaseSameActivity;

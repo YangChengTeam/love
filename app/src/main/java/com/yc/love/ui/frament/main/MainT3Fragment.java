@@ -242,8 +242,10 @@ public class MainT3Fragment extends BaseMainFragment {
     RecyclerViewItemListener recyclerViewItemListener = new RecyclerViewItemListener() {
         @Override
         public void onItemClick(int position) {
+            if (position < 0) {
+                return;
+            }
             MainT3Bean mainT3Bean = mDatas.get(position);
-            int tagId = mainT3Bean.id;
             LoveIntroductionActivity.startLoveIntroductionActivity(mMainActivity, mainT3Bean.name, String.valueOf(mainT3Bean.id));
 //            ExampleDetailActivity.startExampleDetailActivity(mMainActivity, mainT3Bean.id, mainT3Bean.desp);
 

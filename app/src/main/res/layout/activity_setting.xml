@@ -8,7 +8,6 @@
     tools:context=".ui.activity.SettingActivity">
 
 
-
     <com.yc.love.ui.view.MainMyItemLin
         android:id="@+id/setting_ll_item_01"
         android:layout_width="match_parent"
@@ -44,7 +43,6 @@
         app:textNameMyItem="清除缓存" />
 
     <com.yc.love.ui.view.MainMyItemLin
-        android:visibility="gone"
         android:id="@+id/setting_ll_exit"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -71,7 +69,6 @@
             android:textSize="@dimen/size_18"
             android:visibility="gone" />
     </FrameLayout>
-
 
 
 </android.support.constraint.ConstraintLayout>

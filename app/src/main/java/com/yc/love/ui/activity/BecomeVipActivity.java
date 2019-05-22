@@ -20,6 +20,7 @@ import android.widget.TextView;
 
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
+import com.squareup.picasso.Picasso;
 import com.yc.love.R;
 import com.yc.love.adaper.rv.BecomeVipAdapter;
 import com.yc.love.adaper.rv.CreateMainT3Adapter;
@@ -36,14 +37,18 @@ import com.yc.love.model.bean.AResultInfo;
 import com.yc.love.model.bean.BecomeVipBean;
 import com.yc.love.model.bean.BecomeVipPayBean;
 import com.yc.love.model.bean.ExampleTsListBean;
+import com.yc.love.model.bean.IdCorrelationLoginBean;
 import com.yc.love.model.bean.IndexDoodsBean;
 import com.yc.love.model.bean.MainT3Bean;
 import com.yc.love.model.bean.OrdersInitBean;
 import com.yc.love.model.bean.event.EventBusWxPayResult;
+import com.yc.love.model.bean.event.EventPayVipSuccess;
 import com.yc.love.model.engin.OrderEngin;
 import com.yc.love.model.single.YcSingle;
+import com.yc.love.model.util.TimeUtils;
 import com.yc.love.ui.activity.base.BaseSlidingActivity;
 import com.yc.love.ui.activity.base.PayActivity;
+import com.yc.love.ui.view.CircleTransform;
 import com.yc.love.ui.view.LoadDialog;
 
 import org.greenrobot.eventbus.EventBus;
@@ -80,8 +85,57 @@ public class BecomeVipActivity extends PayActivity implements View.OnClickListen
         invadeStatusBar(); //侵入状态栏
         setAndroidNativeLightStatusBar(); //状态栏字体颜色改变
         initViews();
-        netData();
 
+        netIsVipData();
+        netData();
+    }
+
+    private void netIsVipData() {
+        int id = YcSingle.getInstance().id;
+        if (id <= 0) {
+            showToLoginDialog();
+            return;
+        }
+        mOrderEngin.userInfo(String.valueOf(id), "user/info").subscribe(new MySubscriber<AResultInfo<IdCorrelationLoginBean>>(mLoadingDialog) {
+
+            @Override
+            protected void onNetNext(AResultInfo<IdCorrelationLoginBean> idCorrelationLoginBeanAResultInfo) {
+                IdCorrelationLoginBean idCorrelationLoginBean = idCorrelationLoginBeanAResultInfo.data;
+                int is_vip = idCorrelationLoginBean.is_vip;
+                Log.d("mylog", "onNetNext: is_vip " + is_vip);
+                if (is_vip > 0) {
+                    showIsVipTrueDialog();
+                    return;
+                }
+
+            }
+
+            @Override
+            protected void onNetError(Throwable e) {
+
+            }
+
+            @Override
+            protected void onNetCompleted() {
+
+            }
+        });
+    }
+
+    private void showIsVipTrueDialog() {
+        AlertDialog alertDialog = new AlertDialog.Builder(this).create();
+        alertDialog.setCancelable(false);
+        alertDialog.setTitle("提示");
+        alertDialog.setMessage("您已经是VIP用户，不需要重复购买");
+        DialogInterface.OnClickListener listent = null;
+//        alertDialog.setButton(DialogInterface.BUTTON_POSITIVE, "", listent);
+        alertDialog.setButton(DialogInterface.BUTTON_NEGATIVE, "确定", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                finish();
+            }
+        });
+        alertDialog.show();
     }
 
     private void netData() {
@@ -277,6 +331,7 @@ public class BecomeVipActivity extends PayActivity implements View.OnClickListen
                     finish();
                 }
             });
+            EventBus.getDefault().post(new EventPayVipSuccess());
         } else {
             alertDialog.setMessage("支付失败");
 //            alertDialog.setView(LayoutInflater.from(this).inflate(R.layout.dialog_pay_error, null));

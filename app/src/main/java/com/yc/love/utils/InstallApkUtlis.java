@@ -7,7 +7,6 @@ import android.os.Build;
 import android.support.v4.content.FileProvider;
 
 import com.yc.love.BuildConfig;
-import com.yc.love.model.util.DownloadedApkUtlis;
 
 import java.io.File;
 
@@ -16,9 +15,9 @@ import java.io.File;
  */
 
 public class InstallApkUtlis {
-    public static void toInstallApk(Context context) {
+    public static void toInstallApk(Context context,long cacheDownLoadId) {
         Intent install = new Intent(Intent.ACTION_VIEW);
-        File apkFile = DownloadedApkUtlis.queryDownloadedApk(context);
+        File apkFile = DownloadedApkUtlis.queryDownloadedApk(context,cacheDownLoadId);
         //判断是否是AndroidN以及更高的版本
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
             install.setFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);

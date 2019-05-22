@@ -2,14 +2,8 @@ package com.yc.love.factory;
 
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
-import android.util.Log;
 
-import com.yc.love.ui.frament.LoveByStagesFragment;
 import com.yc.love.ui.frament.LoveUpDownPhotoFragment;
-import com.yc.love.ui.frament.main.MainT1Fragment;
-import com.yc.love.ui.frament.main.MainT2Fragment;
-import com.yc.love.ui.frament.main.MainT3Fragment;
-import com.yc.love.ui.frament.main.MainT4Fragment;
 
 import java.util.HashMap;
 import java.util.Map;

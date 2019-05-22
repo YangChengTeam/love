@@ -24,34 +24,6 @@
         android:layout_marginTop="18dp"
         android:orientation="horizontal">
 
-        <!--<include
-            android:visibility="gone"
-            android:id="@+id/dialog_open_akp_tv_qq"
-            layout="@layout/dialog_item_text_view"
-            android:drawableTop="@mipmap/icon_d_qq"
-            android:text="QQ" />
-
-        <include
-            android:visibility="gone"
-            android:id="@+id/dialog_open_akp_tv_wx"
-            layout="@layout/dialog_item_text_view"
-            android:drawableTop="@mipmap/icon_d_wx"
-            android:text="微信" />
-
-        <include
-            android:visibility="gone"
-            android:id="@+id/dialog_open_akp_tv_mm"
-            layout="@layout/dialog_item_text_view"
-            android:drawableTop="@mipmap/icon_d_momo"
-            android:text="陌陌" />
-
-        <include
-            android:visibility="gone"
-            android:id="@+id/dialog_open_akp_tv_tt"
-            layout="@layout/dialog_item_text_view"
-            android:drawableTop="@mipmap/icon_d_tt"
-            android:text="探探" />-->
-
         <TextView
             android:background="?attr/selectableItemBackgroundBorderless"
             android:id="@+id/dialog_open_akp_tv_qq"

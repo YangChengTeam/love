@@ -5,6 +5,13 @@
     android:orientation="vertical"
     android:fitsSystemWindows="true"  >
 
+    <View
+        android:visibility="gone"
+        android:id="@+id/img_sel_view_bar"
+        android:layout_width="match_parent"
+        android:layout_height="25dp"
+        android:background="@color/white" />
+
     <RelativeLayout
         android:id="@+id/rlTitleBar"
         android:layout_width="match_parent"

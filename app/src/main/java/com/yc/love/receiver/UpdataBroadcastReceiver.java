@@ -6,8 +6,6 @@ import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 
-import com.yc.love.model.util.DownloadedApkUtlis;
-import com.yc.love.model.util.SPUtils;
 import com.yc.love.utils.InstallApkUtlis;
 
 
@@ -17,13 +15,19 @@ import com.yc.love.utils.InstallApkUtlis;
 
 public class UpdataBroadcastReceiver extends BroadcastReceiver {
 
+    private final long cacheDownLoadId;
+
+    public UpdataBroadcastReceiver(long cacheDownLoadId) {
+        this.cacheDownLoadId=cacheDownLoadId;
+    }
+
     @SuppressLint("NewApi")
     public void onReceive(Context context, Intent intent) {
         long downLoadId = intent.getLongExtra(DownloadManager.EXTRA_DOWNLOAD_ID, -1);
-        long cacheDownLoadId = (long) SPUtils.get(context,DownloadedApkUtlis.DOWNLOAD_ID,(long)-1);
+//        long cacheDownLoadId = (long) SPUtils.get(context,DownloadedApkUtlis.DOWNLOAD_ID,(long)-1);
 //        long cacheDownLoadId = PreferencesUtils.getLong(context, DownloadedApkUtlis.DOWNLOAD_ID);
         if (cacheDownLoadId == downLoadId) {
-            InstallApkUtlis.toInstallApk(context);
+            InstallApkUtlis.toInstallApk(context,cacheDownLoadId);  //安装apk
         }
     }
 

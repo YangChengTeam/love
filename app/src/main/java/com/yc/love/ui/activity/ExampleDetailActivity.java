@@ -230,7 +230,6 @@ public class ExampleDetailActivity extends BaseSameActivity {
                 mDetailId = loveByStagesDetailsBean.id;
 
                 int isCollect = loveByStagesDetailsBean.is_collect;
-                Log.d("mylog", "onNetNext: isCollect " + isCollect + " loveHealingBean.chat_name " + loveByStagesDetailsBean.post_content);
                 if (isCollect > 0) { //是否收藏
                     mIsCollectLovewords = true;
                 }

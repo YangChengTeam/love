@@ -19,6 +19,7 @@ public class IdCorrelationLoginBean {
 
 
     public int id;
+    public int is_vip;
     public String name;
     public String nick_name;
     public String birthday;
@@ -29,11 +30,11 @@ public class IdCorrelationLoginBean {
     public int vip_end_time;
 
 
-
     @Override
     public String toString() {
         return "IdCorrelationLoginBean{" +
                 "id=" + id +
+                ", is_vip=" + is_vip +
                 ", name='" + name + '\'' +
                 ", nick_name='" + nick_name + '\'' +
                 ", birthday='" + birthday + '\'' +

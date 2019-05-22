@@ -90,7 +90,9 @@ public class MainT1Fragment extends BaseMainFragment {
         public void onItemClick(int position) {
 //            ExampListsBean exampListsBean = mExampListsBeans.get(position);
 //            LoveByStagesDetailsActivity.startLoveByStagesDetailsActivity(mMainActivity, exampListsBean.id, exampListsBean.post_title);
-
+            if (position < 0) {
+                return;
+            }
             ExampListsBean exampListsBean = mExampListsBeans.get(position);
             ExampleDetailActivity.startExampleDetailActivity(mMainActivity, exampListsBean.id, exampListsBean.post_title);
         }
@@ -246,25 +248,6 @@ public class MainT1Fragment extends BaseMainFragment {
                         }
                     }
                 });
-              /*  titleT1ViewHolder.setOnClickShareListent(new TitleT1ViewHolder.OnClickMainT1TitleListent() {
-                    @Override
-                    public void clickShareListent() {
-                        mMainActivity.startActivity(new Intent(mMainActivity, ShareActivity.class));
-//                        Toast.makeText(mMainActivity, "clickShare", Toast.LENGTH_SHORT).show();
-                    }
-
-                    @Override
-                    public void clickIvModule02Listent() {
-                        startActivity(new Intent(mMainActivity, LoveHealActivity.class));
-
-                    }
-
-                    @Override
-                    public void clickIvModule03Listent() {
-                        startActivity(new Intent(mMainActivity, LoveHealingActivity.class));
-//                        Toast.makeText(mMainActivity, "clickIvModule03", Toast.LENGTH_SHORT).show();
-                    }
-                });*/
                 return titleT1ViewHolder;
             }
 

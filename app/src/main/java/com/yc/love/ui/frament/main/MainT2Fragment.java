@@ -1,6 +1,7 @@
 package com.yc.love.ui.frament.main;
 
 import android.content.Intent;
+import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.DividerItemDecoration;
 import android.support.v7.widget.LinearLayoutManager;
@@ -63,6 +64,8 @@ public class MainT2Fragment extends BaseMainFragment {
     private ProgressBarViewHolder progressBarViewHolder;
     private RecyclerView mRecyclerView;
     private boolean mUserIsVip = false;
+    private boolean mIsAddToPayVipItem = false;
+    private boolean mIsShowLogined = false;
 
 
     @Override
@@ -86,7 +89,7 @@ public class MainT2Fragment extends BaseMainFragment {
     }
 
     private void initRecyclerView() {
-
+        SwipeRefreshLayout swipe_refresh = rootView.findViewById(R.id.main_t2_swipe_refresh);
         mRecyclerView = rootView.findViewById(R.id.main_t2_rl);
         LinearLayoutManager layoutManager = new LinearLayoutManager(mMainActivity);
         mRecyclerView.setLayoutManager(layoutManager);
@@ -94,6 +97,21 @@ public class MainT2Fragment extends BaseMainFragment {
         //设置增加或删除条目的动画
         mRecyclerView.setItemAnimator(new DefaultItemAnimator());
 //        mRecyclerView.addItemDecoration(new DividerItemDecoration(mMainActivity,DividerItemDecoration.VERTICAL));
+
+        swipe_refresh.setColorSchemeResources(R.color.red_crimson);
+        swipe_refresh.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+            @Override
+            public void onRefresh() {
+//                obtainWalletData();
+                if (mMainT2Beans != null) {
+                    mMainT2Beans.clear();
+                    mAdapter.notifyDataSetChanged();
+                }
+                loadMoreEnd = false;
+                PAGE_NUM = 1;
+                netData();
+            }
+        });
     }
 
     @Override
@@ -152,8 +170,9 @@ public class MainT2Fragment extends BaseMainFragment {
                         mMainT2Beans.add(new MainT2Bean(1, exampListsBean.create_time, exampListsBean.id, exampListsBean.image, exampListsBean.post_title));
                     }
                 }
-                mMainT2Beans.add(new MainT2Bean("vip", 2));
-
+                if (!mUserIsVip) {
+                    mMainT2Beans.add(new MainT2Bean("vip", 2));
+                }
                 initRecyclerViewData();
             }
 
@@ -221,12 +240,13 @@ public class MainT2Fragment extends BaseMainFragment {
                         showProgressBar = true;
                     }
                     if (!loadMoreEnd) {
+                        netLoadMore();
                         //  判断是否是VIP
-                        if (PAGE_NUM >= 3 && !mUserIsVip) {
+                       /* if (PAGE_NUM >= 3 && !mUserIsVip) {
                             addToPayVipData();
                         } else {
                             netLoadMore();
-                        }
+                        }*/
                     } else {
                         Log.d("mylog", "loadMoreData: loadMoreEnd end 已加载全部数据 ");
                         mMainT2Beans.remove(mMainT2Beans.size() - 1);
@@ -239,6 +259,10 @@ public class MainT2Fragment extends BaseMainFragment {
     }
 
     private void addToPayVipData() {
+        if (mIsAddToPayVipItem) {  //只添加一条即可
+            return;
+        }
+        mIsAddToPayVipItem = true;
         mRecyclerView.postDelayed(new Runnable() {
             @Override
             public void run() {
@@ -253,7 +277,9 @@ public class MainT2Fragment extends BaseMainFragment {
     }
 
     private void netLoadMore() {
-
+        if (PAGE_NUM >= 4 && PAGE_SIZE != 10) {
+            PAGE_SIZE = 10;
+        }
         mLoveEngin.exampLists(String.valueOf(YcSingle.getInstance().id), String.valueOf(++PAGE_NUM), String.valueOf(PAGE_SIZE), "example/lists").subscribe(new MySubscriber<AResultInfo<ExampDataBean>>(mMainActivity) {
 
 
@@ -282,9 +308,7 @@ public class MainT2Fragment extends BaseMainFragment {
 
             @Override
             protected void onNetError(Throwable e) {
-                if (PAGE_NUM != 1) {
-                    PAGE_NUM--;
-                }
+
                 changLoadMoreView(null);
             }
 
@@ -299,19 +323,41 @@ public class MainT2Fragment extends BaseMainFragment {
         showProgressBar = false;
         mMainT2Beans.remove(mMainT2Beans.size() - 1);
         mAdapter.notifyDataSetChanged();
-        if (netLoadMoreData != null) {
+        if (netLoadMoreData != null && netLoadMoreData.size() != 0) {
             if (netLoadMoreData.size() < PAGE_SIZE) {
                 loadMoreEnd = true;
             }
             mMainT2Beans.addAll(netLoadMoreData);
             mAdapter.notifyDataSetChanged();
+        } else {
+            dataEmptyCheck();
         }
         mAdapter.setLoaded();
     }
 
+    private void dataEmptyCheck() {
+        if (PAGE_NUM != 1) {
+            PAGE_NUM--;
+        }
+        int id = YcSingle.getInstance().id;
+        if (id <= 0) {   //数据为空 未登录
+            if (mIsShowLogined) {
+                return;
+            }
+            mMainActivity.showToLoginDialog();
+            mIsShowLogined = true;
+        } else {  //数据为空 不是VIP
+            addToPayVipData();
+        }
+    }
+
+
     RecyclerViewItemListener recyclerViewItemListener = new RecyclerViewItemListener() {
         @Override
         public void onItemClick(int position) {
+            if (position < 0) {
+                return;
+            }
 //            Toast.makeText(mMainActivity, "onItemClick " + position, Toast.LENGTH_SHORT).show();
             MainT2Bean mainT2Bean = mMainT2Beans.get(position);
             ExampleDetailActivity.startExampleDetailActivity(mMainActivity, mainT2Bean.id, mainT2Bean.post_title);
@@ -325,6 +371,9 @@ public class MainT2Fragment extends BaseMainFragment {
     RecyclerViewItemListener recyclerViewToVipListener = new RecyclerViewItemListener() {
         @Override
         public void onItemClick(int position) {
+            if (position < 0) {
+                return;
+            }
             startActivity(new Intent(mMainActivity, BecomeVipActivity.class));
         }
 

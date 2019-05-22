@@ -9,9 +9,9 @@
         android:id="@+id/main_t1_not_net"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:visibility="gone"
         android:background="@color/red_crimson_66"
-        android:paddingTop="38dp">
+        android:paddingTop="38dp"
+        android:visibility="gone">
 
         <TextView
             android:layout_width="wrap_content"
@@ -23,6 +23,7 @@
 
 
     <android.support.v7.widget.RecyclerView
+
         android:id="@+id/main_t1_rl"
         android:layout_width="match_parent"
         android:layout_height="wrap_content" />

@@ -22,6 +22,9 @@ android {
         release {
             minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+            signingConfig signingConfigs.config
+        }
+        debug {
         }
     }
     repositories {
@@ -56,5 +59,5 @@ dependencies {
     implementation 'org.greenrobot:eventbus:3.1.1'
     implementation(name: 'alipaySdk-15.6.2-20190416165036', ext: 'aar')
     implementation 'com.tencent.mm.opensdk:wechat-sdk-android-without-mta:+'
-//    implementation 'cn.trinea.android.common:trinea-android-common:4.2.15'
+    //    implementation 'cn.trinea.android.common:trinea-android-common:4.2.15'
 }
