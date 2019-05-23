@@ -64,6 +64,7 @@
             android:textSize="@dimen/size_14" />
 
         <TextView
+            android:visibility="gone"
             android:background="?attr/selectableItemBackgroundBorderless"
             android:id="@+id/dialog_open_akp_tv_tt"
             android:layout_width="0dp"

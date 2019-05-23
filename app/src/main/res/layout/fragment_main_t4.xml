@@ -9,11 +9,19 @@
     <include
         android:id="@+id/main_t4_view_bar"
         layout="@layout/layout_view_bar" />
-
+    <ProgressBar
+        android:id="@+id/main_t4_pb_progress"
+        style="?android:attr/progressBarStyleHorizontal"
+        android:layout_width="match_parent"
+        android:layout_height="3dp"
+        android:layout_alignParentTop="true"
+        android:max="100"
+        android:progress="0"
+        android:progressDrawable="@drawable/process_bg" />
     <WebView
         android:id="@+id/main_t4_webview"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="match_parent"
         android:focusable="true"
         android:focusableInTouchMode="true" />
 

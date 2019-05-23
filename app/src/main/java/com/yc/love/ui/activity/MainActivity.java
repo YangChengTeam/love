@@ -27,6 +27,7 @@ import com.yc.love.adaper.vp.MainPagerAdapter;
 import com.yc.love.factory.MainFragmentFactory;
 import com.yc.love.model.domain.URLConfig;
 import com.yc.love.model.single.YcSingle;
+import com.yc.love.receiver.UpdataBroadcastReceiver;
 import com.yc.love.utils.DownloadedApkUtlis;
 import com.yc.love.model.util.SPUtils;
 import com.yc.love.receiver.NetWorkChangReceiver;
@@ -43,7 +44,8 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
     private boolean isRegistered = false;
     private NetWorkChangReceiver netWorkChangReceiver;
     private String mPackageVersionName;
-    private String mDownloadIdKey="mDownloadIdKey";
+    public String mDownloadIdKey = "mDownloadIdKey";
+    private UpdataBroadcastReceiver mUpdataBroadcastReceiver;
 
 
     @Override
@@ -64,7 +66,7 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
             mPackageVersionName = "1.0";
         }
         mDownloadIdKey = "download_id".concat(mPackageVersionName);
-
+        Log.d("mylog", "onCreate: download_id mDownloadIdKey "+mDownloadIdKey);
         initView();
 
         checkUpdate();
@@ -104,6 +106,16 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
         isRegistered = true;
     }
 
+    private void initUpdataBroadcastReceiver() {
+//        long spDownloadId = (long) SPUtils.get(this, mDownloadIdKey, (long) -1);
+//        Log.d("mylog", "initUpdataBroadcastReceiver: spDownloadId " + spDownloadId);
+        mUpdataBroadcastReceiver = new UpdataBroadcastReceiver(mDownloadIdKey);
+        IntentFilter filter = new IntentFilter();
+        filter.addAction(DownloadManager.ACTION_DOWNLOAD_COMPLETE);
+        registerReceiver(mUpdataBroadcastReceiver, filter);
+    }
+
+
     @Override
     protected void onDestroy() {
         super.onDestroy();
@@ -111,6 +123,7 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
         if (isRegistered) {
             unregisterReceiver(netWorkChangReceiver);
         }
+        unregisterReceiver(mUpdataBroadcastReceiver);
     }
 
     private void initView() {
@@ -136,11 +149,12 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
         mTvTab1.postDelayed(new Runnable() {
             @Override
             public void run() {
-                Log.d("mylog", "run: postDelayed postDelayed ");
                 initNetWorkChangReceiver();
+                initUpdataBroadcastReceiver();
             }
         }, 200);
     }
+
 
     public void scroolToHomeFragment() {
         mVpFragment.setCurrentItem(MainFragmentFactory.MAIN_FRAGMENT_0, false);
@@ -229,9 +243,8 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
     }
 
 
-
-
     private String netUrl = URLConfig.download_apk_url;
+
     private void showUpdateDialog() {
         AlertDialog alertDialog = new AlertDialog.Builder(this).create();
         alertDialog.setCancelable(false);

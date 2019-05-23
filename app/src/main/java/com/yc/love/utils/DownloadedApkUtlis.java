@@ -31,6 +31,7 @@ public class DownloadedApkUtlis {
         //1.得到下载对象
         DownloadManager dowanloadmanager = (DownloadManager) context.getSystemService(context.DOWNLOAD_SERVICE);
         long spDownloadId = (long) SPUtils.get(context, downloadIdKey, (long) -1);
+        Log.d("mylog", "downLoadApk: downloadIdKey " + downloadIdKey + " spDownloadId " + spDownloadId);
         /*
         下载管理器中有很多下载项，怎么知道一个资源已经下载过，避免重复下载呢？
         我的项目中的需求就是apk更新下载，用户点击更新确定按钮，第一次是直接下载，
@@ -46,8 +47,11 @@ public class DownloadedApkUtlis {
             } else {
                 //有记录
                 Log.d("mylog", "downLoadApk:  有记录 ");
-                InstallApkUtlis.toInstallApk(context,spDownloadId);  //有记录，直接安装
-                return;
+                boolean isFind = InstallApkUtlis.toInstallApk(context, spDownloadId);  //有记录，直接安装
+                if (isFind) {
+                    Log.d("mylog", "downLoadApk:  有文件 ");
+                    return;
+                }
             }
         }
         //2.创建下载请求对象，并且把下载的地址放进去
@@ -79,7 +83,7 @@ public class DownloadedApkUtlis {
 //    public static final String DOWNLOAD_ID = "download_id";
 
     //通过downLoadId查询下载的apk，解决6.0以后安装的问题
-    public static File queryDownloadedApk(Context context,long downLoadId) {
+    public static File queryDownloadedApk(Context context, long downLoadId) {
         File targetApkFile = null;
         DownloadManager downloader = (DownloadManager) context.getSystemService(Context.DOWNLOAD_SERVICE);
 //        long downloadId = (long) SPUtils.get(context, DOWNLOAD_ID, (long) -1);

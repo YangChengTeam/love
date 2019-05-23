@@ -127,9 +127,9 @@ public class MainT3Fragment extends BaseMainFragment {
 
     @Override
     protected void lazyLoad() {
-        List<String> connectionTypeList = YcSingle.getInstance().connectionTypeList;
-        checkNetChangUI(connectionTypeList);
-//        isCanLoadData();
+//        List<String> connectionTypeList = YcSingle.getInstance().connectionTypeList;
+//        checkNetChangUI(connectionTypeList);
+        isCanLoadData();
     }
 
     private void isCanLoadData() {

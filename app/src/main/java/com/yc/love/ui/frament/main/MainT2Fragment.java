@@ -1,6 +1,8 @@
 package com.yc.love.ui.frament.main;
 
 import android.content.Intent;
+import android.graphics.Color;
+import android.os.Build;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.DividerItemDecoration;
@@ -35,6 +37,7 @@ import com.yc.love.model.bean.MainT3Bean;
 import com.yc.love.model.bean.event.NetWorkChangBean;
 import com.yc.love.model.engin.LoveEngin;
 import com.yc.love.model.single.YcSingle;
+import com.yc.love.model.util.RomUtils;
 import com.yc.love.ui.activity.BecomeVipActivity;
 import com.yc.love.ui.activity.ExampleDetailActivity;
 import com.yc.love.ui.activity.LoveHealDetailsActivity;
@@ -85,6 +88,14 @@ public class MainT2Fragment extends BaseMainFragment {
         mLlNotNet = rootView.findViewById(R.id.main_t2_not_net);
 
         mMainActivity.setStateBarHeight(viewBar, 1);
+
+        Log.d("mylog", "initViews: RomUtils.getLightStatausBarAvailableRomType() " + RomUtils.getLightStatausBarAvailableRomType());
+        Log.d("mylog", "initViews: RomUtils.AvailableRomType.NA " + RomUtils.AvailableRomType.NA);
+        Log.d("mylog", "initViews:          tt = Build.VERSION.SDK_INT; " + Build.VERSION.SDK_INT);
+        if (RomUtils.getLightStatausBarAvailableRomType() == RomUtils.AvailableRomType.NA) {
+            viewBar.setBackgroundColor(Color.GRAY);
+        }
+
         initRecyclerView();
     }
 

@@ -5,7 +5,9 @@ import android.app.DownloadManager;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
+import android.util.Log;
 
+import com.yc.love.model.util.SPUtils;
 import com.yc.love.utils.InstallApkUtlis;
 
 
@@ -15,10 +17,11 @@ import com.yc.love.utils.InstallApkUtlis;
 
 public class UpdataBroadcastReceiver extends BroadcastReceiver {
 
-    private final long cacheDownLoadId;
+    //    private final long cacheDownLoadId;
+    private String cacheDownLoadIdKey;
 
-    public UpdataBroadcastReceiver(long cacheDownLoadId) {
-        this.cacheDownLoadId=cacheDownLoadId;
+    public UpdataBroadcastReceiver(String cacheDownLoadIdKey) {
+        this.cacheDownLoadIdKey = cacheDownLoadIdKey;
     }
 
     @SuppressLint("NewApi")
@@ -26,8 +29,14 @@ public class UpdataBroadcastReceiver extends BroadcastReceiver {
         long downLoadId = intent.getLongExtra(DownloadManager.EXTRA_DOWNLOAD_ID, -1);
 //        long cacheDownLoadId = (long) SPUtils.get(context,DownloadedApkUtlis.DOWNLOAD_ID,(long)-1);
 //        long cacheDownLoadId = PreferencesUtils.getLong(context, DownloadedApkUtlis.DOWNLOAD_ID);
-        if (cacheDownLoadId == downLoadId) {
-            InstallApkUtlis.toInstallApk(context,cacheDownLoadId);  //安装apk
+        /*cacheDownLoadIdKey="download_id_123";
+        long spDownloadId = (long) SPUtils.get(context, cacheDownLoadIdKey, (long) -1);
+        Log.d("mylog", "onReceive: cacheDownLoadIdKey " + cacheDownLoadIdKey + " spDownloadId " + spDownloadId + " downLoadId " + downLoadId);
+        if (spDownloadId == downLoadId) {
+            InstallApkUtlis.toInstallApk(context, spDownloadId);  //安装apk
+        }*/
+        if (downLoadId > 0) {
+            InstallApkUtlis.toInstallApk(context, downLoadId);  //安装apk
         }
     }
 

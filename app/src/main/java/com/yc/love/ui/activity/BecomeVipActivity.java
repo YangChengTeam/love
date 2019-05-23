@@ -132,7 +132,7 @@ public class BecomeVipActivity extends PayActivity implements View.OnClickListen
         alertDialog.setButton(DialogInterface.BUTTON_NEGATIVE, "确定", new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
-                finish();
+//                finish();
             }
         });
         alertDialog.show();

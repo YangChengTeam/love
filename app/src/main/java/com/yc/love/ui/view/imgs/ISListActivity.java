@@ -28,6 +28,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.yc.love.R;
+import com.yc.love.utils.StatusBarUtil;
 
 import java.io.File;
 import java.util.ArrayList;
@@ -105,12 +106,13 @@ public class ISListActivity extends AppCompatActivity implements View.OnClickLis
      *             那么默认界面会变成全屏模式，需要在根布局中设置FitsSystemWindows属性为true
      */
     public void setAndroidNativeLightStatusBar(boolean dark) {
-        View decor = getWindow().getDecorView();
+        StatusBarUtil.setStatusTextColor1(true, this);
+      /*  View decor = getWindow().getDecorView();
         if (dark) {
             decor.setSystemUiVisibility(View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN | View.SYSTEM_UI_FLAG_LIGHT_STATUS_BAR);
         } else {
             decor.setSystemUiVisibility(View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN | View.SYSTEM_UI_FLAG_LAYOUT_STABLE);
-        }
+        }*/
     }
 
     @Override

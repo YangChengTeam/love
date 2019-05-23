@@ -15,24 +15,36 @@ import android.support.v4.content.ContextCompat;
 import android.util.Log;
 import android.view.View;
 import android.webkit.DownloadListener;
+import android.webkit.WebChromeClient;
 import android.webkit.WebResourceRequest;
 import android.webkit.WebSettings;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
+import android.widget.ProgressBar;
 import android.widget.Toast;
 
 import com.yc.love.R;
+import com.yc.love.model.base.MySubscriber;
+import com.yc.love.model.bean.AResultInfo;
+import com.yc.love.model.bean.MenuadvInfoBean;
+import com.yc.love.model.engin.LoveEngin;
 import com.yc.love.model.util.SPUtils;
 import com.yc.love.ui.activity.MainActivity;
 import com.yc.love.ui.frament.base.BaseMainFragment;
+import com.yc.love.ui.view.LoadDialog;
 import com.yc.love.ui.view.imgs.ImgSelFragment;
 import com.yc.love.utils.DownloadedApkUtlis;
+import com.yc.love.utils.StatusBarUtil;
 
 /**
  * Created by mayn on 2019/5/22.
  */
 
 public class MainT4Fragment extends BaseMainFragment {
+
+    private WebView mWebView;
+    private ProgressBar mProgressBar;
+
     @Override
     protected int setContentView() {
         return R.layout.fragment_main_t4;
@@ -40,106 +52,104 @@ public class MainT4Fragment extends BaseMainFragment {
 
     private String mDownloadIdKey;
 
+    private LoveEngin mLoveEngin;
+
     @Override
     protected void initViews() {
+
+        mLoveEngin = new LoveEngin(mMainActivity);
+        mProgressBar = rootView.findViewById(R.id.main_t4_pb_progress);
         View viewBar = rootView.findViewById(R.id.main_t4_view_bar);
-        final WebView webView = rootView.findViewById(R.id.main_t4_webview);
-
+        mWebView = rootView.findViewById(R.id.main_t4_webview);
         mMainActivity.setStateBarHeight(viewBar, 1);
+        mWebView.setClickable(true);
+        mWebView.getSettings().setUseWideViewPort(true);
+        mWebView.getSettings().setSupportZoom(true);
+        mWebView.getSettings().setBuiltInZoomControls(true);
+        mWebView.getSettings().setJavaScriptEnabled(true);
+        mWebView.getSettings().setCacheMode(WebSettings.LOAD_NO_CACHE);
+        mWebView.getSettings().setDefaultTextEncodingName("gb2312");
+        mWebView.getSettings().setSaveFormData(true);
+        mWebView.getSettings().setDomStorageEnabled(true);
+        mWebView.getSettings().setLayoutAlgorithm(WebSettings.LayoutAlgorithm.SINGLE_COLUMN);
+        mWebView.getSettings().setJavaScriptCanOpenWindowsAutomatically(true);
+        mWebView.getSettings().setAppCacheEnabled(true);
+        mWebView.getSettings().setLoadWithOverviewMode(true);
+        mWebView.getSettings().setDatabaseEnabled(true);
 
 
-        webView.setClickable(true);
-        webView.getSettings().setUseWideViewPort(true);
-        webView.getSettings().setSupportZoom(true);
-        webView.getSettings().setBuiltInZoomControls(true);
-        webView.getSettings().setJavaScriptEnabled(true);
-        webView.getSettings().setCacheMode(WebSettings.LOAD_NO_CACHE);
-        webView.getSettings().setDefaultTextEncodingName("gb2312");
-        webView.getSettings().setSaveFormData(true);
-        webView.getSettings().setDomStorageEnabled(true);
-        webView.getSettings().setLayoutAlgorithm(WebSettings.LayoutAlgorithm.SINGLE_COLUMN);
-        webView.getSettings().setJavaScriptCanOpenWindowsAutomatically(true);
-        webView.getSettings().setAppCacheEnabled(true);
-        webView.getSettings().setLoadWithOverviewMode(true);
-        webView.getSettings().setDatabaseEnabled(true);
-
-        String url = "http://en.upkao.com";
-        webView.loadUrl(url);
-
-        webView.setWebViewClient(new WebViewClient() {
+        mWebView.setWebViewClient(new WebViewClient() {
 
             @Override
             public boolean shouldOverrideUrlLoading(WebView view, String url) {
                 Log.d("mylog", "shouldOverrideUrlLoading: url---------  " + url);
-                mDownloadIdKey = "download_id_".concat(url);
-                DownloadedApkUtlis.downLoadApk(mMainActivity, mDownloadIdKey, url, contentObserver);
+//                mDownloadIdKey = "download_id_".concat("123");
+//                Log.d("mylog", "shouldOverrideUrlLoading: mDownloadIdKey " + mDownloadIdKey);
+//                DownloadedApkUtlis.downLoadApk(mMainActivity, mDownloadIdKey, url, contentObserver);
                 return super.shouldOverrideUrlLoading(view, url);
             }
 
             @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
             @Override
             public boolean shouldOverrideUrlLoading(WebView view, WebResourceRequest request) {
-                String url1 = request.getUrl().toString();
-                Log.d("mylog", "shouldOverrideUrlLoading: url " + url1);
-                mDownloadIdKey = "download_id_".concat(url1);
-                DownloadedApkUtlis.downLoadApk(mMainActivity, mDownloadIdKey, url1, contentObserver);
+                Uri url = request.getUrl();
                 return super.shouldOverrideUrlLoading(view, request);
             }
         });
-
-       /* webView.setDownloadListener(new DownloadListener() {
+        mWebView.setWebChromeClient(new WebChromeClient() {
             @Override
-            public void onDownloadStart(final String url, String userAgent, String contentDisposition, String mimetype, long contentLength) {
-                mMainActivity.runOnUiThread(new Runnable() {
-                    @Override
-                    public void run() {
-                        //使用前先判断是否有读取、写入内存卡权限
-                        if (ContextCompat.checkSelfPermission(mMainActivity, Manifest.permission.WRITE_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
-                            ActivityCompat.requestPermissions(mMainActivity, new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE}, STORAGE_REQUEST_CODE);
-                        } else {
-
-
-                            downloadAPK.downloadAPK(url, "***.apk");//DownLoader 需要在oncreate 中初始化
-                        }
+            public void onProgressChanged(WebView view, int newProgress) {
+                //首先我们的进度条是隐藏的
+                mProgressBar.setVisibility(View.VISIBLE);//把网页加载的进度传给我们的进度条
+                mProgressBar.setProgress(newProgress);
+                if (newProgress >= 95) { //加载完毕让进度条消失
+                    if (mProgressBar.getVisibility() != View.GONE) {
+                        mProgressBar.setVisibility(View.GONE);
                     }
-                });
-
-
+                }
+                super.onProgressChanged(view, newProgress);
             }
-        });*/
+        });
     }
 
-    /*@Override
-    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
-        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
-        switch (requestCode) {
-            case STORAGE_REQUEST_CODE:
-                if (grantResults.length >= 1 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-                    getSupportFragmentManager()
-                            .beginTransaction()
-                            .add(R.id.fmImageList, ImgSelFragment.instance(), null)
-                            .commitAllowingStateLoss();
-                } else {
-                    mMainActivity.showToastShort("无法访问存储卡");
-                }
-                break;
-            default:
-                break;
-        }
-    }*/
-
-    private static final int STORAGE_REQUEST_CODE = 1;
 
     @Override
     protected void lazyLoad() {
+        netData();
+    }
 
+    private void netData() {
+        LoadDialog loadDialog = new LoadDialog(mMainActivity);
+        loadDialog.show();
+        mLoveEngin.menuadvInfo("menuadv/info").subscribe(new MySubscriber<AResultInfo<MenuadvInfoBean>>(loadDialog) {
+            @Override
+            protected void onNetNext(AResultInfo<MenuadvInfoBean> menuadvInfoBeanAResultInfo) {
+                MenuadvInfoBean menuadvInfoBean = menuadvInfoBeanAResultInfo.data;
+                String url = menuadvInfoBean.url;
+
+//                url = "http://en.upkao.com";
+                //        String url = "https://fir.im/cloudreader";
+                Log.d("mylog", "onNetNext: url "+url);
+                mWebView.loadUrl(url);
+            }
+
+            @Override
+            protected void onNetError(Throwable e) {
+
+            }
+
+            @Override
+            protected void onNetCompleted() {
+
+            }
+        });
     }
 
     private ContentObserver contentObserver = new ContentObserver(null) {
         @Override
         public void onChange(boolean selfChange) {
             DownloadManager.Query query = new DownloadManager.Query();
-            long spDownloadId = (long) SPUtils.get(mMainActivity, mDownloadIdKey, (long) -1);
+            long spDownloadId = (long) SPUtils.get(mMainActivity, mMainActivity.mDownloadIdKey, (long) -1);
             query.setFilterById(spDownloadId);
             DownloadManager dManager = (DownloadManager) mMainActivity.getSystemService(Context.DOWNLOAD_SERVICE);
             final Cursor cursor = dManager.query(query);
@@ -158,5 +168,7 @@ public class MainT4Fragment extends BaseMainFragment {
             }
         }
     };
+
+
 
 }

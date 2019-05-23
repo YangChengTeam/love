@@ -22,6 +22,7 @@ import com.yc.love.model.single.YcSingle;
 import com.yc.love.ui.activity.IdCorrelationSlidingActivity;
 import com.yc.love.ui.activity.MainActivity;
 import com.yc.love.ui.view.LoadDialog;
+import com.yc.love.utils.StatusBarUtil;
 
 /**
  * Created by mayn on 2019/4/25.
@@ -74,7 +75,8 @@ public abstract class BaseActivity extends AppCompatActivity {
     }
 
     public void setAndroidNativeLightStatusBar() {
-        setAndroidNativeLightStatusBar(true);
+        StatusBarUtil.setStatusTextColor1(true, this);
+//        setAndroidNativeLightStatusBar(true);
     }
 
     /**

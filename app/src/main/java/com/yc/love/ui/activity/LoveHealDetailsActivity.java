@@ -193,7 +193,7 @@ public class LoveHealDetailsActivity extends BaseSameActivity {
         OpenApkPkgInfo qq = new OpenApkPkgInfo(1, "", "QQ", getResources().getDrawable(R.mipmap.icon_d_qq));
         OpenApkPkgInfo wx = new OpenApkPkgInfo(2, "", "微信", getResources().getDrawable(R.mipmap.icon_d_wx));
         OpenApkPkgInfo mm = new OpenApkPkgInfo(3, "", "陌陌", getResources().getDrawable(R.mipmap.icon_d_momo));
-        OpenApkPkgInfo tt = new OpenApkPkgInfo(4, "", "探探", getResources().getDrawable(R.mipmap.icon_d_tt));
+//        OpenApkPkgInfo tt = new OpenApkPkgInfo(4, "", "探探", getResources().getDrawable(R.mipmap.icon_d_tt));
 
         List<String> apkList = PackageUtils.getApkList(this);
         for (int i = 0; i < apkList.size(); i++) {
@@ -204,15 +204,15 @@ public class LoveHealDetailsActivity extends BaseSameActivity {
                 wx.pkg = apkPkgName;
             } else if ("com.immomo.momo".equals(apkPkgName)) {
                 mm.pkg = apkPkgName;
-            } else if ("com.p1.mobile.putong".equals(apkPkgName)) {
+            }/* else if ("com.p1.mobile.putong".equals(apkPkgName)) {
                 tt.pkg = apkPkgName;
-            }
+            }*/
         }
 
         openApkPkgInfos.add(qq);
         openApkPkgInfos.add(wx);
         openApkPkgInfos.add(mm);
-        openApkPkgInfos.add(tt);
+//        openApkPkgInfos.add(tt);
         OpenAkpDialog openAkpDialog = new OpenAkpDialog(this, openApkPkgInfos);
         openAkpDialog.show();
     }

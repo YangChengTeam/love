@@ -110,7 +110,7 @@ public class BecomeVipTailViewHolder extends BaseViewHolder<BecomeVipBean> {
         mIvPayWx.setOnClickListener(this);
         mTvNext.setOnClickListener(this);
 
-        mSelectPayType = PAY_TYPE_ZFB;
+        mSelectPayType = PAY_TYPE_WX;
         selectPayType(mSelectPayType);
 
     }

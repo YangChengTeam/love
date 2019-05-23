@@ -20,6 +20,7 @@ import com.yc.love.model.bean.LoveHealDateBean;
 import com.yc.love.model.bean.LoveHealDetBean;
 import com.yc.love.model.bean.LoveHealingBean;
 import com.yc.love.model.bean.LoveUpDownPhotoBean;
+import com.yc.love.model.bean.MenuadvInfoBean;
 import com.yc.love.model.domain.URLConfig;
 
 import java.util.HashMap;
@@ -157,6 +158,18 @@ public class LoveEngin extends BaseEngine {
         requestParams(params);
         HttpCoreEngin<AResultInfo<ExampleTsCategory>> httpCoreEngin = HttpCoreEngin.get(mContext);
         Observable<AResultInfo<ExampleTsCategory>> rxpost = httpCoreEngin.rxpost(URLConfig.getUrl(url), new TypeReference<AResultInfo<ExampleTsCategory>>() {
+                }.getType(),
+                params,
+                true,
+                true, true);
+        return rxpost;
+    }
+    public Observable<AResultInfo<MenuadvInfoBean>> menuadvInfo(String url) {
+        Map<String, String> params = new HashMap<>();
+//        params.put("password", password);
+        requestParams(params);
+        HttpCoreEngin<AResultInfo<MenuadvInfoBean>> httpCoreEngin = HttpCoreEngin.get(mContext);
+        Observable<AResultInfo<MenuadvInfoBean>> rxpost = httpCoreEngin.rxpost(URLConfig.getUrl(url), new TypeReference<AResultInfo<MenuadvInfoBean>>() {
                 }.getType(),
                 params,
                 true,
