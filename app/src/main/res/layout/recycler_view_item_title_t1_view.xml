@@ -30,7 +30,7 @@
         android:layout_height="wrap_content"
         android:layout_marginLeft="22dp"
         android:layout_marginBottom="6dp"
-        android:text="请输入关键词搜索聊天术语"
+        android:text="@string/share_des"
         android:textColor="@color/text_gray"
         android:textSize="@dimen/size_16"
         app:layout_constraintBottom_toBottomOf="@id/item_title_view_iv_share"

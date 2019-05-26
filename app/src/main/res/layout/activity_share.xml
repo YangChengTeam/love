@@ -23,7 +23,7 @@
             android:background="@color/love_background"
             app:iconifiedByDefault="false"
             app:queryBackground="@null"
-            app:queryHint="请输入搜索内容"
+            app:queryHint="@string/share_des_short"
             app:showDividers="none"
             app:submitBackground="@null" />
 

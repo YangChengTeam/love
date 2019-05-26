@@ -4,6 +4,7 @@ import android.content.ClipData;
 import android.content.ClipboardManager;
 import android.content.Context;
 import android.content.Intent;
+import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.DefaultItemAnimator;
@@ -45,6 +46,7 @@ public class LoveHealDetailsActivity extends BaseSameActivity {
     private LoveEngin mLoveEngin;
     private LoveHealDetailsAdapter mAdapter;
     private RecyclerView mRecyclerView;
+    private SwipeRefreshLayout mSwipeRefresh;
     private int PAGE_SIZE = 8;
     private int PAGE_NUM = 1;
     private List<LoveHealDetBean> mLoveHealDetBeans;
@@ -85,6 +87,7 @@ public class LoveHealDetailsActivity extends BaseSameActivity {
     }
 
     private void initRecyclerView() {
+        mSwipeRefresh = findViewById(R.id.love_heal_details_swipe_refresh);
         mRecyclerView = findViewById(R.id.love_heal_details_rl);
         LinearLayoutManager layoutManager = new LinearLayoutManager(this);
         mRecyclerView.setLayoutManager(layoutManager);
@@ -92,6 +95,20 @@ public class LoveHealDetailsActivity extends BaseSameActivity {
         //设置增加或删除条目的动画
         mRecyclerView.setItemAnimator(new DefaultItemAnimator());
 
+        mSwipeRefresh.setColorSchemeResources(R.color.red_crimson);
+        mSwipeRefresh.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+            @Override
+            public void onRefresh() {
+//                obtainWalletData();
+                if (mLoveHealDetBeans != null) {
+                    mLoveHealDetBeans.clear();
+                    mAdapter.notifyDataSetChanged();
+                }
+                loadMoreEnd = false;
+                PAGE_NUM = 1;
+                netData();
+            }
+        });
     }
 
     private void netData() {
@@ -109,12 +126,12 @@ public class LoveHealDetailsActivity extends BaseSameActivity {
 
             @Override
             protected void onNetError(Throwable e) {
-
+                mSwipeRefresh.setRefreshing(false);
             }
 
             @Override
             protected void onNetCompleted() {
-
+                mSwipeRefresh.setRefreshing(false);
             }
         });
     }

@@ -19,6 +19,7 @@ import android.os.Environment;
 import android.os.Handler;
 import android.support.v7.app.AlertDialog;
 import android.util.Log;
+import android.view.KeyEvent;
 import android.view.View;
 import android.widget.TextView;
 
@@ -46,6 +47,7 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
     private String mPackageVersionName;
     public String mDownloadIdKey = "mDownloadIdKey";
     private UpdataBroadcastReceiver mUpdataBroadcastReceiver;
+    private OnChildDisposeMainKeyDownListent onChildDisposeMainKeyDownListent;
 
 
     @Override
@@ -66,7 +68,7 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
             mPackageVersionName = "1.0";
         }
         mDownloadIdKey = "download_id".concat(mPackageVersionName);
-        Log.d("mylog", "onCreate: download_id mDownloadIdKey "+mDownloadIdKey);
+        Log.d("mylog", "onCreate: download_id mDownloadIdKey " + mDownloadIdKey);
         initView();
 
         checkUpdate();
@@ -84,6 +86,31 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
         }
         return super.onKeyDown(keyCode, event);
     }*/
+
+    @Override
+    public boolean onKeyDown(int keyCode, KeyEvent event) {
+        Log.d("mylog", "onKeyDown: ");
+        if (keyCode == KeyEvent.KEYCODE_BACK) {
+            Log.d("mylog", "onKeyDown: keyCode "+keyCode+" KeyEvent.KEYCODE_BACK "+KeyEvent.KEYCODE_BACK);
+            int currentItem = mVpFragment.getCurrentItem();
+            Log.d("mylog", "onKeyDown: currentItem "+currentItem);
+            if (MainFragmentFactory.MAIN_FRAGMENT_3 == currentItem) {
+                boolean disposeMainKeyDown = onChildDisposeMainKeyDownListent.onChildDisposeMainKeyDown();
+                if (disposeMainKeyDown) {
+                    return true;
+                }
+            }
+        }
+        return super.onKeyDown(keyCode, event);
+    }
+
+    public interface OnChildDisposeMainKeyDownListent {
+        boolean onChildDisposeMainKeyDown();
+    }
+
+    public void setOnChildDisposeMainKeyDownListent(OnChildDisposeMainKeyDownListent onChildDisposeMainKeyDownListent) {
+        this.onChildDisposeMainKeyDownListent = onChildDisposeMainKeyDownListent;
+    }
 
     //后台运行而不退出程序
     @Override

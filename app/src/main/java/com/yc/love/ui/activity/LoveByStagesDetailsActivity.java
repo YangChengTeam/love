@@ -43,7 +43,7 @@ public class LoveByStagesDetailsActivity extends BaseSameActivity {
     private boolean mIsCollectArticle = false;
     private boolean mIsDigArticle;
     private int mCategoryId;
-    private ConstraintLayout mClLikeCon;
+    private LinearLayout mClLikeCon;
     private ProgressBar mProgressBar;
     private String mUrl = "";
     private ImageView mIvLike;

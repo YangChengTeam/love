@@ -22,6 +22,7 @@ import com.yc.love.ui.activity.FeedbackActivity;
 import com.yc.love.ui.activity.IdCorrelationSlidingActivity;
 import com.yc.love.ui.activity.SettingActivity;
 import com.yc.love.ui.activity.UserInfoActivity;
+import com.yc.love.ui.activity.UsingHelpActivity;
 import com.yc.love.ui.frament.base.BaseMainFragment;
 import com.yc.love.ui.view.CircleTransform;
 import com.yc.love.ui.view.LoadDialog;
@@ -181,7 +182,7 @@ public class MainT5Fragment extends BaseMainFragment implements View.OnClickList
 
                 break;
             case R.id.main_t5_ll_item_02:
-
+                startActivity(new Intent(mMainActivity, UsingHelpActivity.class));
                 break;
             case R.id.main_t5_ll_item_03:
                 mMainActivity.startActivity(new Intent(mMainActivity, FeedbackActivity.class));

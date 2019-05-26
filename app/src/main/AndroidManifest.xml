@@ -108,7 +108,8 @@
         <activity android:name=".ui.view.imgs.ISListActivity" />
         <activity android:name=".ui.view.imgs.ISCameraActivity" />
 
-        <!--<provider
+        <!--
+        <provider
             android:name="android.support.v4.content.FileProvider"
             android:authorities="com.yc.love.fileprovider"
             android:exported="false"
@@ -116,24 +117,29 @@
             <meta-data
                 android:name="android.support.FILE_PROVIDER_PATHS"
                 android:resource="@xml/provider_paths" />
-        </provider>-->
+        </provider>
+        -->
 
         <activity android:name=".ui.activity.LoveHealDetailsActivity" />
         <activity android:name=".ui.activity.LoveByStagesDetailsActivity" />
         <activity android:name=".ui.activity.ExampleDetailActivity" />
-        <activity android:name=".ui.activity.ShareActivity"></activity>
-        <!--<receiver android:name=".receiver.NetWorkChangReceiver">
+        <activity android:name=".ui.activity.ShareActivity" />
+        <!--
+        <receiver android:name=".receiver.NetWorkChangReceiver">
             <intent-filter>
                 <action android:name="android.net.conn.CONNECTIVITY_CHANGE" />
                 <action android:name="android.net.wifi.WIFI_STATE_CHANGED" />
                 <action android:name="android.net.wifi.STATE_CHANGE" />
             </intent-filter>
-        </receiver>-->
-       <!-- <receiver android:name=".receiver.UpdataBroadcastReceiver">
+        </receiver>
+        -->
+        <!--
+        <receiver android:name=".receiver.UpdataBroadcastReceiver">
             <intent-filter>
                 <action android:name="android.intent.action.DOWNLOAD_COMPLETE" />
             </intent-filter>
-        </receiver>-->
+        </receiver>
+        -->
         <receiver android:name=".receiver.InitApkBroadCastReceiver">
             <intent-filter>
                 <action android:name="android.intent.action.PACKAGE_ADDED" />
@@ -143,10 +149,15 @@
                 <data android:scheme="package" />
             </intent-filter>
         </receiver>
+
         <activity
             android:name="com.tencent.bugly.beta.ui.BetaActivity"
             android:configChanges="keyboardHidden|orientation|screenSize|locale"
             android:theme="@android:style/Theme.Translucent" />
+        <activity android:name=".ui.activity.ProtocolActivity" />
+        <activity android:name=".ui.activity.AboutUsActivity" />
+        <activity android:name=".ui.activity.PrivacyStatementActivity" />
+        <activity android:name=".ui.activity.UsingHelpActivity"></activity>
     </application>
 
 </manifest>

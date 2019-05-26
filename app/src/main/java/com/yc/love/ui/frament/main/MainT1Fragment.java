@@ -14,10 +14,11 @@ import android.widget.LinearLayout;
 import com.yc.love.R;
 import com.yc.love.adaper.rv.MainT1MoreItemAdapter;
 import com.yc.love.adaper.rv.base.RecyclerViewItemListener;
+import com.yc.love.adaper.rv.base.RecyclerViewTimeoutListener;
 import com.yc.love.adaper.rv.holder.BaseViewHolder;
-import com.yc.love.adaper.rv.holder.MainT1CategoryViewHolder;
 import com.yc.love.adaper.rv.holder.MainT1ItemHolder;
 import com.yc.love.adaper.rv.holder.ProgressBarViewHolder;
+import com.yc.love.adaper.rv.holder.TimeoutItemHolder;
 import com.yc.love.adaper.rv.holder.TitleT1ViewHolder;
 import com.yc.love.model.base.MySubscriber;
 import com.yc.love.model.bean.AResultInfo;
@@ -25,7 +26,7 @@ import com.yc.love.model.bean.CategoryArticleBean;
 import com.yc.love.model.bean.CategoryArticleChildrenBean;
 import com.yc.love.model.bean.ExampDataBean;
 import com.yc.love.model.bean.ExampListsBean;
-import com.yc.love.model.bean.event.NetWorkChangBean;
+import com.yc.love.model.bean.event.NetWorkChangT1Bean;
 import com.yc.love.model.engin.LoveEngin;
 import com.yc.love.ui.activity.ExampleDetailActivity;
 import com.yc.love.ui.activity.LoveByStagesActivity;
@@ -58,7 +59,8 @@ public class MainT1Fragment extends BaseMainFragment {
     private MainT1MoreItemAdapter mAdapter;
     private ProgressBarViewHolder progressBarViewHolder;
     private LoveEngin mLoveEngin;
-    private List<ExampListsBean> mExampListsBeans;
+    private List<ExampListsBean> mExampListsBeans = new ArrayList<>();
+    ;
     private RecyclerView mRecyclerView;
     private LinearLayout mLlNotNet;
     private boolean mIsNetData = false;
@@ -85,6 +87,14 @@ public class MainT1Fragment extends BaseMainFragment {
         mRecyclerView.setItemAnimator(new DefaultItemAnimator());
     }
 
+    RecyclerViewTimeoutListener recyclerViewTimeoutListener = new RecyclerViewTimeoutListener() {
+        @Override
+        public void onItemClick(int position) {
+            lazyLoad();
+        }
+    };
+
+
     RecyclerViewItemListener recyclerViewItemListener = new RecyclerViewItemListener() {
         @Override
         public void onItemClick(int position) {
@@ -101,6 +111,7 @@ public class MainT1Fragment extends BaseMainFragment {
         public void onItemLongClick(int position) {
 
         }
+
     };
 
     @Override
@@ -116,7 +127,7 @@ public class MainT1Fragment extends BaseMainFragment {
     }
 
     @Subscribe(threadMode = ThreadMode.MAIN)
-    public void onMessageEvent(NetWorkChangBean netWorkChangBean) {  //无网状态
+    public void onMessageEvent(NetWorkChangT1Bean netWorkChangBean) {  //无网状态
         List<String> connectionTypeList = netWorkChangBean.connectionTypeList;
         if (connectionTypeList == null || connectionTypeList.size() == 0) {
             if (mLlNotNet.getVisibility() != View.VISIBLE) {
@@ -125,9 +136,10 @@ public class MainT1Fragment extends BaseMainFragment {
         } else {
             if (mLlNotNet.getVisibility() != View.GONE) {
                 mLlNotNet.setVisibility(View.GONE);
-                if (!mIsNetData) {
+                lazyLoad();
+              /*  if (!mIsNetData) {
                     netData();
-                }
+                }*/
             }
         }
     }
@@ -136,8 +148,12 @@ public class MainT1Fragment extends BaseMainFragment {
     @Override
     protected void lazyLoad() {
 //        mIsNetData = false;
-        netData();
-        netTitleData();
+        if (!mIsNetData) {
+            netData();
+        }
+        if (!mIsNetTitleData) {
+            netTitleData();
+        }
     }
 
     private void netData() {
@@ -150,9 +166,6 @@ public class MainT1Fragment extends BaseMainFragment {
                 ExampDataBean exampDataBean = exampDataBeanAResultInfo.data;
                 if (exampDataBean != null) {
                     mExampListsBeans = exampDataBean.lists;
-                    if (mExampListsBeans == null) {
-                        mExampListsBeans = new ArrayList<>();
-                    }
                 }
 //                mExampListsBeans.add(0, new ExampListsBean(3, "Article_Category"));
                 mExampListsBeans.add(0, new ExampListsBean(0, "title"));
@@ -168,8 +181,9 @@ public class MainT1Fragment extends BaseMainFragment {
 //                java.net.UnknownHostException: Unable to resolve host "love.bshu.com": No address associated with hostname
                 if (e instanceof SocketTimeoutException || e instanceof UnknownHostException) {
                     //TODO 网络超时
-
-
+//                    mExampListsBeans.add(new ExampListsBean(-1, "title"));
+//                    initRecyclerViewData();
+                    Log.d("mylog", "onNetError: SocketTimeoutException 网络超时 " + e.toString());
                 }
             }
 
@@ -208,6 +222,11 @@ public class MainT1Fragment extends BaseMainFragment {
     private void initRecyclerViewData() {
         Log.d("mylog", "initRecyclerViewData: ");
         mAdapter = new MainT1MoreItemAdapter(mExampListsBeans, mRecyclerView) {
+
+            @Override
+            protected RecyclerView.ViewHolder getTimeoutHolder(ViewGroup parent) {
+                return new TimeoutItemHolder(mMainActivity, parent, "", recyclerViewTimeoutListener);
+            }
 
             @Override
             public BaseViewHolder getHolder(ViewGroup parent) {

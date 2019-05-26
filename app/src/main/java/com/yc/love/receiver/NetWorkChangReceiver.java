@@ -8,7 +8,8 @@ import android.net.NetworkInfo;
 import android.net.wifi.WifiManager;
 import android.util.Log;
 
-import com.yc.love.model.bean.event.NetWorkChangBean;
+import com.yc.love.model.bean.event.NetWorkChangT1Bean;
+import com.yc.love.model.bean.event.NetWorkChangT2Bean;
 import com.yc.love.model.single.YcSingle;
 
 import org.greenrobot.eventbus.EventBus;
@@ -73,7 +74,9 @@ public class NetWorkChangReceiver extends BroadcastReceiver {
                     mConnectionTypeList.remove(String.valueOf(info.getType()));
                 }
                 YcSingle.getInstance().connectionTypeList=mConnectionTypeList;
-                EventBus.getDefault().post(new NetWorkChangBean(mConnectionTypeList));
+//                EventBus.getDefault().post(new NetWorkChangBean(mConnectionTypeList));
+                EventBus.getDefault().post(new NetWorkChangT1Bean(mConnectionTypeList));
+                EventBus.getDefault().post(new NetWorkChangT2Bean(mConnectionTypeList));
             }
         }
     }

@@ -101,9 +101,11 @@ public class LoginEditTextLin extends LinearLayout {
     }
 
     public void setEditText(String text) {
-        if (!TextUtils.isEmpty(text)) {
-            mEt.setText(text);
+        if (TextUtils.isEmpty(text)) {
+            text="";
         }
+        mEt.setText(text);
+        setSelection();
     }
 
     public void setEditCodeText(String text) {
@@ -115,6 +117,16 @@ public class LoginEditTextLin extends LinearLayout {
         if (!TextUtils.isEmpty(text)) {
             mTvCodeWait.setText(text);
         }
+    }
+
+    public void setSelection(){
+        if(mEt!=null){
+            String trim=mEt.getText().toString().trim();
+            if(!TextUtils.isEmpty(trim)){
+                mEt.setSelection(trim.length());
+            }
+        }
+
     }
 
 

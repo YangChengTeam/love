@@ -5,7 +5,6 @@ import android.graphics.Color;
 import android.os.Build;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.DefaultItemAnimator;
-import android.support.v7.widget.DividerItemDecoration;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.OrientationHelper;
 import android.support.v7.widget.RecyclerView;
@@ -14,7 +13,6 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.LinearLayout;
-import android.widget.Toast;
 
 import com.yc.love.R;
 import com.yc.love.adaper.rv.MainT2MoreItemAdapter;
@@ -29,18 +27,13 @@ import com.yc.love.model.base.MySubscriber;
 import com.yc.love.model.bean.AResultInfo;
 import com.yc.love.model.bean.ExampDataBean;
 import com.yc.love.model.bean.ExampListsBean;
-import com.yc.love.model.bean.ExampleTsBean;
-import com.yc.love.model.bean.ExampleTsListBean;
-import com.yc.love.model.bean.LoveByStagesBean;
 import com.yc.love.model.bean.MainT2Bean;
-import com.yc.love.model.bean.MainT3Bean;
-import com.yc.love.model.bean.event.NetWorkChangBean;
+import com.yc.love.model.bean.event.NetWorkChangT2Bean;
 import com.yc.love.model.engin.LoveEngin;
 import com.yc.love.model.single.YcSingle;
 import com.yc.love.model.util.RomUtils;
 import com.yc.love.ui.activity.BecomeVipActivity;
 import com.yc.love.ui.activity.ExampleDetailActivity;
-import com.yc.love.ui.activity.LoveHealDetailsActivity;
 import com.yc.love.ui.frament.base.BaseMainFragment;
 import com.yc.love.ui.view.LoadDialog;
 
@@ -69,6 +62,7 @@ public class MainT2Fragment extends BaseMainFragment {
     private boolean mUserIsVip = false;
     private boolean mIsAddToPayVipItem = false;
     private boolean mIsShowLogined = false;
+    private SwipeRefreshLayout mSwipeRefresh;
 
 
     @Override
@@ -100,7 +94,7 @@ public class MainT2Fragment extends BaseMainFragment {
     }
 
     private void initRecyclerView() {
-        SwipeRefreshLayout swipe_refresh = rootView.findViewById(R.id.main_t2_swipe_refresh);
+        mSwipeRefresh = rootView.findViewById(R.id.main_t2_swipe_refresh);
         mRecyclerView = rootView.findViewById(R.id.main_t2_rl);
         LinearLayoutManager layoutManager = new LinearLayoutManager(mMainActivity);
         mRecyclerView.setLayoutManager(layoutManager);
@@ -109,8 +103,8 @@ public class MainT2Fragment extends BaseMainFragment {
         mRecyclerView.setItemAnimator(new DefaultItemAnimator());
 //        mRecyclerView.addItemDecoration(new DividerItemDecoration(mMainActivity,DividerItemDecoration.VERTICAL));
 
-        swipe_refresh.setColorSchemeResources(R.color.red_crimson);
-        swipe_refresh.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+        mSwipeRefresh.setColorSchemeResources(R.color.red_crimson);
+        mSwipeRefresh.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
             public void onRefresh() {
 //                obtainWalletData();
@@ -118,8 +112,10 @@ public class MainT2Fragment extends BaseMainFragment {
                     mMainT2Beans.clear();
                     mAdapter.notifyDataSetChanged();
                 }
+                mIsAddToPayVipItem = false;
                 loadMoreEnd = false;
                 PAGE_NUM = 1;
+                PAGE_SIZE = 5;
                 netData();
             }
         });
@@ -138,7 +134,7 @@ public class MainT2Fragment extends BaseMainFragment {
     }
 
     @Subscribe(threadMode = ThreadMode.MAIN)
-    public void onMessageEvent(NetWorkChangBean netWorkChangBean) {
+    public void onMessageEvent(NetWorkChangT2Bean netWorkChangBean) {
         List<String> connectionTypeList = netWorkChangBean.connectionTypeList;
         if (connectionTypeList == null || connectionTypeList.size() == 0) {
             if (mLlNotNet.getVisibility() != View.VISIBLE) {
@@ -189,12 +185,12 @@ public class MainT2Fragment extends BaseMainFragment {
 
             @Override
             protected void onNetError(Throwable e) {
-
+                mSwipeRefresh.setRefreshing(false);
             }
 
             @Override
             protected void onNetCompleted() {
-
+                mSwipeRefresh.setRefreshing(false);
             }
         });
     }
@@ -270,6 +266,9 @@ public class MainT2Fragment extends BaseMainFragment {
     }
 
     private void addToPayVipData() {
+        if(mUserIsVip){  //已经是VIP 真的没有数据了
+            return;
+        }
         if (mIsAddToPayVipItem) {  //只添加一条即可
             return;
         }
@@ -335,7 +334,7 @@ public class MainT2Fragment extends BaseMainFragment {
         mMainT2Beans.remove(mMainT2Beans.size() - 1);
         mAdapter.notifyDataSetChanged();
         if (netLoadMoreData != null && netLoadMoreData.size() != 0) {
-            if (netLoadMoreData.size() < PAGE_SIZE) {
+            if (PAGE_NUM != 4 && netLoadMoreData.size() < PAGE_SIZE) {
                 loadMoreEnd = true;
             }
             mMainT2Beans.addAll(netLoadMoreData);
@@ -353,6 +352,7 @@ public class MainT2Fragment extends BaseMainFragment {
         int id = YcSingle.getInstance().id;
         if (id <= 0) {   //数据为空 未登录
             if (mIsShowLogined) {
+                addToPayVipData(); //数据为空 不是VIP
                 return;
             }
             mMainActivity.showToLoginDialog();

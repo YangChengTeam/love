@@ -46,7 +46,7 @@ public class ExampleDetailActivity extends BaseSameActivity {
     private boolean mIsDigArticle;
     private String mUrl = "";
     private ProgressBar mProgressBar;
-    private ConstraintLayout mClLikeCon;
+    private LinearLayout mClLikeCon;
 
     @Override
     protected void initIntentData() {

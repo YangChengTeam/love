@@ -62,7 +62,7 @@ public class OpenAkpDialog extends AlertDialog {
         tvQQ.setOnClickListener(clickToOpenApk(openApkPkgInfos.get(0).pkg));
         tvWx.setOnClickListener(clickToOpenApk(openApkPkgInfos.get(1).pkg));
         tvMm.setOnClickListener(clickToOpenApk(openApkPkgInfos.get(2).pkg));
-        tvTt.setOnClickListener(clickToOpenApk(openApkPkgInfos.get(3).pkg));
+//        tvTt.setOnClickListener(clickToOpenApk(openApkPkgInfos.get(3).pkg));
 
 
     }

@@ -1,6 +1,7 @@
 package com.yc.love.ui.activity;
 
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.drawable.Drawable;
 import android.support.v7.app.AlertDialog;
@@ -77,13 +78,13 @@ public class SettingActivity extends BaseSameActivity {
                 clearExit();
                 break;
             case R.id.setting_ll_item_01:
-
+                showToastShort("当前已经是最新版了");
                 break;
             case R.id.setting_ll_item_02:
-
+                startActivity(new Intent(this, AboutUsActivity.class));
                 break;
             case R.id.setting_ll_item_03:
-
+                startActivity(new Intent(this, PrivacyStatementActivity.class));
                 break;
             case R.id.setting_ll_item_04:
                 clearCache();
@@ -103,7 +104,7 @@ public class SettingActivity extends BaseSameActivity {
                 SPUtils.put(SettingActivity.this, SPUtils.ID_INFO_BEAN, "");
                 YcSingle.getInstance().clearAllData();
 
-                EventBus.getDefault().post( new EventLoginState(EventLoginState.STATE_EXIT));
+                EventBus.getDefault().post(new EventLoginState(EventLoginState.STATE_EXIT));
                 showToastShort("退出登录成功");
                 finish();
             }

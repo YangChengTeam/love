@@ -17,6 +17,7 @@
 
     <LinearLayout
         android:id="@+id/main_t3_not_net"
+        android:visibility="gone"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:background="@color/red_crimson_66"

@@ -10,13 +10,12 @@
         android:id="@+id/item_details_bean_titiv_sex"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:padding="8dp"
+        android:padding="3dp"
         android:src="@mipmap/icon_dialogue_men" />
 
     <TextView
         android:id="@+id/item_details_bean_tittv_name"
         android:layout_width="0dp"
-        android:textStyle="bold"
         android:layout_height="wrap_content"
         android:layout_marginLeft="4dp"
         android:layout_marginRight="4dp"
@@ -24,9 +23,8 @@
         android:maxLines="1"
         android:text="555"
         android:textColor="@color/black"
-        android:textSize="@dimen/size_18" />
-
-
+        android:textSize="@dimen/size_18"
+        android:textStyle="bold" />
 
 
 </LinearLayout>

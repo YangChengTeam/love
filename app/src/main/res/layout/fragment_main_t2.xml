@@ -26,18 +26,16 @@
         layout="@layout/layout_view_bar" />
 
 
-    <android.support.v7.widget.RecyclerView
-        android:id="@+id/main_t2_rl"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:background="@color/white" />
-
     <android.support.v4.widget.SwipeRefreshLayout
         android:id="@+id/main_t2_swipe_refresh"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:visibility="gone">
+        android:layout_height="wrap_content">
 
+        <android.support.v7.widget.RecyclerView
+            android:id="@+id/main_t2_rl"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@color/white" />
 
     </android.support.v4.widget.SwipeRefreshLayout>
 

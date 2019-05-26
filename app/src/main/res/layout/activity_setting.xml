@@ -43,6 +43,7 @@
         app:textNameMyItem="清除缓存" />
 
     <com.yc.love.ui.view.MainMyItemLin
+        android:visibility="gone"
         android:id="@+id/setting_ll_exit"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"

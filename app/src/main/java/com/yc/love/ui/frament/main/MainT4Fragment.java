@@ -93,6 +93,7 @@ public class MainT4Fragment extends BaseMainFragment {
             @Override
             public boolean shouldOverrideUrlLoading(WebView view, WebResourceRequest request) {
                 Uri url = request.getUrl();
+                Log.d("mylog", "shouldOverrideUrlLoading: url++++++++  " + url);
                 return super.shouldOverrideUrlLoading(view, request);
             }
         });
@@ -108,6 +109,20 @@ public class MainT4Fragment extends BaseMainFragment {
                     }
                 }
                 super.onProgressChanged(view, newProgress);
+            }
+        });
+
+        mMainActivity.setOnChildDisposeMainKeyDownListent(new MainActivity.OnChildDisposeMainKeyDownListent() {
+            @Override
+            public boolean onChildDisposeMainKeyDown() {
+                Log.d("mylog", "onKeyDown: mWebView.canGoBack() "+mWebView.canGoBack());
+                if (mWebView.canGoBack()) {
+                    mWebView.goBack();
+                    return true;
+                }else {
+                    mWebView.reload();
+                }
+                return false;
             }
         });
     }
@@ -129,7 +144,7 @@ public class MainT4Fragment extends BaseMainFragment {
 
 //                url = "http://en.upkao.com";
                 //        String url = "https://fir.im/cloudreader";
-                Log.d("mylog", "onNetNext: url "+url);
+                Log.d("mylog", "onNetNext: url " + url);
                 mWebView.loadUrl(url);
             }
 
@@ -168,7 +183,6 @@ public class MainT4Fragment extends BaseMainFragment {
             }
         }
     };
-
 
 
 }

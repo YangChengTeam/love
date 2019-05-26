@@ -24,6 +24,7 @@ public abstract class MainT1MoreItemAdapter extends RecyclerView.Adapter<Recycle
 
     private final List<ExampListsBean> mPersonList;
     private RecyclerView mRecyclerView;
+    private static final int VIEW_TIMEOUT = -1;
     private static final int VIEW_ITEM = 0;
     private static final int VIEW_PROG = 1;
     private static final int VIEW_TITLE = 2;
@@ -56,6 +57,8 @@ public abstract class MainT1MoreItemAdapter extends RecyclerView.Adapter<Recycle
             return VIEW_PROG;
         }
         switch (exampListsBean.type) {
+            case -1:
+                return VIEW_TIMEOUT;
             case 0:
                 return VIEW_TITLE;
             case 1:
@@ -71,6 +74,8 @@ public abstract class MainT1MoreItemAdapter extends RecyclerView.Adapter<Recycle
         RecyclerView.ViewHolder holder;
         if (viewType == VIEW_TITLE) {
             holder = getTitleHolder(parent);
+        } else if (viewType == VIEW_TIMEOUT) {
+            holder = getTimeoutHolder(parent);
         } else if (viewType == VIEW_ITEM) {
             holder = getHolder(parent);
         } else {
@@ -78,8 +83,6 @@ public abstract class MainT1MoreItemAdapter extends RecyclerView.Adapter<Recycle
         }
         return holder;
     }
-
-
 
 
     @Override
@@ -152,6 +155,8 @@ public abstract class MainT1MoreItemAdapter extends RecyclerView.Adapter<Recycle
     public interface OnLoadMoreDataListener {
         void loadMoreData();
     }
+
+    protected abstract RecyclerView.ViewHolder getTimeoutHolder(ViewGroup parent);
 
     public abstract BaseViewHolder getHolder(ViewGroup parent);
 

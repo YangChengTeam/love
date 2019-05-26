@@ -26,13 +26,14 @@ import com.yc.love.model.bean.ExampleTsListBean;
 import com.yc.love.model.bean.LoveByStagesBean;
 import com.yc.love.model.bean.LoveHealDetBean;
 import com.yc.love.model.bean.MainT3Bean;
-import com.yc.love.model.bean.event.NetWorkChangBean;
+import com.yc.love.model.bean.event.NetWorkChangT3Bean;
 import com.yc.love.model.engin.LoveEngin;
 import com.yc.love.model.single.YcSingle;
 import com.yc.love.ui.activity.ExampleDetailActivity;
 import com.yc.love.ui.activity.LoveByStagesActivity;
 import com.yc.love.ui.activity.LoveByStagesDetailsActivity;
 import com.yc.love.ui.activity.LoveIntroductionActivity;
+import com.yc.love.ui.activity.MainActivity;
 import com.yc.love.ui.frament.base.BaseMainFragment;
 import com.yc.love.ui.view.LoadDialog;
 import com.yc.love.ui.view.LoadingDialog;
@@ -104,9 +105,9 @@ public class MainT3Fragment extends BaseMainFragment {
     }
 
     @Subscribe(threadMode = ThreadMode.MAIN)
-    public void onMessageEvent(NetWorkChangBean netWorkChangBean) {
+    public void onMessageEvent(NetWorkChangT3Bean netWorkChangBean) {
         List<String> connectionTypeList = netWorkChangBean.connectionTypeList;
-        checkNetChangUI(connectionTypeList);
+//        checkNetChangUI(connectionTypeList);
     }
 
     private void checkNetChangUI(List<String> connectionTypeList) {
@@ -256,4 +257,5 @@ public class MainT3Fragment extends BaseMainFragment {
 
         }
     };
+
 }

@@ -4,15 +4,12 @@ import android.content.Context;
 import android.content.Intent;
 import android.graphics.Color;
 import android.support.constraint.ConstraintLayout;
-import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v4.view.ViewPager;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.SearchView;
 import android.text.TextUtils;
-import android.util.Log;
 import android.view.View;
 import android.view.animation.AccelerateInterpolator;
 import android.view.animation.DecelerateInterpolator;
@@ -21,7 +18,6 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.yc.love.R;
-import com.yc.love.adaper.vp.CollectPagerAdapter;
 import com.yc.love.adaper.vp.SharePagerAdapter;
 import com.yc.love.model.single.YcSingle;
 import com.yc.love.model.util.SPUtils;
@@ -58,7 +54,7 @@ public class ShareActivity extends BaseSameActivity {
     private ConstraintLayout mClItemCon;
     private FluidLayout mFluidLayout;
     private SearchView mSearchView;
-    private ShareFragment mHome_fragment1;
+    private ShareFragment mShareFragment;
     private FrameLayout mFrameLayout;
 
     @Override
@@ -133,8 +129,8 @@ public class ShareActivity extends BaseSameActivity {
         FragmentManager supportFragmentManager = getSupportFragmentManager();//开启事务
         FragmentTransaction fragmentTransaction = supportFragmentManager.beginTransaction();//碎片
         //提交事务
-        mHome_fragment1 = new ShareFragment();
-        fragmentTransaction.add(R.id.share_frame_layout, mHome_fragment1).commit();
+        mShareFragment = new ShareFragment();
+        fragmentTransaction.add(R.id.share_frame_layout, mShareFragment).commit();
 
     }
 
@@ -210,14 +206,14 @@ public class ShareActivity extends BaseSameActivity {
             return;
         }
 
-        mHome_fragment1.recoverData();
+        mShareFragment.recoverData();
 //        mFragmentT2.recoverData();
 
         changHistoryFluidLayout(query);
 
         hindKeyboard(mViewPager);
 
-        mHome_fragment1.netData(query);
+        mShareFragment.netData(query);
         showShareItemHindInfo();
 
         if (3 > 0) {
@@ -226,7 +222,7 @@ public class ShareActivity extends BaseSameActivity {
         int currentItem = mViewPager.getCurrentItem();
         switch (currentItem) {
             case 0:
-                mHome_fragment1.netData(query);
+                mShareFragment.netData(query);
                 break;
             case 1:
                 mFragmentT2.netShareT2Data(query);
