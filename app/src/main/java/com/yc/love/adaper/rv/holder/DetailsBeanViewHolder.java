@@ -1,6 +1,10 @@
 package com.yc.love.adaper.rv.holder;
 
+import android.content.ComponentName;
 import android.content.Context;
+import android.content.Intent;
+import android.content.pm.PackageManager;
+import android.content.pm.ResolveInfo;
 import android.text.TextUtils;
 import android.util.Log;
 import android.view.View;
@@ -13,6 +17,11 @@ import com.yc.love.adaper.rv.base.RecyclerViewItemListener;
 import com.yc.love.model.bean.LoveHealDetBean;
 import com.yc.love.model.bean.LoveHealDetDetailsBean;
 import com.yc.love.model.bean.StringBean;
+import com.yc.love.model.util.PackageUtils;
+
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
 
 
 public class DetailsBeanViewHolder extends BaseViewHolder<LoveHealDetDetailsBean> {
@@ -27,7 +36,6 @@ public class DetailsBeanViewHolder extends BaseViewHolder<LoveHealDetDetailsBean
 
     @Override
     public void bindData(final LoveHealDetDetailsBean detailsBean) {
-
         ImageView ivSex = itemView.findViewById(R.id.item_details_bean_iv_sex);
         TextView tvName = itemView.findViewById(R.id.item_details_bean_tv_name);
         ImageView ivCopy = itemView.findViewById(R.id.item_details_bean_iv_copy);
@@ -49,7 +57,6 @@ public class DetailsBeanViewHolder extends BaseViewHolder<LoveHealDetDetailsBean
                 onClickCopyListent.onClickCopy(detailsBean);
             }
         });
-
     }
 
     public interface OnClickCopyListent {

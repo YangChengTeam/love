@@ -84,7 +84,6 @@ public class ISCameraActivity extends AppCompatActivity {
             LogUtils.e(tempPhotoFile.getAbsolutePath());
             FileUtils.createFile(tempPhotoFile);
 
-            //TODO 123
             Uri uri = FileProvider.getUriForFile(this,
                     FileUtils.getApplicationId(this) + ".image_provider", tempPhotoFile);
 

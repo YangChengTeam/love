@@ -6,7 +6,7 @@ import android.support.multidex.MultiDexApplication;
 
 import com.kk.securityhttp.domain.GoagalInfo;
 import com.kk.securityhttp.net.contains.HttpConfig;
-import com.yc.love.http.HttpUtils;
+import com.tencent.bugly.Bugly;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -32,8 +32,9 @@ public class YcApplication extends MultiDexApplication {
     public void onCreate() {
         super.onCreate();
         ycApplication = this;
-        HttpUtils.getInstance().init(this);
 
+//        Bugly.init(getApplicationContext(), "注册时申请的APPID", false);  //腾迅自动更新
+        Bugly.init(getApplicationContext(), "dc88d75f55", false);  //腾迅自动更新
 
         //全局信息初始化
         GoagalInfo.get().init(getApplicationContext());

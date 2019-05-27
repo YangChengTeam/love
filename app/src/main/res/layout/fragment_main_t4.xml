@@ -9,117 +9,20 @@
     <include
         android:id="@+id/main_t4_view_bar"
         layout="@layout/layout_view_bar" />
-
-    <LinearLayout
-        android:id="@+id/main_t4_ll_title"
+    <ProgressBar
+        android:id="@+id/main_t4_pb_progress"
+        style="?android:attr/progressBarStyleHorizontal"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_gravity="center_vertical"
-        android:background="@color/white"
-        android:orientation="horizontal"
-        android:padding="12dp">
-
-        <ImageView
-            android:layout_width="wrap_content"
-            android:layout_height="match_parent"
-            android:src="@mipmap/main_icon_default_head" />
-
-        <LinearLayout
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center_vertical"
-            android:layout_marginLeft="14dp"
-            android:orientation="vertical">
-
-            <TextView
-                android:id="@+id/main_t4_tv_name"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="未登录"
-                android:textColor="@color/black"
-                android:textSize="@dimen/size_22"
-                android:textStyle="bold" />
-
-            <View
-                android:layout_width="1dp"
-                android:layout_height="6dp" />
-
-            <TextView
-                android:id="@+id/main_t4_tv_btn_info"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:background="@drawable/selectot_btn_red_crimson"
-                android:gravity="center"
-                android:paddingLeft="24dp"
-                android:paddingTop="4dp"
-                android:paddingRight="24dp"
-                android:paddingBottom="4dp"
-                android:text="信息未完善"
-                android:textColor="@color/select_color_red_crimson"
-                android:textSize="@dimen/size_14" />
-        </LinearLayout>
-    </LinearLayout>
-
-    <RelativeLayout
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:background="@color/white"
-        android:paddingTop="12dp"
-        android:paddingBottom="6dp">
-
-        <ImageView
-            android:id="@+id/main_t4_ll_iv_vip"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:background="@color/white"
-            android:src="@mipmap/main_item_open_vip" />
-
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_alignParentRight="true"
-            android:layout_marginTop="21dp"
-            android:layout_marginRight="48dp"
-            android:background="@drawable/shape_btn_vip_static_yellow"
-            android:paddingLeft="22dp"
-            android:paddingTop="4dp"
-            android:paddingRight="22dp"
-            android:paddingBottom="4dp"
-            android:text="去开通"
-            android:textColor="@color/white"
-            android:textSize="@dimen/size_14" />
-    </RelativeLayout>
-
-
-    <com.yc.love.ui.view.MainMyItemLin
-        android:id="@+id/main_t4_ll_item_01"
+        android:layout_height="3dp"
+        android:layout_alignParentTop="true"
+        android:max="100"
+        android:progress="0"
+        android:progressDrawable="@drawable/process_bg" />
+    <WebView
+        android:id="@+id/main_t4_webview"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        app:imgSrc="@mipmap/main_icon_my_01"
-        app:isAddIntervalTop="true"
-        app:textNameMyItem="我的收藏" />
+        android:layout_height="match_parent"
+        android:focusable="true"
+        android:focusableInTouchMode="true" />
 
-    <com.yc.love.ui.view.MainMyItemLin
-        android:id="@+id/main_t4_ll_item_02"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        app:imgSrc="@mipmap/main_icon_my_02"
-        app:isAddIntervalBom="true"
-        app:isAddIntervalTop="true"
-        app:textNameMyItem="使用帮助" />
-
-    <com.yc.love.ui.view.MainMyItemLin
-        android:id="@+id/main_t4_ll_item_03"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        app:imgSrc="@mipmap/main_icon_my_03"
-        app:textNameMyItem="客服反馈" />
-
-    <com.yc.love.ui.view.MainMyItemLin
-        android:id="@+id/main_t4_ll_item_04"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        app:imgSrc="@mipmap/main_icon_my_04"
-        app:isAddIntervalTop="true"
-        app:textNameMyItem="设置" />
 </LinearLayout>

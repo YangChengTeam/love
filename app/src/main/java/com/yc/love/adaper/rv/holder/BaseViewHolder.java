@@ -14,7 +14,7 @@ import com.yc.love.adaper.rv.base.RecyclerViewItemListener;
 
 public abstract class BaseViewHolder<T> extends RecyclerView.ViewHolder implements View.OnClickListener,View.OnLongClickListener {
 
-    public RecyclerViewItemListener myAdapterListener;
+    private RecyclerViewItemListener myAdapterListener;
 
     public BaseViewHolder(Context context, ViewGroup root, int layoutRes, RecyclerViewItemListener listener) {
         super(LayoutInflater.from(context).inflate(layoutRes, root, false));//super(View view)

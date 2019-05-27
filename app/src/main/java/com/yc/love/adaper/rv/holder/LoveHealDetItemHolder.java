@@ -10,6 +10,7 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.yc.love.R;
+import com.yc.love.adaper.rv.LoveHealDetAdapter;
 import com.yc.love.adaper.rv.NoThingAdapter;
 import com.yc.love.adaper.rv.base.RecyclerViewItemListener;
 import com.yc.love.model.bean.LoveHealDetBean;
@@ -37,8 +38,17 @@ public class LoveHealDetItemHolder extends BaseViewHolder<LoveHealDetBean> {
         layoutManager.setOrientation(OrientationHelper.VERTICAL);
 
         List<LoveHealDetDetailsBean> details = loveHealDetBean.details;
+        if (details == null || details.size() == 0) {
+            details = loveHealDetBean.detail;
+        }
+//        details.add(0, new LoveHealDetDetailsBean(0, loveHealDetBean.id, loveHealDetBean.chat_name, loveHealDetBean.ans_sex));
 
-        NoThingAdapter<LoveHealDetDetailsBean> adapter = new NoThingAdapter<LoveHealDetDetailsBean>(details, recyclerView) {
+        LoveHealDetAdapter adapter = new LoveHealDetAdapter(details, recyclerView) {
+            @Override
+            protected RecyclerView.ViewHolder getTitleHolder(ViewGroup parent) {
+                return new DetailsBeanTitViewHolder(context, null, parent);
+            }
+
             @Override
             public BaseViewHolder getHolder(ViewGroup parent) {
                 DetailsBeanViewHolder detailsBeanViewHolder = new DetailsBeanViewHolder(context, null, parent);

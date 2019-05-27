@@ -43,12 +43,13 @@
         app:textNameMyItem="清除缓存" />
 
     <com.yc.love.ui.view.MainMyItemLin
+        android:visibility="gone"
         android:id="@+id/setting_ll_exit"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         app:imgSrc="@mipmap/seting_icon_04"
         app:layout_constraintTop_toBottomOf="@+id/setting_ll_item_04"
-        app:textNameMyItem="清除缓存" />
+        app:textNameMyItem="退出" />
 
 
     <FrameLayout

@@ -146,7 +146,6 @@ public class EasyLVHolder  implements ViewHelper.AbsListView<EasyLVHolder> {
 
     @Override
     public EasyLVHolder setImageUrl(int viewId, String imgUrl) {
-        // TODO: Use Glide/Picasso/ImageLoader/Fresco
         return this;
     }
 

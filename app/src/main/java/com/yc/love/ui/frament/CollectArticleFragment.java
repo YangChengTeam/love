@@ -7,11 +7,11 @@ import android.util.Log;
 import android.view.ViewGroup;
 
 import com.yc.love.R;
-import com.yc.love.adaper.rv.NoThingAdapter;
 import com.yc.love.adaper.rv.base.RecyclerViewItemListener;
 import com.yc.love.adaper.rv.holder.BaseViewHolder;
 import com.yc.love.adaper.rv.holder.CollectArticleViewHolder;
-import com.yc.love.adaper.rv.holder.LoveByStagesViewHolder;
+import com.yc.love.adaper.rv.NoThingCanEmptyAdapter;
+import com.yc.love.adaper.rv.holder.EmptyViewHolder;
 import com.yc.love.model.base.MySubscriber;
 import com.yc.love.model.bean.AResultInfo;
 import com.yc.love.model.bean.ExampleTsListBean;
@@ -24,14 +24,14 @@ import com.yc.love.ui.view.LoadDialog;
 import java.util.List;
 
 /**
- *
+ * 收藏 问答
  * Created by mayn on 2019/5/5.
  */
 
 public class CollectArticleFragment extends BaseCollectFragment {
 
     private RecyclerView mRecyclerView;
-//    private int mCategoryId;
+    //    private int mCategoryId;
     private LoveEngin mLoveEngin;
     private int PAGE_SIZE = 10;
     private int PAGE_NUM = 1;
@@ -40,7 +40,7 @@ public class CollectArticleFragment extends BaseCollectFragment {
     private boolean loadMoreEnd;
     private boolean loadDataEnd;
     private boolean showProgressBar = false;
-    private NoThingAdapter<ExampleTsListBean> mAdapter;
+    private NoThingCanEmptyAdapter<ExampleTsListBean> mAdapter;
 
     @Override
     protected void initBundle() {
@@ -53,7 +53,7 @@ public class CollectArticleFragment extends BaseCollectFragment {
 
     @Override
     protected int setContentView() {
-        return R.layout.fragment_love_by_stages;
+        return R.layout.fragment_collect_article;
     }
 
     @Override
@@ -66,7 +66,7 @@ public class CollectArticleFragment extends BaseCollectFragment {
 
 
     private void initRecyclerView() {
-        mRecyclerView = rootView.findViewById(R.id.fragment_love_by_stages_rv);
+        mRecyclerView = rootView.findViewById(R.id.fragment_collect_article_rv);
         LinearLayoutManager layoutManager = new LinearLayoutManager(mCollectActivity);
         mRecyclerView.setLayoutManager(layoutManager);
     }
@@ -106,7 +106,7 @@ public class CollectArticleFragment extends BaseCollectFragment {
     }
 
     private void initRecyclerData() {
-        mAdapter = new NoThingAdapter<ExampleTsListBean>(mExampleTsListBeans, mRecyclerView) {
+        mAdapter = new NoThingCanEmptyAdapter<ExampleTsListBean>(mExampleTsListBeans, mRecyclerView) {
             @Override
             public BaseViewHolder getHolder(ViewGroup parent) {
                 return new CollectArticleViewHolder(mCollectActivity, recyclerViewItemListener, parent);
@@ -116,7 +116,7 @@ public class CollectArticleFragment extends BaseCollectFragment {
         if (mExampleTsListBeans.size() < PAGE_SIZE) {
             Log.d("ssss", "loadMoreData: data---end");
         } else {
-            mAdapter.setOnMoreDataLoadListener(new NoThingAdapter.OnLoadMoreDataListener() {
+            mAdapter.setOnMoreDataLoadListener(new NoThingCanEmptyAdapter.OnLoadMoreDataListener() {
                 @Override
                 public void loadMoreData() {
                     if (loadDataEnd == false) {
@@ -147,7 +147,7 @@ public class CollectArticleFragment extends BaseCollectFragment {
             mCollectActivity.showToLoginDialog();
             return;
         }
-        mLoveEngin.collectListsArticle(String.valueOf(id), String.valueOf(PAGE_NUM++), String.valueOf(PAGE_SIZE), "Article/collect_list").subscribe(new MySubscriber<AResultInfo<List<ExampleTsListBean>>>(mCollectActivity) {
+        mLoveEngin.collectListsArticle(String.valueOf(id), String.valueOf(++PAGE_NUM), String.valueOf(PAGE_SIZE), "Article/collect_list").subscribe(new MySubscriber<AResultInfo<List<ExampleTsListBean>>>(mCollectActivity) {
 
             @Override
             protected void onNetNext(AResultInfo<List<ExampleTsListBean>> listAResultInfo) {
@@ -178,8 +178,9 @@ public class CollectArticleFragment extends BaseCollectFragment {
     RecyclerViewItemListener recyclerViewItemListener = new RecyclerViewItemListener() {
         @Override
         public void onItemClick(int position) {
-            ExampleTsListBean ExampleTsListBean = mExampleTsListBeans.get(position);
-            LoveByStagesDetailsActivity.startLoveByStagesDetailsActivity(mCollectActivity,ExampleTsListBean.id,ExampleTsListBean.post_title);
+            ExampleTsListBean exampleTsListBean = mExampleTsListBeans.get(position);
+            LoveByStagesDetailsActivity.startLoveByStagesDetailsActivity(mCollectActivity,exampleTsListBean.id,exampleTsListBean.post_title);
+
         }
 
         @Override

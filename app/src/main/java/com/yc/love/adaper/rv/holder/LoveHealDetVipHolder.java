@@ -31,6 +31,10 @@ public class LoveHealDetVipHolder extends BaseViewHolder<LoveHealDetBean> {
         TextView tvName = itemView.findViewById(R.id.item_love_heal_det_vip_tv_name);
 
         List<LoveHealDetDetailsBean> details = loveHealDetBean.details;
+        if(details==null||details.size()==0){
+            details = loveHealDetBean.detail;
+        }
+
         if (details != null && details.size() > 0) {
             LoveHealDetDetailsBean detailsBean = details.get(0);
             tvName.setText(detailsBean.content);

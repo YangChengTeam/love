@@ -1,14 +1,24 @@
 package com.yc.love.ui.activity;
 
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Handler;
 import android.support.v4.app.FragmentActivity;
 import android.os.Bundle;
+import android.support.v7.app.AlertDialog;
+import android.util.Log;
 
 import com.yc.love.R;
+import com.yc.love.model.bean.event.EventLoginState;
 import com.yc.love.model.data.BackfillSingle;
+import com.yc.love.model.single.YcSingle;
+import com.yc.love.model.util.CheckNetwork;
+import com.yc.love.model.util.SPUtils;
+import com.yc.love.ui.activity.base.BaseActivity;
 
-public class SpecializedActivity extends FragmentActivity {
+import org.greenrobot.eventbus.EventBus;
+
+public class SpecializedActivity extends BaseActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -23,13 +33,40 @@ public class SpecializedActivity extends FragmentActivity {
         new Handler().postDelayed(new Runnable() {
             @Override
             public void run() {
-
-                BackfillSingle.backfillLoginData(SpecializedActivity.this, ""); //初始化单例，回填ID数据
-
-                startActivity(new Intent(SpecializedActivity.this, MainActivity.class));
-                overridePendingTransition(R.anim.screen_zoom_in, R.anim.screen_zoom_out);
-                finish();
+//                checkNetwork();
+                startNextActivity();
             }
         }, 600);
+    }
+
+    private void startNextActivity() {
+        BackfillSingle.backfillLoginData(SpecializedActivity.this, ""); //初始化单例，回填ID数据
+        startActivity(new Intent(SpecializedActivity.this, MainActivity.class));
+        overridePendingTransition(R.anim.screen_zoom_in, R.anim.screen_zoom_out);
+        finish();
+    }
+
+    private void checkNetwork() {
+        boolean networkConnected = CheckNetwork.isNetworkConnected(SpecializedActivity.this);
+        boolean connected = CheckNetwork.isWifiConnected(SpecializedActivity.this);
+        Log.d("mylog", "checkNetwork: networkConnected " + networkConnected);
+        Log.d("mylog", "checkNetwork: connected " + connected);
+        if (!networkConnected) {
+            showNotNetworkDialog();
+        } else {
+            startNextActivity();
+        }
+    }
+
+    private void showNotNetworkDialog() {
+        AlertDialog alertDialog = new AlertDialog.Builder(this).create();
+        alertDialog.setMessage("网络连接失败，请重试");
+        alertDialog.setButton(DialogInterface.BUTTON_POSITIVE, "重试", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialogInterface, int i) {
+                checkNetwork();
+            }
+        });
+        alertDialog.show();
     }
 }

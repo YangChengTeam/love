@@ -17,6 +17,9 @@ public class SPUtils {
     public static final String ID_INFO_BEAN = "ID_INFO_BEAN";
     public static final String LOGIN_PWD = "LOGIN_PWD";
     public static final String LOGIN_MOBILE = "LOGIN_MOBILE";
+
+    public static final String SHARE_HISTORY = "SHARE_HISTORY";
+
 //    public static final String LOGIN_ = "LOGIN_BEAN";
 
 
@@ -47,6 +50,13 @@ public class SPUtils {
             editor.putString(key, object.toString());
         }
 
+        SharedPreferencesCompat.apply(editor);
+    }
+    public static void putLong(Context context, String key, long longData) {
+        SharedPreferences sp = context.getSharedPreferences(FILE_NAME,
+                Context.MODE_PRIVATE);
+        SharedPreferences.Editor editor = sp.edit();
+        editor.putLong(key, longData);
         SharedPreferencesCompat.apply(editor);
     }
 

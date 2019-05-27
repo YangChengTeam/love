@@ -43,6 +43,7 @@ public class IdCorrelationSlidingActivity extends BaseSlidingActivity implements
     private TextView mTvRegister;
     private LinearLayout mLlKeepPwdCon;
     private int mInitentState;
+    private String mInitentMobile;
     private TextView mTvProtocolDes;
     private LinearLayout mLlProtocolCon;
 //    private ImageView mIvKeepPwdCheck;
@@ -50,6 +51,7 @@ public class IdCorrelationSlidingActivity extends BaseSlidingActivity implements
     private boolean mIsKeepPwd = true;
     private TextView mTvKeepPwdCheck;
     private IdCorrelationEngin mIdCorrelationEngin;
+
     //    private MyTimerTask mMyTimerTask;
 //    private Timer mTimer = new Timer();
     private LoginEditTextLin mEtPhone, mEtCode, mEtPwd;
@@ -61,7 +63,7 @@ public class IdCorrelationSlidingActivity extends BaseSlidingActivity implements
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_id_correlation);
-
+        mIdCorrelationEngin = new IdCorrelationEngin(this);
 
 //        setContentView(R.layout.activity_id_correlation_xiaomi);
 
@@ -71,9 +73,6 @@ public class IdCorrelationSlidingActivity extends BaseSlidingActivity implements
         initViews();
         Log.d("mylog", "onCreate: mInitentState " + mInitentState);
         initState(mInitentState);
-
-        mIdCorrelationEngin = new IdCorrelationEngin(this);
-
         YcApplication ycApplication = (YcApplication) getApplication();
         ycApplication.activityIdCorList.add(this);
     }
@@ -82,6 +81,7 @@ public class IdCorrelationSlidingActivity extends BaseSlidingActivity implements
     private void initInitent() {
         Intent intent = getIntent();
         mInitentState = intent.getIntExtra("state", -1);
+        mInitentMobile = intent.getStringExtra("mobile");
     }
 
     public static void startIdCorrelationActivity(Context context, int state) {
@@ -90,11 +90,22 @@ public class IdCorrelationSlidingActivity extends BaseSlidingActivity implements
         context.startActivity(intent);
     }
 
+    public static void startIdCorrelationActivity(Context context, String mobile, int state) {
+        Intent intent = new Intent(context, IdCorrelationSlidingActivity.class);
+        intent.putExtra("state", state);
+        intent.putExtra("mobile", mobile);
+        context.startActivity(intent);
+    }
+
     private void initState(int state) {
-        String mobile = (String) SPUtils.get(this, SPUtils.LOGIN_MOBILE, "");
+        if (!TextUtils.isEmpty(mInitentMobile)) {
+            mEtPhone.setEditText(mInitentMobile);
+        } else {
+            String mobile = (String) SPUtils.get(this, SPUtils.LOGIN_MOBILE, "");
 //        String mobile = YcSingle.getInstance().mobile;
-        if (!TextUtils.isEmpty(mobile)) {
-            mEtPhone.setEditText(mobile);
+            if (!TextUtils.isEmpty(mobile)) {
+                mEtPhone.setEditText(mobile);
+            }
         }
         switch (state) {
             case ID_CORRELATION_STATE_LOGIN:
@@ -173,7 +184,7 @@ public class IdCorrelationSlidingActivity extends BaseSlidingActivity implements
 //    private int recLen = RECLEN_TIME;
 
     private long countDoenInterval = 980;
-    private long millisInFuture = 1000 * 9 + 300;
+    private long millisInFuture = 1000 * 60 + 500;
 
     private LoginEditTextLin.OnClickEtCodeListent clickEtCodeListent = new LoginEditTextLin.OnClickEtCodeListent() {
         @Override
@@ -299,7 +310,6 @@ public class IdCorrelationSlidingActivity extends BaseSlidingActivity implements
                 }
                 break;
             case R.id.id_correlation_tv_next:
-                //TODO  mIsKeepPwd true-->记住密码  false-->不用记住密码
                 switch (mInitentState) {
                     case ID_CORRELATION_STATE_LOGIN:
                         boolean isCanLogin = checkInputLogin();
@@ -325,7 +335,7 @@ public class IdCorrelationSlidingActivity extends BaseSlidingActivity implements
                 }
                 break;
             case R.id.id_correlation_tv_protocol:
-                showToastShort("protocol");
+                startActivity(new Intent(this,ProtocolActivity.class));
                 break;
             case R.id.id_correlation_tv_register:
                 IdCorrelationSlidingActivity.startIdCorrelationActivity(IdCorrelationSlidingActivity.this, ID_CORRELATION_STATE_REGISTER);
@@ -341,8 +351,6 @@ public class IdCorrelationSlidingActivity extends BaseSlidingActivity implements
     }
 
     private void netResetPassword() {
-
-        // TODO 重置密码的接口用不了
         mLoadingDialog.showLoadingDialog();
         mIdCorrelationEngin.resetPassword(mInputCodeString, mInputPhoneString, mInputPwdString, "user/reset").subscribe(new MySubscriber<AResultInfo<String>>(mLoadingDialog) {
 
@@ -418,13 +426,20 @@ public class IdCorrelationSlidingActivity extends BaseSlidingActivity implements
             protected void onNetCompleted() {
             }
         });*/
-        mIdCorrelationEngin.login(mInputPhoneString, mInputPwdString, "user/login").subscribe(new MySubscriber<ResultInfo<IdCorrelationLoginBean>>(mLoadingDialog) {
+        mIdCorrelationEngin.login(mInputPhoneString, mInputPwdString, "user/login").subscribe(new MySubscriber<AResultInfo<IdCorrelationLoginBean>>(mLoadingDialog, true) {
 
             @Override
-            protected void onNetNext(ResultInfo<IdCorrelationLoginBean> myIdCorrelationSmsBeanAResultInfo) {
+            protected void onNetNext(AResultInfo<IdCorrelationLoginBean> myIdCorrelationSmsBeanAResultInfo) {
 
-                String msg = myIdCorrelationSmsBeanAResultInfo.message;
+                String msg = myIdCorrelationSmsBeanAResultInfo.msg;
                 int code = myIdCorrelationSmsBeanAResultInfo.code;
+
+                if (code == 0) { //未注册
+//                    showToastShort("");
+                    IdCorrelationSlidingActivity.startIdCorrelationActivity(IdCorrelationSlidingActivity.this, mInputPhoneString, ID_CORRELATION_STATE_REGISTER);
+                    return;
+                }
+
                 final IdCorrelationLoginBean data = myIdCorrelationSmsBeanAResultInfo.data;
                 Log.d("mylog", "onNetNext: data " + data.toString());
 

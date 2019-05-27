@@ -23,9 +23,10 @@ public abstract class LoveHealDetailsAdapter extends RecyclerView.Adapter<Recycl
 
     private final List<LoveHealDetBean> mPersonList;
     private RecyclerView mRecyclerView;
-    private static final int VIEW_ITEM = 1;  // 0 显示VIP  1 不显示VIP,显示ITEM
-    private static final int VIEW_VIP = 0;
+    private static final int VIEW_VIP = 1;  // 1 显示VIP  0 不显示VIP,显示ITEM
+    private static final int VIEW_ITEM = 0;
     private static final int VIEW_PROG = 2;
+    private static final int VIEW_EMPTY = 3;
     private boolean isLoading;
     private int totalItemCount;
     private int lastVisibleItemPosition;
@@ -38,15 +39,18 @@ public abstract class LoveHealDetailsAdapter extends RecyclerView.Adapter<Recycl
 
     @Override
     public int getItemCount() {
-        if (mPersonList != null) {
+        if (mPersonList != null && mPersonList.size() != 0) {
             return mPersonList.size();
         }
-        return 0;
+        return 1;
     }
 
     //根据不同的数据返回不同的viewType
     @Override
     public int getItemViewType(int position) {
+        if (mPersonList == null || mPersonList.size() == 0) {
+            return VIEW_EMPTY;
+        }
         LoveHealDetBean loveHealDetBean = mPersonList.get(position);
         if (loveHealDetBean == null) {
             return VIEW_PROG;
@@ -69,11 +73,15 @@ public abstract class LoveHealDetailsAdapter extends RecyclerView.Adapter<Recycl
             holder = getPayVipHolder(parent);
         } else if (viewType == VIEW_ITEM) {
             holder = getHolder(parent);
+        }  else if (viewType == VIEW_EMPTY) {
+            holder = getEmptyHolder(parent);
         } else {
             holder = getBarViewHolder(parent);
         }
         return holder;
     }
+
+
 
 
     @Override
@@ -152,4 +160,6 @@ public abstract class LoveHealDetailsAdapter extends RecyclerView.Adapter<Recycl
     protected abstract RecyclerView.ViewHolder getBarViewHolder(ViewGroup parent);
 
     protected abstract RecyclerView.ViewHolder getPayVipHolder(ViewGroup parent);
+
+    protected abstract RecyclerView.ViewHolder getEmptyHolder(ViewGroup parent);
 }

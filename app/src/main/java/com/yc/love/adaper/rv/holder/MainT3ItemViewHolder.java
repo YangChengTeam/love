@@ -29,13 +29,14 @@ public class MainT3ItemViewHolder extends BaseViewHolder<MainT3Bean> {
         ImageView imageView = itemView.findViewById(R.id.item_t3item_iv);
         TextView tvTitle= itemView.findViewById(R.id.item_t3item_tv_title);
         TextView tvDes= itemView.findViewById(R.id.item_t3item_tv_des);
-        tvTitle.setText(mainT3Bean.category_name);
-        tvDes.setText(mainT3Bean.post_title);
+        tvTitle.setText(mainT3Bean.name);
+        tvDes.setText(mainT3Bean.desp);
 //        imageView.setImageResource(mainT3Bean.imgResId);
         String image=mainT3Bean.image;
         if(TextUtils.isEmpty(image)){
             image="image";
         }
+//         image="http:\\/\\/love.bshu.com\\/uploads\\/images\\/20190517\\/9da943716fca7a987ffd4b4b0ba4f106.";
         Picasso.with(context).load(image).transform(new CropSquareTransformation()).error(R.mipmap.main_bg_t3_placeholder).placeholder(R.mipmap.main_bg_t3_placeholder).into(imageView);
 
     }

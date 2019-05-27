@@ -17,16 +17,19 @@ public class LoveUpDownPhotoActivity extends BaseSameActivity {
 
 
     private int mClickPosition;
+    private String mChildUrl;
 
     @Override
     protected void initIntentData() {
         Intent intent = getIntent();
         mClickPosition = intent.getIntExtra("position", -1);
+        mChildUrl = intent.getStringExtra("childUrl");
     }
 
-    public static void startLoveUpDownPhotoActivity(Context context, int position) {
+    public static void startLoveUpDownPhotoActivity(Context context, int position,String childUrl) {
         Intent intent = new Intent(context, LoveUpDownPhotoActivity.class);
         intent.putExtra("position", position);
+        intent.putExtra("childUrl", childUrl);
         context.startActivity(intent);
     }
 
@@ -45,9 +48,9 @@ public class LoveUpDownPhotoActivity extends BaseSameActivity {
             datas.add("itme " + i);
         }
         YViewPager viewPager = findViewById(R.id.love_up_down_photo_viewpager);
-        LoveUpDownPhotoPagerAdapter loveUpDownPhotoPagerAdapter = new LoveUpDownPhotoPagerAdapter(getSupportFragmentManager(), datas);
+        LoveUpDownPhotoPagerAdapter loveUpDownPhotoPagerAdapter = new LoveUpDownPhotoPagerAdapter(getSupportFragmentManager(), mChildUrl,datas);
         viewPager.setAdapter(loveUpDownPhotoPagerAdapter);
-        viewPager.setCurrentItem(mClickPosition);
+        viewPager.setCurrentItem(mClickPosition );
     }
 
     @Override

@@ -6,23 +6,108 @@
     android:layout_height="match_parent"
     tools:context=".ui.activity.ExampleDetailActivity">
 
+    <ProgressBar
+        android:id="@+id/example_detail_pb_progress"
+        style="?android:attr/progressBarStyleHorizontal"
+        android:layout_width="match_parent"
+        android:layout_height="3dp"
+        android:layout_alignParentTop="true"
+        android:max="100"
+        android:progress="0"
+        android:progressDrawable="@drawable/process_bg" />
+
     <com.yc.love.ui.view.NewsScrollView
         android:id="@+id/example_detail_scroll_view"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:descendantFocusability="blocksDescendants">
+        android:descendantFocusability="blocksDescendants"
+        app:layout_constraintBottom_toBottomOf="@+id/example_detail_pb_progress">
 
-        <WebView
-
-            android:id="@+id/example_detail_webview"
+        <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:focusable="true"
-            android:focusableInTouchMode="true"
-            android:paddingLeft="8dp"
-            android:paddingTop="18dp"
-            android:paddingRight="8dp"
-            android:paddingBottom="14dp" />
+            android:layout_height="match_parent"
+            android:orientation="vertical">
 
+            <WebView
+                android:id="@+id/example_detail_webview"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="12dp"
+                android:layout_marginRight="10dp"
+                android:focusable="true"
+                android:focusableInTouchMode="true"
+                android:paddingTop="18dp"
+                android:paddingBottom="14dp" />
+
+            <LinearLayout
+                android:id="@+id/example_detail_cl_like_con"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="15dp"
+                android:layout_marginRight="15dp"
+                android:orientation="vertical"
+                android:paddingLeft="8dp"
+                android:paddingTop="25dp"
+                android:paddingRight="8dp"
+                android:paddingBottom="65dp"
+                android:visibility="invisible">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="25dp"
+                    android:text="@string/web_liability_exemption"
+                    android:textColor="@color/text_gray_dark"
+                    android:textSize="@dimen/size_14" />
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal">
+
+                    <FrameLayout
+                        android:layout_width="0dp"
+                        android:layout_height="match_parent"
+                        android:layout_weight="1">
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="center_vertical"
+                            android:drawableTop="@mipmap/icon_line_stages"
+                            android:drawablePadding="8dp"
+                            android:gravity="center_horizontal"
+                            android:text="觉得有用"
+                            android:textColor="@color/text_gray"
+                            android:textSize="@dimen/size_14" />
+                    </FrameLayout>
+
+                    <ImageView
+                        android:id="@+id/example_detail_iv_like"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:src="@mipmap/icon_like_gray" />
+
+                    <RelativeLayout
+                        android:layout_width="0dp"
+                        android:layout_height="match_parent"
+                        android:layout_weight="1">
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_alignParentRight="true"
+                            android:layout_centerVertical="true"
+                            android:layout_gravity="center_vertical"
+                            android:drawableTop="@mipmap/icon_line_stages"
+                            android:drawablePadding="8dp"
+                            android:gravity="center_horizontal"
+                            android:text="不妨点个赞"
+                            android:textColor="@color/text_gray"
+                            android:textSize="@dimen/size_14" />
+                    </RelativeLayout>
+                </LinearLayout>
+            </LinearLayout>
+        </LinearLayout>
     </com.yc.love.ui.view.NewsScrollView>
 </android.support.constraint.ConstraintLayout>

@@ -6,6 +6,8 @@ package com.yc.love.model.bean;
 
 public class LoveByStagesDetailsBean {
 
+
+
         public int id;
         public String is_open;
         public String status;

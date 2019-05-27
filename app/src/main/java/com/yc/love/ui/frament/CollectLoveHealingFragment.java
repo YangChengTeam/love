@@ -7,39 +7,38 @@ import android.util.Log;
 import android.view.ViewGroup;
 
 import com.yc.love.R;
-import com.yc.love.adaper.rv.NoThingAdapter;
+import com.yc.love.adaper.rv.NoThingCanEmptyAdapter;
 import com.yc.love.adaper.rv.base.RecyclerViewItemListener;
 import com.yc.love.adaper.rv.holder.BaseViewHolder;
-import com.yc.love.adaper.rv.holder.LoveHealingItemTitleViewHolder;
+import com.yc.love.adaper.rv.holder.EmptyViewHolder;
 import com.yc.love.adaper.rv.holder.LoveHealingItemViewHolder;
 import com.yc.love.model.base.MySubscriber;
 import com.yc.love.model.bean.AResultInfo;
 import com.yc.love.model.bean.LoveHealingBean;
 import com.yc.love.model.engin.LoveEngin;
 import com.yc.love.model.single.YcSingle;
-import com.yc.love.ui.activity.LoveByStagesDetailsActivity;
+import com.yc.love.ui.activity.LoveUpDownPhotoActivity;
 import com.yc.love.ui.frament.base.BaseCollectFragment;
 import com.yc.love.ui.view.LoadDialog;
 
 import java.util.List;
 
 /**
+ * 收藏 情话
  * Created by mayn on 2019/5/5.
  */
 
 public class CollectLoveHealingFragment extends BaseCollectFragment {
 
     private RecyclerView mRecyclerView;
-    //    private int mCategoryId;
     private LoveEngin mLoveEngin;
     private int PAGE_SIZE = 10;
     private int PAGE_NUM = 1;
     private LoadDialog mLoadingDialog;
-    //    private List<LoveHealingBean> mLoveHealingBeans;
     private boolean loadMoreEnd;
     private boolean loadDataEnd;
     private boolean showProgressBar = false;
-    private NoThingAdapter<LoveHealingBean> mAdapter;
+    private NoThingCanEmptyAdapter<LoveHealingBean> mAdapter;
     private List<LoveHealingBean> mLoveHealingBeans;
 
     @Override
@@ -105,18 +104,19 @@ public class CollectLoveHealingFragment extends BaseCollectFragment {
     }
 
     private void initRecyclerData() {
-        mAdapter = new NoThingAdapter<LoveHealingBean>(mLoveHealingBeans, mRecyclerView) {
+        mAdapter = new NoThingCanEmptyAdapter<LoveHealingBean>(mLoveHealingBeans, mRecyclerView) {
             @Override
             public BaseViewHolder getHolder(ViewGroup parent) {
 //                return new CollectLoveHealingViewHolder(mCollectActivity, recyclerViewItemListener, parent);
                 return new LoveHealingItemViewHolder(mCollectActivity, recyclerViewItemListener, parent);
             }
+
         };
         mRecyclerView.setAdapter(mAdapter);
         if (mLoveHealingBeans.size() < PAGE_SIZE) {
             Log.d("ssss", "loadMoreData: data---end");
         } else {
-            mAdapter.setOnMoreDataLoadListener(new NoThingAdapter.OnLoadMoreDataListener() {
+            mAdapter.setOnMoreDataLoadListener(new NoThingCanEmptyAdapter.OnLoadMoreDataListener() {
                 @Override
                 public void loadMoreData() {
                     if (loadDataEnd == false) {
@@ -179,8 +179,10 @@ public class CollectLoveHealingFragment extends BaseCollectFragment {
     RecyclerViewItemListener recyclerViewItemListener = new RecyclerViewItemListener() {
         @Override
         public void onItemClick(int position) {
-            LoveHealingBean LoveHealingBean = mLoveHealingBeans.get(position);
-            LoveByStagesDetailsActivity.startLoveByStagesDetailsActivity(mCollectActivity, LoveHealingBean.id, LoveHealingBean.chat_name);
+//            LoveHealingBean LoveHealingBean = mLoveHealingBeans.get(position);
+//            LoveByStagesDetailsActivity.startLoveByStagesDetailsActivity(mCollectActivity, LoveHealingBean.id, LoveHealingBean.chat_name);
+
+            LoveUpDownPhotoActivity.startLoveUpDownPhotoActivity(mCollectActivity, position,"Lovewords/collect_list" );
         }
 
         @Override

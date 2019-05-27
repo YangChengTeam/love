@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/white"
+    android:gravity="center_horizontal"
+    android:orientation="vertical"
+    android:padding="18dp">
+
+    <ImageView
+        android:id="@+id/item_timeout_iv_icon"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:padding="16dp"
+        android:src="@mipmap/repeat_play" />
+
+    <TextView
+        android:id="@+id/item_timeout_tv_des"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:maxLines="1"
+        android:text="连接超时，点击重试"
+        android:textColor="@color/text_gray"
+        android:textSize="@dimen/size_14" />
+
+
+</LinearLayout>

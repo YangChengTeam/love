@@ -45,6 +45,19 @@ public class TimeUtils {
     public static long dateToStamp(Date date) {
         SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd");
         String format = simpleDateFormat.format(date);
+        format="2019-05-18";
+        Date parse = null;
+        try {
+            parse = simpleDateFormat.parse(format);
+        } catch (ParseException e) {
+            Log.d("mylog", "dateToStamp: ParseException " + e);
+        }
+        return parse.getTime();
+    }
+    public static long dateToStamp(String format) {
+        SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd");
+//        String format = simpleDateFormat.format(date);
+//        format="2019-05-18";
         Date parse = null;
         try {
             parse = simpleDateFormat.parse(format);

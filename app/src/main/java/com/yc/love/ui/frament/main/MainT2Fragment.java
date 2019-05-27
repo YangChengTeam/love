@@ -1,8 +1,10 @@
 package com.yc.love.ui.frament.main;
 
 import android.content.Intent;
+import android.graphics.Color;
+import android.os.Build;
+import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.DefaultItemAnimator;
-import android.support.v7.widget.DividerItemDecoration;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.OrientationHelper;
 import android.support.v7.widget.RecyclerView;
@@ -10,8 +12,10 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Toast;
+import android.widget.LinearLayout;
 
+import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
 import com.yc.love.R;
 import com.yc.love.adaper.rv.MainT2MoreItemAdapter;
 import com.yc.love.adaper.rv.base.RecyclerViewItemListener;
@@ -25,18 +29,21 @@ import com.yc.love.model.base.MySubscriber;
 import com.yc.love.model.bean.AResultInfo;
 import com.yc.love.model.bean.ExampDataBean;
 import com.yc.love.model.bean.ExampListsBean;
-import com.yc.love.model.bean.ExampleTsBean;
-import com.yc.love.model.bean.ExampleTsListBean;
-import com.yc.love.model.bean.LoveByStagesBean;
 import com.yc.love.model.bean.MainT2Bean;
-import com.yc.love.model.bean.MainT3Bean;
+import com.yc.love.model.bean.event.NetWorkChangT2Bean;
 import com.yc.love.model.engin.LoveEngin;
 import com.yc.love.model.single.YcSingle;
+import com.yc.love.model.util.RomUtils;
+import com.yc.love.model.util.SPUtils;
 import com.yc.love.ui.activity.BecomeVipActivity;
 import com.yc.love.ui.activity.ExampleDetailActivity;
-import com.yc.love.ui.activity.LoveHealDetailsActivity;
 import com.yc.love.ui.frament.base.BaseMainFragment;
 import com.yc.love.ui.view.LoadDialog;
+import com.yc.love.utils.CacheUtils;
+
+import org.greenrobot.eventbus.EventBus;
+import org.greenrobot.eventbus.Subscribe;
+import org.greenrobot.eventbus.ThreadMode;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -57,6 +64,9 @@ public class MainT2Fragment extends BaseMainFragment {
     private ProgressBarViewHolder progressBarViewHolder;
     private RecyclerView mRecyclerView;
     private boolean mUserIsVip = false;
+    private boolean mIsAddToPayVipItem = false;
+    private boolean mIsShowLogined = false;
+    private SwipeRefreshLayout mSwipeRefresh;
 
 
     @Override
@@ -65,17 +75,22 @@ public class MainT2Fragment extends BaseMainFragment {
     }
 
     private LoveEngin mLoveEngin;
+    private LinearLayout mLlNotNet;
+    private boolean mIsNetData = false;
+    private boolean mIsDataToCache;
 
     @Override
     protected void initViews() {
         mLoveEngin = new LoveEngin(mMainActivity);
         View viewBar = rootView.findViewById(R.id.main_t2_view_bar);
+        mLlNotNet = rootView.findViewById(R.id.main_t2_not_net);
         mMainActivity.setStateBarHeight(viewBar, 1);
+
         initRecyclerView();
     }
 
     private void initRecyclerView() {
-
+        mSwipeRefresh = rootView.findViewById(R.id.main_t2_swipe_refresh);
         mRecyclerView = rootView.findViewById(R.id.main_t2_rl);
         LinearLayoutManager layoutManager = new LinearLayoutManager(mMainActivity);
         mRecyclerView.setLayoutManager(layoutManager);
@@ -83,17 +98,61 @@ public class MainT2Fragment extends BaseMainFragment {
         //设置增加或删除条目的动画
         mRecyclerView.setItemAnimator(new DefaultItemAnimator());
 //        mRecyclerView.addItemDecoration(new DividerItemDecoration(mMainActivity,DividerItemDecoration.VERTICAL));
+
+        mSwipeRefresh.setColorSchemeResources(R.color.red_crimson);
+        mSwipeRefresh.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+            @Override
+            public void onRefresh() {
+//                obtainWalletData();
+                if (mMainT2Beans != null) {
+                    mMainT2Beans.clear();
+                    mAdapter.notifyDataSetChanged();
+                }
+                mIsAddToPayVipItem = false;
+                loadMoreEnd = false;
+                PAGE_NUM = 1;
+                PAGE_SIZE = 5;
+                netData();
+            }
+        });
     }
 
+    @Override
+    public void onStart() {
+        super.onStart();
+        EventBus.getDefault().register(this);
+    }
+
+    @Override
+    public void onStop() {
+        super.onStop();
+        EventBus.getDefault().unregister(this);
+    }
+
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    public void onMessageEvent(NetWorkChangT2Bean netWorkChangBean) {
+        List<String> connectionTypeList = netWorkChangBean.connectionTypeList;
+        if (connectionTypeList == null || connectionTypeList.size() == 0) {
+            if (mLlNotNet.getVisibility() != View.VISIBLE) {
+                mLlNotNet.setVisibility(View.VISIBLE);
+            }
+        } else {
+            if (mLlNotNet.getVisibility() != View.GONE) {
+                mLlNotNet.setVisibility(View.GONE);
+                    lazyLoad();
+            }
+        }
+    }
 
 
     @Override
     protected void lazyLoad() {
-        isCanLoadData();
-    }
-
-    private void isCanLoadData() {
-        netData();
+        if(mIsDataToCache){
+            mIsNetData=false;
+        }
+        if (!mIsNetData) {
+            netData();
+        }
     }
 
     private void netData() {
@@ -102,6 +161,7 @@ public class MainT2Fragment extends BaseMainFragment {
         mLoveEngin.exampLists(String.valueOf(YcSingle.getInstance().id), String.valueOf(PAGE_NUM), String.valueOf(PAGE_SIZE), "example/lists").subscribe(new MySubscriber<AResultInfo<ExampDataBean>>(loadDialog) {
             @Override
             protected void onNetNext(AResultInfo<ExampDataBean> exampDataBeanAResultInfo) {
+                mIsNetData = true;
                 ExampDataBean exampDataBean = exampDataBeanAResultInfo.data;
                 int isVip = exampDataBean.is_vip;
                 if (isVip > 0) {
@@ -116,19 +176,33 @@ public class MainT2Fragment extends BaseMainFragment {
                         mMainT2Beans.add(new MainT2Bean(1, exampListsBean.create_time, exampListsBean.id, exampListsBean.image, exampListsBean.post_title));
                     }
                 }
-                mMainT2Beans.add(new MainT2Bean("vip", 2));
-
+                if (!mUserIsVip) {
+                    mMainT2Beans.add(new MainT2Bean("vip", 2));
+                }
+                CacheUtils.cacheBeanData(mMainActivity, "main2_example_lists", mMainT2Beans);
                 initRecyclerViewData();
             }
 
             @Override
             protected void onNetError(Throwable e) {
-
+                mSwipeRefresh.setRefreshing(false);
+                String data = (String) SPUtils.get(mMainActivity, "main2_example_lists", "");
+                mMainT2Beans = new Gson().fromJson(data, new TypeToken<ArrayList<MainT2Bean>>() {
+                }.getType());
+                for (MainT2Bean mainT2Bean:mMainT2Beans
+                     ) {
+                    Log.d("mylog", "onNetError: mainT2Bean "+mainT2Bean.toString());
+                }
+                if (mMainT2Beans != null && mMainT2Beans.size() != 0) {
+                    mIsDataToCache = true;
+                    mIsNetData = true;
+                    initRecyclerViewData();
+                }
             }
 
             @Override
             protected void onNetCompleted() {
-
+                mSwipeRefresh.setRefreshing(false);
             }
         });
     }
@@ -185,12 +259,13 @@ public class MainT2Fragment extends BaseMainFragment {
                         showProgressBar = true;
                     }
                     if (!loadMoreEnd) {
+                        netLoadMore();
                         //  判断是否是VIP
-                        if (PAGE_NUM >= 3 && !mUserIsVip) {
+                       /* if (PAGE_NUM >= 3 && !mUserIsVip) {
                             addToPayVipData();
                         } else {
                             netLoadMore();
-                        }
+                        }*/
                     } else {
                         Log.d("mylog", "loadMoreData: loadMoreEnd end 已加载全部数据 ");
                         mMainT2Beans.remove(mMainT2Beans.size() - 1);
@@ -203,6 +278,13 @@ public class MainT2Fragment extends BaseMainFragment {
     }
 
     private void addToPayVipData() {
+        if (mUserIsVip) {  //已经是VIP 真的没有数据了
+            return;
+        }
+        if (mIsAddToPayVipItem) {  //只添加一条即可
+            return;
+        }
+        mIsAddToPayVipItem = true;
         mRecyclerView.postDelayed(new Runnable() {
             @Override
             public void run() {
@@ -217,8 +299,10 @@ public class MainT2Fragment extends BaseMainFragment {
     }
 
     private void netLoadMore() {
-
-        mLoveEngin.exampLists(String.valueOf(YcSingle.getInstance().id), String.valueOf(PAGE_NUM++), String.valueOf(PAGE_SIZE), "example/lists").subscribe(new MySubscriber<AResultInfo<ExampDataBean>>(mMainActivity) {
+        if (PAGE_NUM >= 4 && PAGE_SIZE != 10) {
+            PAGE_SIZE = 10;
+        }
+        mLoveEngin.exampLists(String.valueOf(YcSingle.getInstance().id), String.valueOf(++PAGE_NUM), String.valueOf(PAGE_SIZE), "example/lists").subscribe(new MySubscriber<AResultInfo<ExampDataBean>>(mMainActivity) {
 
 
             @Override
@@ -232,7 +316,8 @@ public class MainT2Fragment extends BaseMainFragment {
                         netLoadMoreData.add(new MainT2Bean(1, exampListsBean.create_time, exampListsBean.id, exampListsBean.image, exampListsBean.post_title));
                     }
                 }
-                showProgressBar = false;
+                changLoadMoreView(netLoadMoreData);
+              /*  showProgressBar = false;
                 mMainT2Beans.remove(mMainT2Beans.size() - 1);
                 mAdapter.notifyDataSetChanged();
                 if (netLoadMoreData.size() < PAGE_SIZE) {
@@ -240,12 +325,13 @@ public class MainT2Fragment extends BaseMainFragment {
                 }
                 mMainT2Beans.addAll(netLoadMoreData);
                 mAdapter.notifyDataSetChanged();
-                mAdapter.setLoaded();
+                mAdapter.setLoaded();*/
             }
 
             @Override
             protected void onNetError(Throwable e) {
 
+                changLoadMoreView(null);
             }
 
             @Override
@@ -254,12 +340,50 @@ public class MainT2Fragment extends BaseMainFragment {
             }
         });
     }
+
+    private void changLoadMoreView(List<MainT2Bean> netLoadMoreData) {
+        showProgressBar = false;
+        mMainT2Beans.remove(mMainT2Beans.size() - 1);
+        mAdapter.notifyDataSetChanged();
+        if (netLoadMoreData != null && netLoadMoreData.size() != 0) {
+            if (PAGE_NUM != 4 && netLoadMoreData.size() < PAGE_SIZE) {
+                loadMoreEnd = true;
+            }
+            mMainT2Beans.addAll(netLoadMoreData);
+            mAdapter.notifyDataSetChanged();
+        } else {
+            dataEmptyCheck();
+        }
+        mAdapter.setLoaded();
+    }
+
+    private void dataEmptyCheck() {
+        if (PAGE_NUM != 1) {
+            PAGE_NUM--;
+        }
+        int id = YcSingle.getInstance().id;
+        if (id <= 0) {   //数据为空 未登录
+            if (mIsShowLogined) {
+                addToPayVipData(); //数据为空 不是VIP
+                return;
+            }
+            mMainActivity.showToLoginDialog();
+            mIsShowLogined = true;
+        } else {  //数据为空 不是VIP
+            addToPayVipData();
+        }
+    }
+
+
     RecyclerViewItemListener recyclerViewItemListener = new RecyclerViewItemListener() {
         @Override
         public void onItemClick(int position) {
+            if (position < 0) {
+                return;
+            }
 //            Toast.makeText(mMainActivity, "onItemClick " + position, Toast.LENGTH_SHORT).show();
             MainT2Bean mainT2Bean = mMainT2Beans.get(position);
-            ExampleDetailActivity.startExampleDetailActivity(mMainActivity,mainT2Bean.id,mainT2Bean.post_title);
+            ExampleDetailActivity.startExampleDetailActivity(mMainActivity, mainT2Bean.id, mainT2Bean.post_title);
         }
 
         @Override
@@ -270,7 +394,9 @@ public class MainT2Fragment extends BaseMainFragment {
     RecyclerViewItemListener recyclerViewToVipListener = new RecyclerViewItemListener() {
         @Override
         public void onItemClick(int position) {
-            //TODO 购买VIP后 刷新数据
+            if (position < 0) {
+                return;
+            }
             startActivity(new Intent(mMainActivity, BecomeVipActivity.class));
         }
 

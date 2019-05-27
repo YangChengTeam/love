@@ -7,6 +7,8 @@ import android.view.ViewGroup;
 
 import com.yc.love.ui.activity.MainActivity;
 
+import org.greenrobot.eventbus.EventBus;
+
 /**
  * Created by mayn on 2019/4/23.
  */
@@ -20,4 +22,6 @@ public abstract class BaseMainFragment extends BaseLazyFragment {
         mMainActivity = (MainActivity) getActivity();
         return super.onFragmentCreateView(inflater, container, savedInstanceState);
     }
+
+
 }

@@ -9,104 +9,289 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ImageView;
 import android.widget.LinearLayout;
-import android.widget.TextView;
-import android.widget.Toast;
 
-import com.squareup.picasso.Picasso;
+import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
 import com.yc.love.R;
 import com.yc.love.adaper.rv.MainT1MoreItemAdapter;
 import com.yc.love.adaper.rv.base.RecyclerViewItemListener;
+import com.yc.love.adaper.rv.base.RecyclerViewTimeoutListener;
 import com.yc.love.adaper.rv.holder.BaseViewHolder;
+import com.yc.love.adaper.rv.holder.MainT1ItemHolder;
 import com.yc.love.adaper.rv.holder.ProgressBarViewHolder;
-import com.yc.love.adaper.rv.holder.StringBeanViewHolder;
+import com.yc.love.adaper.rv.holder.TimeoutItemHolder;
 import com.yc.love.adaper.rv.holder.TitleT1ViewHolder;
-import com.yc.love.cont.gank.MainT1FragGank;
-import com.yc.love.cont.http.RequestImpl;
 import com.yc.love.model.base.MySubscriber;
 import com.yc.love.model.bean.AResultInfo;
-import com.yc.love.model.bean.BannerItemBean;
-import com.yc.love.model.bean.ExampleTsBean;
-import com.yc.love.model.bean.ExampleTsListBean;
-import com.yc.love.model.bean.FrontpageBean;
-import com.yc.love.model.bean.JobBean;
-import com.yc.love.model.bean.MainT3Bean;
-import com.yc.love.model.bean.StringBean;
-import com.yc.love.model.data.BackfillSingle;
+import com.yc.love.model.bean.CategoryArticleBean;
+import com.yc.love.model.bean.CategoryArticleChildrenBean;
+import com.yc.love.model.bean.ExampDataBean;
+import com.yc.love.model.bean.ExampListsBean;
+import com.yc.love.model.bean.event.NetWorkChangT1Bean;
+import com.yc.love.model.engin.LoveEngin;
+import com.yc.love.model.util.SPUtils;
+import com.yc.love.ui.activity.ExampleDetailActivity;
+import com.yc.love.ui.activity.LoveByStagesActivity;
 import com.yc.love.ui.activity.LoveHealActivity;
 import com.yc.love.ui.activity.LoveHealingActivity;
+import com.yc.love.ui.activity.ShareActivity;
 import com.yc.love.ui.frament.base.BaseMainFragment;
 import com.yc.love.ui.view.LoadDialog;
-import com.yc.love.ui.view.LoadingDialog;
+import com.yc.love.utils.CacheUtils;
 
+import org.greenrobot.eventbus.EventBus;
+import org.greenrobot.eventbus.Subscribe;
+import org.greenrobot.eventbus.ThreadMode;
+
+import java.net.SocketTimeoutException;
+import java.net.UnknownHostException;
 import java.util.ArrayList;
 import java.util.List;
-
-import io.reactivex.disposables.Disposable;
 
 /**
  * Created by mayn on 2019/4/23.
  */
 
 public class MainT1Fragment extends BaseMainFragment {
-    private List<StringBean> stringBeans;
-    private int PAGE_NUM = 10;
+    //    private List<StringBean> mExampListsBeans;
+    private int PAGE_SIZE = 10;
+    private int PAGE_NUM = 1;
     private boolean loadMoreEnd;
     private boolean loadDataEnd;
     private boolean showProgressBar = false;
-    private int num = 10;
     private MainT1MoreItemAdapter mAdapter;
     private ProgressBarViewHolder progressBarViewHolder;
-
-    //    private TextView tvName;
+    private LoveEngin mLoveEngin;
+    private List<ExampListsBean> mExampListsBeans = new ArrayList<>();
+    ;
+    private RecyclerView mRecyclerView;
+    private LinearLayout mLlNotNet;
+    private boolean mIsNetData = false;
+    private boolean mIsNetTitleData = false;
+    private List<CategoryArticleBean> mCategoryArticleBeans;
+    private boolean mIsDataToCache;
 
     @Override
     protected int setContentView() {
         return R.layout.fragment_main_t1;
     }
 
+
     @Override
     protected void initViews() {
-//        tvName = rootView.findViewById(R.id.main_t1_tv_name);
+        mLoveEngin = new LoveEngin(mMainActivity);
 
-        final RecyclerView recyclerView = rootView.findViewById(R.id.main_t1_rl);
+        mLlNotNet = rootView.findViewById(R.id.main_t1_not_net);
+
+        mRecyclerView = rootView.findViewById(R.id.main_t1_rl);
         LinearLayoutManager layoutManager = new LinearLayoutManager(mMainActivity);
-        recyclerView.setLayoutManager(layoutManager);
+        mRecyclerView.setLayoutManager(layoutManager);
         layoutManager.setOrientation(OrientationHelper.VERTICAL);
         //设置增加或删除条目的动画
-        recyclerView.setItemAnimator(new DefaultItemAnimator());
+        mRecyclerView.setItemAnimator(new DefaultItemAnimator());
+    }
 
-        stringBeans = new ArrayList<>();
-        for (int i = 0; i < 10; i++) {
-            stringBeans.add(new StringBean("name " + i));
+    RecyclerViewTimeoutListener recyclerViewTimeoutListener = new RecyclerViewTimeoutListener() {
+        @Override
+        public void onItemClick(int position) {
+            lazyLoad();
+        }
+    };
+
+
+    RecyclerViewItemListener recyclerViewItemListener = new RecyclerViewItemListener() {
+        @Override
+        public void onItemClick(int position) {
+//            ExampListsBean exampListsBean = mExampListsBeans.get(position);
+//            LoveByStagesDetailsActivity.startLoveByStagesDetailsActivity(mMainActivity, exampListsBean.id, exampListsBean.post_title);
+            if (position < 0) {
+                return;
+            }
+            ExampListsBean exampListsBean = mExampListsBeans.get(position);
+            ExampleDetailActivity.startExampleDetailActivity(mMainActivity, exampListsBean.id, exampListsBean.post_title);
         }
 
-        mAdapter = new MainT1MoreItemAdapter<StringBean>(stringBeans, recyclerView) {
+        @Override
+        public void onItemLongClick(int position) {
+
+        }
+
+    };
+
+    @Override
+    public void onStart() {
+        super.onStart();
+        EventBus.getDefault().register(this);
+    }
+
+    @Override
+    public void onStop() {
+        super.onStop();
+        EventBus.getDefault().unregister(this);
+    }
+
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    public void onMessageEvent(NetWorkChangT1Bean netWorkChangBean) {  //无网状态
+        List<String> connectionTypeList = netWorkChangBean.connectionTypeList;
+        if (connectionTypeList == null || connectionTypeList.size() == 0) {
+            if (mLlNotNet.getVisibility() != View.VISIBLE) {
+                mLlNotNet.setVisibility(View.VISIBLE);
+            }
+        } else {
+            if (mLlNotNet.getVisibility() != View.GONE) {
+                mLlNotNet.setVisibility(View.GONE);
+                lazyLoad();
+              /*  if (!mIsNetData) {
+                    netData();
+                }*/
+            }
+        }
+    }
+
+
+    @Override
+    protected void lazyLoad() {
+        if(mIsDataToCache){
+            mIsNetData=false;
+            mIsNetTitleData=false;
+        }
+//        mIsNetData = false;
+        if (!mIsNetData) {
+            netData();
+        }
+        if (!mIsNetTitleData) {
+            netTitleData();
+        }
+    }
+
+    private void netData() {
+        LoadDialog loadDialog = new LoadDialog(mMainActivity);
+        loadDialog.show();
+        mLoveEngin.indexExample(String.valueOf(PAGE_NUM), String.valueOf(PAGE_SIZE), "example/index").subscribe(new MySubscriber<AResultInfo<ExampDataBean>>(loadDialog) {
+            @Override
+            protected void onNetNext(AResultInfo<ExampDataBean> exampDataBeanAResultInfo) {
+                ExampDataBean exampDataBean = exampDataBeanAResultInfo.data;
+                if (exampDataBean != null) {
+                    mExampListsBeans = exampDataBean.lists;
+                }
+//                mExampListsBeans.add(0, new ExampListsBean(3, "Article_Category"));
+                mExampListsBeans.add(0, new ExampListsBean(0, "title"));
+                CacheUtils.cacheBeanData(mMainActivity, "main_example_index", mExampListsBeans);
+                mIsNetData = true;
+                if (mIsNetData && mIsNetTitleData) {
+                    initRecyclerViewData();
+                }
+            }
+
+            @Override
+            protected void onNetError(Throwable e) {
+                String data = (String) SPUtils.get(mMainActivity, "main_example_index", "");
+                mExampListsBeans = new Gson().fromJson(data, new TypeToken<ArrayList<ExampListsBean>>() {
+                }.getType());
+                if (mExampListsBeans != null && mExampListsBeans.size() != 0) {
+                    mIsNetData = true;
+                    if (mIsNetData && mIsNetTitleData) {
+                        mIsDataToCache = true;
+                        initRecyclerViewData();
+                    }
+                }
+//                java.net.SocketTimeoutException: timeout
+//                java.net.UnknownHostException: Unable to resolve host "love.bshu.com": No address associated with hostname
+                if (e instanceof SocketTimeoutException || e instanceof UnknownHostException) {
+//                    mExampListsBeans.add(new ExampListsBean(-1, "title"));
+//                    initRecyclerViewData();
+                    Log.d("mylog", "onNetError: SocketTimeoutException 网络超时 " + e.toString());
+                }
+            }
+
+            @Override
+            protected void onNetCompleted() {
+
+            }
+        });
+    }
+
+    private void netTitleData() {
+        LoadDialog loadDialog = new LoadDialog(mMainActivity);
+        loadDialog.show();
+        mLoveEngin.categoryArticle("Article/category").subscribe(new MySubscriber<AResultInfo<List<CategoryArticleBean>>>(loadDialog) {
+            @Override
+            protected void onNetNext(AResultInfo<List<CategoryArticleBean>> listAResultInfo) {
+                mCategoryArticleBeans = listAResultInfo.data;
+                CacheUtils.cacheBeanData(mMainActivity, "main_Article_category", mCategoryArticleBeans);
+                mIsNetTitleData = true;
+                if (mIsNetData && mIsNetTitleData) {
+                    initRecyclerViewData();
+                }
+            }
+
+            @Override
+            protected void onNetError(Throwable e) {
+                String data = (String) SPUtils.get(mMainActivity, "main_Article_category", "");
+                mCategoryArticleBeans = new Gson().fromJson(data, new TypeToken<ArrayList<CategoryArticleBean>>() {
+                }.getType());
+                if (mCategoryArticleBeans != null && mCategoryArticleBeans.size() != 0) {
+                    mIsNetTitleData = true;
+                    if (mIsNetData && mIsNetTitleData) {
+                        initRecyclerViewData();
+                    }
+                }
+            }
+
+            @Override
+            protected void onNetCompleted() {
+
+            }
+        });
+    }
+
+    private void initRecyclerViewData() {
+        Log.d("mylog", "initRecyclerViewData: ");
+        mAdapter = new MainT1MoreItemAdapter(mExampListsBeans, mRecyclerView) {
+
+            @Override
+            protected RecyclerView.ViewHolder getTimeoutHolder(ViewGroup parent) {
+                return new TimeoutItemHolder(mMainActivity, parent, "", recyclerViewTimeoutListener);
+            }
+
             @Override
             public BaseViewHolder getHolder(ViewGroup parent) {
-                return new StringBeanViewHolder(mMainActivity, recyclerViewItemListener, parent);
+                return new MainT1ItemHolder(mMainActivity, recyclerViewItemListener, parent);
             }
 
             @Override
             public BaseViewHolder getTitleHolder(ViewGroup parent) {
                 TitleT1ViewHolder titleT1ViewHolder = new TitleT1ViewHolder(mMainActivity, null, parent);
-                titleT1ViewHolder.setOnClickShareListent(new TitleT1ViewHolder.OnClickMainT1TitleListent() {
+                titleT1ViewHolder.setOnClickTitleIconListener(new TitleT1ViewHolder.OnClickTitleIconListener() {
                     @Override
-                    public void clickShareListent() {
-                        Toast.makeText(mMainActivity, "clickShare", Toast.LENGTH_SHORT).show();
-                    }
-
-                    @Override
-                    public void clickIvModule02Listent() {
-                        startActivity(new Intent(mMainActivity,LoveHealActivity.class));
-
-                    }
-
-                    @Override
-                    public void clickIvModule03Listent() {
-                        startActivity(new Intent(mMainActivity,LoveHealingActivity.class));
-//                        Toast.makeText(mMainActivity, "clickIvModule03", Toast.LENGTH_SHORT).show();
+                    public void clickTitleIcon(int position) {
+                        switch (position) {
+                            case 0:
+                                startLoveByStagesActivity(0, "单身期");
+                                break;
+                            case 1:
+                                startLoveByStagesActivity(1, "追求期");
+                                break;
+                            case 2:
+                                startLoveByStagesActivity(2, "热恋期");
+                                break;
+                            case 3:
+                                startLoveByStagesActivity(3, "失恋期");
+                                break;
+                            case 4:
+                                startLoveByStagesActivity(4, "婚后期");
+                                break;
+                            case 5:
+                                startActivity(new Intent(mMainActivity, LoveHealActivity.class));
+                                break;
+                            case 6:
+                                startActivity(new Intent(mMainActivity, LoveHealingActivity.class));
+                                break;
+                            case 7:
+                                mMainActivity.startActivity(new Intent(mMainActivity, ShareActivity.class));
+                                break;
+                        }
                     }
                 });
                 return titleT1ViewHolder;
@@ -119,8 +304,8 @@ public class MainT1Fragment extends BaseMainFragment {
                 return progressBarViewHolder;
             }
         };
-        recyclerView.setAdapter(mAdapter);
-        if (stringBeans.size() < PAGE_NUM) {
+        mRecyclerView.setAdapter(mAdapter);
+        if (mExampListsBeans.size() < PAGE_SIZE) {
             Log.d("ssss", "loadMoreData: data---end");
         } else {
             mAdapter.setOnMoreDataLoadListener(new MainT1MoreItemAdapter.OnLoadMoreDataListener() {
@@ -131,39 +316,15 @@ public class MainT1Fragment extends BaseMainFragment {
                     }
                     if (showProgressBar == false) {
                         //加入null值此时adapter会判断item的type
-                        stringBeans.add(null);
+                        mExampListsBeans.add(null);
                         mAdapter.notifyDataSetChanged();
                         showProgressBar = true;
                     }
                     if (!loadMoreEnd) {
-                        recyclerView.postDelayed(new Runnable() {
-                            @Override
-                            public void run() {
-
-                                if (num >= 41) {
-                                    progressBarViewHolder.removePbChangDes("已加载全部数据");
-                                    return;
-                                }
-
-                                List<StringBean> netLoadMoreData = new ArrayList<>();
-                                for (int i = 0; i < 10; i++) {
-                                    netLoadMoreData.add(new StringBean("name " + (i + num)));
-                                }
-                                num += 10;
-                                showProgressBar = false;
-                                stringBeans.remove(stringBeans.size() - 1);
-                                mAdapter.notifyDataSetChanged();
-                                if (netLoadMoreData.size() < PAGE_NUM) {
-                                    loadMoreEnd = true;
-                                }
-                                stringBeans.addAll(netLoadMoreData);
-                                mAdapter.notifyDataSetChanged();
-                                mAdapter.setLoaded();
-                            }
-                        }, 1000);
+                        netLoadMore();
                     } else {
                         Log.d("mylog", "loadMoreData: loadMoreEnd end 已加载全部数据 ");
-                        stringBeans.remove(stringBeans.size() - 1);
+                        mExampListsBeans.remove(mExampListsBeans.size() - 1);
                         mAdapter.notifyDataSetChanged();
                     }
                 }
@@ -172,72 +333,54 @@ public class MainT1Fragment extends BaseMainFragment {
         loadDataEnd = true;
     }
 
-    RecyclerViewItemListener recyclerViewItemListener = new RecyclerViewItemListener() {
-        @Override
-        public void onItemClick(int position) {
-            Toast.makeText(mMainActivity, "onItemClick " + position, Toast.LENGTH_SHORT).show();
+    private void startLoveByStagesActivity(int position, String title) {
+        if (mCategoryArticleBeans == null || mCategoryArticleBeans.size() < position + 1) {
+            return;
         }
-
-        @Override
-        public void onItemLongClick(int position) {
-
-        }
-    };
-
-
-    @Override
-    protected void lazyLoad() {
-        /*tvName.postDelayed(new Runnable() {
-            @Override
-            public void run() {
-
-            }
-        }, 1000);*/
-        netData();
+        CategoryArticleBean categoryArticleBean = mCategoryArticleBeans.get(position);
+        ArrayList<CategoryArticleChildrenBean> children = categoryArticleBean.children;
+        LoveByStagesActivity.startLoveByStagesActivity(mMainActivity, title, children);
     }
 
-    private void netData() {
-        /*LoadDialog loadDialog = new LoadDialog(mMainActivity);
-        loadDialog.show();
-        mLoveEngin.exampleTs("example/ts").subscribe(new MySubscriber<AResultInfo<List<ExampleTsBean>>>(loadDialog) {
 
-
+    private void netLoadMore() {
+        mLoveEngin.indexExample(String.valueOf(++PAGE_NUM), String.valueOf(PAGE_SIZE), "example/index").subscribe(new MySubscriber<AResultInfo<ExampDataBean>>(mMainActivity) {
             @Override
-            protected void onNetNext(AResultInfo<List<ExampleTsBean>> listAResultInfo) {
-                mDatas = new ArrayList<>();
-                mDatas.add(new MainT3Bean(1));
-                mDatas.add(new MainT3Bean(2, "入门秘籍"));
-                List<ExampleTsBean> exampleTsBeans = listAResultInfo.data;
-                for (ExampleTsBean exampleTsBean : exampleTsBeans
-                        ) {
-                    List<ExampleTsListBean> list1 = exampleTsBean.list1;
-                    for (int i = 0; i < list1.size(); i++) {
-                        ExampleTsListBean listBean = list1.get(i);
-                        mDatas.add(new MainT3Bean(3, listBean.id, listBean.post_title, listBean.image, listBean.tag, listBean.tag_id, listBean.category_name));
-                    }
-                    mDatas.add(new MainT3Bean(2, "进阶秘籍"));
-                    List<ExampleTsListBean> list2 = exampleTsBean.list2;
-                    for (int i = 0; i < list2.size(); i++) {
-                        ExampleTsListBean listBean = list2.get(i);
-                        mDatas.add(new MainT3Bean(3, listBean.id, listBean.post_title, listBean.image, listBean.tag, listBean.tag_id, listBean.category_name));
-                    }
+            protected void onNetNext(AResultInfo<ExampDataBean> exampDataBeanAResultInfo) {
+
+                ExampDataBean exampDataBean = exampDataBeanAResultInfo.data;
+                if (exampDataBean != null) {
+                    List<ExampListsBean> netLoadMoreData = exampDataBean.lists;
+                    changLoadMoreView(netLoadMoreData);
                 }
-                initRecyclerViewData();
             }
 
             @Override
             protected void onNetError(Throwable e) {
-
+                if (PAGE_NUM != 1) {
+                    PAGE_NUM--;
+                }
+                changLoadMoreView(null);
             }
 
             @Override
             protected void onNetCompleted() {
 
             }
-        });*/
+        });
     }
 
-
-
-
+    private void changLoadMoreView(List<ExampListsBean> netLoadMoreData) {
+        showProgressBar = false;
+        mExampListsBeans.remove(mExampListsBeans.size() - 1);
+        mAdapter.notifyDataSetChanged();
+        if (netLoadMoreData != null) {
+            if (netLoadMoreData.size() < PAGE_SIZE) {
+                loadMoreEnd = true;
+            }
+            mExampListsBeans.addAll(netLoadMoreData);
+            mAdapter.notifyDataSetChanged();
+        }
+        mAdapter.setLoaded();
+    }
 }

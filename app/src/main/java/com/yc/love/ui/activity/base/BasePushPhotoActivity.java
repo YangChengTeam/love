@@ -5,7 +5,6 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.Color;
-import android.graphics.Path;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Environment;
@@ -14,45 +13,20 @@ import android.provider.MediaStore;
 import android.text.TextUtils;
 import android.util.Log;
 import android.widget.ImageView;
-import android.widget.Toast;
 
-import com.bumptech.glide.Glide;
 import com.squareup.picasso.Picasso;
 import com.yc.love.R;
-import com.yc.love.cont.http.HttpClient;
-import com.yc.love.model.util.CropPhotoUtlis;
-import com.yc.love.model.util.UploadUtils;
 import com.yc.love.ui.view.CircleTransform;
 import com.yc.love.ui.view.SelectPhotoDialog;
-import com.yc.love.ui.view.imgs.ISCameraConfig;
 import com.yc.love.ui.view.imgs.ISListConfig;
 import com.yc.love.ui.view.imgs.ISNav;
 import com.yc.love.ui.view.imgs.ImageLoader;
-/*import com.yuyh.library.imgsel.ISNav;
-import com.yuyh.library.imgsel.common.ImageLoader;
-import com.yuyh.library.imgsel.config.ISCameraConfig;
-import com.yuyh.library.imgsel.config.ISListConfig;*/
 
-import java.io.ByteArrayOutputStream;
 import java.io.File;
-import java.io.FileInputStream;
-import java.io.IOException;
 import java.util.ArrayList;
-import java.util.List;
 
-import okhttp3.Call;
-import okhttp3.Callback;
-import okhttp3.FormBody;
-import okhttp3.MediaType;
-import okhttp3.MultipartBody;
-import okhttp3.OkHttpClient;
-import okhttp3.Request;
-import okhttp3.RequestBody;
-import okhttp3.Response;
-import retrofit2.Retrofit;
 import top.zibin.luban.Luban;
 import top.zibin.luban.OnCompressListener;
-import retrofit2.adapter.rxjava2.Result;
 
 /**
  * Created by mayn on 2019/5/7.
@@ -80,7 +54,9 @@ public abstract class BasePushPhotoActivity extends BaseSameActivity {
             mInstance.init(new ImageLoader() {
                 @Override
                 public void displayImage(Context context, String path, ImageView imageView) {
-                    Glide.with(context).load(path).into(imageView);
+                    Picasso.with(context).load("file://" + path).into(imageView);
+                    Log.d("mylog", "displayImage: path " + path);
+//                    Glide.with(context).load(path).into(imageView);
                 }
             });
         }
@@ -251,111 +227,7 @@ public abstract class BasePushPhotoActivity extends BaseSameActivity {
                         //        View 设置图片
                         Picasso.with(BasePushPhotoActivity.this).load(file).transform(new CircleTransform()).into(putPhotoImageViewPhoto);
                         Log.d("mylog", "onSuccess: file.getPath() " + file.getPath());
-
-                       /* ArrayList<File> files = new ArrayList<>();
-                        files.add(file);
-                        ArrayList<String> names = new ArrayList<>();
-                        ArrayList<Object> values = new ArrayList<>();
-                        String url = "http://love.bshu.com/v1/common/upload";
-                        boolean state = UploadUtils.uploadFile(files, null, url, names, values);
-
-                        Log.d("mylog", "onSuccess: state "+state);
-
-
-                        if (3 > 0) {
-                            return;
-                        }*/
                         onLubanFileSuccess(file);
-
-                        /*Retrofit retrofit = new Retrofit.Builder()
-                                .baseUrl("https://api.github.com/")
-                                .build();
-
-                        HttpClient service = retrofit.create(HttpClient.class);
-
-                        //1.创建MultipartBody.Builder对象
-                        MultipartBody.Builder builder = new MultipartBody.Builder()
-                                .setType(MultipartBody.FORM);//表单类型
-
-                        //2.获取图片，创建请求体
-//                        File file = new File(path);
-                        RequestBody body = RequestBody.create(MediaType.parse("multipart/form-data"), file);//表单类型
-
-                        //3.调用MultipartBody.Builder的addFormDataPart()方法添加表单数据
-//                        builder.addFormDataPart(key, value);//传入服务器需要的key，和相应value值
-                        builder.addFormDataPart("image", file.getName(), body); //添加图片数据，body创建的请求体
-
-                        //4.创建List<MultipartBody.Part> 集合，
-                        //  调用MultipartBody.Builder的build()方法会返回一个新创建的MultipartBody
-                        //  再调用MultipartBody的parts()方法返回MultipartBody.Part集合
-                        List<MultipartBody.Part> parts = builder.build().parts();
-
-                        //5.最后进行HTTP请求，传入parts即可
-                        retrofit2.Call<Result> resultCall = service.myUpload(parts);
-//                        Call<Result> uploadPic =
-                        resultCall.enqueue(new retrofit2.Callback<Result>() {
-                            @Override
-                            public void onResponse(retrofit2.Call<Result> call, retrofit2.Response<Result> response) {
-                                String jsonData = response.body().toString();
-                                Log.d("mylog", "onResponse: jsonData " + jsonData);
-                            }
-
-                            @Override
-                            public void onFailure(retrofit2.Call<Result> call, Throwable t) {
-                                Log.d("mylog", "与服务器建立连接失败--onResponse: response.isSuccessful()==false " + t);
-                            }
-                        });*/
-
-
-                        byte[] bytes = new byte[]{};
-                        try {
-                            bytes = readStream(file.toString());
-                        } catch (Exception e) {
-                            e.printStackTrace();
-                        }
-                        String url = "http://love.bshu.com/v1/common/upload";
-
-
-                      /*  FormBody.Builder builder = new FormBody.Builder();
-                        builder.add("image", String.valueOf(bytes));
-                        Log.d("mylog", "onSuccess: image " + byte2hex(bytes));
-                        RequestBody build = builder.build();*/
-                        OkHttpClient okHttpClient = new OkHttpClient();
-
-                        MultipartBody.Builder builder1 = new MultipartBody.Builder();//构建者模式
-                        builder1.setType(MultipartBody.FORM);//传输类型
-//                        builder1.addFormDataPart("image", file.getName());
-                        builder1.addFormDataPart("image", "image", RequestBody.create(MediaType.parse
-                                ("multipart/form-data"), file));
-//                        RequestBody.create(MediaType.parse("application/octet-stream"), file);
-//                        RequestBody.create(MediaType.parse("application/octet-stream"), byte2hex(bytes));
-                        Log.d("mylog", "onSuccess: file.getName() " + file.getName());
-                        Log.d("mylog", "onSuccess: byte2hex(bytes) " + byte2hex(bytes));
-
-
-                        //表单数据参数填入
-                        final Request request = new Request.Builder()
-                                .url(url)
-                                .post(builder1.build())
-//                                .post(body)
-                                .build();
-                        Call call = okHttpClient.newCall(request);
-                        call.enqueue(new Callback() {
-                            @Override
-                            public void onFailure(Call call, IOException e) {
-                                Log.d("mylog", "--onResponse: onFailure.onFailure() " + e);
-                            }
-
-                            @Override
-                            public void onResponse(Call call, Response response) throws IOException {
-                                if (response.isSuccessful()) {
-                                    String body = response.body().string();
-                                    Log.d("mylog", "onResponse: body " + body);
-                                } else {
-                                    Log.d("mylog", "与服务器建立连接失败--onResponse: response.isSuccessful()==false " + response.body().string());
-                                }
-                            }
-                        });
                     }
 
                     @Override
@@ -367,35 +239,5 @@ public abstract class BasePushPhotoActivity extends BaseSameActivity {
     }
 
     protected abstract void onLubanFileSuccess(File file);
-
-    // 二进制转字符串
-    public static String byte2hex(byte[] b) {
-        StringBuffer sb = new StringBuffer();
-        String tmp = "";
-        for (int i = 0; i < b.length; i++) {
-            tmp = Integer.toHexString(b[i] & 0XFF);
-            if (tmp.length() == 1) {
-                sb.append("0" + tmp);
-            } else {
-                sb.append(tmp);
-            }
-
-        }
-        return sb.toString();
-    }
-
-
-    public static byte[] readStream(String imagepath) throws Exception {
-        FileInputStream fs = new FileInputStream(imagepath);
-        ByteArrayOutputStream outStream = new ByteArrayOutputStream();
-        byte[] buffer = new byte[1024];
-        int len = 0;
-        while (-1 != (len = fs.read(buffer))) {
-            outStream.write(buffer, 0, len);
-        }
-        outStream.close();
-        fs.close();
-        return outStream.toByteArray();
-    }
 
 }

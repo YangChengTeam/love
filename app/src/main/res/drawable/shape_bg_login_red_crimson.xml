@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8"?><!-- 矩形内部填充-线性垂直渐变 -->
+<shape xmlns:android="http://schemas.android.com/apk/res/android"
+    android:shape="rectangle"
+    android:useLevel="true">
+
+    <!--  <size
+          android:width="@dimen/shape_size"
+          android:height="@dimen/shape_size" />-->
+
+    <!--  <stroke
+          android:width="1px"
+          android:color="#ffff00ff" />-->
+
+    <!-- 调整angle实现水平渐变，垂直渐变或者对角渐变 -->
+    <gradient
+        android:angle="-45"
+        android:centerColor="@color/red_crimson_login_center"
+        android:centerX="0.5"
+        android:centerY="0.4"
+        android:endColor="@color/red_crimson_login_end"
+        android:startColor="@color/red_crimson_login_start"
+        android:type="linear" />
+</shape>

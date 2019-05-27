@@ -45,10 +45,23 @@ public abstract class MySubscriber<T> extends Subscriber<T> {
 
     @Override
     public void onNext(T t) {
-        try {
-            AResultInfo resultInfo = (AResultInfo) t;
+        if (t == null) {
+            onNetError(null);
+            return;
+        } else {
+            AResultInfo resultInfo = null;
+            try {
+                resultInfo = (AResultInfo) t;
+            } catch (ClassCastException e) {
+                Log.d("mylog", "MySubscriber onNext: ClassCastException " + e);
+            }
+            if (resultInfo == null) {
+                onNetError(null);
+                return;
+            }
             int code = resultInfo.code;
             String message = resultInfo.msg;
+            Log.d("mylog", "MySubscriber onNext: code " + code + " message " + message + " activityDealServiceCode1 " + activityDealServiceCode1);
             if (1 != code && !activityDealServiceCode1) {
                 if (loadDialog != null) {
                     context = loadDialog.getContext();
@@ -59,15 +72,13 @@ public abstract class MySubscriber<T> extends Subscriber<T> {
                 DialogInterface.OnClickListener listent = null;
                 alertDialog.setButton(DialogInterface.BUTTON_POSITIVE, "确定", listent);
                 alertDialog.show();
+                return;
             }
-            Log.d("mylog", "MySubscriber onNext: message " + message + " code " + code);
-        } catch (ClassCastException e) {
-            Log.d("mylog", "MySubscriber onNext: ClassCastException " + e);
+            onNetNext(t);
         }
         if (loadDialog != null) {
             loadDialog.dismissLoadingDialog();
         }
-        onNetNext(t);
     }
 
     protected abstract void onNetNext(T t);

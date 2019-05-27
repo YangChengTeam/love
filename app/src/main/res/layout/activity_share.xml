@@ -1,0 +1,151 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/white"
+    android:orientation="vertical"
+    android:padding="12dp"
+    tools:context=".ui.activity.ShareActivity">
+
+    <LinearLayout
+        android:id="@+id/share_ll_sear_title"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
+
+        <android.support.v7.widget.SearchView
+            android:id="@+id/share_searview"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="10"
+            android:background="@color/love_background"
+            app:iconifiedByDefault="false"
+            app:queryBackground="@null"
+            app:queryHint="@string/share_des_short"
+            app:showDividers="none"
+            app:submitBackground="@null" />
+
+
+        <TextView
+            android:id="@+id/share_tv_next"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="12dp"
+            android:background="@drawable/selectot_btn_brim_red_crimson_brim"
+            android:gravity="center_horizontal"
+            android:paddingLeft="18dp"
+            android:paddingTop="12dp"
+            android:paddingRight="18dp"
+            android:paddingBottom="18dp"
+            android:text="搜索"
+            android:textColor="@color/white"
+            android:textSize="@dimen/size_18" />
+    </LinearLayout>
+
+    <android.support.constraint.ConstraintLayout
+        android:id="@+id/share_cons_lay_info"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignBottom="@+id/share_ll_sear_title"
+        android:layout_marginTop="12dp">
+
+        <RelativeLayout
+            android:id="@+id/share_rl_01"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="海量聊天话术库每日更新"
+                android:textColor="@color/red_crimson"
+                android:textSize="@dimen/size_14" />
+
+            <TextView
+                android:id="@+id/share_tv_today_add"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentRight="true"
+                android:text="今日新增55条话术"
+                android:textColor="@color/red_crimson"
+                android:textSize="@dimen/size_14" />
+        </RelativeLayout>
+
+        <RelativeLayout
+            android:id="@+id/share_rl_02"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="24dp"
+            app:layout_constraintTop_toBottomOf="@+id/share_rl_01">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="搜索记录"
+                android:textColor="@color/black"
+                android:textSize="@dimen/size_18" />
+
+            <TextView
+                android:id="@+id/share_tv_delete"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentRight="true"
+                android:background="?attr/selectableItemBackgroundBorderless"
+                android:drawableRight="@mipmap/icon_delete_gray"
+                android:drawablePadding="6dp"
+                android:padding="4dp"
+                android:text="清空"
+                android:textColor="@color/text_gray"
+                android:textSize="@dimen/size_14" />
+        </RelativeLayout>
+
+        <com.yc.love.ui.view.FluidLayout
+            android:id="@+id/share_fluid_layout"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="6dp"
+            app:layout_constraintTop_toBottomOf="@+id/share_rl_02" />
+
+        <ImageView
+            android:id="@+id/share_iv_to_vip"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="15dp"
+            android:src="@mipmap/main_item_vip"
+            app:layout_constraintTop_toBottomOf="@+id/share_fluid_layout" />
+
+    </android.support.constraint.ConstraintLayout>
+
+    <FrameLayout
+        android:id="@+id/share_frame_layout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="12dp"
+        android:visibility="gone" />
+
+    <android.support.constraint.ConstraintLayout
+        android:id="@+id/share_cons_lay_item_con"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="12dp"
+        android:visibility="gone"
+        app:layout_constraintTop_toBottomOf="@+id/share_ll_sear_title">
+
+        <net.lucode.hackware.magicindicator.MagicIndicator
+            android:id="@+id/share_pager_tabs"
+            android:layout_width="wrap_content"
+            android:layout_height="40dp"
+            android:background="@color/white" />
+
+
+        <android.support.v4.view.ViewPager
+            android:id="@+id/share_view_pager"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" />
+
+
+    </android.support.constraint.ConstraintLayout>
+
+</LinearLayout>

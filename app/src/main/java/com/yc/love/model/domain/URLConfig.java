@@ -12,6 +12,8 @@ public class URLConfig {
     private static String baseUrl = "http://love.bshu.com/v1/";
     private static String debugBaseUrl = "http://en.qqtn.com/api/";
 
+    public static String uploadPhotoUrl = baseUrl.concat("common/upload");
+
 
 
     public static final String ID_INFO_SMS = getBaseUrl() + "user/code";
@@ -24,4 +26,9 @@ public class URLConfig {
     public static String getUrl(String url) {
         return DEBUG ? debugBaseUrl : baseUrl.concat(url);
     }
+
+    // apk 下载地址
+    public static String download_apk_url = "http://toppic-mszs.oss-cn-hangzhou.aliyuncs.com/xfzs.apk";
+//    public static String download_apk_url = "http://toppic-mszs.oss-cn-hangzhou.aliyuncs.com/";
+
 }

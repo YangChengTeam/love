@@ -106,7 +106,7 @@ public abstract class MainT2MoreItemAdapter extends RecyclerView.Adapter<Recycle
             super.onScrolled(recyclerView, dx, dy);
             final LinearLayoutManager linearLayoutManager = (LinearLayoutManager) mRecyclerView.getLayoutManager();
 
-            int currentposition = linearLayoutManager.getPosition(linearLayoutManager.getChildAt(0));
+//            int currentposition = linearLayoutManager.getPosition(linearLayoutManager.getChildAt(0));
             int firstVisibleItemPosition = linearLayoutManager.findFirstVisibleItemPosition();
            /* if (firstVisibleItemPosition >= 1) {
                 ll_toolbar.setVisibility(View.VISIBLE);

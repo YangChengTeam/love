@@ -5,6 +5,7 @@ import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.yc.love.R;
@@ -19,18 +20,27 @@ import com.yc.love.model.bean.AResultInfo;
 import com.yc.love.model.bean.CategoryArticleBean;
 import com.yc.love.model.bean.CategoryArticleChildrenBean;
 import com.yc.love.model.bean.ExampleTsBean;
+import com.yc.love.model.bean.ExampleTsCategory;
+import com.yc.love.model.bean.ExampleTsCategoryList;
 import com.yc.love.model.bean.ExampleTsListBean;
 import com.yc.love.model.bean.LoveByStagesBean;
 import com.yc.love.model.bean.LoveHealDetBean;
 import com.yc.love.model.bean.MainT3Bean;
+import com.yc.love.model.bean.event.NetWorkChangT3Bean;
 import com.yc.love.model.engin.LoveEngin;
+import com.yc.love.model.single.YcSingle;
 import com.yc.love.ui.activity.ExampleDetailActivity;
 import com.yc.love.ui.activity.LoveByStagesActivity;
 import com.yc.love.ui.activity.LoveByStagesDetailsActivity;
 import com.yc.love.ui.activity.LoveIntroductionActivity;
+import com.yc.love.ui.activity.MainActivity;
 import com.yc.love.ui.frament.base.BaseMainFragment;
 import com.yc.love.ui.view.LoadDialog;
 import com.yc.love.ui.view.LoadingDialog;
+
+import org.greenrobot.eventbus.EventBus;
+import org.greenrobot.eventbus.Subscribe;
+import org.greenrobot.eventbus.ThreadMode;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -55,6 +65,8 @@ public class MainT3Fragment extends BaseMainFragment {
     private List<MainT3Bean> mDatas;
     //    private LoadDialog mLoadingDialog;
     private List<CategoryArticleBean> mCategoryArticleBeans;
+    private LinearLayout mLlNotNet;
+    private boolean mIsNetData = false;
 
     @Override
     protected int setContentView() {
@@ -66,6 +78,7 @@ public class MainT3Fragment extends BaseMainFragment {
     @Override
     protected void initViews() {
         mLoveEngin = new LoveEngin(mMainActivity);
+        mLlNotNet = rootView.findViewById(R.id.main_t3_not_net);
         View viewBar = rootView.findViewById(R.id.main_t3_view_bar);
         mMainActivity.setStateBarHeight(viewBar, 1);
 //        mLoadingDialog = mMainActivity.mLoadingDialog;
@@ -79,15 +92,50 @@ public class MainT3Fragment extends BaseMainFragment {
 //        mRecyclerView.setItemAnimator(new DefaultItemAnimator());
     }
 
+    @Override
+    public void onStart() {
+        super.onStart();
+        EventBus.getDefault().register(this);
+    }
+
+    @Override
+    public void onStop() {
+        super.onStop();
+        EventBus.getDefault().unregister(this);
+    }
+
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    public void onMessageEvent(NetWorkChangT3Bean netWorkChangBean) {
+        List<String> connectionTypeList = netWorkChangBean.connectionTypeList;
+//        checkNetChangUI(connectionTypeList);
+    }
+
+    private void checkNetChangUI(List<String> connectionTypeList) {
+        if (connectionTypeList == null || connectionTypeList.size() == 0) {
+            if (mLlNotNet.getVisibility() != View.VISIBLE) {
+                mLlNotNet.setVisibility(View.VISIBLE);
+            }
+        } else {
+            if (mLlNotNet.getVisibility() != View.GONE) {
+                mLlNotNet.setVisibility(View.GONE);
+                if (!mIsNetData) {
+                    isCanLoadData();
+                }
+            }
+        }
+    }
+
 
     @Override
     protected void lazyLoad() {
+//        List<String> connectionTypeList = YcSingle.getInstance().connectionTypeList;
+//        checkNetChangUI(connectionTypeList);
         isCanLoadData();
     }
 
     private void isCanLoadData() {
         netData();
-        netTitleData();
+//        netTitleData();
 
     }
 
@@ -97,6 +145,7 @@ public class MainT3Fragment extends BaseMainFragment {
         mLoveEngin.categoryArticle("Article/category").subscribe(new MySubscriber<AResultInfo<List<CategoryArticleBean>>>(loadDialog) {
             @Override
             protected void onNetNext(AResultInfo<List<CategoryArticleBean>> listAResultInfo) {
+                mIsNetData = true;
                 mCategoryArticleBeans = listAResultInfo.data;
                 for (CategoryArticleBean categoryArticleBean : mCategoryArticleBeans
                         ) {
@@ -119,27 +168,30 @@ public class MainT3Fragment extends BaseMainFragment {
     private void netData() {
         LoadDialog loadDialog = new LoadDialog(mMainActivity);
         loadDialog.show();
-        mLoveEngin.exampleTs("example/ts").subscribe(new MySubscriber<AResultInfo<List<ExampleTsBean>>>(loadDialog) {
+//        mLoveEngin.exampleTs("example/ts").subscribe(new MySubscriber<AResultInfo<List<ExampleTsBean>>>(loadDialog) {
+        mLoveEngin.exampleTsCategory("example/ts_category").subscribe(new MySubscriber<AResultInfo<ExampleTsCategory>>(loadDialog) {
 
 
             @Override
-            protected void onNetNext(AResultInfo<List<ExampleTsBean>> listAResultInfo) {
+            protected void onNetNext(AResultInfo<ExampleTsCategory> exampleTsCategoryAResultInfo) {
+                mIsNetData = true;
                 mDatas = new ArrayList<>();
                 mDatas.add(new MainT3Bean(1));
-                mDatas.add(new MainT3Bean(2, "入门秘籍"));
-                List<ExampleTsBean> exampleTsBeans = listAResultInfo.data;
-                for (ExampleTsBean exampleTsBean : exampleTsBeans
-                        ) {
-                    List<ExampleTsListBean> list1 = exampleTsBean.list1;
+//                mDatas.add(new MainT3Bean(2, "入门秘籍"));
+                ExampleTsCategory exampleTsCategory = exampleTsCategoryAResultInfo.data;
+                List<ExampleTsCategoryList> list1 = exampleTsCategory.list1;
+                List<ExampleTsCategoryList> list2 = exampleTsCategory.list2;
+                if (list1 != null) {
                     for (int i = 0; i < list1.size(); i++) {
-                        ExampleTsListBean listBean = list1.get(i);
-                        mDatas.add(new MainT3Bean(3, listBean.id, listBean.post_title, listBean.image, listBean.tag, listBean.tag_id, listBean.category_name));
+                        ExampleTsCategoryList categoryList = list1.get(i);
+                        mDatas.add(new MainT3Bean(3, categoryList._level, categoryList.desp, categoryList.id, categoryList.image, categoryList.name, categoryList.parent_id));
                     }
-                    mDatas.add(new MainT3Bean(2, "进阶秘籍"));
-                    List<ExampleTsListBean> list2 = exampleTsBean.list2;
+                }
+                mDatas.add(new MainT3Bean(2, "进阶秘籍"));
+                if (list2 != null) {
                     for (int i = 0; i < list2.size(); i++) {
-                        ExampleTsListBean listBean = list2.get(i);
-                        mDatas.add(new MainT3Bean(3, listBean.id, listBean.post_title, listBean.image, listBean.tag, listBean.tag_id, listBean.category_name));
+                        ExampleTsCategoryList categoryList = list2.get(i);
+                        mDatas.add(new MainT3Bean(3, categoryList._level, categoryList.desp, categoryList.id, categoryList.image, categoryList.name, categoryList.parent_id));
                     }
                 }
                 initRecyclerViewData();
@@ -168,30 +220,7 @@ public class MainT3Fragment extends BaseMainFragment {
 
             @Override
             public BaseViewHolder getTitleHolder(ViewGroup parent) {
-                MainT3TitleViewHolder mainT3TitleViewHolder = new MainT3TitleViewHolder(mMainActivity, null, parent);
-                mainT3TitleViewHolder.setOnClickTitleIconListener(new MainT3TitleViewHolder.OnClickTitleIconListener() {
-                    @Override
-                    public void clickTitleIcon(int position) {
-                        switch (position) {
-                            case 0:
-                                startLoveByStagesActivity(0, "单身期");
-                                break;
-                            case 1:
-                                startLoveByStagesActivity(1, "追求期");
-                                break;
-                            case 2:
-                                startLoveByStagesActivity(2, "热恋期");
-                                break;
-                            case 3:
-                                startLoveByStagesActivity(3, "失恋期");
-                                break;
-                            case 4:
-                                startLoveByStagesActivity(4, "婚后期");
-                                break;
-                        }
-                    }
-                });
-                return mainT3TitleViewHolder;
+                return new MainT3TitleViewHolder(mMainActivity, null, parent);
             }
 
             @Override
@@ -214,10 +243,12 @@ public class MainT3Fragment extends BaseMainFragment {
     RecyclerViewItemListener recyclerViewItemListener = new RecyclerViewItemListener() {
         @Override
         public void onItemClick(int position) {
+            if (position < 0) {
+                return;
+            }
             MainT3Bean mainT3Bean = mDatas.get(position);
-            int tagId = mainT3Bean.tag_id;
-//            LoveIntroductionActivity.startLoveIntroductionActivity(mMainActivity, mainT3Bean.category_name, String.valueOf(tagId));
-            ExampleDetailActivity.startExampleDetailActivity(mMainActivity,mainT3Bean.id,mainT3Bean.post_title);
+            LoveIntroductionActivity.startLoveIntroductionActivity(mMainActivity, mainT3Bean.name, String.valueOf(mainT3Bean.id));
+//            ExampleDetailActivity.startExampleDetailActivity(mMainActivity, mainT3Bean.id, mainT3Bean.desp);
 
         }
 
@@ -226,4 +257,5 @@ public class MainT3Fragment extends BaseMainFragment {
 
         }
     };
+
 }

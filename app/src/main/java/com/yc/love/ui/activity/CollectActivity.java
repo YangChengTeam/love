@@ -61,6 +61,7 @@ public class CollectActivity extends BaseSameActivity {
         List<String> titleLists = new ArrayList<>();
         titleLists.add("情话");
         titleLists.add("文章");
+        titleLists.add("问答");
 
         initNavigator(titleLists);
 

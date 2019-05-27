@@ -32,7 +32,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * 首页提升--》状态
+ * 首页提升--》不同恋爱阶段
  */
 
 public class LoveByStagesActivity extends BaseSameActivity {

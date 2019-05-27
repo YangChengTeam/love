@@ -158,7 +158,7 @@ public class LoveHealingActivity extends BaseSameActivity {
     }
 
     private void netLoadMoreData() {
-        mLoveEngin.recommendLovewords(String.valueOf(YcSingle.getInstance().id),String.valueOf(PAGE_NUM++), String.valueOf(PAGE_SIZE), "lovewords/recommend")
+        mLoveEngin.recommendLovewords(String.valueOf(YcSingle.getInstance().id),String.valueOf(++PAGE_NUM), String.valueOf(PAGE_SIZE), "lovewords/recommend")
                 .subscribe(new MySubscriber<AResultInfo<List<LoveHealingBean>>>(mLoadingDialog) {
                     @Override
                     protected void onNetNext(AResultInfo<List<LoveHealingBean>> listAResultInfo) {
@@ -195,7 +195,7 @@ public class LoveHealingActivity extends BaseSameActivity {
         @Override
         public void onItemClick(int position) {
             if (position >= 2) {
-                LoveUpDownPhotoActivity.startLoveUpDownPhotoActivity(LoveHealingActivity.this, position - 1);
+                LoveUpDownPhotoActivity.startLoveUpDownPhotoActivity(LoveHealingActivity.this, position-2,"lovewords/recommend" );
             }
 //            LoveHealingActivity.this.clickToPosition = position;
         }

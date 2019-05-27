@@ -12,6 +12,7 @@ import com.yc.love.adaper.rv.base.RecyclerViewItemListener;
 import com.yc.love.model.bean.BecomeVipBean;
 import com.yc.love.model.bean.BecomeVipPayBean;
 import com.yc.love.model.bean.IndexDoodsBean;
+import com.yc.love.model.util.DoubleToStringUtils;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -90,7 +91,7 @@ public class BecomeVipTailViewHolder extends BaseViewHolder<BecomeVipBean> {
         for (int i = 0; i < mPayBeans.size(); i++) {
             IndexDoodsBean indexDoodsBean = mPayBeans.get(i);
             tvTits[i].setText(indexDoodsBean.name);
-            tvMoneys[i].setText(String.valueOf(indexDoodsBean.m_price));
+            tvMoneys[i].setText(DoubleToStringUtils.doubleStringToString(indexDoodsBean.m_price));
             tvDess[i].setText(indexDoodsBean.desp);
         }
 
@@ -109,7 +110,7 @@ public class BecomeVipTailViewHolder extends BaseViewHolder<BecomeVipBean> {
         mIvPayWx.setOnClickListener(this);
         mTvNext.setOnClickListener(this);
 
-        mSelectPayType = PAY_TYPE_ZFB;
+        mSelectPayType = PAY_TYPE_WX;
         selectPayType(mSelectPayType);
 
     }

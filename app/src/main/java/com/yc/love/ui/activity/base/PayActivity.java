@@ -3,10 +3,16 @@ package com.yc.love.ui.activity.base;
 
 import android.content.Context;
 import android.content.DialogInterface;
+import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
 
 import com.alipay.sdk.app.PayTask;
+import com.tencent.mm.opensdk.modelpay.PayReq;
+import com.tencent.mm.opensdk.openapi.IWXAPI;
+import com.tencent.mm.opensdk.openapi.WXAPIFactory;
+import com.yc.love.model.bean.OrdersInitBean;
+import com.yc.love.model.constant.ConstantKey;
 import com.yc.love.pay.AuthResult;
 import com.yc.love.pay.PayResult;
 
@@ -21,9 +27,37 @@ import android.text.TextUtils;
  * Created by mayn on 2019/5/14.
  */
 
-public class PayActivity extends BaseSlidingActivity {
+public abstract class PayActivity extends BaseSlidingActivity {
     private static final int SDK_PAY_FLAG = 1;
     private static final int SDK_AUTH_FLAG = 2;
+    private IWXAPI mMsgApi;
+
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        mMsgApi = WXAPIFactory.createWXAPI(this, null);
+        // 将该app注册到微信
+        mMsgApi.registerApp(ConstantKey.WX_APP_ID);
+    }
+
+    public void toWxPay(OrdersInitBean.ParamsBean paramsBean) {
+        PayReq request = new PayReq();
+        /*request.appId = "wxd930ea5d5a258f4f";
+        request.partnerId = "1900000109";
+        request.prepayId= "1101000000140415649af9fc314aa427";
+        request.packageValue = "Sign=WXPay";
+        request.nonceStr= "1101000000140429eb40476f8896f4c9";
+        request.timeStamp= "1398746574";
+        request.sign= "7FFECB600D7157C5AA49810D2D8F28BC2811827B";*/
+        request.appId = paramsBean.appid;
+        request.partnerId = paramsBean.mch_id;
+        request.prepayId = paramsBean.prepay_id;
+        request.packageValue = "Sign=WXPay";
+        request.nonceStr = paramsBean.nonce_str;
+        request.timeStamp = String.valueOf(paramsBean.timestamp);
+        request.sign = paramsBean.sign;
+        mMsgApi.sendReq(request);
+    }
 
     public void toZfbPay(final String orderInfo) {
         Runnable payRunnable = new Runnable() {
@@ -60,10 +94,12 @@ public class PayActivity extends BaseSlidingActivity {
                     // 判断resultStatus 为9000则代表支付成功
                     if (TextUtils.equals(resultStatus, "9000")) {
                         // 该笔订单是否真实支付成功，需要依赖服务端的异步通知。
-                        showAlert(PayActivity.this, "Payment success:" + payResult);
+                        onZfbPauResult(true);
+//                        showAlert(PayActivity.this, "001 Payment success:" + payResult);
                     } else {
                         // 该笔订单真实的支付结果，需要依赖服务端的异步通知。
-                        showAlert(PayActivity.this, "Payment failed:" + payResult);
+                        onZfbPauResult(false);
+//                        showAlert(PayActivity.this, "002 Payment failed:" + payResult);  //用户取消
                     }
                     break;
                 }
@@ -77,10 +113,10 @@ public class PayActivity extends BaseSlidingActivity {
                     if (TextUtils.equals(resultStatus, "9000") && TextUtils.equals(authResult.getResultCode(), "200")) {
                         // 获取alipay_open_id，调支付时作为参数extern_token 的value
                         // 传入，则支付账户为该授权账户
-                        showAlert(PayActivity.this, "Authentication success:" + authResult);
+                        showAlert(PayActivity.this, "003 Authentication success:" + authResult);
                     } else {
                         // 其他状态值则为授权失败
-                        showAlert(PayActivity.this, "Authentication failed:" + authResult);
+                        showAlert(PayActivity.this, "004 Authentication failed:" + authResult);
                     }
                     break;
                 }
@@ -91,6 +127,8 @@ public class PayActivity extends BaseSlidingActivity {
 
         ;
     };
+
+    protected abstract void onZfbPauResult(boolean result) ;
 
     private void showAlert(Context ctx, String info) {
         showAlert(ctx, info, null);

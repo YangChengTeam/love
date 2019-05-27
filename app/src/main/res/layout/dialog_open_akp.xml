@@ -1,0 +1,81 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_marginLeft="25dp"
+    android:layout_marginRight="25dp"
+    android:background="@drawable/shape_white_circular"
+    android:orientation="vertical"
+    android:padding="25dp">
+
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_horizontal"
+        android:text="已经成功复制，快去聊天吧"
+        android:textColor="@color/text_gray_dark"
+        android:textSize="@dimen/size_18" />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="18dp"
+        android:orientation="horizontal">
+
+        <TextView
+            android:background="?attr/selectableItemBackgroundBorderless"
+            android:id="@+id/dialog_open_akp_tv_qq"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:drawableTop="@mipmap/icon_d_qq"
+            android:drawablePadding="8dp"
+            android:gravity="center_horizontal"
+            android:text="QQ"
+            android:textColor="@color/text_gray_dark"
+            android:textSize="@dimen/size_14" />
+
+        <TextView
+            android:background="?attr/selectableItemBackgroundBorderless"
+            android:id="@+id/dialog_open_akp_tv_wx"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:drawableTop="@mipmap/icon_d_wx"
+            android:drawablePadding="8dp"
+            android:gravity="center_horizontal"
+            android:text="微信"
+            android:textColor="@color/text_gray_dark"
+            android:textSize="@dimen/size_14" />
+
+        <TextView
+            android:background="?attr/selectableItemBackgroundBorderless"
+            android:id="@+id/dialog_open_akp_tv_mm"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:drawableTop="@mipmap/icon_d_momo"
+            android:drawablePadding="8dp"
+            android:gravity="center_horizontal"
+            android:text="陌陌"
+            android:textColor="@color/text_gray_dark"
+            android:textSize="@dimen/size_14" />
+
+        <TextView
+            android:visibility="gone"
+            android:background="?attr/selectableItemBackgroundBorderless"
+            android:id="@+id/dialog_open_akp_tv_tt"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:drawableTop="@mipmap/icon_d_tt"
+            android:drawablePadding="8dp"
+            android:gravity="center_horizontal"
+            android:text="探探"
+            android:textColor="@color/text_gray_dark"
+            android:textSize="@dimen/size_14" />
+    </LinearLayout>
+
+</LinearLayout>

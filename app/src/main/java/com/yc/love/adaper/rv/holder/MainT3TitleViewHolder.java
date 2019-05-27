@@ -13,8 +13,6 @@ import com.yc.love.model.bean.MainT3Bean;
 import com.yc.love.ui.activity.MainActivity;
 
 
-
-
 public class MainT3TitleViewHolder extends BaseViewHolder<MainT3Bean> {
 
     private final Context context;

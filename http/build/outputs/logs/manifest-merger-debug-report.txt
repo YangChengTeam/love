@@ -1,0 +1,37 @@
+-- Merging decision tree log ---
+manifest
+ADDED from D:\AndroidStudioProjects\love\http\src\main\AndroidManifest.xml:1:1-2:34
+INJECTED from D:\AndroidStudioProjects\love\http\src\main\AndroidManifest.xml:1:1-2:34
+INJECTED from D:\AndroidStudioProjects\love\http\src\main\AndroidManifest.xml:1:1-2:34
+INJECTED from D:\AndroidStudioProjects\love\http\src\main\AndroidManifest.xml:1:1-2:34
+INJECTED from D:\AndroidStudioProjects\love\http\src\main\AndroidManifest.xml:1:1-2:34
+INJECTED from D:\AndroidStudioProjects\love\http\src\main\AndroidManifest.xml:1:1-2:34
+INJECTED from D:\AndroidStudioProjects\love\http\src\main\AndroidManifest.xml:1:1-2:34
+	package
+		ADDED from D:\AndroidStudioProjects\love\http\src\main\AndroidManifest.xml:2:5-31
+		INJECTED from D:\AndroidStudioProjects\love\http\src\main\AndroidManifest.xml
+		INJECTED from D:\AndroidStudioProjects\love\http\src\main\AndroidManifest.xml
+	android:versionName
+		INJECTED from D:\AndroidStudioProjects\love\http\src\main\AndroidManifest.xml
+		ADDED from D:\AndroidStudioProjects\love\http\src\main\AndroidManifest.xml:1:1-2:34
+		INJECTED from D:\AndroidStudioProjects\love\http\src\main\AndroidManifest.xml
+	android:versionCode
+		INJECTED from D:\AndroidStudioProjects\love\http\src\main\AndroidManifest.xml
+		ADDED from D:\AndroidStudioProjects\love\http\src\main\AndroidManifest.xml:1:1-2:34
+		INJECTED from D:\AndroidStudioProjects\love\http\src\main\AndroidManifest.xml
+	xmlns:android
+		ADDED from D:\AndroidStudioProjects\love\http\src\main\AndroidManifest.xml:1:11-69
+uses-sdk
+INJECTED from D:\AndroidStudioProjects\love\http\src\main\AndroidManifest.xml reason: use-sdk injection requested
+INJECTED from D:\AndroidStudioProjects\love\http\src\main\AndroidManifest.xml
+INJECTED from D:\AndroidStudioProjects\love\http\src\main\AndroidManifest.xml
+INJECTED from D:\AndroidStudioProjects\love\http\src\main\AndroidManifest.xml
+INJECTED from D:\AndroidStudioProjects\love\http\src\main\AndroidManifest.xml
+	android:targetSdkVersion
+		INJECTED from D:\AndroidStudioProjects\love\http\src\main\AndroidManifest.xml
+		ADDED from D:\AndroidStudioProjects\love\http\src\main\AndroidManifest.xml
+		INJECTED from D:\AndroidStudioProjects\love\http\src\main\AndroidManifest.xml
+	android:minSdkVersion
+		INJECTED from D:\AndroidStudioProjects\love\http\src\main\AndroidManifest.xml
+		ADDED from D:\AndroidStudioProjects\love\http\src\main\AndroidManifest.xml
+		INJECTED from D:\AndroidStudioProjects\love\http\src\main\AndroidManifest.xml

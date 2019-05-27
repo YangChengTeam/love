@@ -7,6 +7,7 @@ import com.kk.securityhttp.engin.HttpCoreEngin;
 import com.yc.love.model.base.BaseEngine;
 import com.yc.love.model.bean.AResultInfo;
 import com.yc.love.model.bean.ExampleTsListBean;
+import com.yc.love.model.bean.IdCorrelationLoginBean;
 import com.yc.love.model.bean.IndexDoodsBean;
 import com.yc.love.model.bean.OrdersInitBean;
 import com.yc.love.model.domain.URLConfig;
@@ -32,6 +33,18 @@ public class OrderEngin extends BaseEngine {
         requestParams(params);
         HttpCoreEngin<AResultInfo<List<IndexDoodsBean>>> httpCoreEngin = HttpCoreEngin.get(mContext);
         Observable<AResultInfo<List<IndexDoodsBean>>> rxpost = httpCoreEngin.rxpost(URLConfig.getUrl(url), new TypeReference<AResultInfo<List<IndexDoodsBean>>>() {
+                }.getType(),
+                params,
+                true,
+                true, true);
+        return rxpost;
+    }
+    public Observable<AResultInfo<IdCorrelationLoginBean>> userInfo(String userId, String url) {
+        Map<String, String> params = new HashMap<>();
+        params.put("user_id", userId);
+        requestParams(params);
+        HttpCoreEngin<AResultInfo<IdCorrelationLoginBean>> httpCoreEngin = HttpCoreEngin.get(mContext);
+        Observable<AResultInfo<IdCorrelationLoginBean>> rxpost = httpCoreEngin.rxpost(URLConfig.getUrl(url), new TypeReference<AResultInfo<IdCorrelationLoginBean>>() {
                 }.getType(),
                 params,
                 true,

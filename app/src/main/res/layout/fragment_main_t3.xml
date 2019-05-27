@@ -15,4 +15,20 @@
         android:background="@color/white"
         app:layout_constraintTop_toBottomOf="@+id/main_t3_view_bar" />
 
+    <LinearLayout
+        android:id="@+id/main_t3_not_net"
+        android:visibility="gone"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/red_crimson_66"
+        android:paddingTop="28dp">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:padding="8dp"
+            android:text="网络连接不可用"
+            android:textSize="@dimen/size_12" />
+    </LinearLayout>
+
 </android.support.constraint.ConstraintLayout>

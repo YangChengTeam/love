@@ -13,12 +13,21 @@ public class MainT3Bean {
 //    public String des;
 
 
+    /**
+     * _level : 2
+     * desp : 形象决定气质，改变从现在开始
+     * id : 12
+     * image : http://v.bjyzbx.com/upload/image/20181129/5bff5e8745ce3.jpg
+     * name : 形象提升
+     * parent_id : 19
+     */
+
+    public String _level;
+    public String desp;
     public int id;
-    public String post_title;
     public String image;
-    public String tag;
-    public int tag_id;
-    public String category_name;
+    public String name;
+    public int parent_id;
 
     public MainT3Bean(int type) {
         this.type = type;
@@ -29,20 +38,13 @@ public class MainT3Bean {
         this.titleName = titleName;
     }
 
-    public MainT3Bean(int type, int id, String post_title, String image, String tag, int tag_id, String category_name) {
+    public MainT3Bean(int type, String _level, String desp, int id, String image, String name, int parent_id) {
         this.type = type;
+        this._level = _level;
+        this.desp = desp;
         this.id = id;
-        this.post_title = post_title;
         this.image = image;
-        this.tag = tag;
-        this.tag_id = tag_id;
-        this.category_name = category_name;
-    }
-
-/*public MainT3Bean(int type, String name, String des, int imgResId) {
-        this.type = type;
         this.name = name;
-        this.des = des;
-        this.imgResId = imgResId;
-    }*/
+        this.parent_id = parent_id;
+    }
 }

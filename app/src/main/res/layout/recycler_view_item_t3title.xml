@@ -19,11 +19,38 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:background="@color/white"
+        android:gravity="center_vertical"
+        android:orientation="horizontal"
+        android:paddingLeft="12dp"
+        android:paddingTop="10dp"
+        android:paddingBottom="2dp"
+        app:layout_constraintTop_toBottomOf="@+id/item_t3title_iv_title">
+
+        <ImageView
+            android:layout_width="5dp"
+            android:layout_height="14dp"
+            android:src="@drawable/shape_icon_red_crimson" />
+
+        <TextView
+            android:id="@+id/item_t3item_title_tv_name"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:paddingLeft="10dp"
+            android:text="入门秘籍"
+            android:textColor="@color/black"
+            android:textSize="@dimen/size_16" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
         android:orientation="horizontal"
         android:paddingLeft="4dp"
         android:paddingTop="12dp"
         android:paddingRight="4dp"
         android:paddingBottom="14dp"
+        android:visibility="gone"
         app:layout_constraintTop_toBottomOf="@+id/item_t3title_iv_title">
 
         <TextView

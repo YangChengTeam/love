@@ -7,9 +7,10 @@ import android.util.Log;
 import android.view.ViewGroup;
 
 import com.yc.love.R;
-import com.yc.love.adaper.rv.NoThingAdapter;
+import com.yc.love.adaper.rv.NoThingCanEmptyAdapter;
 import com.yc.love.adaper.rv.base.RecyclerViewItemListener;
 import com.yc.love.adaper.rv.holder.BaseViewHolder;
+import com.yc.love.adaper.rv.holder.EmptyViewHolder;
 import com.yc.love.adaper.rv.holder.LoveByStagesViewHolder;
 import com.yc.love.model.base.MySubscriber;
 import com.yc.love.model.bean.AResultInfo;
@@ -37,7 +38,7 @@ public class LoveByStagesFragment extends BaseLoveByStagesFragment {
     private boolean loadMoreEnd;
     private boolean loadDataEnd;
     private boolean showProgressBar = false;
-    private NoThingAdapter<LoveByStagesBean> mAdapter;
+    private NoThingCanEmptyAdapter<LoveByStagesBean> mAdapter;
 
     @Override
     protected void initBundle() {
@@ -97,17 +98,22 @@ public class LoveByStagesFragment extends BaseLoveByStagesFragment {
     }
 
     private void initRecyclerData() {
-        mAdapter = new NoThingAdapter<LoveByStagesBean>(mLoveByStagesBeans, mRecyclerView) {
+        mAdapter = new NoThingCanEmptyAdapter<LoveByStagesBean>(mLoveByStagesBeans, mRecyclerView) {
             @Override
             public BaseViewHolder getHolder(ViewGroup parent) {
                 return new LoveByStagesViewHolder(mLoveByStagesActivity, recyclerViewItemListener, parent);
+            }
+
+            @Override
+            protected RecyclerView.ViewHolder getEmptyHolder(ViewGroup parent) {
+                return new EmptyViewHolder(mLoveByStagesActivity, parent, "");
             }
         };
         mRecyclerView.setAdapter(mAdapter);
         if (mLoveByStagesBeans.size() < PAGE_SIZE) {
             Log.d("ssss", "loadMoreData: data---end");
         } else {
-            mAdapter.setOnMoreDataLoadListener(new NoThingAdapter.OnLoadMoreDataListener() {
+            mAdapter.setOnMoreDataLoadListener(new NoThingCanEmptyAdapter.OnLoadMoreDataListener() {
                 @Override
                 public void loadMoreData() {
                     if (loadDataEnd == false) {
@@ -133,7 +139,7 @@ public class LoveByStagesFragment extends BaseLoveByStagesFragment {
     }
 
     private void netLoadMore() {
-        mLoveEngin.listsArticle(String.valueOf(mCategoryId), String.valueOf(PAGE_NUM++), String.valueOf(PAGE_SIZE), "Article/lists").subscribe(new MySubscriber<AResultInfo<List<LoveByStagesBean>>>(mLoveByStagesActivity) {
+        mLoveEngin.listsArticle(String.valueOf(mCategoryId), String.valueOf(++PAGE_NUM), String.valueOf(PAGE_SIZE), "Article/lists").subscribe(new MySubscriber<AResultInfo<List<LoveByStagesBean>>>(mLoveByStagesActivity) {
 
             @Override
             protected void onNetNext(AResultInfo<List<LoveByStagesBean>> listAResultInfo) {
@@ -165,7 +171,7 @@ public class LoveByStagesFragment extends BaseLoveByStagesFragment {
         @Override
         public void onItemClick(int position) {
             LoveByStagesBean loveByStagesBean = mLoveByStagesBeans.get(position);
-            LoveByStagesDetailsActivity.startLoveByStagesDetailsActivity(mLoveByStagesActivity,loveByStagesBean.id,loveByStagesBean.post_title);
+            LoveByStagesDetailsActivity.startLoveByStagesDetailsActivity(mLoveByStagesActivity, loveByStagesBean.id, loveByStagesBean.post_title);
         }
 
         @Override
