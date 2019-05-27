@@ -17,7 +17,6 @@ import com.yc.love.model.constant.ConstantKey;
 import org.greenrobot.eventbus.EventBus;
 
 
-
 /**
  * Created by Administrator on 2018/7/4.
  */
@@ -48,7 +47,8 @@ public class WXPayEntryActivity extends Activity implements IWXAPIEventHandler {
     }
 
     public void onResp(BaseResp resp) {
-        Log.d("mylog", "onPayFinish, errCode = " + resp.errCode + " transaction " + resp.transaction);
+        Log.d("mylog", "onPayFinish, resp.errCode  " + resp.errCode + " resp.transaction " + resp.transaction
+                + " resp.errStr " + resp.errStr + " resp.openId " + resp.openId);
         /*if (resp.getType() == 5) {
             Builder builder = new Builder(this);
             builder.setTitle("2131165188");

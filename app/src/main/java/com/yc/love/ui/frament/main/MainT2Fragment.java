@@ -189,10 +189,6 @@ public class MainT2Fragment extends BaseMainFragment {
                 String data = (String) SPUtils.get(mMainActivity, "main2_example_lists", "");
                 mMainT2Beans = new Gson().fromJson(data, new TypeToken<ArrayList<MainT2Bean>>() {
                 }.getType());
-                for (MainT2Bean mainT2Bean:mMainT2Beans
-                     ) {
-                    Log.d("mylog", "onNetError: mainT2Bean "+mainT2Bean.toString());
-                }
                 if (mMainT2Beans != null && mMainT2Beans.size() != 0) {
                     mIsDataToCache = true;
                     mIsNetData = true;

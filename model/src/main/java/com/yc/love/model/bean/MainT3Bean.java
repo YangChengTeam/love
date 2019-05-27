@@ -47,4 +47,18 @@ public class MainT3Bean {
         this.name = name;
         this.parent_id = parent_id;
     }
+
+    @Override
+    public String toString() {
+        return "MainT3Bean{" +
+                "type=" + type +
+                ", titleName='" + titleName + '\'' +
+                ", _level='" + _level + '\'' +
+                ", desp='" + desp + '\'' +
+                ", id=" + id +
+                ", image='" + image + '\'' +
+                ", name='" + name + '\'' +
+                ", parent_id=" + parent_id +
+                '}';
+    }
 }

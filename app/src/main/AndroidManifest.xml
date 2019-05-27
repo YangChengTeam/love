@@ -157,7 +157,8 @@
         <activity android:name=".ui.activity.ProtocolActivity" />
         <activity android:name=".ui.activity.AboutUsActivity" />
         <activity android:name=".ui.activity.PrivacyStatementActivity" />
-        <activity android:name=".ui.activity.UsingHelpActivity"></activity>
+        <activity android:name=".ui.activity.UsingHelpActivity" />
+        <activity android:name=".ui.activity.TestWebViewActivity"></activity>
     </application>
 
 </manifest>

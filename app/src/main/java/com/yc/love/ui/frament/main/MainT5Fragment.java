@@ -84,7 +84,7 @@ public class MainT5Fragment extends BaseMainFragment implements View.OnClickList
 
         mMainActivity.setStateBarHeight(viewBar, 14);
 
-        setTitleName();
+
     }
 
     @Override
@@ -107,12 +107,16 @@ public class MainT5Fragment extends BaseMainFragment implements View.OnClickList
                 String nickName = idCorrelationLoginBean.nick_name;
                 if (!TextUtils.isEmpty(nickName)) {
                     mTvBtnInfo.setText("信息已完善");
+                }else {
+                    mTvBtnInfo.setText("信息未完善");
                 }
                 Log.d("mylog", "onNetNext: is_vip " + is_vip);
                 if (is_vip > 0) {
                     mTvVipState.setText("已开通");
+                }else {
+                    mTvVipState.setText("未开通");
                 }
-
+                setTitleName();
             }
 
             @Override
@@ -137,7 +141,8 @@ public class MainT5Fragment extends BaseMainFragment implements View.OnClickList
                 IdCorrelationSlidingActivity.startIdCorrelationActivity(mMainActivity, IdCorrelationSlidingActivity.ID_CORRELATION_STATE_LOGIN);
                 break;
             case EventLoginState.STATE_LOGINED:
-                setTitleName();
+//                setTitleName();
+                netIsVipData();
                 break;
             case EventLoginState.STATE_UPDATE_INFO:
                 mTvBtnInfo.setText("信息已完善");

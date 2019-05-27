@@ -8,6 +8,8 @@ import android.view.ViewGroup;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
 import com.yc.love.R;
 import com.yc.love.adaper.rv.CreateMainT3Adapter;
 import com.yc.love.adaper.rv.base.RecyclerViewItemListener;
@@ -29,6 +31,7 @@ import com.yc.love.model.bean.MainT3Bean;
 import com.yc.love.model.bean.event.NetWorkChangT3Bean;
 import com.yc.love.model.engin.LoveEngin;
 import com.yc.love.model.single.YcSingle;
+import com.yc.love.model.util.SPUtils;
 import com.yc.love.ui.activity.ExampleDetailActivity;
 import com.yc.love.ui.activity.LoveByStagesActivity;
 import com.yc.love.ui.activity.LoveByStagesDetailsActivity;
@@ -37,6 +40,7 @@ import com.yc.love.ui.activity.MainActivity;
 import com.yc.love.ui.frament.base.BaseMainFragment;
 import com.yc.love.ui.view.LoadDialog;
 import com.yc.love.ui.view.LoadingDialog;
+import com.yc.love.utils.CacheUtils;
 
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
@@ -51,10 +55,10 @@ import java.util.List;
 
 public class MainT3Fragment extends BaseMainFragment {
     private TextView tvName;
-    private int[] imgResId01s = {R.mipmap.main_bg_t3_01, R.mipmap.main_bg_t3_02, R.mipmap.main_bg_t3_03,
+    /*private int[] imgResId01s = {R.mipmap.main_bg_t3_01, R.mipmap.main_bg_t3_02, R.mipmap.main_bg_t3_03,
             R.mipmap.main_bg_t3_04, R.mipmap.main_bg_t3_05, R.mipmap.main_bg_t3_06};
     private int[] imgResId02s = {R.mipmap.main_bg_t3_07, R.mipmap.main_bg_t3_08, R.mipmap.main_bg_t3_09,
-            R.mipmap.main_bg_t3_10, R.mipmap.main_bg_t3_11, R.mipmap.main_bg_t3_12, R.mipmap.main_bg_t3_13};
+            R.mipmap.main_bg_t3_10, R.mipmap.main_bg_t3_11, R.mipmap.main_bg_t3_12, R.mipmap.main_bg_t3_13};*/
     private String[] name01s = {"线上撩妹", "线下撩妹", "开场搭讪", "约会邀请", "把握主权", "完美告白"};
     private String[] name02s = {"自我提升", "相亲妙招", "关系确定", "关系进阶", "甜蜜异地", "分手挽回", "婚姻经营"};
     private String[] des01s = {"用话语撩动屏幕前的TA", "用情感感染你面前的TA", "搭讪有窍门，开场不尴尬",
@@ -67,6 +71,7 @@ public class MainT3Fragment extends BaseMainFragment {
     private List<CategoryArticleBean> mCategoryArticleBeans;
     private LinearLayout mLlNotNet;
     private boolean mIsNetData = false;
+    private boolean mIsDataToCache;
 
     @Override
     protected int setContentView() {
@@ -106,8 +111,9 @@ public class MainT3Fragment extends BaseMainFragment {
 
     @Subscribe(threadMode = ThreadMode.MAIN)
     public void onMessageEvent(NetWorkChangT3Bean netWorkChangBean) {
+        Log.d("mylog", "onMessageEvent: NetWorkChangT3Bean ");
         List<String> connectionTypeList = netWorkChangBean.connectionTypeList;
-//        checkNetChangUI(connectionTypeList);
+        checkNetChangUI(connectionTypeList);
     }
 
     private void checkNetChangUI(List<String> connectionTypeList) {
@@ -118,9 +124,7 @@ public class MainT3Fragment extends BaseMainFragment {
         } else {
             if (mLlNotNet.getVisibility() != View.GONE) {
                 mLlNotNet.setVisibility(View.GONE);
-                if (!mIsNetData) {
-                    isCanLoadData();
-                }
+                lazyLoad();
             }
         }
     }
@@ -130,13 +134,12 @@ public class MainT3Fragment extends BaseMainFragment {
     protected void lazyLoad() {
 //        List<String> connectionTypeList = YcSingle.getInstance().connectionTypeList;
 //        checkNetChangUI(connectionTypeList);
-        isCanLoadData();
-    }
-
-    private void isCanLoadData() {
-        netData();
-//        netTitleData();
-
+        if(mIsDataToCache){
+            mIsNetData=false;
+        }
+        if (!mIsNetData) {
+            netData();
+        }
     }
 
     private void netTitleData() {
@@ -194,12 +197,24 @@ public class MainT3Fragment extends BaseMainFragment {
                         mDatas.add(new MainT3Bean(3, categoryList._level, categoryList.desp, categoryList.id, categoryList.image, categoryList.name, categoryList.parent_id));
                     }
                 }
+                CacheUtils.cacheBeanData(mMainActivity, "main3_example_ts_category", mDatas);
                 initRecyclerViewData();
             }
 
             @Override
             protected void onNetError(Throwable e) {
-
+                String data = (String) SPUtils.get(mMainActivity, "main3_example_ts_category", "");
+                mDatas = new Gson().fromJson(data, new TypeToken<ArrayList<MainT3Bean>>() {
+                }.getType());
+                for (MainT3Bean mainT2Bean:mDatas
+                        ) {
+                    Log.d("mylog", "onNetError: mainT2Bean "+mainT2Bean.toString());
+                }
+                if (mDatas != null && mDatas.size() != 0) {
+                    mIsDataToCache = true;
+                    mIsNetData = true;
+                    initRecyclerViewData();
+                }
             }
 
             @Override

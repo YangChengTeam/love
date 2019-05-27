@@ -89,16 +89,13 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
 
     @Override
     public boolean onKeyDown(int keyCode, KeyEvent event) {
-        Log.d("mylog", "onKeyDown: ");
         if (keyCode == KeyEvent.KEYCODE_BACK) {
-            Log.d("mylog", "onKeyDown: keyCode " + keyCode + " KeyEvent.KEYCODE_BACK " + KeyEvent.KEYCODE_BACK);
             int currentItem = mVpFragment.getCurrentItem();
-            Log.d("mylog", "onKeyDown: currentItem " + currentItem);
             if (MainFragmentFactory.MAIN_FRAGMENT_3 == currentItem && onChildDisposeMainKeyDownListent.onChildDisposeMainKeyDown()) {
-                Log.d("mylog", "onKeyDown: ----------------------------");
+                Log.d("mylog", "onKeyDown: WebView goBack");
                 return true;
             } else {
-                Log.d("mylog", "onKeyDown: +++++++++++++++++");
+                Log.d("mylog", "onKeyDown: 退出app");
                 Intent home = new Intent(Intent.ACTION_MAIN);
                 home.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
                 home.addCategory(Intent.CATEGORY_HOME);

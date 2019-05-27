@@ -9,6 +9,7 @@
     <include
         android:id="@+id/main_t4_view_bar"
         layout="@layout/layout_view_bar" />
+
     <ProgressBar
         android:id="@+id/main_t4_pb_progress"
         style="?android:attr/progressBarStyleHorizontal"

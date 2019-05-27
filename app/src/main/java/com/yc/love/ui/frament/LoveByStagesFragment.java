@@ -1,5 +1,6 @@
 package com.yc.love.ui.frament;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -17,6 +18,7 @@ import com.yc.love.model.bean.AResultInfo;
 import com.yc.love.model.bean.LoveByStagesBean;
 import com.yc.love.model.engin.LoveEngin;
 import com.yc.love.ui.activity.LoveByStagesDetailsActivity;
+import com.yc.love.ui.activity.TestWebViewActivity;
 import com.yc.love.ui.frament.base.BaseLoveByStagesFragment;
 import com.yc.love.ui.view.LoadDialog;
 
@@ -170,8 +172,11 @@ public class LoveByStagesFragment extends BaseLoveByStagesFragment {
     RecyclerViewItemListener recyclerViewItemListener = new RecyclerViewItemListener() {
         @Override
         public void onItemClick(int position) {
-            LoveByStagesBean loveByStagesBean = mLoveByStagesBeans.get(position);
-            LoveByStagesDetailsActivity.startLoveByStagesDetailsActivity(mLoveByStagesActivity, loveByStagesBean.id, loveByStagesBean.post_title);
+
+            mLoveByStagesActivity.startActivity(new Intent(mLoveByStagesActivity, TestWebViewActivity.class));
+
+//            LoveByStagesBean loveByStagesBean = mLoveByStagesBeans.get(position);
+//            LoveByStagesDetailsActivity.startLoveByStagesDetailsActivity(mLoveByStagesActivity, loveByStagesBean.id, loveByStagesBean.post_title);
         }
 
         @Override

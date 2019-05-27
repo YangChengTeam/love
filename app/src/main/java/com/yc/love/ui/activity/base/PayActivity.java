@@ -21,6 +21,7 @@ import java.util.Map;
 import android.annotation.SuppressLint;
 import android.support.v7.app.AlertDialog;
 import android.text.TextUtils;
+import android.util.Log;
 
 
 /**
@@ -56,6 +57,15 @@ public abstract class PayActivity extends BaseSlidingActivity {
         request.nonceStr = paramsBean.nonce_str;
         request.timeStamp = String.valueOf(paramsBean.timestamp);
         request.sign = paramsBean.sign;
+
+        Log.d("mylog", "toWxPay: request.appId "+request.appId);
+        Log.d("mylog", "toWxPay: request.partnerId "+request.partnerId);
+        Log.d("mylog", "toWxPay: request.prepayId "+request.prepayId);
+        Log.d("mylog", "toWxPay: request.packageValue "+request.packageValue);
+        Log.d("mylog", "toWxPay: request.nonceStr "+request.nonceStr);
+        Log.d("mylog", "toWxPay: request.timeStamp "+request.timeStamp);
+        Log.d("mylog", "toWxPay: request.sign "+request.sign);
+
         mMsgApi.sendReq(request);
     }
 
