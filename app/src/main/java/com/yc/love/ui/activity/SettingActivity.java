@@ -105,7 +105,7 @@ public class SettingActivity extends BaseSameActivity {
                 YcSingle.getInstance().clearAllData();
 
                 EventBus.getDefault().post(new EventLoginState(EventLoginState.STATE_EXIT));
-                showToastShort("退出登录成功");
+//                showToastShort("退出登录成功");
                 finish();
             }
         });

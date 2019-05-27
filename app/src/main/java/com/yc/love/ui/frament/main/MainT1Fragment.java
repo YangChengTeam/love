@@ -11,6 +11,8 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.LinearLayout;
 
+import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
 import com.yc.love.R;
 import com.yc.love.adaper.rv.MainT1MoreItemAdapter;
 import com.yc.love.adaper.rv.base.RecyclerViewItemListener;
@@ -28,6 +30,7 @@ import com.yc.love.model.bean.ExampDataBean;
 import com.yc.love.model.bean.ExampListsBean;
 import com.yc.love.model.bean.event.NetWorkChangT1Bean;
 import com.yc.love.model.engin.LoveEngin;
+import com.yc.love.model.util.SPUtils;
 import com.yc.love.ui.activity.ExampleDetailActivity;
 import com.yc.love.ui.activity.LoveByStagesActivity;
 import com.yc.love.ui.activity.LoveHealActivity;
@@ -35,6 +38,7 @@ import com.yc.love.ui.activity.LoveHealingActivity;
 import com.yc.love.ui.activity.ShareActivity;
 import com.yc.love.ui.frament.base.BaseMainFragment;
 import com.yc.love.ui.view.LoadDialog;
+import com.yc.love.utils.CacheUtils;
 
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
@@ -66,6 +70,7 @@ public class MainT1Fragment extends BaseMainFragment {
     private boolean mIsNetData = false;
     private boolean mIsNetTitleData = false;
     private List<CategoryArticleBean> mCategoryArticleBeans;
+    private boolean mIsDataToCache;
 
     @Override
     protected int setContentView() {
@@ -147,6 +152,10 @@ public class MainT1Fragment extends BaseMainFragment {
 
     @Override
     protected void lazyLoad() {
+        if(mIsDataToCache){
+            mIsNetData=false;
+            mIsNetTitleData=false;
+        }
 //        mIsNetData = false;
         if (!mIsNetData) {
             netData();
@@ -162,13 +171,13 @@ public class MainT1Fragment extends BaseMainFragment {
         mLoveEngin.indexExample(String.valueOf(PAGE_NUM), String.valueOf(PAGE_SIZE), "example/index").subscribe(new MySubscriber<AResultInfo<ExampDataBean>>(loadDialog) {
             @Override
             protected void onNetNext(AResultInfo<ExampDataBean> exampDataBeanAResultInfo) {
-
                 ExampDataBean exampDataBean = exampDataBeanAResultInfo.data;
                 if (exampDataBean != null) {
                     mExampListsBeans = exampDataBean.lists;
                 }
 //                mExampListsBeans.add(0, new ExampListsBean(3, "Article_Category"));
                 mExampListsBeans.add(0, new ExampListsBean(0, "title"));
+                CacheUtils.cacheBeanData(mMainActivity, "main_example_index", mExampListsBeans);
                 mIsNetData = true;
                 if (mIsNetData && mIsNetTitleData) {
                     initRecyclerViewData();
@@ -177,10 +186,19 @@ public class MainT1Fragment extends BaseMainFragment {
 
             @Override
             protected void onNetError(Throwable e) {
+                String data = (String) SPUtils.get(mMainActivity, "main_example_index", "");
+                mExampListsBeans = new Gson().fromJson(data, new TypeToken<ArrayList<ExampListsBean>>() {
+                }.getType());
+                if (mExampListsBeans != null && mExampListsBeans.size() != 0) {
+                    mIsNetData = true;
+                    if (mIsNetData && mIsNetTitleData) {
+                        mIsDataToCache = true;
+                        initRecyclerViewData();
+                    }
+                }
 //                java.net.SocketTimeoutException: timeout
 //                java.net.UnknownHostException: Unable to resolve host "love.bshu.com": No address associated with hostname
                 if (e instanceof SocketTimeoutException || e instanceof UnknownHostException) {
-                    //TODO 网络超时
 //                    mExampListsBeans.add(new ExampListsBean(-1, "title"));
 //                    initRecyclerViewData();
                     Log.d("mylog", "onNetError: SocketTimeoutException 网络超时 " + e.toString());
@@ -201,6 +219,7 @@ public class MainT1Fragment extends BaseMainFragment {
             @Override
             protected void onNetNext(AResultInfo<List<CategoryArticleBean>> listAResultInfo) {
                 mCategoryArticleBeans = listAResultInfo.data;
+                CacheUtils.cacheBeanData(mMainActivity, "main_Article_category", mCategoryArticleBeans);
                 mIsNetTitleData = true;
                 if (mIsNetData && mIsNetTitleData) {
                     initRecyclerViewData();
@@ -209,7 +228,15 @@ public class MainT1Fragment extends BaseMainFragment {
 
             @Override
             protected void onNetError(Throwable e) {
-
+                String data = (String) SPUtils.get(mMainActivity, "main_Article_category", "");
+                mCategoryArticleBeans = new Gson().fromJson(data, new TypeToken<ArrayList<CategoryArticleBean>>() {
+                }.getType());
+                if (mCategoryArticleBeans != null && mCategoryArticleBeans.size() != 0) {
+                    mIsNetTitleData = true;
+                    if (mIsNetData && mIsNetTitleData) {
+                        initRecyclerViewData();
+                    }
+                }
             }
 
             @Override

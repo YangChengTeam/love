@@ -14,6 +14,8 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.LinearLayout;
 
+import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
 import com.yc.love.R;
 import com.yc.love.adaper.rv.MainT2MoreItemAdapter;
 import com.yc.love.adaper.rv.base.RecyclerViewItemListener;
@@ -32,10 +34,12 @@ import com.yc.love.model.bean.event.NetWorkChangT2Bean;
 import com.yc.love.model.engin.LoveEngin;
 import com.yc.love.model.single.YcSingle;
 import com.yc.love.model.util.RomUtils;
+import com.yc.love.model.util.SPUtils;
 import com.yc.love.ui.activity.BecomeVipActivity;
 import com.yc.love.ui.activity.ExampleDetailActivity;
 import com.yc.love.ui.frament.base.BaseMainFragment;
 import com.yc.love.ui.view.LoadDialog;
+import com.yc.love.utils.CacheUtils;
 
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
@@ -73,22 +77,14 @@ public class MainT2Fragment extends BaseMainFragment {
     private LoveEngin mLoveEngin;
     private LinearLayout mLlNotNet;
     private boolean mIsNetData = false;
+    private boolean mIsDataToCache;
 
     @Override
     protected void initViews() {
         mLoveEngin = new LoveEngin(mMainActivity);
         View viewBar = rootView.findViewById(R.id.main_t2_view_bar);
-
         mLlNotNet = rootView.findViewById(R.id.main_t2_not_net);
-
         mMainActivity.setStateBarHeight(viewBar, 1);
-
-        Log.d("mylog", "initViews: RomUtils.getLightStatausBarAvailableRomType() " + RomUtils.getLightStatausBarAvailableRomType());
-        Log.d("mylog", "initViews: RomUtils.AvailableRomType.NA " + RomUtils.AvailableRomType.NA);
-        Log.d("mylog", "initViews:          tt = Build.VERSION.SDK_INT; " + Build.VERSION.SDK_INT);
-        if (RomUtils.getLightStatausBarAvailableRomType() == RomUtils.AvailableRomType.NA) {
-            viewBar.setBackgroundColor(Color.GRAY);
-        }
 
         initRecyclerView();
     }
@@ -143,9 +139,7 @@ public class MainT2Fragment extends BaseMainFragment {
         } else {
             if (mLlNotNet.getVisibility() != View.GONE) {
                 mLlNotNet.setVisibility(View.GONE);
-                if (!mIsNetData) {
-                    netData();
-                }
+                    lazyLoad();
             }
         }
     }
@@ -153,7 +147,12 @@ public class MainT2Fragment extends BaseMainFragment {
 
     @Override
     protected void lazyLoad() {
-        netData();
+        if(mIsDataToCache){
+            mIsNetData=false;
+        }
+        if (!mIsNetData) {
+            netData();
+        }
     }
 
     private void netData() {
@@ -180,12 +179,25 @@ public class MainT2Fragment extends BaseMainFragment {
                 if (!mUserIsVip) {
                     mMainT2Beans.add(new MainT2Bean("vip", 2));
                 }
+                CacheUtils.cacheBeanData(mMainActivity, "main2_example_lists", mMainT2Beans);
                 initRecyclerViewData();
             }
 
             @Override
             protected void onNetError(Throwable e) {
                 mSwipeRefresh.setRefreshing(false);
+                String data = (String) SPUtils.get(mMainActivity, "main2_example_lists", "");
+                mMainT2Beans = new Gson().fromJson(data, new TypeToken<ArrayList<MainT2Bean>>() {
+                }.getType());
+                for (MainT2Bean mainT2Bean:mMainT2Beans
+                     ) {
+                    Log.d("mylog", "onNetError: mainT2Bean "+mainT2Bean.toString());
+                }
+                if (mMainT2Beans != null && mMainT2Beans.size() != 0) {
+                    mIsDataToCache = true;
+                    mIsNetData = true;
+                    initRecyclerViewData();
+                }
             }
 
             @Override
@@ -266,7 +278,7 @@ public class MainT2Fragment extends BaseMainFragment {
     }
 
     private void addToPayVipData() {
-        if(mUserIsVip){  //已经是VIP 真的没有数据了
+        if (mUserIsVip) {  //已经是VIP 真的没有数据了
             return;
         }
         if (mIsAddToPayVipItem) {  //只添加一条即可

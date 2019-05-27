@@ -6,6 +6,7 @@ import android.content.Context;
 import android.content.pm.PackageManager;
 import android.database.ContentObserver;
 import android.database.Cursor;
+import android.graphics.Bitmap;
 import android.net.Uri;
 import android.os.Build;
 import android.support.annotation.NonNull;
@@ -13,6 +14,7 @@ import android.support.annotation.RequiresApi;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
 import android.util.Log;
+import android.view.KeyEvent;
 import android.view.View;
 import android.webkit.DownloadListener;
 import android.webkit.WebChromeClient;
@@ -53,6 +55,7 @@ public class MainT4Fragment extends BaseMainFragment {
     private String mDownloadIdKey;
 
     private LoveEngin mLoveEngin;
+    private boolean isLoadUrl = false;
 
     @Override
     protected void initViews() {
@@ -79,7 +82,14 @@ public class MainT4Fragment extends BaseMainFragment {
 
 
         mWebView.setWebViewClient(new WebViewClient() {
-
+            /*@Override
+            public void onPageStarted(WebView view, String url, Bitmap favicon) {
+                if (!isLoadUrl) {
+                    isLoadUrl = true;
+                    view.loadUrl(url);
+                }
+                super.onPageStarted(view, url, favicon);
+            }*/
             @Override
             public boolean shouldOverrideUrlLoading(WebView view, String url) {
                 Log.d("mylog", "shouldOverrideUrlLoading: url---------  " + url);
@@ -89,13 +99,38 @@ public class MainT4Fragment extends BaseMainFragment {
                 return super.shouldOverrideUrlLoading(view, url);
             }
 
-            @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
             @Override
             public boolean shouldOverrideUrlLoading(WebView view, WebResourceRequest request) {
-                Uri url = request.getUrl();
-                Log.d("mylog", "shouldOverrideUrlLoading: url++++++++  " + url);
-                return super.shouldOverrideUrlLoading(view, request);
+                mMainActivity.showToastShort("123456");
+                Log.d("mylog", "shouldOverrideUrlLoading: 2222222222222222222222");
+                if (Build.VERSION.SDK_INT >=  Build.VERSION_CODES.LOLLIPOP) {
+                    view.loadUrl(request.getUrl().toString());
+                }else {
+                    view.loadUrl(request.toString());
+                }
+                return true;
             }
+
+            @Override
+            public boolean shouldOverrideKeyEvent(WebView view, KeyEvent event) {
+                Log.d("mylog", "shouldOverrideKeyEvent: _+_+_+_+_+_+_+_+_+_+_+_");
+                Log.d("mylog", "shouldOverrideKeyEvent: event "+event);
+                Log.d("mylog", "shouldOverrideKeyEvent:  KeyEvent.KEYCODE_BACK "+ KeyEvent.KEYCODE_BACK);
+                view.goBack();
+
+                return super.shouldOverrideKeyEvent(view, event);
+            }
+
+           /* @Override
+            public boolean shouldOverrideUrlLoading(WebView view, String url) {
+                Log.d("mylog", "shouldOverrideUrlLoading: url " + url);
+                if (Build.VERSION.SDK_INT >= 26) {
+//                    mWebView.loadUrl(url);
+                    return false;
+                }
+                return super.shouldOverrideUrlLoading(view, url);
+            }*/
+
         });
         mWebView.setWebChromeClient(new WebChromeClient() {
             @Override
@@ -112,19 +147,21 @@ public class MainT4Fragment extends BaseMainFragment {
             }
         });
 
-        mMainActivity.setOnChildDisposeMainKeyDownListent(new MainActivity.OnChildDisposeMainKeyDownListent() {
+        /*mMainActivity.setOnChildDisposeMainKeyDownListent(new MainActivity.OnChildDisposeMainKeyDownListent() {
             @Override
             public boolean onChildDisposeMainKeyDown() {
-                Log.d("mylog", "onKeyDown: mWebView.canGoBack() "+mWebView.canGoBack());
-                if (mWebView.canGoBack()) {
+                Log.d("mylog", "onKeyDown: mWebView.canGoBack() " + mWebView.canGoBack());
+                *//*if (mWebView.canGoBack()) {
                     mWebView.goBack();
                     return true;
-                }else {
+                } else {
                     mWebView.reload();
                 }
-                return false;
+                return false;*//*
+                mWebView.goBack();
+                return true;
             }
-        });
+        });*/
     }
 
 

@@ -41,4 +41,18 @@ public class ExampListsBean {
         this.image = image;
         this.post_title = post_title;
     }
+
+    @Override
+    public String toString() {
+        return "ExampListsBean{" +
+                "type=" + type +
+                ", category_name='" + category_name + '\'' +
+                ", create_time=" + create_time +
+                ", collect_time=" + collect_time +
+                ", id=" + id +
+                ", feeluseful=" + feeluseful +
+                ", image='" + image + '\'' +
+                ", post_title='" + post_title + '\'' +
+                '}';
+    }
 }

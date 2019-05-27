@@ -66,7 +66,7 @@
             android:drawableTop="@mipmap/main_icon_t3_01"
             android:drawablePadding="8dp"
             android:gravity="center_horizontal"
-            android:text="单身期"
+            android:text="单身汪"
             android:textColor="@color/black"
             android:textSize="@dimen/size_14" />
 
@@ -78,7 +78,7 @@
             android:drawableTop="@mipmap/main_icon_t3_02"
             android:drawablePadding="8dp"
             android:gravity="center_horizontal"
-            android:text="追求期"
+            android:text="追求吧"
             android:textColor="@color/black"
             android:textSize="@dimen/size_14" />
 
@@ -90,7 +90,7 @@
             android:drawableTop="@mipmap/main_icon_t3_03"
             android:drawablePadding="8dp"
             android:gravity="center_horizontal"
-            android:text="热恋期"
+            android:text="热恋中"
             android:textColor="@color/black"
             android:textSize="@dimen/size_14" />
 
@@ -102,7 +102,7 @@
             android:drawableTop="@mipmap/main_icon_t3_04"
             android:drawablePadding="8dp"
             android:gravity="center_horizontal"
-            android:text="失恋期"
+            android:text="失恋后"
             android:textColor="@color/black"
             android:textSize="@dimen/size_14" />
 

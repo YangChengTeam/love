@@ -45,8 +45,20 @@ public abstract class MySubscriber<T> extends Subscriber<T> {
 
     @Override
     public void onNext(T t) {
-        try {
-            AResultInfo resultInfo = (AResultInfo) t;
+        if (t == null) {
+            onNetError(null);
+            return;
+        } else {
+            AResultInfo resultInfo = null;
+            try {
+                resultInfo = (AResultInfo) t;
+            } catch (ClassCastException e) {
+                Log.d("mylog", "MySubscriber onNext: ClassCastException " + e);
+            }
+            if (resultInfo == null) {
+                onNetError(null);
+                return;
+            }
             int code = resultInfo.code;
             String message = resultInfo.msg;
             Log.d("mylog", "MySubscriber onNext: code " + code + " message " + message + " activityDealServiceCode1 " + activityDealServiceCode1);
@@ -62,13 +74,11 @@ public abstract class MySubscriber<T> extends Subscriber<T> {
                 alertDialog.show();
                 return;
             }
-        } catch (ClassCastException e) {
-            Log.d("mylog", "MySubscriber onNext: ClassCastException " + e);
+            onNetNext(t);
         }
         if (loadDialog != null) {
             loadDialog.dismissLoadingDialog();
         }
-        onNetNext(t);
     }
 
     protected abstract void onNetNext(T t);

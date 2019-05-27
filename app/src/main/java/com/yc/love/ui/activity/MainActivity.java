@@ -91,14 +91,19 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
     public boolean onKeyDown(int keyCode, KeyEvent event) {
         Log.d("mylog", "onKeyDown: ");
         if (keyCode == KeyEvent.KEYCODE_BACK) {
-            Log.d("mylog", "onKeyDown: keyCode "+keyCode+" KeyEvent.KEYCODE_BACK "+KeyEvent.KEYCODE_BACK);
+            Log.d("mylog", "onKeyDown: keyCode " + keyCode + " KeyEvent.KEYCODE_BACK " + KeyEvent.KEYCODE_BACK);
             int currentItem = mVpFragment.getCurrentItem();
-            Log.d("mylog", "onKeyDown: currentItem "+currentItem);
-            if (MainFragmentFactory.MAIN_FRAGMENT_3 == currentItem) {
-                boolean disposeMainKeyDown = onChildDisposeMainKeyDownListent.onChildDisposeMainKeyDown();
-                if (disposeMainKeyDown) {
-                    return true;
-                }
+            Log.d("mylog", "onKeyDown: currentItem " + currentItem);
+            if (MainFragmentFactory.MAIN_FRAGMENT_3 == currentItem && onChildDisposeMainKeyDownListent.onChildDisposeMainKeyDown()) {
+                Log.d("mylog", "onKeyDown: ----------------------------");
+                return true;
+            } else {
+                Log.d("mylog", "onKeyDown: +++++++++++++++++");
+                Intent home = new Intent(Intent.ACTION_MAIN);
+                home.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                home.addCategory(Intent.CATEGORY_HOME);
+                startActivity(home);
+                return true;
             }
         }
         return super.onKeyDown(keyCode, event);
@@ -112,14 +117,14 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
         this.onChildDisposeMainKeyDownListent = onChildDisposeMainKeyDownListent;
     }
 
-    //后台运行而不退出程序
+    /*//后台运行而不退出程序
     @Override
     public void onBackPressed() { //重写的Activity返回
         Intent intent = new Intent();
         intent.setAction("android.intent.action.MAIN");
         intent.addCategory("android.intent.category.HOME");
         startActivity(intent);
-    }
+    }*/
 
 
     private void initNetWorkChangReceiver() {
