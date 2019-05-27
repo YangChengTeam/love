@@ -10,6 +10,7 @@ import android.util.Log;
 
 import com.yc.love.model.bean.event.NetWorkChangT1Bean;
 import com.yc.love.model.bean.event.NetWorkChangT2Bean;
+import com.yc.love.model.bean.event.NetWorkChangT3Bean;
 import com.yc.love.model.single.YcSingle;
 
 import org.greenrobot.eventbus.EventBus;
@@ -77,6 +78,7 @@ public class NetWorkChangReceiver extends BroadcastReceiver {
 //                EventBus.getDefault().post(new NetWorkChangBean(mConnectionTypeList));
                 EventBus.getDefault().post(new NetWorkChangT1Bean(mConnectionTypeList));
                 EventBus.getDefault().post(new NetWorkChangT2Bean(mConnectionTypeList));
+                EventBus.getDefault().post(new NetWorkChangT3Bean(mConnectionTypeList));
             }
         }
     }

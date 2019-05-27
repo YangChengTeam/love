@@ -39,27 +39,44 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         app:imgSrc="@mipmap/seting_icon_04"
+        app:isAddIntervalBom="true"
         app:layout_constraintTop_toBottomOf="@+id/setting_ll_item_03"
         app:textNameMyItem="清除缓存" />
 
     <com.yc.love.ui.view.MainMyItemLin
-        android:visibility="gone"
         android:id="@+id/setting_ll_exit"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:visibility="gone"
         app:imgSrc="@mipmap/seting_icon_04"
         app:layout_constraintTop_toBottomOf="@+id/setting_ll_item_04"
-        app:textNameMyItem="退出" />
+        app:textNameMyItem="退出登录" />
 
+
+    <TextView
+        android:id="@+id/setting_tv_exit"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="12dp"
+        android:layout_marginTop="24dp"
+        android:layout_marginRight="12dp"
+        android:layout_marginBottom="48dp"
+        android:background="@drawable/selectot_btn_brim_red_crimson"
+        android:gravity="center_horizontal"
+        android:paddingTop="12dp"
+        android:paddingBottom="18dp"
+        android:text="退出登录"
+        android:textColor="@color/white"
+        app:layout_constraintBottom_toBottomOf="parent" />
 
     <FrameLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:background="@color/white"
+        android:visibility="gone"
         app:layout_constraintBottom_toBottomOf="parent">
 
         <TextView
-            android:id="@+id/setting_tv_exit"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:background="?android:attr/selectableItemBackground"
@@ -67,8 +84,7 @@
             android:padding="10dp"
             android:text="退出登录"
             android:textColor="@color/red_crimson"
-            android:textSize="@dimen/size_18"
-            android:visibility="gone" />
+            android:textSize="@dimen/size_18" />
     </FrameLayout>
 
 
