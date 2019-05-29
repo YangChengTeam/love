@@ -11,6 +11,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import com.umeng.analytics.MobclickAgent;
 import com.yc.love.R;
 import com.yc.love.adaper.rv.LoveHealingAdapter;
 import com.yc.love.adaper.rv.base.RecyclerViewItemListener;
@@ -24,6 +25,7 @@ import com.yc.love.model.bean.AResultInfo;
 import com.yc.love.model.bean.LoveHealingBean;
 import com.yc.love.model.bean.event.EventLoginState;
 import com.yc.love.model.bean.event.EventLoveUpDownCollectChangBean;
+import com.yc.love.model.constant.ConstantKey;
 import com.yc.love.model.engin.LoveEngin;
 import com.yc.love.model.single.YcSingle;
 import com.yc.love.ui.activity.base.BaseSameActivity;
@@ -62,6 +64,11 @@ public class LoveHealingActivity extends BaseSameActivity {
         initViews();
         netData();
 
+    }
+    @Override
+    protected void onResume() {
+        super.onResume();
+        MobclickAgent.onEvent(this, ConstantKey.UM_HONEYEDWORDS_ID);
     }
 
     protected void initViews() {

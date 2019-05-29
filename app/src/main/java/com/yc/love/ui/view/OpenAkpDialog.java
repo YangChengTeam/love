@@ -108,6 +108,7 @@ public class OpenAkpDialog extends AlertDialog {
                 intent1.setComponent(componentName);
                 intent1.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
                 context.startActivity(intent1);
+                break;
             }
         }
     }

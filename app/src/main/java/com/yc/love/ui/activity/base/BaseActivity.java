@@ -18,6 +18,7 @@ import android.view.WindowManager;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.Toast;
 
+import com.umeng.analytics.MobclickAgent;
 import com.yc.love.model.single.YcSingle;
 import com.yc.love.ui.activity.IdCorrelationSlidingActivity;
 import com.yc.love.ui.activity.MainActivity;
@@ -220,5 +221,17 @@ public abstract class BaseActivity extends AppCompatActivity {
         DialogInterface.OnClickListener listent = null;
         alertDialog.setButton(DialogInterface.BUTTON_NEGATIVE, "取消", listent);
         alertDialog.show();
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        MobclickAgent.onResume(this);
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+        MobclickAgent.onPause(this);
     }
 }

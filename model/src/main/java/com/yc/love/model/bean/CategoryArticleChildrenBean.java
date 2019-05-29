@@ -3,11 +3,13 @@ package com.yc.love.model.bean;
 import android.os.Parcel;
 import android.os.Parcelable;
 
+import java.io.Serializable;
+
 /**
  * Created by mayn on 2019/5/10.
  */
 
-public class CategoryArticleChildrenBean implements Parcelable {
+public class CategoryArticleChildrenBean implements Parcelable,Serializable {
     public String _level;
     public String name;
     public int id;

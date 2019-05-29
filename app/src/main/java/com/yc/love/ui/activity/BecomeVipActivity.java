@@ -21,6 +21,7 @@ import android.widget.TextView;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
 import com.squareup.picasso.Picasso;
+import com.umeng.analytics.MobclickAgent;
 import com.yc.love.R;
 import com.yc.love.adaper.rv.BecomeVipAdapter;
 import com.yc.love.adaper.rv.CreateMainT3Adapter;
@@ -43,6 +44,7 @@ import com.yc.love.model.bean.MainT3Bean;
 import com.yc.love.model.bean.OrdersInitBean;
 import com.yc.love.model.bean.event.EventBusWxPayResult;
 import com.yc.love.model.bean.event.EventPayVipSuccess;
+import com.yc.love.model.constant.ConstantKey;
 import com.yc.love.model.engin.OrderEngin;
 import com.yc.love.model.single.YcSingle;
 import com.yc.love.model.util.TimeUtils;
@@ -88,6 +90,12 @@ public class BecomeVipActivity extends PayActivity implements View.OnClickListen
 
         netIsVipData();
         netData();
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        MobclickAgent.onEvent(this, ConstantKey.UM_VIPPURCHASE_ID);
     }
 
     private void netIsVipData() {
@@ -273,7 +281,7 @@ public class BecomeVipActivity extends PayActivity implements View.OnClickListen
             protected void onNetNext(AResultInfo<OrdersInitBean> ordersInitBeanAResultInfo) {
                 OrdersInitBean ordersInitBean = ordersInitBeanAResultInfo.data;
                 OrdersInitBean.ParamsBean paramsBean = ordersInitBean.params;
-                Log.d("mylog", "onNetNext: payType == 0  Zfb   payType "+payType);
+                Log.d("mylog", "onNetNext: payType == 0  Zfb   payType " + payType);
                 if (payType == 0) {
 //                    String info="alipay_sdk=alipay-sdk-php-20180705&app_id=2019051564672294&biz_content=%7B%22timeout_express%22%3A%2230m%22%2C%22seller_id%22%3A%22%22%2C%22product_code%22%3A%22QUICK_MSECURITY_PAY%22%2C%22total_amount%22%3A0.01%2C%22subject%22%3A%221%22%2C%22body%22%3A%22%5Cu5145%5Cu503c%22%2C%22out_trade_no%22%3A%22201905161657594587%22%7D&charset=UTF-8&format=json&method=alipay.trade.app.pay&notify_url=http%3A%2F%2Flove.bshu.com%2Fnotify%2Falipay%2Fdefault&sign_type=RSA2&timestamp=2019-05-16+16%3A57%3A59&version=1.0&sign=BRj%2FY6Bk319dZwNoHwWbYIKYZFJahg1TRgvhFf7ubJzFKZEIESnattbFnaGJ6wq6%2BmauaKZcGv83ianrZfw0R%2BMQ9OmbTPXjKYGZUMzdPNDV3NygmVMgM68vs6oeHyQOxsbx16L4ltGi%2BdEjPDsLWqlw8E1INukZMxV4EDbFl8ZlyzKYerY9YZR1dRtxscFXgG7npmyPp3mO%2BA%2BywZABb5sANxqBShG%2FgeGbE%2BG1hpkZUE4KYGV7rCC80dcBjODWPgj%2FKQtFUXnx5NzCfWIeUMcyc8UaeK%2FsxqyrMJmsFPQgCBYGR5HH1llIfQ8NJuitwhDnJTKMhqCgh03UG9j%2B%2BQ%3D%3D";
 //                    toZfbPay(info);
@@ -300,11 +308,13 @@ public class BecomeVipActivity extends PayActivity implements View.OnClickListen
         switch (event.code) {
             case 0://支付成功
                 //  微信支付成功
-                showPaySuccessDialog(true);
+                showPaySuccessDialog(true, "支付成功");
                 break;
             case -1://错误
+                showPaySuccessDialog(false, "支付失败");
+                break;
             case -2://用户取消
-                showPaySuccessDialog(false);
+                showPaySuccessDialog(false, "支付取消");
                 break;
             default:
                 break;
@@ -314,31 +324,27 @@ public class BecomeVipActivity extends PayActivity implements View.OnClickListen
 
     //  支付宝支付成功
     @Override
-    protected void onZfbPauResult(boolean result) {
-        showPaySuccessDialog(result);
+    protected void onZfbPauResult(boolean result, String des) {
+        showPaySuccessDialog(result, des);
     }
 
-    private void showPaySuccessDialog(boolean result) {
-        AlertDialog alertDialog = new AlertDialog.Builder(this).create();
+    private void showPaySuccessDialog(final boolean result, String des) {
+        final AlertDialog alertDialog = new AlertDialog.Builder(this).create();
         alertDialog.setCancelable(false);
         alertDialog.setTitle("提示");
         if (result) {
-//            alertDialog.setView(LayoutInflater.from(this).inflate(R.layout.dialog_pay_success, null));
-            alertDialog.setMessage("支付成功");
-            DialogInterface.OnClickListener listent = null;
-            alertDialog.setButton(DialogInterface.BUTTON_NEGATIVE, "确定", new DialogInterface.OnClickListener() {
-                @Override
-                public void onClick(DialogInterface dialog, int which) {
+            EventBus.getDefault().post(new EventPayVipSuccess());
+        }
+        alertDialog.setMessage(des);
+        DialogInterface.OnClickListener listent = null;
+        alertDialog.setButton(DialogInterface.BUTTON_NEGATIVE, "确定", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                if (result) {
                     finish();
                 }
-            });
-            EventBus.getDefault().post(new EventPayVipSuccess());
-        } else {
-            alertDialog.setMessage("支付失败");
-//            alertDialog.setView(LayoutInflater.from(this).inflate(R.layout.dialog_pay_error, null));
-            DialogInterface.OnClickListener listent = null;
-            alertDialog.setButton(DialogInterface.BUTTON_NEGATIVE, "确定", listent);
-        }
+            }
+        });
         alertDialog.show();
 
     /*    alertDialog.setOnDismissListener(new DialogInterface.OnDismissListener() {

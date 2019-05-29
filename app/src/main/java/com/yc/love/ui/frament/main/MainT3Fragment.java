@@ -1,5 +1,8 @@
 package com.yc.love.ui.frament.main;
 
+import android.Manifest;
+import android.content.pm.PackageManager;
+import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
@@ -10,6 +13,7 @@ import android.widget.TextView;
 
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
+import com.umeng.analytics.MobclickAgent;
 import com.yc.love.R;
 import com.yc.love.adaper.rv.CreateMainT3Adapter;
 import com.yc.love.adaper.rv.base.RecyclerViewItemListener;
@@ -21,6 +25,7 @@ import com.yc.love.model.base.MySubscriber;
 import com.yc.love.model.bean.AResultInfo;
 import com.yc.love.model.bean.CategoryArticleBean;
 import com.yc.love.model.bean.CategoryArticleChildrenBean;
+import com.yc.love.model.bean.ExampListsBean;
 import com.yc.love.model.bean.ExampleTsBean;
 import com.yc.love.model.bean.ExampleTsCategory;
 import com.yc.love.model.bean.ExampleTsCategoryList;
@@ -29,6 +34,7 @@ import com.yc.love.model.bean.LoveByStagesBean;
 import com.yc.love.model.bean.LoveHealDetBean;
 import com.yc.love.model.bean.MainT3Bean;
 import com.yc.love.model.bean.event.NetWorkChangT3Bean;
+import com.yc.love.model.constant.ConstantKey;
 import com.yc.love.model.engin.LoveEngin;
 import com.yc.love.model.single.YcSingle;
 import com.yc.love.model.util.SPUtils;
@@ -41,6 +47,7 @@ import com.yc.love.ui.frament.base.BaseMainFragment;
 import com.yc.love.ui.view.LoadDialog;
 import com.yc.love.ui.view.LoadingDialog;
 import com.yc.love.utils.CacheUtils;
+import com.yc.love.utils.SerializableFileUtli;
 
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
@@ -82,6 +89,7 @@ public class MainT3Fragment extends BaseMainFragment {
 
     @Override
     protected void initViews() {
+        MobclickAgent.onEvent(mMainActivity, ConstantKey.UM_PROMOTION_ID);
         mLoveEngin = new LoveEngin(mMainActivity);
         mLlNotNet = rootView.findViewById(R.id.main_t3_not_net);
         View viewBar = rootView.findViewById(R.id.main_t3_view_bar);
@@ -134,8 +142,8 @@ public class MainT3Fragment extends BaseMainFragment {
     protected void lazyLoad() {
 //        List<String> connectionTypeList = YcSingle.getInstance().connectionTypeList;
 //        checkNetChangUI(connectionTypeList);
-        if(mIsDataToCache){
-            mIsNetData=false;
+        if (mIsDataToCache) {
+            mIsNetData = false;
         }
         if (!mIsNetData) {
             netData();
@@ -197,24 +205,28 @@ public class MainT3Fragment extends BaseMainFragment {
                         mDatas.add(new MainT3Bean(3, categoryList._level, categoryList.desp, categoryList.id, categoryList.image, categoryList.name, categoryList.parent_id));
                     }
                 }
-                CacheUtils.cacheBeanData(mMainActivity, "main3_example_ts_category", mDatas);
+                SerializableFileUtli.checkPermissionWriteData(mDatas, "main3_example_ts_category");
+//                CacheUtils.cacheBeanData(mMainActivity, "main3_example_ts_category", mDatas);
                 initRecyclerViewData();
             }
 
             @Override
             protected void onNetError(Throwable e) {
-                String data = (String) SPUtils.get(mMainActivity, "main3_example_ts_category", "");
-                mDatas = new Gson().fromJson(data, new TypeToken<ArrayList<MainT3Bean>>() {
-                }.getType());
-                for (MainT3Bean mainT2Bean:mDatas
-                        ) {
-                    Log.d("mylog", "onNetError: mainT2Bean "+mainT2Bean.toString());
-                }
+                mDatas = (List<MainT3Bean>) SerializableFileUtli.checkReadPermission(mMainActivity, "main3_example_ts_category");
                 if (mDatas != null && mDatas.size() != 0) {
                     mIsDataToCache = true;
                     mIsNetData = true;
                     initRecyclerViewData();
                 }
+
+                /*String data = (String) SPUtils.get(mMainActivity, "main3_example_ts_category", "");
+                mDatas = new Gson().fromJson(data, new TypeToken<ArrayList<MainT3Bean>>() {
+                }.getType());
+                if (mDatas != null && mDatas.size() != 0) {
+                    mIsDataToCache = true;
+                    mIsNetData = true;
+                    initRecyclerViewData();
+                }*/
             }
 
             @Override

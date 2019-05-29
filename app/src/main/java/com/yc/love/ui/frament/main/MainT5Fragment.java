@@ -1,6 +1,12 @@
 package com.yc.love.ui.frament.main;
 
+import android.Manifest;
+import android.content.ClipData;
+import android.content.ClipboardManager;
+import android.content.DialogInterface;
 import android.content.Intent;
+import android.net.Uri;
+import android.support.v7.app.AlertDialog;
 import android.text.TextUtils;
 import android.util.Log;
 import android.view.View;
@@ -8,12 +14,17 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import com.qw.soul.permission.SoulPermission;
+import com.qw.soul.permission.bean.Permission;
+import com.qw.soul.permission.callbcak.CheckRequestPermissionListener;
 import com.squareup.picasso.Picasso;
+import com.umeng.analytics.MobclickAgent;
 import com.yc.love.R;
 import com.yc.love.model.base.MySubscriber;
 import com.yc.love.model.bean.AResultInfo;
 import com.yc.love.model.bean.IdCorrelationLoginBean;
 import com.yc.love.model.bean.event.EventLoginState;
+import com.yc.love.model.constant.ConstantKey;
 import com.yc.love.model.engin.LoveEngin;
 import com.yc.love.model.single.YcSingle;
 import com.yc.love.ui.activity.BecomeVipActivity;
@@ -61,6 +72,8 @@ public class MainT5Fragment extends BaseMainFragment implements View.OnClickList
 
     @Override
     protected void initViews() {
+        MobclickAgent.onEvent(mMainActivity, ConstantKey.UM_PERSONAL_ID);
+
         mLoveEngin = new LoveEngin(mMainActivity);
         View viewBar = rootView.findViewById(R.id.main_t5_view_bar);
         mTvBtnInfo = rootView.findViewById(R.id.main_t5_tv_btn_info);
@@ -73,6 +86,7 @@ public class MainT5Fragment extends BaseMainFragment implements View.OnClickList
         LinearLayout llItem02 = rootView.findViewById(R.id.main_t5_ll_item_02);
         LinearLayout llItem03 = rootView.findViewById(R.id.main_t5_ll_item_03);
         LinearLayout llItem04 = rootView.findViewById(R.id.main_t5_ll_item_04);
+        LinearLayout llItem05 = rootView.findViewById(R.id.main_t5_ll_item_05);
 
         mTvBtnInfo.setOnClickListener(this);
         llTitle.setOnClickListener(this);
@@ -81,6 +95,7 @@ public class MainT5Fragment extends BaseMainFragment implements View.OnClickList
         llItem02.setOnClickListener(this);
         llItem03.setOnClickListener(this);
         llItem04.setOnClickListener(this);
+        llItem05.setOnClickListener(this);
 
         mMainActivity.setStateBarHeight(viewBar, 14);
 
@@ -107,13 +122,13 @@ public class MainT5Fragment extends BaseMainFragment implements View.OnClickList
                 String nickName = idCorrelationLoginBean.nick_name;
                 if (!TextUtils.isEmpty(nickName)) {
                     mTvBtnInfo.setText("信息已完善");
-                }else {
+                } else {
                     mTvBtnInfo.setText("信息未完善");
                 }
                 Log.d("mylog", "onNetNext: is_vip " + is_vip);
                 if (is_vip > 0) {
                     mTvVipState.setText("已开通");
-                }else {
+                } else {
                     mTvVipState.setText("未开通");
                 }
                 setTitleName();
@@ -195,8 +210,51 @@ public class MainT5Fragment extends BaseMainFragment implements View.OnClickList
             case R.id.main_t5_ll_item_04:
                 mMainActivity.startActivity(new Intent(mMainActivity, SettingActivity.class));
                 break;
+            case R.id.main_t5_ll_item_05:
+                showToCallDialog();
+                break;
         }
     }
 
+    private void showToCallDialog() {
+        final String telPhone = "13164125027";
+        AlertDialog alertDialog = new AlertDialog.Builder(mMainActivity).create();
+        alertDialog.setTitle("客服电话");
+        alertDialog.setMessage(telPhone);
+        DialogInterface.OnClickListener listent = null;
+        alertDialog.setButton(DialogInterface.BUTTON_NEUTRAL, "取消", listent);
+        alertDialog.setButton(DialogInterface.BUTTON_NEGATIVE, "直接拨打", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                SoulPermission.getInstance().checkAndRequestPermission(Manifest.permission.CALL_PHONE,
+                        //if you want do noting or no need all the callbacks you may use SimplePermissionAdapter instead
+                        new CheckRequestPermissionListener() {
+                            @Override
+                            public void onPermissionOk(Permission permission) {
+//                                Intent intent = new Intent(Intent.ACTION_DIAL);
+                                Intent intent = new Intent(Intent.ACTION_CALL);
+                                Uri data = Uri.parse("tel:" + telPhone);
+                                intent.setData(data);
+                                startActivity(intent);
+                            }
+
+                            @Override
+                            public void onPermissionDenied(Permission permission) {
+                                mMainActivity.showToastShort("没有获取到拨打电话的权限");
+                            }
+                        });
+            }
+        });
+        alertDialog.setButton(DialogInterface.BUTTON_POSITIVE, "复制号码", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialogInterface, int i) {
+                ClipboardManager myClipboard = (ClipboardManager) mMainActivity.getSystemService(mMainActivity.CLIPBOARD_SERVICE);
+                ClipData myClip = ClipData.newPlainText("text", telPhone);
+                myClipboard.setPrimaryClip(myClip);
+                mMainActivity.showToastShort("复制号码成功");
+            }
+        });
+        alertDialog.show();
+    }
 
 }

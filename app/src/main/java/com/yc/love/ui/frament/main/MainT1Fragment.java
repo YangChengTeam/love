@@ -1,6 +1,10 @@
 package com.yc.love.ui.frament.main;
 
+import android.Manifest;
 import android.content.Intent;
+import android.content.pm.PackageManager;
+import android.os.Environment;
+import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.OrientationHelper;
@@ -10,9 +14,13 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.LinearLayout;
+import android.widget.Toast;
 
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
+import com.qw.soul.permission.SoulPermission;
+import com.qw.soul.permission.bean.Permission;
+import com.qw.soul.permission.callbcak.CheckRequestPermissionListener;
 import com.yc.love.R;
 import com.yc.love.adaper.rv.MainT1MoreItemAdapter;
 import com.yc.love.adaper.rv.base.RecyclerViewItemListener;
@@ -39,11 +47,18 @@ import com.yc.love.ui.activity.ShareActivity;
 import com.yc.love.ui.frament.base.BaseMainFragment;
 import com.yc.love.ui.view.LoadDialog;
 import com.yc.love.utils.CacheUtils;
+import com.yc.love.utils.SerializableFileUtli;
 
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
 import org.greenrobot.eventbus.ThreadMode;
 
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
 import java.net.SocketTimeoutException;
 import java.net.UnknownHostException;
 import java.util.ArrayList;
@@ -152,9 +167,9 @@ public class MainT1Fragment extends BaseMainFragment {
 
     @Override
     protected void lazyLoad() {
-        if(mIsDataToCache){
-            mIsNetData=false;
-            mIsNetTitleData=false;
+        if (mIsDataToCache) {
+            mIsNetData = false;
+            mIsNetTitleData = false;
         }
 //        mIsNetData = false;
         if (!mIsNetData) {
@@ -177,7 +192,7 @@ public class MainT1Fragment extends BaseMainFragment {
                 }
 //                mExampListsBeans.add(0, new ExampListsBean(3, "Article_Category"));
                 mExampListsBeans.add(0, new ExampListsBean(0, "title"));
-                CacheUtils.cacheBeanData(mMainActivity, "main_example_index", mExampListsBeans);
+                SerializableFileUtli.checkPermissionWriteData(mExampListsBeans, "main1_example_index");
                 mIsNetData = true;
                 if (mIsNetData && mIsNetTitleData) {
                     initRecyclerViewData();
@@ -186,9 +201,7 @@ public class MainT1Fragment extends BaseMainFragment {
 
             @Override
             protected void onNetError(Throwable e) {
-                String data = (String) SPUtils.get(mMainActivity, "main_example_index", "");
-                mExampListsBeans = new Gson().fromJson(data, new TypeToken<ArrayList<ExampListsBean>>() {
-                }.getType());
+                mExampListsBeans = (List<ExampListsBean>) SerializableFileUtli.checkReadPermission(mMainActivity, "main1_example_index");
                 if (mExampListsBeans != null && mExampListsBeans.size() != 0) {
                     mIsNetData = true;
                     if (mIsNetData && mIsNetTitleData) {
@@ -219,7 +232,8 @@ public class MainT1Fragment extends BaseMainFragment {
             @Override
             protected void onNetNext(AResultInfo<List<CategoryArticleBean>> listAResultInfo) {
                 mCategoryArticleBeans = listAResultInfo.data;
-                CacheUtils.cacheBeanData(mMainActivity, "main_Article_category", mCategoryArticleBeans);
+//                CacheUtils.cacheBeanData(mMainActivity, "main_Article_category", mCategoryArticleBeans);
+                SerializableFileUtli.checkPermissionWriteData(mCategoryArticleBeans, "main1_Article_category");
                 mIsNetTitleData = true;
                 if (mIsNetData && mIsNetTitleData) {
                     initRecyclerViewData();
@@ -228,7 +242,15 @@ public class MainT1Fragment extends BaseMainFragment {
 
             @Override
             protected void onNetError(Throwable e) {
-                String data = (String) SPUtils.get(mMainActivity, "main_Article_category", "");
+                    mCategoryArticleBeans = (List<CategoryArticleBean>)SerializableFileUtli.checkReadPermission(mMainActivity, "main1_Article_category");
+                    if (mCategoryArticleBeans != null && mCategoryArticleBeans.size() != 0) {
+                        mIsNetTitleData = true;
+                        if (mIsNetData && mIsNetTitleData) {
+                            initRecyclerViewData();
+                    }
+                }
+
+                /*String data = (String) SPUtils.get(mMainActivity, "main_Article_category", "");
                 mCategoryArticleBeans = new Gson().fromJson(data, new TypeToken<ArrayList<CategoryArticleBean>>() {
                 }.getType());
                 if (mCategoryArticleBeans != null && mCategoryArticleBeans.size() != 0) {
@@ -236,7 +258,7 @@ public class MainT1Fragment extends BaseMainFragment {
                     if (mIsNetData && mIsNetTitleData) {
                         initRecyclerViewData();
                     }
-                }
+                }*/
             }
 
             @Override

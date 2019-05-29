@@ -16,6 +16,7 @@ import android.widget.LinearLayout;
 
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
+import com.umeng.analytics.MobclickAgent;
 import com.yc.love.R;
 import com.yc.love.adaper.rv.MainT2MoreItemAdapter;
 import com.yc.love.adaper.rv.base.RecyclerViewItemListener;
@@ -31,6 +32,7 @@ import com.yc.love.model.bean.ExampDataBean;
 import com.yc.love.model.bean.ExampListsBean;
 import com.yc.love.model.bean.MainT2Bean;
 import com.yc.love.model.bean.event.NetWorkChangT2Bean;
+import com.yc.love.model.constant.ConstantKey;
 import com.yc.love.model.engin.LoveEngin;
 import com.yc.love.model.single.YcSingle;
 import com.yc.love.model.util.RomUtils;
@@ -67,6 +69,7 @@ public class MainT2Fragment extends BaseMainFragment {
     private boolean mIsAddToPayVipItem = false;
     private boolean mIsShowLogined = false;
     private SwipeRefreshLayout mSwipeRefresh;
+    private boolean mIsNotNet;
 
 
     @Override
@@ -81,6 +84,7 @@ public class MainT2Fragment extends BaseMainFragment {
 
     @Override
     protected void initViews() {
+        MobclickAgent.onEvent(mMainActivity, ConstantKey.UM_INSTANCE_ID);
         mLoveEngin = new LoveEngin(mMainActivity);
         View viewBar = rootView.findViewById(R.id.main_t2_view_bar);
         mLlNotNet = rootView.findViewById(R.id.main_t2_not_net);
@@ -133,10 +137,12 @@ public class MainT2Fragment extends BaseMainFragment {
     public void onMessageEvent(NetWorkChangT2Bean netWorkChangBean) {
         List<String> connectionTypeList = netWorkChangBean.connectionTypeList;
         if (connectionTypeList == null || connectionTypeList.size() == 0) {
+            mIsNotNet = true;
             if (mLlNotNet.getVisibility() != View.VISIBLE) {
                 mLlNotNet.setVisibility(View.VISIBLE);
             }
         } else {
+            mIsNotNet = false;
             if (mLlNotNet.getVisibility() != View.GONE) {
                 mLlNotNet.setVisibility(View.GONE);
                     lazyLoad();
@@ -287,7 +293,7 @@ public class MainT2Fragment extends BaseMainFragment {
                 showProgressBar = false;
                 mMainT2Beans.remove(mMainT2Beans.size() - 1);
                 mAdapter.notifyDataSetChanged();
-                mMainT2Beans.add(new MainT2Bean("toPayVip", 3));
+                mMainT2Beans.add(new MainT2Bean("toPayVip", 3,mMainT2Beans.size()));
                 mAdapter.notifyDataSetChanged();
                 mAdapter.setLoaded();
             }
@@ -359,12 +365,17 @@ public class MainT2Fragment extends BaseMainFragment {
         }
         int id = YcSingle.getInstance().id;
         if (id <= 0) {   //数据为空 未登录
-            if (mIsShowLogined) {
+
+            addToPayVipData(); //数据为空 不是VIP
+
+            /*if (mIsShowLogined) {
                 addToPayVipData(); //数据为空 不是VIP
                 return;
             }
-            mMainActivity.showToLoginDialog();
-            mIsShowLogined = true;
+            if(!mIsNotNet){
+                mMainActivity.showToLoginDialog();
+                mIsShowLogined = true;
+            }*/
         } else {  //数据为空 不是VIP
             addToPayVipData();
         }

@@ -6,6 +6,7 @@
     <uses-permission android:name="android.permission.CAMERA" />
     <uses-permission android:name="android.permission.READ_LOGS" />
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+    <uses-permission android:name="android.permission.CALL_PHONE" />
     <uses-permission android:name="android.permission.ACCESS_WIFI_STATE" />
     <uses-permission android:name="android.permission.READ_PHONE_STATE" />
     <uses-permission android:name="android.permission.CHANGE_WIFI_STATE" />
@@ -13,6 +14,9 @@
     <uses-permission android:name="android.permission.REQUEST_INSTALL_PACKAGES" />
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.REQUEST_PERMISSIONS" />
+    <!--<uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />-->
+    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
+    <uses-permission android:name="android.permission.SYSTEM_ALERT_WINDOW" />
 
     <!-- android:theme="@style/AppTheme" -->
     <application
@@ -158,7 +162,7 @@
         <activity android:name=".ui.activity.AboutUsActivity" />
         <activity android:name=".ui.activity.PrivacyStatementActivity" />
         <activity android:name=".ui.activity.UsingHelpActivity" />
-        <activity android:name=".ui.activity.TestWebViewActivity"></activity>
+        <activity android:name=".ui.activity.TestWebViewActivity" />
     </application>
 
 </manifest>

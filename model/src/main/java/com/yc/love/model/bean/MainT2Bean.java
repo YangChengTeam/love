@@ -16,6 +16,7 @@ public class MainT2Bean {
      */
 
     public int create_time;
+    public int canShouCount;
     public int id;
     public String image;
     public String post_title;
@@ -26,6 +27,11 @@ public class MainT2Bean {
     public MainT2Bean(String name, int type) {
         this.name = name;
         this.type = type;
+    }
+    public MainT2Bean(String name, int type,int canShouCount) {
+        this.name = name;
+        this.type = type;
+        this.canShouCount = canShouCount;
     }
 
     public MainT2Bean(int type, int create_time, int id, String image, String post_title) {

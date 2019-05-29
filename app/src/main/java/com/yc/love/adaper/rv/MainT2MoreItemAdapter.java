@@ -6,6 +6,7 @@ import android.util.Log;
 import android.view.ViewGroup;
 
 import com.yc.love.adaper.rv.holder.BaseViewHolder;
+import com.yc.love.adaper.rv.holder.MainT2ToPayVipHolder;
 import com.yc.love.adaper.rv.holder.MainT2ViewHolder;
 import com.yc.love.adaper.rv.holder.ProgressBarViewHolder;
 import com.yc.love.adaper.rv.holder.MainT2TitleViewHolder;
@@ -93,6 +94,8 @@ public abstract class MainT2MoreItemAdapter extends RecyclerView.Adapter<Recycle
         } else if (holder instanceof VipViewHolder) {
             ((BaseViewHolder) holder).bindData(mPersonList.get(position));
         } else if (holder instanceof MainT2ViewHolder) {
+            ((BaseViewHolder) holder).bindData(mPersonList.get(position));
+        }else if (holder instanceof MainT2ToPayVipHolder) {
             ((BaseViewHolder) holder).bindData(mPersonList.get(position));
         } else if (holder instanceof ProgressBarViewHolder) {
             ProgressBarViewHolder viewHolder = (ProgressBarViewHolder) holder;

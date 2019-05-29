@@ -7,6 +7,7 @@ import android.support.multidex.MultiDexApplication;
 import com.kk.securityhttp.domain.GoagalInfo;
 import com.kk.securityhttp.net.contains.HttpConfig;
 import com.tencent.bugly.Bugly;
+import com.umeng.commonsdk.UMConfigure;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -24,6 +25,7 @@ public class YcApplication extends MultiDexApplication {
     public static YcApplication getInstance() {
         return ycApplication;
     }
+
     public List<Activity> activityIdCorList;
 
 
@@ -35,6 +37,8 @@ public class YcApplication extends MultiDexApplication {
 
 //        Bugly.init(getApplicationContext(), "注册时申请的APPID", false);  //腾迅自动更新
         Bugly.init(getApplicationContext(), "dc88d75f55", false);  //腾迅自动更新
+
+        UMConfigure.init(getApplicationContext(), "5cec86d84ca35779b00010b8", "Umeng", UMConfigure.DEVICE_TYPE_PHONE, null);
 
         //全局信息初始化
         GoagalInfo.get().init(getApplicationContext());

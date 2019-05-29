@@ -1,10 +1,12 @@
 package com.yc.love.model.bean;
 
+import java.io.Serializable;
+
 /**
  * Created by mayn on 2019/4/30.
  */
 
-public class MainT3Bean {
+public class MainT3Bean implements Serializable {
 
     public int type;
     public String titleName;

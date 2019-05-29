@@ -8,6 +8,7 @@ import android.util.Log;
 import android.view.ViewGroup;
 import android.widget.Toast;
 
+import com.umeng.analytics.MobclickAgent;
 import com.yc.love.R;
 import com.yc.love.adaper.rv.CreateAdapter;
 import com.yc.love.adaper.rv.base.RecyclerViewItemListener;
@@ -19,6 +20,7 @@ import com.yc.love.model.bean.AResultInfo;
 import com.yc.love.model.bean.IdCorrelationLoginBean;
 import com.yc.love.model.bean.LoveHealBean;
 import com.yc.love.model.bean.LoveHealDateBean;
+import com.yc.love.model.constant.ConstantKey;
 import com.yc.love.model.engin.LoveEngin;
 import com.yc.love.ui.activity.base.BaseSameActivity;
 
@@ -45,7 +47,11 @@ public class LoveHealActivity extends BaseSameActivity {
         initViews();
         initRecyclerData();
     }
-
+    @Override
+    protected void onResume() {
+        super.onResume();
+        MobclickAgent.onEvent(this, ConstantKey.UM_LOVEQUOTE_ID);
+    }
 
     private void initViews() {
         initRecyclerView();
@@ -127,7 +133,7 @@ public class LoveHealActivity extends BaseSameActivity {
 
     @Override
     protected String offerActivityTitle() {
-        return "恋爱妙方";
+        return "恋爱妙语";
     }
 
 /*    @Override

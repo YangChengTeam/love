@@ -13,10 +13,12 @@ import android.webkit.WebView;
 import android.webkit.WebViewClient;
 import android.widget.ProgressBar;
 
+import com.umeng.analytics.MobclickAgent;
 import com.yc.love.R;
 import com.yc.love.model.base.MySubscriber;
 import com.yc.love.model.bean.AResultInfo;
 import com.yc.love.model.bean.MenuadvInfoBean;
+import com.yc.love.model.constant.ConstantKey;
 import com.yc.love.model.engin.LoveEngin;
 import com.yc.love.model.util.SPUtils;
 import com.yc.love.ui.activity.MainActivity;
@@ -43,6 +45,7 @@ public class MainT4Fragment extends BaseMainFragment {
         return R.layout.fragment_main_t4;
     }
 
+
     private String mDownloadIdKey;
 
     private LoveEngin mLoveEngin;
@@ -50,6 +53,7 @@ public class MainT4Fragment extends BaseMainFragment {
 
     @Override
     protected void initViews() {
+        MobclickAgent.onEvent(mMainActivity, ConstantKey.UM_WELFEAR_ID);
 
         mLoveEngin = new LoveEngin(mMainActivity);
         mProgressBar = rootView.findViewById(R.id.main_t4_pb_progress);
@@ -92,7 +96,7 @@ public class MainT4Fragment extends BaseMainFragment {
             @Override
             public void onLoadResource(WebView view, String url) {
 //                mIsCanToHome = false;
-                Log.d("mylog", "onLoadResource: url " + url);
+//                Log.d("mylog", "onLoadResource: url " + url);
                 super.onLoadResource(view, url);
             }
 
@@ -120,19 +124,39 @@ public class MainT4Fragment extends BaseMainFragment {
         });
 
         mMainActivity.setOnChildDisposeMainKeyDownListent(new MainActivity.OnChildDisposeMainKeyDownListent() {
+
+            private boolean mIsCanBack;
+
             @Override
             public boolean onChildDisposeMainKeyDown() {
-                Log.d("mylog", "onChildDisposeMainKeyDown: mWebView.canGoBack "+mWebView.canGoBack());
+                Log.d("mylog", "onChildDisposeMainKeyDown: mWebView.canGoBack " + mWebView.canGoBack());
                 if (mWebView.canGoBack()) {
                     mWebView.goBack();
                     return true;
                 } else {
+                    Log.d("mylog", "onChildDisposeMainKeyDown: mIsCanBack " + mIsCanBack);
+                    if (mIsCanBack) {
+                        return false;
+                    }
                     mWebView.loadUrl(homeUrl);
+                    mIsCanBack = true;
+                    mWebView.postDelayed(new Runnable() {
+                        @Override
+                        public void run() {
+                            mIsCanBack = false;
+                        }
+                    }, 2500);
 //                    mWebView.
                     return true;
                 }
             }
         });
+
+        /**
+         * VOVO 8.0手机莫名闪退
+         */
+        mWebView.setLayerType(View.LAYER_TYPE_SOFTWARE, null);
+        mWebView.setLayerType(View.LAYER_TYPE_HARDWARE, null);
     }
 
 
@@ -196,5 +220,23 @@ public class MainT4Fragment extends BaseMainFragment {
         }
     };
 
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        destroyWebView();
+    }
 
+    public void destroyWebView() {
+        if(mProgressBar!=null){
+            mProgressBar.clearAnimation();
+        }
+        if (mWebView != null) {
+            mWebView.clearHistory();
+            mWebView.clearCache(true);
+            mWebView.loadUrl("about:blank"); // clearView() should be changed to loadUrl("about:blank"), since clearView() is deprecated now mWebView.freeMemory(); mWebView.pauseTimers(); mWebView = null; // Note that mWebView.destroy() and mWebView = null do the exact same thing } }
+            mWebView.destroy();
+            mWebView = null;
+        }
+
+    }
 }

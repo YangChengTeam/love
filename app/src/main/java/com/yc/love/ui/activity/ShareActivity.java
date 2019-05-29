@@ -17,8 +17,10 @@ import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.umeng.analytics.MobclickAgent;
 import com.yc.love.R;
 import com.yc.love.adaper.vp.SharePagerAdapter;
+import com.yc.love.model.constant.ConstantKey;
 import com.yc.love.model.single.YcSingle;
 import com.yc.love.model.util.SPUtils;
 import com.yc.love.model.util.TimeUtils;
@@ -63,6 +65,12 @@ public class ShareActivity extends BaseSameActivity {
         setContentView(R.layout.activity_share);
 
         initViews();
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        MobclickAgent.onEvent(this, ConstantKey.UM_SEARCH_ID);
     }
 
     @Override

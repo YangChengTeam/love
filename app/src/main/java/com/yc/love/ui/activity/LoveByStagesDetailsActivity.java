@@ -339,4 +339,23 @@ public class LoveByStagesDetailsActivity extends BaseSameActivity {
     protected String offerActivityTitle() {
         return "问答";
     }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        destroyWebView();
+    }
+
+    public void destroyWebView() {
+        if(mProgressBar!=null){
+            mProgressBar.clearAnimation();
+        }
+        if (webView != null) {
+            webView.clearHistory();
+            webView.clearCache(true);
+            webView.loadUrl("about:blank"); // clearView() should be changed to loadUrl("about:blank"), since clearView() is deprecated now mWebView.freeMemory(); mWebView.pauseTimers(); mWebView = null; // Note that mWebView.destroy() and mWebView = null do the exact same thing } }
+            webView.destroy();
+            webView = null;
+        }
+    }
 }

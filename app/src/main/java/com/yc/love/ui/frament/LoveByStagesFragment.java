@@ -173,10 +173,12 @@ public class LoveByStagesFragment extends BaseLoveByStagesFragment {
         @Override
         public void onItemClick(int position) {
 
-            mLoveByStagesActivity.startActivity(new Intent(mLoveByStagesActivity, TestWebViewActivity.class));
-
-//            LoveByStagesBean loveByStagesBean = mLoveByStagesBeans.get(position);
-//            LoveByStagesDetailsActivity.startLoveByStagesDetailsActivity(mLoveByStagesActivity, loveByStagesBean.id, loveByStagesBean.post_title);
+//            mLoveByStagesActivity.startActivity(new Intent(mLoveByStagesActivity, TestWebViewActivity.class));
+            if (position < 0) {
+                return;
+            }
+            LoveByStagesBean loveByStagesBean = mLoveByStagesBeans.get(position);
+            LoveByStagesDetailsActivity.startLoveByStagesDetailsActivity(mLoveByStagesActivity, loveByStagesBean.id, loveByStagesBean.post_title);
         }
 
         @Override

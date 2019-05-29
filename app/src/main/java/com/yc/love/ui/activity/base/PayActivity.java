@@ -104,11 +104,11 @@ public abstract class PayActivity extends BaseSlidingActivity {
                     // 判断resultStatus 为9000则代表支付成功
                     if (TextUtils.equals(resultStatus, "9000")) {
                         // 该笔订单是否真实支付成功，需要依赖服务端的异步通知。
-                        onZfbPauResult(true);
+                        onZfbPauResult(true,"支付成功");
 //                        showAlert(PayActivity.this, "001 Payment success:" + payResult);
                     } else {
                         // 该笔订单真实的支付结果，需要依赖服务端的异步通知。
-                        onZfbPauResult(false);
+                        onZfbPauResult(false,"支付失败");
 //                        showAlert(PayActivity.this, "002 Payment failed:" + payResult);  //用户取消
                     }
                     break;
@@ -138,7 +138,7 @@ public abstract class PayActivity extends BaseSlidingActivity {
         ;
     };
 
-    protected abstract void onZfbPauResult(boolean result) ;
+    protected abstract void onZfbPauResult(boolean result,String des) ;
 
     private void showAlert(Context ctx, String info) {
         showAlert(ctx, info, null);
