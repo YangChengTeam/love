@@ -63,13 +63,13 @@ import java.util.List;
 import java.util.Map;
 
 public class BecomeVipActivity extends PayActivity implements View.OnClickListener {
-    private int[] imgResIds = {R.mipmap.become_vip_icon_01, R.mipmap.become_vip_icon_02, R.mipmap.become_vip_icon_03,
-            R.mipmap.become_vip_icon_04, R.mipmap.become_vip_icon_05, R.mipmap.become_vip_icon_06};
-    private String[] names = {"20W+话术免费搜索", "海量话术实战免费查看", "海量话术技巧免费阅读",
-            "经典聊天开场白免费看", "多样表白话术免费查看", "创新幽默语录免费查看"};
-    private String[] subNames = {"输入TA的话，快速查找撩心话术", "话术聊天实战案例，跟着套路学撩妹",
+    private int[] imgResIds = {R.mipmap.become_vip_icon_06, R.mipmap.become_vip_icon_01, R.mipmap.become_vip_icon_02, R.mipmap.become_vip_icon_03,
+            R.mipmap.become_vip_icon_04, R.mipmap.become_vip_icon_05};
+    private String[] names = {"最少投入，恋爱成功率提高98%", "20W+话术免费搜索", "海量话术实战免费查看", "海量话术技巧免费阅读",
+            "经典聊天开场白免费看", "多样表白话术免费查看"};
+    private String[] subNames = {"花样幽默风趣语句，提高妹子好感度", "输入TA的话，快速查找撩心话术", "话术聊天实战案例，跟着套路学撩妹",
             "恋爱脱单的爱情秘籍，撩动TA心的话术技巧", "最全聊天开场白，跨出撩妹第一步",
-            "高情商表白话术，提高表白成功率", "花样幽默风趣语句，提高妹子好感度"};
+            "高情商表白话术，提高表白成功率"};
     private String[] payName = {"购买VIP30天", "购买VIP90天", "购买全年VIP", "购买永久VIP"};
     private int[] payMoney = {38, 58, 198, 298};
     private String[] payDes = {"最低1.2元/天", "最低0.6元/天", "最低0.5元/天", "一次开通永久免费限时免费"};
@@ -147,6 +147,10 @@ public class BecomeVipActivity extends PayActivity implements View.OnClickListen
     }
 
     private void netData() {
+        if (mLoadingDialog == null) {
+            mLoadingDialog = new LoadDialog(this);
+        }
+        mLoadingDialog.showLoadingDialog();
         mOrderEngin.indexDoods("goods/index").subscribe(new MySubscriber<AResultInfo<List<IndexDoodsBean>>>(mLoadingDialog) {
 
             @Override
@@ -161,6 +165,13 @@ public class BecomeVipActivity extends PayActivity implements View.OnClickListen
                 if (mIndexDoodsBeans == null) {
                     mIndexDoodsBeans = new ArrayList<>();
                 }
+               /* List<IndexDoodsBean> mIndexDoodsBe=new ArrayList<>();
+                for (int i = 0; i < mIndexDoodsBeans.size(); i++) {
+                    if(i<=2){
+                        mIndexDoodsBe.add(mIndexDoodsBeans.get(i));
+                    }
+                }
+                mDatas.add(new BecomeVipBean(3, mIndexDoodsBe));*/
                 mDatas.add(new BecomeVipBean(3, mIndexDoodsBeans));
                 initRecyclerData();
             }

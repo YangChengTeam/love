@@ -42,7 +42,7 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
 
     private ControlScrollViewPager mVpFragment;
     private TextView mTvTab1, mTvTab2, mTvTab3, mTvTab4, mTvTab5;
-    private boolean isRegistered = false;
+//    private boolean isRegistered = false;
     private NetWorkChangReceiver netWorkChangReceiver;
     private String mPackageVersionName;
     public String mDownloadIdKey = "mDownloadIdKey";
@@ -132,7 +132,7 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
         filter.addAction(WifiManager.NETWORK_STATE_CHANGED_ACTION);
         filter.addAction(ConnectivityManager.CONNECTIVITY_ACTION);
         registerReceiver(netWorkChangReceiver, filter);
-        isRegistered = true;
+//        isRegistered = true;
     }
 
     private void initUpdataBroadcastReceiver() {
@@ -149,10 +149,14 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
     protected void onDestroy() {
         super.onDestroy();
         //解绑
-        if (isRegistered) {
+//        if (isRegistered) {
+        if(netWorkChangReceiver!=null){
             unregisterReceiver(netWorkChangReceiver);
         }
-        unregisterReceiver(mUpdataBroadcastReceiver);
+//        }
+        if(netWorkChangReceiver!=null){
+            unregisterReceiver(mUpdataBroadcastReceiver);
+        }
     }
 
     private void initView() {
@@ -179,7 +183,7 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
             @Override
             public void run() {
                 initNetWorkChangReceiver();
-                initUpdataBroadcastReceiver();
+//                initUpdataBroadcastReceiver();
             }
         }, 200);
     }

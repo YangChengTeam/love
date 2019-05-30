@@ -21,6 +21,7 @@ import com.yc.love.model.bean.LoveHealDetBean;
 import com.yc.love.model.bean.LoveHealingBean;
 import com.yc.love.model.bean.LoveUpDownPhotoBean;
 import com.yc.love.model.bean.MenuadvInfoBean;
+import com.yc.love.model.bean.SearchDialogueBean;
 import com.yc.love.model.domain.URLConfig;
 
 import java.util.HashMap;
@@ -306,6 +307,23 @@ public class LoveEngin extends BaseEngine {
         requestParams(params);
         HttpCoreEngin<AResultInfo<List<LoveHealDetBean>>> httpCoreEngin = HttpCoreEngin.get(mContext);
         Observable<AResultInfo<List<LoveHealDetBean>>> rxpost = httpCoreEngin.rxpost(URLConfig.getUrl(url), new TypeReference<AResultInfo<List<LoveHealDetBean>>>() {
+                }.getType(),
+                params,
+                true,
+                true, true);
+        return rxpost;
+    }
+    public Observable<AResultInfo<SearchDialogueBean>> searchDialogue2(String userId, String keyword, String page, String pageSize, String url) {
+        Map<String, String> params = new HashMap<>();
+        params.put("user_id", userId);
+//        params.put("search_type", searchType);
+//        params.put("user_id", userId);
+        params.put("page", page);
+        params.put("keyword", keyword);
+        params.put("page_size", pageSize);
+        requestParams(params);
+        HttpCoreEngin<AResultInfo<SearchDialogueBean>> httpCoreEngin = HttpCoreEngin.get(mContext);
+        Observable<AResultInfo<SearchDialogueBean>> rxpost = httpCoreEngin.rxpost(URLConfig.getUrl(url), new TypeReference<AResultInfo<SearchDialogueBean>>() {
                 }.getType(),
                 params,
                 true,

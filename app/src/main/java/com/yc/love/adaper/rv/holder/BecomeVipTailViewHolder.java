@@ -23,8 +23,8 @@ public class BecomeVipTailViewHolder extends BaseViewHolder<BecomeVipBean> {
     private final Context context;
     private int mSelectPosition;
     private int mSelectPayType;
-    public int PAY_TYPE_ZFB=0;
-    public int PAY_TYPE_WX=1;
+    public int PAY_TYPE_ZFB = 0;
+    public int PAY_TYPE_WX = 1;
     private ConstraintLayout[] clCons;
     private ImageView[] ivSels;
     private TextView[] tvUnits;
@@ -32,10 +32,11 @@ public class BecomeVipTailViewHolder extends BaseViewHolder<BecomeVipBean> {
     private ImageView mIvPayZfb;
     private ImageView mIvPayWx;
     private TextView mTvNext;
-//    private List<BecomeVipPayBean> mPayBeans;
-    private List<IndexDoodsBean>  mPayBeans;
+    //    private List<BecomeVipPayBean> mPayBeans;
+    private List<IndexDoodsBean> mPayBeans;
 
     private OnClickTailListener onClickTailListener;
+    private TextView[] mTvDess;
 
     public BecomeVipTailViewHolder(Context context, RecyclerViewItemListener listener, ViewGroup parent) {
         super(context, parent, R.layout.recycler_view_item_become_vip_tail, listener);   //一个类对应一个布局文件
@@ -82,17 +83,22 @@ public class BecomeVipTailViewHolder extends BaseViewHolder<BecomeVipBean> {
 //       List<TextView> tvTits= new ArrayList<>();
         TextView[] tvTits = {tvTit01, tvTit02, tvTit03, tvTit04};
         tvMoneys = new TextView[]{tvMoney01, tvMoney02, tvMoney03, tvMoney04};
-        TextView[] tvDess = {tvDes01, tvDes02, tvDes03, tvDes04};
+        mTvDess = new TextView[]{tvDes01, tvDes02, tvDes03, tvDes04};
         clCons = new ConstraintLayout[]{clCon01, clCon02, clCon03, clCon04};
         ivSels = new ImageView[]{ivSel01, ivSel02, ivSel03, ivSel04};
         tvUnits = new TextView[]{tvUnit01, tvUnit02, tvUnit03, tvUnit04};
 
         mPayBeans = becomeVipBean.payBeans;
+        if (mPayBeans.size() >= 4) {
+            // 四条数据，删除两条
+            mPayBeans.remove(0);
+            mPayBeans.remove(0);
+        }
         for (int i = 0; i < mPayBeans.size(); i++) {
             IndexDoodsBean indexDoodsBean = mPayBeans.get(i);
             tvTits[i].setText(indexDoodsBean.name);
             tvMoneys[i].setText(DoubleToStringUtils.doubleStringToString(indexDoodsBean.m_price));
-            tvDess[i].setText(indexDoodsBean.desp);
+            mTvDess[i].setText(indexDoodsBean.desp);
         }
 
         /*clCon01.setBackground(context.getResources().getDrawable(R.mipmap.become_vip_bg_pay_s));
@@ -175,11 +181,13 @@ public class BecomeVipTailViewHolder extends BaseViewHolder<BecomeVipBean> {
                 ivSels[i].setVisibility(View.VISIBLE);
                 tvUnits[i].setTextColor(context.getResources().getColor(R.color.yellow_vip_text_mon_s));
                 tvMoneys[i].setTextColor(context.getResources().getColor(R.color.yellow_vip_text_mon_s));
+                mTvDess[i].setBackground(context.getResources().getDrawable(R.drawable.shape_tv_asymmetry_yellow_s));
             } else {
                 clCons[i].setBackground(context.getResources().getDrawable(R.mipmap.become_vip_bg_pay));
                 ivSels[i].setVisibility(View.GONE);
                 tvUnits[i].setTextColor(context.getResources().getColor(R.color.yellow_vip_text_mon));
                 tvMoneys[i].setTextColor(context.getResources().getColor(R.color.yellow_vip_text_mon));
+                mTvDess[i].setBackground(context.getResources().getDrawable(R.drawable.shape_tv_asymmetry_yellow));
             }
         }
         setNextDes();

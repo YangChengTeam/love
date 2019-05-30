@@ -61,37 +61,46 @@
         </LinearLayout>
     </LinearLayout>
 
+
     <RelativeLayout
-        android:layout_width="wrap_content"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="@color/white"
-        android:paddingTop="12dp"
-        android:paddingBottom="6dp">
+        android:background="@color/white">
 
-        <ImageView
-            android:id="@+id/main_t5_ll_iv_vip"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:background="@color/white"
-            android:src="@mipmap/main_item_open_vip" />
 
-        <TextView
-            android:id="@+id/main_t5_tv_vip_state"
+        <RelativeLayout
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_alignParentRight="true"
-            android:layout_marginTop="21dp"
-            android:layout_marginRight="48dp"
-            android:background="@drawable/shape_btn_vip_static_yellow"
-            android:paddingLeft="22dp"
-            android:paddingTop="4dp"
-            android:paddingRight="22dp"
-            android:paddingBottom="4dp"
-            android:text="去开通"
-            android:textColor="@color/white"
-            android:textSize="@dimen/size_14" />
-    </RelativeLayout>
+            android:layout_centerHorizontal="true"
+            android:layout_marginTop="12dp"
+            android:layout_marginBottom="6dp">
 
+            <ImageView
+                android:id="@+id/main_t5_ll_iv_vip"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerHorizontal="true"
+                android:background="@color/white"
+                android:src="@mipmap/main_item_open_vip" />
+
+            <TextView
+                android:id="@+id/main_t5_tv_vip_state"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentRight="true"
+                android:layout_marginTop="21dp"
+                android:layout_marginRight="48dp"
+                android:background="@drawable/shape_btn_vip_static_yellow"
+                android:paddingLeft="22dp"
+                android:paddingTop="4dp"
+                android:paddingRight="22dp"
+                android:paddingBottom="4dp"
+                android:text="去开通"
+                android:textColor="@color/white"
+                android:textSize="@dimen/size_14" />
+        </RelativeLayout>
+
+    </RelativeLayout>
 
     <com.yc.love.ui.view.MainMyItemLin
         android:id="@+id/main_t5_ll_item_01"

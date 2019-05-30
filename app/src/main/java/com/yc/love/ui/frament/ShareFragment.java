@@ -26,6 +26,7 @@ import com.yc.love.model.bean.AResultInfo;
 import com.yc.love.model.bean.LoveHealDetBean;
 import com.yc.love.model.bean.LoveHealDetDetailsBean;
 import com.yc.love.model.bean.OpenApkPkgInfo;
+import com.yc.love.model.bean.SearchDialogueBean;
 import com.yc.love.model.engin.LoveEngin;
 import com.yc.love.model.single.YcSingle;
 import com.yc.love.model.util.PackageUtils;
@@ -83,10 +84,10 @@ public class ShareFragment extends BaseLazyFragment {
             public void onRefresh() {
 //                obtainWalletData();
                 if (!TextUtils.isEmpty(keyword)) {
-                    if (mLoveHealDetBeans != null) {
+                   /* if (mLoveHealDetBeans != null) {
                         mLoveHealDetBeans.clear();
                         mAdapter.notifyDataSetChanged();
-                    }
+                    }*/
                     loadMoreEnd = false;
                     PAGE_NUM = 1;
                     netData(keyword);
@@ -119,12 +120,20 @@ public class ShareFragment extends BaseLazyFragment {
             return;
         }
         mLoadingDialog.showLoadingDialog();
-        mLoveEngin.searchDialogue(String.valueOf(id), keyword, String.valueOf(PAGE_NUM), String.valueOf(PAGE_SIZE), "Dialogue/search").subscribe(new MySubscriber<AResultInfo<List<LoveHealDetBean>>>(mLoadingDialog) {
+        mLoveEngin.searchDialogue2(String.valueOf(id), keyword, String.valueOf(PAGE_NUM), String.valueOf(PAGE_SIZE), "Dialogue/search").subscribe(new MySubscriber<AResultInfo<SearchDialogueBean>>(mLoadingDialog) {
 
 
             @Override
-            protected void onNetNext(AResultInfo<List<LoveHealDetBean>> listAResultInfo) {
-                mLoveHealDetBeans = listAResultInfo.data;
+            protected void onNetNext(AResultInfo<SearchDialogueBean> searchDialogueBeanAResultInfo) {
+                SearchDialogueBean searchDialogueBean = searchDialogueBeanAResultInfo.data;
+                int searchBuyVip = searchDialogueBean.search_buy_vip;
+                if (1 == searchBuyVip) { //1 弹窗 0不弹
+                    startActivity(new Intent(mShareActivity, BecomeVipActivity.class));
+                    mShareActivity.childDisposeOnBack();
+//                    notCanShart();
+                    return;
+                }
+                mLoveHealDetBeans = searchDialogueBean.list;
                 initRecyclerData();
             }
 
@@ -193,7 +202,9 @@ public class ShareFragment extends BaseLazyFragment {
                         netLoadMore();
                     } else {
                         Log.d("mylog", "loadMoreData: loadMoreEnd end 已加载全部数据 ");
-                        mLoveHealDetBeans.remove(mLoveHealDetBeans.size() - 1);
+                        if (mLoveHealDetBeans != null && mLoveHealDetBeans.size() > 0) {
+                            mLoveHealDetBeans.remove(mLoveHealDetBeans.size() - 1);
+                        }
                         mAdapter.notifyDataSetChanged();
                     }
                 }
@@ -256,11 +267,20 @@ public class ShareFragment extends BaseLazyFragment {
             mShareActivity.showToLoginDialog();
             return;
         }
-        mLoveEngin.searchDialogue(String.valueOf(id), "1", keyword, String.valueOf(++PAGE_NUM), String.valueOf(PAGE_SIZE), "Dialogue/search").subscribe(new MySubscriber<AResultInfo<List<LoveHealDetBean>>>(mShareActivity) {
+        mLoveEngin.searchDialogue2(String.valueOf(id), keyword, String.valueOf(++PAGE_NUM), String.valueOf(PAGE_SIZE), "Dialogue/search").subscribe(new MySubscriber<AResultInfo<SearchDialogueBean>>(mShareActivity) {
+
 
             @Override
-            protected void onNetNext(AResultInfo<List<LoveHealDetBean>> listAResultInfo) {
-                List<LoveHealDetBean> netLoadMoreData = listAResultInfo.data;
+            protected void onNetNext(AResultInfo<SearchDialogueBean> searchDialogueBeanAResultInfo) {
+                SearchDialogueBean searchDialogueBean = searchDialogueBeanAResultInfo.data;
+                int searchBuyVip = searchDialogueBean.search_buy_vip;
+                if (1 == searchBuyVip) { //1 弹窗 0不弹
+                    PAGE_NUM = 1;
+//                    startActivity(new Intent(mShareActivity, BecomeVipActivity.class));
+                    return;
+                }
+//                mLoveHealDetBeans = searchDialogueBean.list;
+                List<LoveHealDetBean> netLoadMoreData = searchDialogueBean.list;
                 showProgressBar = false;
                 mLoveHealDetBeans.remove(mLoveHealDetBeans.size() - 1);
                 mAdapter.notifyDataSetChanged();

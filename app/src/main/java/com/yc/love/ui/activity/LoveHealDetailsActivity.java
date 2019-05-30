@@ -100,10 +100,10 @@ public class LoveHealDetailsActivity extends BaseSameActivity {
             @Override
             public void onRefresh() {
 //                obtainWalletData();
-                if (mLoveHealDetBeans != null) {
+                /*if (mLoveHealDetBeans != null) {
                     mLoveHealDetBeans.clear();
                     mAdapter.notifyDataSetChanged();
-                }
+                }*/
                 loadMoreEnd = false;
                 PAGE_NUM = 1;
                 netData();

@@ -79,6 +79,7 @@ public class MainT3Fragment extends BaseMainFragment {
     private LinearLayout mLlNotNet;
     private boolean mIsNetData = false;
     private boolean mIsDataToCache;
+    private LoadDialog mLoadDialog;
 
     @Override
     protected int setContentView() {
@@ -177,12 +178,15 @@ public class MainT3Fragment extends BaseMainFragment {
     }
 
     private void netData() {
-        LoadDialog loadDialog = new LoadDialog(mMainActivity);
-        loadDialog.show();
+        mDatas = (List<MainT3Bean>) SerializableFileUtli.checkReadPermission(mMainActivity, "main3_example_ts_category");
+        if (mDatas != null && mDatas.size() != 0) {
+            initRecyclerViewData();
+        } else {
+            mLoadDialog = new LoadDialog(mMainActivity);
+            mLoadDialog.showLoadingDialog();
+        }
 //        mLoveEngin.exampleTs("example/ts").subscribe(new MySubscriber<AResultInfo<List<ExampleTsBean>>>(loadDialog) {
-        mLoveEngin.exampleTsCategory("example/ts_category").subscribe(new MySubscriber<AResultInfo<ExampleTsCategory>>(loadDialog) {
-
-
+        mLoveEngin.exampleTsCategory("example/ts_category").subscribe(new MySubscriber<AResultInfo<ExampleTsCategory>>(mLoadDialog) {
             @Override
             protected void onNetNext(AResultInfo<ExampleTsCategory> exampleTsCategoryAResultInfo) {
                 mIsNetData = true;
@@ -212,12 +216,12 @@ public class MainT3Fragment extends BaseMainFragment {
 
             @Override
             protected void onNetError(Throwable e) {
-                mDatas = (List<MainT3Bean>) SerializableFileUtli.checkReadPermission(mMainActivity, "main3_example_ts_category");
+                /*mDatas = (List<MainT3Bean>) SerializableFileUtli.checkReadPermission(mMainActivity, "main3_example_ts_category");
                 if (mDatas != null && mDatas.size() != 0) {
                     mIsDataToCache = true;
                     mIsNetData = true;
                     initRecyclerViewData();
-                }
+                }*/
 
                 /*String data = (String) SPUtils.get(mMainActivity, "main3_example_ts_category", "");
                 mDatas = new Gson().fromJson(data, new TypeToken<ArrayList<MainT3Bean>>() {

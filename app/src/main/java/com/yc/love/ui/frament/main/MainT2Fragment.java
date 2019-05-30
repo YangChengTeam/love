@@ -42,6 +42,7 @@ import com.yc.love.ui.activity.ExampleDetailActivity;
 import com.yc.love.ui.frament.base.BaseMainFragment;
 import com.yc.love.ui.view.LoadDialog;
 import com.yc.love.utils.CacheUtils;
+import com.yc.love.utils.SerializableFileUtli;
 
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
@@ -70,6 +71,7 @@ public class MainT2Fragment extends BaseMainFragment {
     private boolean mIsShowLogined = false;
     private SwipeRefreshLayout mSwipeRefresh;
     private boolean mIsNotNet;
+    private LoadDialog mLoadDialog;
 
 
     @Override
@@ -80,7 +82,7 @@ public class MainT2Fragment extends BaseMainFragment {
     private LoveEngin mLoveEngin;
     private LinearLayout mLlNotNet;
     private boolean mIsNetData = false;
-    private boolean mIsDataToCache;
+//    private boolean mIsDataToCache;
 
     @Override
     protected void initViews() {
@@ -108,10 +110,10 @@ public class MainT2Fragment extends BaseMainFragment {
             @Override
             public void onRefresh() {
 //                obtainWalletData();
-                if (mMainT2Beans != null) {
+                /*if (mMainT2Beans != null) {
                     mMainT2Beans.clear();
                     mAdapter.notifyDataSetChanged();
-                }
+                }*/
                 mIsAddToPayVipItem = false;
                 loadMoreEnd = false;
                 PAGE_NUM = 1;
@@ -145,7 +147,7 @@ public class MainT2Fragment extends BaseMainFragment {
             mIsNotNet = false;
             if (mLlNotNet.getVisibility() != View.GONE) {
                 mLlNotNet.setVisibility(View.GONE);
-                    lazyLoad();
+                lazyLoad();
             }
         }
     }
@@ -153,18 +155,23 @@ public class MainT2Fragment extends BaseMainFragment {
 
     @Override
     protected void lazyLoad() {
-        if(mIsDataToCache){
+        /*if(mIsDataToCache){
             mIsNetData=false;
-        }
+        }*/
         if (!mIsNetData) {
             netData();
         }
     }
 
     private void netData() {
-        LoadDialog loadDialog = new LoadDialog(mMainActivity);
-        loadDialog.show();
-        mLoveEngin.exampLists(String.valueOf(YcSingle.getInstance().id), String.valueOf(PAGE_NUM), String.valueOf(PAGE_SIZE), "example/lists").subscribe(new MySubscriber<AResultInfo<ExampDataBean>>(loadDialog) {
+        mMainT2Beans = (List<MainT2Bean>) SerializableFileUtli.checkReadPermission(mMainActivity, "main2_example_lists");
+        if (mMainT2Beans != null && mMainT2Beans.size() != 0) {
+            initRecyclerViewData();
+        } else {
+            mLoadDialog = new LoadDialog(mMainActivity);
+            mLoadDialog.showLoadingDialog();
+        }
+        mLoveEngin.exampLists(String.valueOf(YcSingle.getInstance().id), String.valueOf(PAGE_NUM), String.valueOf(PAGE_SIZE), "example/lists").subscribe(new MySubscriber<AResultInfo<ExampDataBean>>(mLoadDialog) {
             @Override
             protected void onNetNext(AResultInfo<ExampDataBean> exampDataBeanAResultInfo) {
                 mIsNetData = true;
@@ -185,21 +192,22 @@ public class MainT2Fragment extends BaseMainFragment {
                 if (!mUserIsVip) {
                     mMainT2Beans.add(new MainT2Bean("vip", 2));
                 }
-                CacheUtils.cacheBeanData(mMainActivity, "main2_example_lists", mMainT2Beans);
+                SerializableFileUtli.checkPermissionWriteData(mMainT2Beans, "main2_example_lists");
+//                CacheUtils.cacheBeanData(mMainActivity, "main2_example_lists", mMainT2Beans);
                 initRecyclerViewData();
             }
 
             @Override
             protected void onNetError(Throwable e) {
                 mSwipeRefresh.setRefreshing(false);
-                String data = (String) SPUtils.get(mMainActivity, "main2_example_lists", "");
+                /*String data = (String) SPUtils.get(mMainActivity, "main2_example_lists", "");
                 mMainT2Beans = new Gson().fromJson(data, new TypeToken<ArrayList<MainT2Bean>>() {
                 }.getType());
                 if (mMainT2Beans != null && mMainT2Beans.size() != 0) {
                     mIsDataToCache = true;
                     mIsNetData = true;
                     initRecyclerViewData();
-                }
+                }*/
             }
 
             @Override
@@ -293,7 +301,7 @@ public class MainT2Fragment extends BaseMainFragment {
                 showProgressBar = false;
                 mMainT2Beans.remove(mMainT2Beans.size() - 1);
                 mAdapter.notifyDataSetChanged();
-                mMainT2Beans.add(new MainT2Bean("toPayVip", 3,mMainT2Beans.size()));
+                mMainT2Beans.add(new MainT2Bean("toPayVip", 3, mMainT2Beans.size()));
                 mAdapter.notifyDataSetChanged();
                 mAdapter.setLoaded();
             }
@@ -301,6 +309,9 @@ public class MainT2Fragment extends BaseMainFragment {
     }
 
     private void netLoadMore() {
+
+
+
         if (PAGE_NUM >= 4 && PAGE_SIZE != 10) {
             PAGE_SIZE = 10;
         }

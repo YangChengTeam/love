@@ -39,7 +39,7 @@
                 android:paddingTop="8dp"
                 android:text="66"
                 android:textColor="@color/yellow_vip_text_tit"
-                android:textSize="@dimen/size_12"
+                android:textSize="@dimen/size_14"
                 app:layout_constraintLeft_toLeftOf="parent"
                 app:layout_constraintRight_toRightOf="parent" />
 
@@ -71,21 +71,22 @@
 
             <TextView
                 android:id="@+id/item_become_vip_tail_tv_pay_des_01"
-                android:layout_width="match_parent"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginLeft="4dp"
+                android:layout_marginLeft="14dp"
                 android:layout_marginRight="4dp"
-                android:layout_marginBottom="6dp"
+                android:layout_marginBottom="8dp"
                 android:background="@drawable/shape_tv_asymmetry_yellow"
-                android:gravity="center_horizontal"
-                android:paddingLeft="4dp"
+                android:paddingLeft="22dp"
                 android:paddingTop="3dp"
-                android:paddingRight="4dp"
+                android:paddingRight="22dp"
                 android:paddingBottom="3dp"
                 android:text="最低1.2元/天"
                 android:textColor="@color/white"
-                android:textSize="@dimen/size_10"
+                android:textSize="@dimen/size_12"
                 app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintLeft_toLeftOf="parent"
+                app:layout_constraintRight_toRightOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/item_become_vip_tail_ll_pay_con_01" />
 
             <ImageView
@@ -94,7 +95,6 @@
                 android:layout_height="wrap_content"
                 android:src="@mipmap/become_vip_icon_pay_s"
                 android:visibility="gone"
-
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintRight_toRightOf="parent" />
         </android.support.constraint.ConstraintLayout>
@@ -117,7 +117,7 @@
                 android:paddingTop="8dp"
                 android:text="66"
                 android:textColor="@color/yellow_vip_text_tit"
-                android:textSize="@dimen/size_12"
+                android:textSize="@dimen/size_14"
                 app:layout_constraintLeft_toLeftOf="parent"
                 app:layout_constraintRight_toRightOf="parent" />
 
@@ -149,21 +149,23 @@
 
             <TextView
                 android:id="@+id/item_become_vip_tail_tv_pay_des_02"
-                android:layout_width="match_parent"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="4dp"
                 android:layout_marginRight="4dp"
-                android:layout_marginBottom="6dp"
+                android:layout_marginBottom="8dp"
                 android:background="@drawable/shape_tv_asymmetry_yellow"
                 android:gravity="center_horizontal"
-                android:paddingLeft="4dp"
+                android:paddingLeft="22dp"
                 android:paddingTop="3dp"
-                android:paddingRight="4dp"
+                android:paddingRight="22dp"
                 android:paddingBottom="3dp"
-                android:text="55555555"
+                android:text="最低1.2元/天"
                 android:textColor="@color/white"
-                android:textSize="@dimen/size_10"
+                android:textSize="@dimen/size_12"
                 app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintLeft_toLeftOf="parent"
+                app:layout_constraintRight_toRightOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/item_become_vip_tail_ll_pay_con_02" />
 
             <ImageView
@@ -185,7 +187,8 @@
             android:layout_weight="1"
             android:background="@mipmap/become_vip_bg_pay"
             android:gravity="center_horizontal"
-            android:orientation="vertical">
+            android:orientation="vertical"
+            android:visibility="gone">
 
             <TextView
                 android:id="@+id/item_become_vip_tail_tv_pay_tit_03"
@@ -261,7 +264,8 @@
             android:layout_weight="1"
             android:background="@mipmap/become_vip_bg_pay"
             android:gravity="center_horizontal"
-            android:orientation="vertical">
+            android:orientation="vertical"
+            android:visibility="gone">
 
             <TextView
                 android:id="@+id/item_become_vip_tail_tv_pay_tit_04"

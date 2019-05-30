@@ -10,9 +10,11 @@ import android.support.v4.view.ViewPager;
 import android.os.Bundle;
 import android.support.v7.widget.SearchView;
 import android.text.TextUtils;
+import android.util.TypedValue;
 import android.view.View;
 import android.view.animation.AccelerateInterpolator;
 import android.view.animation.DecelerateInterpolator;
+import android.widget.EditText;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -104,6 +106,12 @@ public class ShareActivity extends BaseSameActivity {
         ivToVip.setOnClickListener(this);
 
         initSwitchPagerData();
+
+        //修改键入的文字字体大小、颜色和hint的字体颜色
+        final EditText editText = mSearchView.findViewById(R.id.search_src_text);
+        editText.setTextSize(TypedValue.COMPLEX_UNIT_PX,getResources()
+                .getDimension(R.dimen.size_16));
+//        editText.setTextColor(ContextCompat.getColor(this,R.color.nb_text_primary));
 
         //监听关闭按钮点击事件
         ImageView mCloseButton = mSearchView.findViewById(android.support.v7.appcompat.R.id.search_close_btn);
@@ -372,7 +380,7 @@ public class ShareActivity extends BaseSameActivity {
     }
 
     @Override
-    protected boolean childDisposeOnBack() {
+    public boolean childDisposeOnBack() {
         if (mFrameLayout.getVisibility() != View.GONE) {
             hindShareItemShowInfo();
         } else {

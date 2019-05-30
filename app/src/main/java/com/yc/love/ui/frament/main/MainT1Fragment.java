@@ -84,8 +84,11 @@ public class MainT1Fragment extends BaseMainFragment {
     private LinearLayout mLlNotNet;
     private boolean mIsNetData = false;
     private boolean mIsNetTitleData = false;
+    private boolean mIsCacheData = false;
+    private boolean mIsCacheTitleData = false;
     private List<CategoryArticleBean> mCategoryArticleBeans;
     private boolean mIsDataToCache;
+    private LoadDialog mLoadDialog;
 
     @Override
     protected int setContentView() {
@@ -181,9 +184,17 @@ public class MainT1Fragment extends BaseMainFragment {
     }
 
     private void netData() {
-        LoadDialog loadDialog = new LoadDialog(mMainActivity);
-        loadDialog.show();
-        mLoveEngin.indexExample(String.valueOf(PAGE_NUM), String.valueOf(PAGE_SIZE), "example/index").subscribe(new MySubscriber<AResultInfo<ExampDataBean>>(loadDialog) {
+        mExampListsBeans = (List<ExampListsBean>) SerializableFileUtli.checkReadPermission(mMainActivity, "main1_example_index");
+        if (mExampListsBeans != null && mExampListsBeans.size() != 0) {
+            mIsCacheData = true;
+            if (mIsCacheData && mIsCacheTitleData) {
+                initRecyclerViewData();
+            }
+        } else {
+            mLoadDialog = new LoadDialog(mMainActivity);
+            mLoadDialog.showLoadingDialog();
+        }
+        mLoveEngin.indexExample(String.valueOf(PAGE_NUM), String.valueOf(PAGE_SIZE), "example/index").subscribe(new MySubscriber<AResultInfo<ExampDataBean>>(mLoadDialog) {
             @Override
             protected void onNetNext(AResultInfo<ExampDataBean> exampDataBeanAResultInfo) {
                 ExampDataBean exampDataBean = exampDataBeanAResultInfo.data;
@@ -201,11 +212,10 @@ public class MainT1Fragment extends BaseMainFragment {
 
             @Override
             protected void onNetError(Throwable e) {
-                mExampListsBeans = (List<ExampListsBean>) SerializableFileUtli.checkReadPermission(mMainActivity, "main1_example_index");
+              /*  mExampListsBeans = (List<ExampListsBean>) SerializableFileUtli.checkReadPermission(mMainActivity, "main1_example_index");
                 if (mExampListsBeans != null && mExampListsBeans.size() != 0) {
-                    mIsNetData = true;
-                    if (mIsNetData && mIsNetTitleData) {
-                        mIsDataToCache = true;
+                    mIsCacheTitleData = true;
+                    if (mIsCacheData && mIsCacheTitleData) {
                         initRecyclerViewData();
                     }
                 }
@@ -215,7 +225,7 @@ public class MainT1Fragment extends BaseMainFragment {
 //                    mExampListsBeans.add(new ExampListsBean(-1, "title"));
 //                    initRecyclerViewData();
                     Log.d("mylog", "onNetError: SocketTimeoutException 网络超时 " + e.toString());
-                }
+                }*/
             }
 
             @Override
@@ -226,9 +236,18 @@ public class MainT1Fragment extends BaseMainFragment {
     }
 
     private void netTitleData() {
-        LoadDialog loadDialog = new LoadDialog(mMainActivity);
-        loadDialog.show();
-        mLoveEngin.categoryArticle("Article/category").subscribe(new MySubscriber<AResultInfo<List<CategoryArticleBean>>>(loadDialog) {
+
+        mCategoryArticleBeans = (List<CategoryArticleBean>) SerializableFileUtli.checkReadPermission(mMainActivity, "main1_Article_category");
+        if (mCategoryArticleBeans != null && mCategoryArticleBeans.size() != 0) {
+            mIsCacheTitleData = true;
+            if (mIsCacheData && mIsCacheTitleData) {
+                initRecyclerViewData();
+            }
+        } else {
+            mLoadDialog = new LoadDialog(mMainActivity);
+            mLoadDialog.showLoadingDialog();
+        }
+        mLoveEngin.categoryArticle("Article/category").subscribe(new MySubscriber<AResultInfo<List<CategoryArticleBean>>>(mLoadDialog) {
             @Override
             protected void onNetNext(AResultInfo<List<CategoryArticleBean>> listAResultInfo) {
                 mCategoryArticleBeans = listAResultInfo.data;
@@ -242,13 +261,13 @@ public class MainT1Fragment extends BaseMainFragment {
 
             @Override
             protected void onNetError(Throwable e) {
-                    mCategoryArticleBeans = (List<CategoryArticleBean>)SerializableFileUtli.checkReadPermission(mMainActivity, "main1_Article_category");
-                    if (mCategoryArticleBeans != null && mCategoryArticleBeans.size() != 0) {
-                        mIsNetTitleData = true;
-                        if (mIsNetData && mIsNetTitleData) {
-                            initRecyclerViewData();
+              /*  mCategoryArticleBeans = (List<CategoryArticleBean>) SerializableFileUtli.checkReadPermission(mMainActivity, "main1_Article_category");
+                if (mCategoryArticleBeans != null && mCategoryArticleBeans.size() != 0) {
+                    mIsNetTitleData = true;
+                    if (mIsNetData && mIsNetTitleData) {
+                        initRecyclerViewData();
                     }
-                }
+                }*/
 
                 /*String data = (String) SPUtils.get(mMainActivity, "main_Article_category", "");
                 mCategoryArticleBeans = new Gson().fromJson(data, new TypeToken<ArrayList<CategoryArticleBean>>() {
