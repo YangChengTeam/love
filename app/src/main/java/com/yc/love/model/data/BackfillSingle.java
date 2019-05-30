@@ -125,8 +125,8 @@ public class BackfillSingle {
                 ycSingle.vip = vip;
                 idCorrelationLogin.vip = vip;
             }
-            Log.d("mylog", "backfillLoginData: idCorrelationLoginBean " + idCorrelationLoginBean.toString());
-            Log.d("mylog", "backfillLoginData: idCorrelationLogin " + idCorrelationLogin.toString());
+//            Log.d("mylog", "backfillLoginData: idCorrelationLoginBean " + idCorrelationLoginBean.toString());
+//            Log.d("mylog", "backfillLoginData: idCorrelationLogin " + idCorrelationLogin.toString());
         }
         String string = JSON.toJSONString(idCorrelationLogin);
         Log.d("mylog", "backfillLoginData: JSON.toJSONString(idCorrelationLogin " + string);

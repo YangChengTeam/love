@@ -57,7 +57,7 @@ import java.util.List;
 
 public class MainT2Fragment extends BaseMainFragment {
     private List<MainT2Bean> mMainT2Beans;
-    private int PAGE_SIZE = 5;
+    private int PAGE_SIZE = 10;
     private int PAGE_NUM = 1;
     private boolean loadMoreEnd;
     private boolean loadDataEnd;
@@ -82,7 +82,8 @@ public class MainT2Fragment extends BaseMainFragment {
     private LoveEngin mLoveEngin;
     private LinearLayout mLlNotNet;
     private boolean mIsNetData = false;
-//    private boolean mIsDataToCache;
+    //    private boolean mIsDataToCache;
+    private boolean mIsHandRefresh;
 
     @Override
     protected void initViews() {
@@ -114,10 +115,10 @@ public class MainT2Fragment extends BaseMainFragment {
                     mMainT2Beans.clear();
                     mAdapter.notifyDataSetChanged();
                 }*/
+                mIsHandRefresh = true;
                 mIsAddToPayVipItem = false;
                 loadMoreEnd = false;
                 PAGE_NUM = 1;
-                PAGE_SIZE = 5;
                 netData();
             }
         });
@@ -164,12 +165,14 @@ public class MainT2Fragment extends BaseMainFragment {
     }
 
     private void netData() {
-        mMainT2Beans = (List<MainT2Bean>) SerializableFileUtli.checkReadPermission(mMainActivity, "main2_example_lists");
-        if (mMainT2Beans != null && mMainT2Beans.size() != 0) {
-            initRecyclerViewData();
-        } else {
-            mLoadDialog = new LoadDialog(mMainActivity);
-            mLoadDialog.showLoadingDialog();
+        if (!mIsHandRefresh) {
+            mMainT2Beans = (List<MainT2Bean>) SerializableFileUtli.checkReadPermission(mMainActivity, "main2_example_lists");
+            if (mMainT2Beans != null && mMainT2Beans.size() != 0) {
+                initRecyclerViewData();
+            } else {
+                mLoadDialog = new LoadDialog(mMainActivity);
+                mLoadDialog.showLoadingDialog();
+            }
         }
         mLoveEngin.exampLists(String.valueOf(YcSingle.getInstance().id), String.valueOf(PAGE_NUM), String.valueOf(PAGE_SIZE), "example/lists").subscribe(new MySubscriber<AResultInfo<ExampDataBean>>(mLoadDialog) {
             @Override
@@ -189,8 +192,8 @@ public class MainT2Fragment extends BaseMainFragment {
                         mMainT2Beans.add(new MainT2Bean(1, exampListsBean.create_time, exampListsBean.id, exampListsBean.image, exampListsBean.post_title));
                     }
                 }
-                if (!mUserIsVip) {
-                    mMainT2Beans.add(new MainT2Bean("vip", 2));
+                if (!mUserIsVip && mMainT2Beans != null && mMainT2Beans.size() > 6) {
+                    mMainT2Beans.add(6, new MainT2Bean("vip", 2));
                 }
                 SerializableFileUtli.checkPermissionWriteData(mMainT2Beans, "main2_example_lists");
 //                CacheUtils.cacheBeanData(mMainActivity, "main2_example_lists", mMainT2Beans);
@@ -287,37 +290,9 @@ public class MainT2Fragment extends BaseMainFragment {
         loadDataEnd = true;
     }
 
-    private void addToPayVipData() {
-        if (mUserIsVip) {  //已经是VIP 真的没有数据了
-            return;
-        }
-        if (mIsAddToPayVipItem) {  //只添加一条即可
-            return;
-        }
-        mIsAddToPayVipItem = true;
-        mRecyclerView.postDelayed(new Runnable() {
-            @Override
-            public void run() {
-                showProgressBar = false;
-                mMainT2Beans.remove(mMainT2Beans.size() - 1);
-                mAdapter.notifyDataSetChanged();
-                mMainT2Beans.add(new MainT2Bean("toPayVip", 3, mMainT2Beans.size()));
-                mAdapter.notifyDataSetChanged();
-                mAdapter.setLoaded();
-            }
-        }, 600);
-    }
 
     private void netLoadMore() {
-
-
-
-        if (PAGE_NUM >= 4 && PAGE_SIZE != 10) {
-            PAGE_SIZE = 10;
-        }
         mLoveEngin.exampLists(String.valueOf(YcSingle.getInstance().id), String.valueOf(++PAGE_NUM), String.valueOf(PAGE_SIZE), "example/lists").subscribe(new MySubscriber<AResultInfo<ExampDataBean>>(mMainActivity) {
-
-
             @Override
             protected void onNetNext(AResultInfo<ExampDataBean> exampDataBeanAResultInfo) {
                 ExampDataBean exampDataBean = exampDataBeanAResultInfo.data;
@@ -355,13 +330,13 @@ public class MainT2Fragment extends BaseMainFragment {
     }
 
     private void changLoadMoreView(List<MainT2Bean> netLoadMoreData) {
-        showProgressBar = false;
-        mMainT2Beans.remove(mMainT2Beans.size() - 1);
-        mAdapter.notifyDataSetChanged();
+        MainT2Bean mainT2Bean = mMainT2Beans.get(mMainT2Beans.size() - 1);
+        if (mainT2Bean == null) {
+            showProgressBar = false;
+            mMainT2Beans.remove(mMainT2Beans.size() - 1);
+            mAdapter.notifyDataSetChanged();
+        }
         if (netLoadMoreData != null && netLoadMoreData.size() != 0) {
-            if (PAGE_NUM != 4 && netLoadMoreData.size() < PAGE_SIZE) {
-                loadMoreEnd = true;
-            }
             mMainT2Beans.addAll(netLoadMoreData);
             mAdapter.notifyDataSetChanged();
         } else {
@@ -371,25 +346,48 @@ public class MainT2Fragment extends BaseMainFragment {
     }
 
     private void dataEmptyCheck() {
-        if (PAGE_NUM != 1) {
+        if (PAGE_NUM != 1) {  //如果购买成功，依然请求这一页
             PAGE_NUM--;
         }
         int id = YcSingle.getInstance().id;
-        if (id <= 0) {   //数据为空 未登录
-
-            addToPayVipData(); //数据为空 不是VIP
-
-            /*if (mIsShowLogined) {
+        /*if (id <= 0) {   //数据为空
+            Log.d("mylog", "dataEmptyCheck: PAGE_NUM "+PAGE_NUM);
+            if (PAGE_NUM <= 2) {
+                addToPayVipData(); //数据为空 不是VIP
+            }
+            *//*if (mIsShowLogined) {
                 addToPayVipData(); //数据为空 不是VIP
                 return;
             }
             if(!mIsNotNet){
                 mMainActivity.showToLoginDialog();
                 mIsShowLogined = true;
-            }*/
-        } else {  //数据为空 不是VIP
-            addToPayVipData();
+            }*//*
+        }*/
+        if (PAGE_NUM <= 2) {
+            if (!mIsAddToPayVipItem) {
+                addToPayVipData(); //数据为空 不是VIP
+            }
         }
+    }
+
+    private void addToPayVipData() {
+        if (mUserIsVip) {  //已经是VIP 真的没有数据了
+            return;
+        }
+        /*if (mIsAddToPayVipItem) {  //只添加一条即可
+            return;
+        }
+        mIsAddToPayVipItem = true;*/
+        mIsAddToPayVipItem = true;
+        mRecyclerView.postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                mMainT2Beans.add(new MainT2Bean("toPayVip", 3, mMainT2Beans.size()));
+                mAdapter.notifyDataSetChanged();
+//                mRecyclerView.scrollToPosition(mMainT2Beans.size()-1);
+            }
+        }, 600);
     }
 
 
