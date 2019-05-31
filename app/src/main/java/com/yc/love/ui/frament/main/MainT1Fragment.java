@@ -1,10 +1,6 @@
 package com.yc.love.ui.frament.main;
 
-import android.Manifest;
 import android.content.Intent;
-import android.content.pm.PackageManager;
-import android.os.Environment;
-import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.OrientationHelper;
@@ -14,13 +10,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.LinearLayout;
-import android.widget.Toast;
 
-import com.google.gson.Gson;
-import com.google.gson.reflect.TypeToken;
-import com.qw.soul.permission.SoulPermission;
-import com.qw.soul.permission.bean.Permission;
-import com.qw.soul.permission.callbcak.CheckRequestPermissionListener;
 import com.yc.love.R;
 import com.yc.love.adaper.rv.MainT1MoreItemAdapter;
 import com.yc.love.adaper.rv.base.RecyclerViewItemListener;
@@ -30,6 +20,7 @@ import com.yc.love.adaper.rv.holder.MainT1ItemHolder;
 import com.yc.love.adaper.rv.holder.ProgressBarViewHolder;
 import com.yc.love.adaper.rv.holder.TimeoutItemHolder;
 import com.yc.love.adaper.rv.holder.TitleT1ViewHolder;
+import com.yc.love.cache.CacheWorker;
 import com.yc.love.model.base.MySubscriber;
 import com.yc.love.model.bean.AResultInfo;
 import com.yc.love.model.bean.CategoryArticleBean;
@@ -38,7 +29,6 @@ import com.yc.love.model.bean.ExampDataBean;
 import com.yc.love.model.bean.ExampListsBean;
 import com.yc.love.model.bean.event.NetWorkChangT1Bean;
 import com.yc.love.model.engin.LoveEngin;
-import com.yc.love.model.util.SPUtils;
 import com.yc.love.ui.activity.ExampleDetailActivity;
 import com.yc.love.ui.activity.LoveByStagesActivity;
 import com.yc.love.ui.activity.LoveHealActivity;
@@ -46,21 +36,11 @@ import com.yc.love.ui.activity.LoveHealingActivity;
 import com.yc.love.ui.activity.ShareActivity;
 import com.yc.love.ui.frament.base.BaseMainFragment;
 import com.yc.love.ui.view.LoadDialog;
-import com.yc.love.utils.CacheUtils;
-import com.yc.love.utils.SerializableFileUtli;
 
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
 import org.greenrobot.eventbus.ThreadMode;
 
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.io.ObjectInputStream;
-import java.io.ObjectOutputStream;
-import java.net.SocketTimeoutException;
-import java.net.UnknownHostException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -78,6 +58,7 @@ public class MainT1Fragment extends BaseMainFragment {
     private MainT1MoreItemAdapter mAdapter;
     private ProgressBarViewHolder progressBarViewHolder;
     private LoveEngin mLoveEngin;
+    private CacheWorker mCacheWorker;
     private List<ExampListsBean> mExampListsBeans = new ArrayList<>();
     ;
     private RecyclerView mRecyclerView;
@@ -99,7 +80,7 @@ public class MainT1Fragment extends BaseMainFragment {
     @Override
     protected void initViews() {
         mLoveEngin = new LoveEngin(mMainActivity);
-
+        mCacheWorker = new CacheWorker();
         mLlNotNet = rootView.findViewById(R.id.main_t1_not_net);
 
         mRecyclerView = rootView.findViewById(R.id.main_t1_rl);
@@ -184,7 +165,8 @@ public class MainT1Fragment extends BaseMainFragment {
     }
 
     private void netData() {
-        mExampListsBeans = (List<ExampListsBean>) SerializableFileUtli.checkReadPermission(mMainActivity, "main1_example_index");
+//        mExampListsBeans = (List<ExampListsBean>) SerializableFileUtli.checkReadPermission(mMainActivity, "main1_example_index");
+        mExampListsBeans = (List<ExampListsBean>)mCacheWorker.getCache(mMainActivity, "main1_example_index");
         if (mExampListsBeans != null && mExampListsBeans.size() != 0) {
             mIsCacheData = true;
             if (mIsCacheData && mIsCacheTitleData) {
@@ -203,7 +185,8 @@ public class MainT1Fragment extends BaseMainFragment {
                 }
 //                mExampListsBeans.add(0, new ExampListsBean(3, "Article_Category"));
                 mExampListsBeans.add(0, new ExampListsBean(0, "title"));
-                SerializableFileUtli.checkPermissionWriteData(mExampListsBeans, "main1_example_index");
+//                SerializableFileUtli.checkPermissionWriteData(mExampListsBeans, "main1_example_index");
+                mCacheWorker.setCache("main1_example_index", mExampListsBeans);
                 mIsNetData = true;
                 if (mIsNetData && mIsNetTitleData) {
                     initRecyclerViewData();
@@ -237,7 +220,8 @@ public class MainT1Fragment extends BaseMainFragment {
 
     private void netTitleData() {
 
-        mCategoryArticleBeans = (List<CategoryArticleBean>) SerializableFileUtli.checkReadPermission(mMainActivity, "main1_Article_category");
+//        mCategoryArticleBeans = (List<CategoryArticleBean>) SerializableFileUtli.checkReadPermission(mMainActivity, "main1_Article_category");
+        mCategoryArticleBeans = (List<CategoryArticleBean>) mCacheWorker.getCache(mMainActivity, "main1_Article_category");
         if (mCategoryArticleBeans != null && mCategoryArticleBeans.size() != 0) {
             mIsCacheTitleData = true;
             if (mIsCacheData && mIsCacheTitleData) {
@@ -252,7 +236,8 @@ public class MainT1Fragment extends BaseMainFragment {
             protected void onNetNext(AResultInfo<List<CategoryArticleBean>> listAResultInfo) {
                 mCategoryArticleBeans = listAResultInfo.data;
 //                CacheUtils.cacheBeanData(mMainActivity, "main_Article_category", mCategoryArticleBeans);
-                SerializableFileUtli.checkPermissionWriteData(mCategoryArticleBeans, "main1_Article_category");
+//                SerializableFileUtli.checkPermissionWriteData(mCategoryArticleBeans, "main1_Article_category");
+                mCacheWorker.setCache("main1_Article_category", mCategoryArticleBeans);
                 mIsNetTitleData = true;
                 if (mIsNetData && mIsNetTitleData) {
                     initRecyclerViewData();

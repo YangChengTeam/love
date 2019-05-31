@@ -28,7 +28,6 @@ import com.yc.love.adaper.vp.MainPagerAdapter;
 import com.yc.love.factory.MainFragmentFactory;
 import com.yc.love.model.domain.URLConfig;
 import com.yc.love.model.single.YcSingle;
-import com.yc.love.receiver.UpdataBroadcastReceiver;
 import com.yc.love.utils.DownloadedApkUtlis;
 import com.yc.love.model.util.SPUtils;
 import com.yc.love.receiver.NetWorkChangReceiver;
@@ -46,7 +45,6 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
     private NetWorkChangReceiver netWorkChangReceiver;
     private String mPackageVersionName;
     public String mDownloadIdKey = "mDownloadIdKey";
-    private UpdataBroadcastReceiver mUpdataBroadcastReceiver;
     private OnChildDisposeMainKeyDownListent onChildDisposeMainKeyDownListent;
 
 
@@ -135,14 +133,7 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
 //        isRegistered = true;
     }
 
-    private void initUpdataBroadcastReceiver() {
-//        long spDownloadId = (long) SPUtils.get(this, mDownloadIdKey, (long) -1);
-//        Log.d("mylog", "initUpdataBroadcastReceiver: spDownloadId " + spDownloadId);
-        mUpdataBroadcastReceiver = new UpdataBroadcastReceiver(mDownloadIdKey);
-        IntentFilter filter = new IntentFilter();
-        filter.addAction(DownloadManager.ACTION_DOWNLOAD_COMPLETE);
-        registerReceiver(mUpdataBroadcastReceiver, filter);
-    }
+
 
 
     @Override
@@ -154,9 +145,7 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
             unregisterReceiver(netWorkChangReceiver);
         }
 //        }
-        if(netWorkChangReceiver!=null){
-            unregisterReceiver(mUpdataBroadcastReceiver);
-        }
+
     }
 
     private void initView() {
@@ -183,7 +172,6 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
             @Override
             public void run() {
                 initNetWorkChangReceiver();
-//                initUpdataBroadcastReceiver();
             }
         }, 200);
     }
@@ -288,7 +276,7 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
         alertDialog.setButton(DialogInterface.BUTTON_POSITIVE, "立即下载", new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialogInterface, int i) {
-                DownloadedApkUtlis.downLoadApk(MainActivity.this, mDownloadIdKey, netUrl, contentObserver);
+//                DownloadedApkUtlis.downLoadApk(MainActivity.this, mDownloadIdKey, netUrl, contentObserver);
             }
         });
         alertDialog.show();

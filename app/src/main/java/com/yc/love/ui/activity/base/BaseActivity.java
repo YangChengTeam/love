@@ -10,6 +10,7 @@ import android.os.PersistableBundle;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
+import android.text.TextUtils;
 import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
@@ -19,9 +20,13 @@ import android.view.inputmethod.InputMethodManager;
 import android.widget.Toast;
 
 import com.umeng.analytics.MobclickAgent;
+import com.yc.love.model.constant.ConstantKey;
+import com.yc.love.model.data.BackfillSingle;
 import com.yc.love.model.single.YcSingle;
+import com.yc.love.model.util.SPUtils;
 import com.yc.love.ui.activity.IdCorrelationSlidingActivity;
 import com.yc.love.ui.activity.MainActivity;
+import com.yc.love.ui.activity.SpecializedActivity;
 import com.yc.love.ui.view.LoadDialog;
 import com.yc.love.utils.StatusBarUtil;
 
@@ -38,6 +43,23 @@ public abstract class BaseActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         Log.d("ClassName", "onCreate: ClassName " + getClass().getName());
         mLoadingDialog = new LoadDialog(this);
+
+
+        checkSingle();
+    }
+
+    private void checkSingle() {
+        if (this instanceof SpecializedActivity) { //默认在闪屏页恢复数据
+            return;
+        }
+        int id = YcSingle.getInstance().id;
+        if (id <= 0) {
+            String idInfo = (String) SPUtils.get(this, SPUtils.ID_INFO_BEAN, "");
+            if (!TextUtils.isEmpty(idInfo)) {
+                MobclickAgent.onEvent(this, ConstantKey.UM_INFO_LOSE_ID);
+                BackfillSingle.backfillLoginData(this, "");
+            }
+        }
     }
 
     public void showToastShort(String des) {

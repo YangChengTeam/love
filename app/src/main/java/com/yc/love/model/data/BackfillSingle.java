@@ -20,6 +20,11 @@ import org.json.JSONObject;
 
 public class BackfillSingle {
 
+    /**
+     * 更新单例数据
+     * @param context
+     * @param stringBean  服务器返回的新数据，传""表示没有新数据取本地SP的数据恢复
+     */
     public static void backfillLoginData(Context context, String stringBean) {
         YcSingle ycSingle = YcSingle.getInstance();
         //本地数据

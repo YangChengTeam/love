@@ -21,6 +21,7 @@ public class ConstantKey {
     public static final String UM_PERSONAL_ID = "personal_id";
     public static final String UM_INSTANCE_ID = "instance_id";
     public static final String UM_PROMOTION_ID = "promotion_id";
+    public static final String UM_INFO_LOSE_ID = "info_lose_id";
 
 
 }

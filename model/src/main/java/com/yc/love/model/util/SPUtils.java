@@ -20,6 +20,9 @@ public class SPUtils {
 
     public static final String SHARE_HISTORY = "SHARE_HISTORY";
 
+    //外部apk下载id  用于保存系统下载文件的标识 long lastDownloadId = dowanloadmanager.enqueue(request);
+    public static final String DOWNLOAD_OUT_ID = "DOWNLOAD_OUT_ID";
+
 //    public static final String LOGIN_ = "LOGIN_BEAN";
 
 

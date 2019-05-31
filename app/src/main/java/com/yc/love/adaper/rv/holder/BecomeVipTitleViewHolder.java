@@ -20,7 +20,7 @@ public class BecomeVipTitleViewHolder extends BaseViewHolder<BecomeVipBean> {
     public void bindData(BecomeVipBean becomeVipBean) {
 
         TextView tvName = itemView.findViewById(R.id.item_become_vip_title_tv_name);
-        tvName.setText(becomeVipBean.name);
+//        tvName.setText(becomeVipBean.name);
 
     }
 }

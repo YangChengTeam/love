@@ -80,8 +80,12 @@ public abstract class BecomeVipAdapter extends RecyclerView.Adapter<RecyclerView
         }
     }
 
-    private int height = 25;// 滑动开始变色的高,真实项目中此高度是由广告轮播或其他首页view高度决定
+    private int height = 35;// 滑动开始变色的高,真实项目中此高度是由广告轮播或其他首页view高度决定
     private int overallXScroll = 0;
+
+    private int endAlpha = 255;
+//    private int endAlpha = 180;
+
     private RecyclerView.OnScrollListener onScrollListener = new RecyclerView.OnScrollListener() {
         @Override
         public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
@@ -93,17 +97,17 @@ public abstract class BecomeVipAdapter extends RecyclerView.Adapter<RecyclerView
                 overallXScroll = 1;
             }
             overallXScroll = overallXScroll + dy;// 累加y值 解决滑动一半y值为0
-            if (overallXScroll <= 0) {   //设置标题的背景颜色
+            if (overallXScroll <= 10) {   //设置标题的背景颜色
 //                mLlTitleCon.setBackgroundColor(Color.argb((int) 0, 255, 130, 0));
                 mLlTitleCon.setBackgroundColor(Color.argb((int) 0, 208, 180, 130));
-            } else if (overallXScroll > 0 && overallXScroll <= height) { //滑动距离小于banner图的高度时，设置背景和字体颜色颜色透明度渐变
+            } else if (overallXScroll > 10 && overallXScroll <= height) { //滑动距离小于banner图的高度时，设置背景和字体颜色颜色透明度渐变
                 float scale = (float) overallXScroll / height;
-                float alpha = (255 * scale);
+                float alpha = (endAlpha * scale);
 //                mLlTitleCon.setBackgroundColor(Color.argb((int) alpha, 255, 130, 0));
                 mLlTitleCon.setBackgroundColor(Color.argb((int) alpha, 208, 180, 130));
             } else {
 //                mLlTitleCon.setBackgroundColor(Color.argb((int) 255, 255, 130, 0));
-                mLlTitleCon.setBackgroundColor(Color.argb((int) 255, 208, 180, 130));
+                mLlTitleCon.setBackgroundColor(Color.argb((int) endAlpha, 208, 180, 130));
             }
         }
     };

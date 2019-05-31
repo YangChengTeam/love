@@ -1,8 +1,6 @@
 package com.yc.love.ui.frament.main;
 
 import android.content.Intent;
-import android.graphics.Color;
-import android.os.Build;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
@@ -14,8 +12,6 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.LinearLayout;
 
-import com.google.gson.Gson;
-import com.google.gson.reflect.TypeToken;
 import com.umeng.analytics.MobclickAgent;
 import com.yc.love.R;
 import com.yc.love.adaper.rv.MainT2MoreItemAdapter;
@@ -26,6 +22,8 @@ import com.yc.love.adaper.rv.holder.ProgressBarViewHolder;
 import com.yc.love.adaper.rv.holder.MainT2ViewHolder;
 import com.yc.love.adaper.rv.holder.MainT2TitleViewHolder;
 import com.yc.love.adaper.rv.holder.VipViewHolder;
+import com.yc.love.cache.CacheWorker;
+import com.yc.love.cache.SDFileStrategy;
 import com.yc.love.model.base.MySubscriber;
 import com.yc.love.model.bean.AResultInfo;
 import com.yc.love.model.bean.ExampDataBean;
@@ -35,14 +33,10 @@ import com.yc.love.model.bean.event.NetWorkChangT2Bean;
 import com.yc.love.model.constant.ConstantKey;
 import com.yc.love.model.engin.LoveEngin;
 import com.yc.love.model.single.YcSingle;
-import com.yc.love.model.util.RomUtils;
-import com.yc.love.model.util.SPUtils;
 import com.yc.love.ui.activity.BecomeVipActivity;
 import com.yc.love.ui.activity.ExampleDetailActivity;
 import com.yc.love.ui.frament.base.BaseMainFragment;
 import com.yc.love.ui.view.LoadDialog;
-import com.yc.love.utils.CacheUtils;
-import com.yc.love.utils.SerializableFileUtli;
 
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
@@ -72,6 +66,7 @@ public class MainT2Fragment extends BaseMainFragment {
     private SwipeRefreshLayout mSwipeRefresh;
     private boolean mIsNotNet;
     private LoadDialog mLoadDialog;
+    private CacheWorker mCacheWorker;
 
 
     @Override
@@ -89,6 +84,7 @@ public class MainT2Fragment extends BaseMainFragment {
     protected void initViews() {
         MobclickAgent.onEvent(mMainActivity, ConstantKey.UM_INSTANCE_ID);
         mLoveEngin = new LoveEngin(mMainActivity);
+        mCacheWorker = new CacheWorker();
         View viewBar = rootView.findViewById(R.id.main_t2_view_bar);
         mLlNotNet = rootView.findViewById(R.id.main_t2_not_net);
         mMainActivity.setStateBarHeight(viewBar, 1);
@@ -166,7 +162,7 @@ public class MainT2Fragment extends BaseMainFragment {
 
     private void netData() {
         if (!mIsHandRefresh) {
-            mMainT2Beans = (List<MainT2Bean>) SerializableFileUtli.checkReadPermission(mMainActivity, "main2_example_lists");
+            mMainT2Beans = (List<MainT2Bean>) mCacheWorker.getCache(mMainActivity, "main2_example_lists");
             if (mMainT2Beans != null && mMainT2Beans.size() != 0) {
                 initRecyclerViewData();
             } else {
@@ -174,35 +170,40 @@ public class MainT2Fragment extends BaseMainFragment {
                 mLoadDialog.showLoadingDialog();
             }
         }
-        mLoveEngin.exampLists(String.valueOf(YcSingle.getInstance().id), String.valueOf(PAGE_NUM), String.valueOf(PAGE_SIZE), "example/lists").subscribe(new MySubscriber<AResultInfo<ExampDataBean>>(mLoadDialog) {
-            @Override
-            protected void onNetNext(AResultInfo<ExampDataBean> exampDataBeanAResultInfo) {
-                mIsNetData = true;
-                ExampDataBean exampDataBean = exampDataBeanAResultInfo.data;
-                int isVip = exampDataBean.is_vip;
-                if (isVip > 0) {
-                    mUserIsVip = true;
-                }
-                List<ExampListsBean> exampListsBeans = exampDataBean.lists;
-                mMainT2Beans = new ArrayList<>();
-                mMainT2Beans.add(new MainT2Bean("tit", 0));
-                if (exampListsBeans != null && exampListsBeans.size() != 0) {
-                    for (int i = 0; i < exampListsBeans.size(); i++) {
-                        ExampListsBean exampListsBean = exampListsBeans.get(i);
-                        mMainT2Beans.add(new MainT2Bean(1, exampListsBean.create_time, exampListsBean.id, exampListsBean.image, exampListsBean.post_title));
-                    }
-                }
-                if (!mUserIsVip && mMainT2Beans != null && mMainT2Beans.size() > 6) {
-                    mMainT2Beans.add(6, new MainT2Bean("vip", 2));
-                }
-                SerializableFileUtli.checkPermissionWriteData(mMainT2Beans, "main2_example_lists");
-//                CacheUtils.cacheBeanData(mMainActivity, "main2_example_lists", mMainT2Beans);
-                initRecyclerViewData();
-            }
+        mLoveEngin.exampLists(String.valueOf(YcSingle.getInstance().id), String.valueOf(PAGE_NUM), String.valueOf(PAGE_SIZE), "example/lists")
+                .subscribe(new MySubscriber<AResultInfo<ExampDataBean>>(mLoadDialog) {
+                    @Override
+                    protected void onNetNext(AResultInfo<ExampDataBean> exampDataBeanAResultInfo) {
+                        mIsNetData = true;
+                        ExampDataBean exampDataBean = exampDataBeanAResultInfo.data;
+                        int isVip = exampDataBean.is_vip;
+                        if (isVip > 0) {
+                            mUserIsVip = true;
+                        }
+                        List<ExampListsBean> exampListsBeans = exampDataBean.lists;
+                        mMainT2Beans = new ArrayList<>();
+                        mMainT2Beans.add(new MainT2Bean("tit", 0));
+                        if (exampListsBeans != null && exampListsBeans.size() != 0) {
+                            for (int i = 0; i < exampListsBeans.size(); i++) {
+                                ExampListsBean exampListsBean = exampListsBeans.get(i);
+                                mMainT2Beans.add(new MainT2Bean(1, exampListsBean.create_time, exampListsBean.id, exampListsBean.image, exampListsBean.post_title));
+                            }
+                        }
+                        if (!mUserIsVip && mMainT2Beans != null && mMainT2Beans.size() > 6) {
+                            mMainT2Beans.add(6, new MainT2Bean("vip", 2));
+                        }
 
-            @Override
-            protected void onNetError(Throwable e) {
-                mSwipeRefresh.setRefreshing(false);
+
+                        mCacheWorker.setCache("main2_example_lists", mMainT2Beans);
+
+//                SerializableFileUtli.checkPermissionWriteData(mMainT2Beans, "main2_example_lists");
+//                CacheUtils.cacheBeanData(mMainActivity, "main2_example_lists", mMainT2Beans);
+                        initRecyclerViewData();
+                    }
+
+                    @Override
+                    protected void onNetError(Throwable e) {
+                        mSwipeRefresh.setRefreshing(false);
                 /*String data = (String) SPUtils.get(mMainActivity, "main2_example_lists", "");
                 mMainT2Beans = new Gson().fromJson(data, new TypeToken<ArrayList<MainT2Bean>>() {
                 }.getType());
@@ -211,13 +212,13 @@ public class MainT2Fragment extends BaseMainFragment {
                     mIsNetData = true;
                     initRecyclerViewData();
                 }*/
-            }
+                    }
 
-            @Override
-            protected void onNetCompleted() {
-                mSwipeRefresh.setRefreshing(false);
-            }
-        });
+                    @Override
+                    protected void onNetCompleted() {
+                        mSwipeRefresh.setRefreshing(false);
+                    }
+                });
     }
 
     private void initRecyclerViewData() {

@@ -136,13 +136,6 @@
             </intent-filter>
         </receiver>
         -->
-        <!--
-        <receiver android:name=".receiver.UpdataBroadcastReceiver">
-            <intent-filter>
-                <action android:name="android.intent.action.DOWNLOAD_COMPLETE" />
-            </intent-filter>
-        </receiver>
-        -->
         <receiver android:name=".receiver.InitApkBroadCastReceiver">
             <intent-filter>
                 <action android:name="android.intent.action.PACKAGE_ADDED" />
@@ -162,6 +155,12 @@
         <activity android:name=".ui.activity.PrivacyStatementActivity" />
         <activity android:name=".ui.activity.UsingHelpActivity" />
         <activity android:name=".ui.activity.TestWebViewActivity" />
+
+        <receiver android:name=".receiver.UpdataBroadcastReceiver">
+            <intent-filter>
+                <action android:name="android.intent.action.DOWNLOAD_COMPLETE" />
+            </intent-filter>
+        </receiver>
     </application>
 
 </manifest>

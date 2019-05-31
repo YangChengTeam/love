@@ -1,29 +1,49 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/love_background"
-    android:orientation="vertical">
+    android:background="@color/love_background">
 
-    <include
-        android:id="@+id/main_t4_view_bar"
-        layout="@layout/layout_view_bar" />
-
-    <ProgressBar
-        android:id="@+id/main_t4_pb_progress"
-        style="?android:attr/progressBarStyleHorizontal"
-        android:layout_width="match_parent"
-        android:layout_height="3dp"
-        android:layout_alignParentTop="true"
-        android:max="100"
-        android:progress="0"
-        android:progressDrawable="@drawable/process_bg" />
-    <WebView
-        android:id="@+id/main_t4_webview"
+    <ImageView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:focusable="true"
-        android:focusableInTouchMode="true" />
+        android:scaleType="fitXY"
+        android:src="@mipmap/main_t4_bg" />
 
-</LinearLayout>
+    <TextView
+        android:id="@+id/main_t4_tv_btn"
+        android:layout_width="265dp"
+        android:layout_height="60dp"
+        android:layout_alignParentBottom="true"
+        android:layout_centerHorizontal="true"
+        android:layout_marginBottom="12dp" />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        android:visibility="gone">
+
+        <include
+            android:id="@+id/main_t4_view_bar"
+            layout="@layout/layout_view_bar" />
+
+        <ProgressBar
+            android:id="@+id/main_t4_pb_progress"
+            style="?android:attr/progressBarStyleHorizontal"
+            android:layout_width="match_parent"
+            android:layout_height="3dp"
+            android:layout_alignParentTop="true"
+            android:max="100"
+            android:progress="0"
+            android:progressDrawable="@drawable/process_bg" />
+
+        <WebView
+            android:id="@+id/main_t4_webview"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:focusable="true"
+            android:focusableInTouchMode="true" />
+    </LinearLayout>
+</RelativeLayout>

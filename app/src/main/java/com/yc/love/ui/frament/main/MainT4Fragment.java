@@ -1,10 +1,13 @@
 package com.yc.love.ui.frament.main;
 
 import android.app.DownloadManager;
+import android.app.ProgressDialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.database.ContentObserver;
 import android.database.Cursor;
 import android.graphics.Bitmap;
+import android.support.v7.app.AlertDialog;
 import android.util.Log;
 import android.view.View;
 import android.webkit.WebChromeClient;
@@ -12,6 +15,7 @@ import android.webkit.WebSettings;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
 import android.widget.ProgressBar;
+import android.widget.TextView;
 
 import com.umeng.analytics.MobclickAgent;
 import com.yc.love.R;
@@ -24,12 +28,13 @@ import com.yc.love.model.util.SPUtils;
 import com.yc.love.ui.activity.MainActivity;
 import com.yc.love.ui.frament.base.BaseMainFragment;
 import com.yc.love.ui.view.LoadDialog;
+import com.yc.love.utils.DownloadedApkUtlis;
 
 /**
  * Created by mayn on 2019/5/22.
  */
 
-public class MainT4Fragment extends BaseMainFragment {
+public class MainT4Fragment extends BaseMainFragment implements View.OnClickListener {
 
     private WebView mWebView;
     private ProgressBar mProgressBar;
@@ -38,7 +43,8 @@ public class MainT4Fragment extends BaseMainFragment {
     //    private List<String> urlList = new ArrayList<>();
 //    private boolean mIsCanToHome;
     private String homeUrl;
-//    private boolean mIsHome;
+    private int mProgress;
+    //    private boolean mIsHome;
 
     @Override
     protected int setContentView() {
@@ -55,11 +61,80 @@ public class MainT4Fragment extends BaseMainFragment {
     protected void initViews() {
         MobclickAgent.onEvent(mMainActivity, ConstantKey.UM_WELFEAR_ID);
 
-        mLoveEngin = new LoveEngin(mMainActivity);
-        mProgressBar = rootView.findViewById(R.id.main_t4_pb_progress);
         View viewBar = rootView.findViewById(R.id.main_t4_view_bar);
-        mWebView = rootView.findViewById(R.id.main_t4_webview);
         mMainActivity.setStateBarHeight(viewBar, 1);
+        mLoveEngin = new LoveEngin(mMainActivity);
+
+        TextView tvBen = rootView.findViewById(R.id.main_t4_tv_btn);
+        tvBen.setOnClickListener(this);
+
+
+//        initWebView();
+    }
+
+    @Override
+    public void onClick(View v) {
+        switch (v.getId()) {
+            case R.id.main_t4_tv_btn:
+                String downloadUrl = "http://sp.5gchang.com/Uploads/apk/2/ssyy.apk";
+                DownloadedApkUtlis.downLoadApk(mMainActivity, downloadUrl, contentObserver);
+
+                showDownloadDialog();
+                break;
+        }
+    }
+
+    private ContentObserver contentObserver = new ContentObserver(null) {
+        @Override
+        public void onChange(boolean selfChange) {
+            DownloadManager.Query query = new DownloadManager.Query();
+            long spDownloadId = (long) SPUtils.get(mMainActivity, SPUtils.DOWNLOAD_OUT_ID, (long) -1);
+            query.setFilterById(spDownloadId);
+            DownloadManager dManager = (DownloadManager) mMainActivity.getSystemService(Context.DOWNLOAD_SERVICE);
+            final Cursor cursor = dManager.query(query);
+            if (cursor != null && cursor.moveToFirst()) {
+                final int totalColumn = cursor.getColumnIndex(DownloadManager.COLUMN_TOTAL_SIZE_BYTES);
+                final int currentColumn = cursor.getColumnIndex(DownloadManager.COLUMN_BYTES_DOWNLOADED_SO_FAR);
+                int totalSize = cursor.getInt(totalColumn);
+                int currentSize = cursor.getInt(currentColumn);
+                float percent = (float) currentSize / (float) totalSize;
+                mProgress = Math.round(percent * 100);
+                Log.d("mylog", "onChange: progress " + mProgress);
+                if (pd != null) {
+                    pd.setProgress(mProgress);
+                    if (mProgress == 100) {
+                        pd.dismiss();
+                    }
+                }
+            }
+        }
+    };
+
+    private ProgressDialog pd; // 进度条对话框
+
+    private void showDownloadDialog() {
+        if (pd == null) {
+            pd = new ProgressDialog(mMainActivity);
+        }
+        pd.setProgressStyle(ProgressDialog.STYLE_HORIZONTAL);
+        pd.setMessage("文件正在下载");
+        pd.setMax(100);
+        pd.show();
+        pd.setCancelable(false);
+
+        /*AlertDialog alertDialog = new AlertDialog.Builder(mMainActivity).create();
+        alertDialog.setTitle("文件正在下载");
+//        alertDialog.setMessage("文件正在下载");
+        alertDialog.set
+        DialogInterface.OnClickListener listener = null;
+        alertDialog.setButton(DialogInterface.BUTTON_POSITIVE, "确定", listener);
+        alertDialog.show();*/
+    }
+
+    private void initWebView() {
+        mProgressBar = rootView.findViewById(R.id.main_t4_pb_progress);
+        mWebView = rootView.findViewById(R.id.main_t4_webview);
+
         mWebView.setClickable(true);
         mWebView.getSettings().setUseWideViewPort(true);
         mWebView.getSettings().setSupportZoom(true);
@@ -162,7 +237,7 @@ public class MainT4Fragment extends BaseMainFragment {
 
     @Override
     protected void lazyLoad() {
-        netData();
+//        netData();
     }
 
     private void netData() {
@@ -196,29 +271,6 @@ public class MainT4Fragment extends BaseMainFragment {
         });
     }
 
-    private ContentObserver contentObserver = new ContentObserver(null) {
-        @Override
-        public void onChange(boolean selfChange) {
-            DownloadManager.Query query = new DownloadManager.Query();
-            long spDownloadId = (long) SPUtils.get(mMainActivity, mMainActivity.mDownloadIdKey, (long) -1);
-            query.setFilterById(spDownloadId);
-            DownloadManager dManager = (DownloadManager) mMainActivity.getSystemService(Context.DOWNLOAD_SERVICE);
-            final Cursor cursor = dManager.query(query);
-            if (cursor != null && cursor.moveToFirst()) {
-                final int totalColumn = cursor.getColumnIndex(DownloadManager.COLUMN_TOTAL_SIZE_BYTES);
-                final int currentColumn = cursor.getColumnIndex(DownloadManager.COLUMN_BYTES_DOWNLOADED_SO_FAR);
-                int totalSize = cursor.getInt(totalColumn);
-                int currentSize = cursor.getInt(currentColumn);
-                float percent = (float) currentSize / (float) totalSize;
-                int progress = Math.round(percent * 100);
-                Log.d("mylog", "onChange: progress " + progress);
-               /* pd.setProgress(progress);
-                if (progress == 100) {
-                    pd.dismiss();
-                }*/
-            }
-        }
-    };
 
     @Override
     public void onDestroy() {
@@ -227,7 +279,7 @@ public class MainT4Fragment extends BaseMainFragment {
     }
 
     public void destroyWebView() {
-        if(mProgressBar!=null){
+        if (mProgressBar != null) {
             mProgressBar.clearAnimation();
         }
         if (mWebView != null) {
@@ -239,4 +291,6 @@ public class MainT4Fragment extends BaseMainFragment {
         }
 
     }
+
+
 }
