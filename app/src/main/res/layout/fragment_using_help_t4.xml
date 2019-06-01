@@ -9,17 +9,18 @@
         android:id="@+id/using_help_tv_t4_des"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:paddingLeft="92dp"
+        android:paddingLeft="72dp"
         android:paddingTop="92dp"
         android:text="点击查看别人的实战经历，让你\n不再盲目撩妹"
         android:textColor="@color/text_gray"
-        android:textSize="@dimen/size_12"
+        android:textSize="@dimen/size_16"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
     <ImageView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_width="320dp"
+        android:layout_height="280dp"
+        android:scaleType="fitXY"
         android:src="@mipmap/using_help_04"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"

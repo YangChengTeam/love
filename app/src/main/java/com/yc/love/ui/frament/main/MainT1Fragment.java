@@ -9,13 +9,17 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Adapter;
 import android.widget.LinearLayout;
 
 import com.yc.love.R;
 import com.yc.love.adaper.rv.MainT1MoreItemAdapter;
+import com.yc.love.adaper.rv.base.BaseEmptyViewHolder;
 import com.yc.love.adaper.rv.base.RecyclerViewItemListener;
 import com.yc.love.adaper.rv.base.RecyclerViewTimeoutListener;
 import com.yc.love.adaper.rv.holder.BaseViewHolder;
+import com.yc.love.adaper.rv.holder.DataOverViewHolder;
+import com.yc.love.adaper.rv.holder.EmptyViewHolder;
 import com.yc.love.adaper.rv.holder.MainT1ItemHolder;
 import com.yc.love.adaper.rv.holder.ProgressBarViewHolder;
 import com.yc.love.adaper.rv.holder.TimeoutItemHolder;
@@ -166,7 +170,7 @@ public class MainT1Fragment extends BaseMainFragment {
 
     private void netData() {
 //        mExampListsBeans = (List<ExampListsBean>) SerializableFileUtli.checkReadPermission(mMainActivity, "main1_example_index");
-        mExampListsBeans = (List<ExampListsBean>)mCacheWorker.getCache(mMainActivity, "main1_example_index");
+        mExampListsBeans = (List<ExampListsBean>) mCacheWorker.getCache(mMainActivity, "main1_example_index");
         if (mExampListsBeans != null && mExampListsBeans.size() != 0) {
             mIsCacheData = true;
             if (mIsCacheData && mIsCacheTitleData) {
@@ -277,6 +281,11 @@ public class MainT1Fragment extends BaseMainFragment {
         mAdapter = new MainT1MoreItemAdapter(mExampListsBeans, mRecyclerView) {
 
             @Override
+            protected RecyclerView.ViewHolder getDaTaOverHolder(ViewGroup parent) {
+                return new DataOverViewHolder(mMainActivity, parent, "");
+            }
+
+            @Override
             protected RecyclerView.ViewHolder getTimeoutHolder(ViewGroup parent) {
                 return new TimeoutItemHolder(mMainActivity, parent, "", recyclerViewTimeoutListener);
             }
@@ -343,15 +352,20 @@ public class MainT1Fragment extends BaseMainFragment {
                     if (showProgressBar == false) {
                         //加入null值此时adapter会判断item的type
                         mExampListsBeans.add(null);
-                        mAdapter.notifyDataSetChanged();
+//                        mAdapter.setIsLoading();
+                        mAdapter.notifyItemChanged(mExampListsBeans.size() - 1);
+//                        mAdapter.notifyDataSetChanged();
                         showProgressBar = true;
                     }
                     if (!loadMoreEnd) {
                         netLoadMore();
                     } else {
                         Log.d("mylog", "loadMoreData: loadMoreEnd end 已加载全部数据 ");
-                        mExampListsBeans.remove(mExampListsBeans.size() - 1);
-                        mAdapter.notifyDataSetChanged();
+                        ExampListsBean exampListsBean = mExampListsBeans.get(mExampListsBeans.size() - 1);
+                        if (exampListsBean == null) {
+                            mExampListsBeans.remove(mExampListsBeans.size() - 1);
+                            mAdapter.notifyItemChanged(mExampListsBeans.size() - 1);
+                        }
                     }
                 }
             });
@@ -364,6 +378,9 @@ public class MainT1Fragment extends BaseMainFragment {
             return;
         }
         CategoryArticleBean categoryArticleBean = mCategoryArticleBeans.get(position);
+
+        Log.d("mylog", "startLoveByStagesActivity: categoryArticleBean "+categoryArticleBean);
+
         ArrayList<CategoryArticleChildrenBean> children = categoryArticleBean.children;
         LoveByStagesActivity.startLoveByStagesActivity(mMainActivity, title, children);
     }
@@ -398,14 +415,21 @@ public class MainT1Fragment extends BaseMainFragment {
 
     private void changLoadMoreView(List<ExampListsBean> netLoadMoreData) {
         showProgressBar = false;
-        mExampListsBeans.remove(mExampListsBeans.size() - 1);
-        mAdapter.notifyDataSetChanged();
+        ExampListsBean exampListsBean = mExampListsBeans.get(mExampListsBeans.size() - 1);
+        if (exampListsBean == null) {
+            mExampListsBeans.remove(mExampListsBeans.size() - 1);
+            mAdapter.notifyItemChanged(mExampListsBeans.size() - 1);
+        }
+//        mExampListsBeans.remove(mExampListsBeans.size() - 1);
+//        mAdapter.notifyDataSetChanged();
         if (netLoadMoreData != null) {
             if (netLoadMoreData.size() < PAGE_SIZE) {
                 loadMoreEnd = true;
+                mExampListsBeans.add(new ExampListsBean(4, "data_over"));
             }
             mExampListsBeans.addAll(netLoadMoreData);
-            mAdapter.notifyDataSetChanged();
+//            mAdapter.notifyDataSetChanged();
+            mAdapter.notifyItemRangeChanged(mExampListsBeans.size(), netLoadMoreData.size());
         }
         mAdapter.setLoaded();
     }

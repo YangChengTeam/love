@@ -74,14 +74,24 @@ public class MainT3Fragment extends BaseMainFragment {
 
     @Override
     protected void initViews() {
-        MobclickAgent.onEvent(mMainActivity, ConstantKey.UM_PROMOTION_ID);
-        mLoveEngin = new LoveEngin(mMainActivity);
-        mCacheWorker = new CacheWorker();
-        mLlNotNet = rootView.findViewById(R.id.main_t3_not_net);
-        View viewBar = rootView.findViewById(R.id.main_t3_view_bar);
-        mMainActivity.setStateBarHeight(viewBar, 1);
+
+
+    }
+
+    private void initView() {
+        if(mLoveEngin==null&&mLlNotNet==null){
+
+            Log.d("mylog", "initView: MainT3Fragment 333333333 initView ");
+
+            MobclickAgent.onEvent(mMainActivity, ConstantKey.UM_PROMOTION_ID);
+            mLoveEngin = new LoveEngin(mMainActivity);
+            mCacheWorker = new CacheWorker();
+            mLlNotNet = rootView.findViewById(R.id.main_t3_not_net);
+            View viewBar = rootView.findViewById(R.id.main_t3_view_bar);
+            mMainActivity.setStateBarHeight(viewBar, 1);
 //        mLoadingDialog = mMainActivity.mLoadingDialog;
-        initRecyclerView();
+            initRecyclerView();
+        }
     }
 
     public void initRecyclerView() {
@@ -126,6 +136,7 @@ public class MainT3Fragment extends BaseMainFragment {
 
     @Override
     protected void lazyLoad() {
+        initView();
 //        List<String> connectionTypeList = YcSingle.getInstance().connectionTypeList;
 //        checkNetChangUI(connectionTypeList);
         if (mIsDataToCache) {

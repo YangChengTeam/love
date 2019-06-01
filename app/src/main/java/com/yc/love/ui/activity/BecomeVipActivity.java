@@ -25,8 +25,10 @@ import com.yc.love.R;
 import com.yc.love.adaper.rv.BecomeVipAdapter;
 import com.yc.love.adaper.rv.holder.BaseViewHolder;
 import com.yc.love.adaper.rv.holder.BecomeVipItemViewHolder;
+import com.yc.love.adaper.rv.holder.BecomeVipTagViewHolder;
 import com.yc.love.adaper.rv.holder.BecomeVipTailViewHolder;
 import com.yc.love.adaper.rv.holder.BecomeVipTitleViewHolder;
+import com.yc.love.adaper.rv.holder.EndEmptyViewHolder;
 import com.yc.love.model.base.MySubscriber;
 import com.yc.love.model.bean.AResultInfo;
 import com.yc.love.model.bean.BecomeVipBean;
@@ -147,12 +149,16 @@ public class BecomeVipActivity extends PayActivity implements View.OnClickListen
 
                 mDatas = new ArrayList<>();
                 mDatas.add(new BecomeVipBean(1, "升级VIP解锁全部聊天话术及20W+条话术免费搜索"));
-                for (int i = 0; i < imgResIds.length; i++) {
-                    mDatas.add(new BecomeVipBean(2, names[i], subNames[i], imgResIds[i]));
-                }
                 if (mIndexDoodsBeans == null) {
                     mIndexDoodsBeans = new ArrayList<>();
                 }
+                mDatas.add(new BecomeVipBean(3, mIndexDoodsBeans));
+                mDatas.add(new BecomeVipBean(4, "vip标识"));
+                for (int i = 0; i < imgResIds.length; i++) {
+                    mDatas.add(new BecomeVipBean(2, names[i], subNames[i], imgResIds[i]));
+                }
+                mDatas.add(new BecomeVipBean(5, "底部空白"));
+
                /* List<IndexDoodsBean> mIndexDoodsBe=new ArrayList<>();
                 for (int i = 0; i < mIndexDoodsBeans.size(); i++) {
                     if(i<=2){
@@ -160,7 +166,7 @@ public class BecomeVipActivity extends PayActivity implements View.OnClickListen
                     }
                 }
                 mDatas.add(new BecomeVipBean(3, mIndexDoodsBe));*/
-                mDatas.add(new BecomeVipBean(3, mIndexDoodsBeans));
+
                 initRecyclerData();
             }
 
@@ -193,6 +199,7 @@ public class BecomeVipActivity extends PayActivity implements View.OnClickListen
         ivBack.setImageDrawable(getResources().getDrawable(R.mipmap.icon_arr_lift_white));
         tvTitle.setTextColor(Color.WHITE);
         tvTitle.setText("开通会员");
+//        tvTitle.setText("");
         setStateBarHeight(viewBar, 25);
 
     }
@@ -211,6 +218,16 @@ public class BecomeVipActivity extends PayActivity implements View.OnClickListen
             @Override
             public BaseViewHolder getTitleHolder(ViewGroup parent) {
                 return new BecomeVipTitleViewHolder(BecomeVipActivity.this, null, parent);
+            }
+
+            @Override
+            protected RecyclerView.ViewHolder getEndHolder(ViewGroup parent) {
+                return new EndEmptyViewHolder(BecomeVipActivity.this, null, parent);
+            }
+
+            @Override
+            protected RecyclerView.ViewHolder getVipTagHolder(ViewGroup parent) {
+                return new BecomeVipTagViewHolder(BecomeVipActivity.this, null, parent);
             }
 
             @Override
@@ -275,6 +292,7 @@ public class BecomeVipActivity extends PayActivity implements View.OnClickListen
         if (mLoadingDialog == null) {
             mLoadingDialog = new LoadDialog(this);
         }
+        mLoadingDialog.showLoadingDialog();
         mOrderEngin.initOrders(params, "orders/init").subscribe(new MySubscriber<AResultInfo<OrdersInitBean>>(mLoadingDialog) {
             @Override
             protected void onNetNext(AResultInfo<OrdersInitBean> ordersInitBeanAResultInfo) {

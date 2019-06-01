@@ -50,7 +50,7 @@ public class CollectActivity extends BaseSameActivity {
     @Override
     public void onClick(View v) {
         super.onClick(v);
-        switch (v.getId()){
+        switch (v.getId()) {
             case R.id.collect_pager_iv_back:
                 finish();
                 break;
@@ -71,7 +71,8 @@ public class CollectActivity extends BaseSameActivity {
 
     private void initNavigator(final List<String> titleList) {
         CommonNavigator commonNavigator = new CommonNavigator(this);
-        commonNavigator.setScrollPivotX(0.65f);
+//        commonNavigator.setScrollPivotX(0.65f);
+        commonNavigator.setAdjustMode(true);
         CommonNavigatorAdapter navigatorAdapter = new CommonNavigatorAdapter() {
 
             @Override
@@ -108,6 +109,18 @@ public class CollectActivity extends BaseSameActivity {
                 indicator.setColors(getResources().getColor(R.color.red_crimson));
                 return indicator;
             }
+
+            @Override
+            public float getTitleWeight(Context context, int index) {
+                if (index == 0) {
+                    return 1.0f;
+                } else if (index == 1) {
+                    return 2.5f;
+                } else {
+                    return 1.0f;
+                }
+            }
+
         };
         commonNavigator.setAdapter(navigatorAdapter);
         mTabLayout.setNavigator(commonNavigator);
@@ -124,13 +137,13 @@ public class CollectActivity extends BaseSameActivity {
         return true;
     }
 
-   /* @Override
-    protected boolean hindActivityBar() {
-        return true;
-    }*/
-   @Override
-   protected boolean isSupportSwipeBack() {
-       return false;
-   }
+    /* @Override
+     protected boolean hindActivityBar() {
+         return true;
+     }*/
+    @Override
+    protected boolean isSupportSwipeBack() {
+        return false;
+    }
 
 }

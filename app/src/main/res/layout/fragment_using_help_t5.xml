@@ -9,8 +9,8 @@
         android:id="@+id/using_help_tv_t5_des"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:paddingLeft="85dp"
-        android:paddingTop="85dp"
+        android:paddingLeft="65dp"
+        android:paddingTop="75dp"
         android:text="推荐情话分分钟让你get到撩妹技能"
         android:textColor="@color/text_gray"
         android:textSize="@dimen/size_14"
@@ -18,8 +18,8 @@
         app:layout_constraintTop_toTopOf="parent" />
 
     <ImageView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_width="320dp"
+        android:layout_height="315dp"
         android:src="@mipmap/using_help_05"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"

@@ -1,5 +1,7 @@
 package com.yc.love.ui.frament.main;
 
+import android.Manifest;
+import android.app.Activity;
 import android.app.DownloadManager;
 import android.app.ProgressDialog;
 import android.content.Context;
@@ -17,6 +19,9 @@ import android.webkit.WebViewClient;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
+import com.qw.soul.permission.SoulPermission;
+import com.qw.soul.permission.bean.Permission;
+import com.qw.soul.permission.callbcak.CheckRequestPermissionListener;
 import com.umeng.analytics.MobclickAgent;
 import com.yc.love.R;
 import com.yc.love.model.base.MySubscriber;
@@ -76,10 +81,47 @@ public class MainT4Fragment extends BaseMainFragment implements View.OnClickList
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.main_t4_tv_btn:
-                String downloadUrl = "http://sp.5gchang.com/Uploads/apk/2/ssyy.apk";
-                DownloadedApkUtlis.downLoadApk(mMainActivity, downloadUrl, contentObserver);
 
-                showDownloadDialog();
+                SoulPermission.getInstance().checkAndRequestPermission(Manifest.permission.WRITE_EXTERNAL_STORAGE,
+                        //if you want do noting or no need all the callbacks you may use SimplePermissionAdapter instead
+                        new CheckRequestPermissionListener() {
+                            @Override
+                            public void onPermissionOk(Permission permission) {
+                                String downloadUrl = "http://sp.5gchang.com/Uploads/apk/2/ssyy.apk";
+                                long deadline = System.currentTimeMillis();
+                                DownloadedApkUtlis.downLoadApk(mMainActivity, downloadUrl, contentObserver,String.valueOf(deadline));
+                                MobclickAgent.onEvent(mMainActivity, ConstantKey.UM_DOWNLOAD_OUT_ID);
+                                showDownloadDialog();
+                            }
+
+                            @Override
+                            public void onPermissionDenied(Permission permission) {
+//                                Activity activity = SoulPermission.getInstance().getTopActivity();
+                                /*if (null == activity) {
+                                    return;
+                                }*/
+                                //绿色框中的流程
+                                //用户第一次拒绝了权限、并且没有勾选"不再提示"这个值为true，此时告诉用户为什么需要这个权限。
+                                if (permission.shouldRationale()) {
+                                    mMainActivity.showToastShort("未获取到存储权限");
+                                } else {
+                                    //此时请求权限会直接报未授予，需要用户手动去权限设置页，所以弹框引导用户跳转去设置页
+                                    String permissionDesc = permission.getPermissionNameDesc();
+                                    new AlertDialog.Builder(mMainActivity)
+                                            .setTitle("提示")
+                                            .setMessage(permissionDesc + "异常，请前往设置－>权限管理，打开" + permissionDesc + "。")
+                                            .setPositiveButton("去设置", new DialogInterface.OnClickListener() {
+                                                @Override
+                                                public void onClick(DialogInterface dialogInterface, int i) {
+                                                    //去设置页
+                                                    SoulPermission.getInstance().goPermissionSettings();
+                                                }
+                                            }).create().show();
+                                }
+                            }
+                        });
+
+
                 break;
         }
     }
@@ -113,9 +155,7 @@ public class MainT4Fragment extends BaseMainFragment implements View.OnClickList
     private ProgressDialog pd; // 进度条对话框
 
     private void showDownloadDialog() {
-        if (pd == null) {
-            pd = new ProgressDialog(mMainActivity);
-        }
+        pd = new ProgressDialog(mMainActivity);
         pd.setProgressStyle(ProgressDialog.STYLE_HORIZONTAL);
         pd.setMessage("文件正在下载");
         pd.setMax(100);

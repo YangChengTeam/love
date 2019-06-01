@@ -29,6 +29,7 @@ public abstract class MainT1MoreItemAdapter extends RecyclerView.Adapter<Recycle
     private static final int VIEW_PROG = 1;
     private static final int VIEW_TITLE = 2;
     private static final int VIEW_CATEGORY = 3;
+    private static final int VIEW_DATA_OVER = 4;
     private boolean isLoading;
     private int totalItemCount;
     private int lastVisibleItemPosition;
@@ -65,6 +66,8 @@ public abstract class MainT1MoreItemAdapter extends RecyclerView.Adapter<Recycle
                 return VIEW_ITEM;
             case 3:
                 return VIEW_CATEGORY;
+            case 4:
+                return VIEW_DATA_OVER;
         }
         return VIEW_PROG;
     }
@@ -78,12 +81,13 @@ public abstract class MainT1MoreItemAdapter extends RecyclerView.Adapter<Recycle
             holder = getTimeoutHolder(parent);
         } else if (viewType == VIEW_ITEM) {
             holder = getHolder(parent);
+        } else if (viewType == VIEW_DATA_OVER) {
+            holder = getDaTaOverHolder(parent);
         } else {
             holder = getBarViewHolder(parent);
         }
         return holder;
     }
-
 
     @Override
     public void onBindViewHolder(RecyclerView.ViewHolder holder, int position) {
@@ -104,16 +108,24 @@ public abstract class MainT1MoreItemAdapter extends RecyclerView.Adapter<Recycle
             final LinearLayoutManager linearLayoutManager = (LinearLayoutManager) mRecyclerView.getLayoutManager();
 
 
-            totalItemCount = linearLayoutManager.getItemCount();
-            lastVisibleItemPosition = linearLayoutManager.findLastVisibleItemPosition();
+            totalItemCount = linearLayoutManager.getItemCount();  //全部条数
+            lastVisibleItemPosition = linearLayoutManager.findLastVisibleItemPosition(); //完全可见的最后一条
+
+//            Log.d("mylog", "onScrolled: totalItemCount " + totalItemCount);
+//            Log.d("mylog", "onScrolled: lastVisibleItemPosition " + lastVisibleItemPosition);
+
             if (totalItemCount == lastVisibleItemPosition + 1) {
                 if (totalItemCount == 0) {
                     return;
                 }
             }
-
 //            if (!isLoading && totalItemCount <= (lastVisibleItemPosition + visibleThreshold)) {
             if (!isLoading && totalItemCount == lastVisibleItemPosition + 1) {
+                try {
+                    mPersonList.get(lastVisibleItemPosition);  //添加加载更多进度条的操作后，会重复触发加载数据
+                } catch (IndexOutOfBoundsException e) {
+                    return;
+                }
                 //此时是刷新状态
                 if (mMoreDataListener != null) {
                     if (totalItemCount == 0) {
@@ -141,6 +153,14 @@ public abstract class MainT1MoreItemAdapter extends RecyclerView.Adapter<Recycle
         isLoading = false;
     }
 
+    public boolean isLoading() {
+        return isLoading;
+    }
+
+    public void setIsLoading() {
+        isLoading = true;
+    }
+
     private OnLoadMoreDataListener mMoreDataListener;
 
     //加载更多监听方法
@@ -155,6 +175,8 @@ public abstract class MainT1MoreItemAdapter extends RecyclerView.Adapter<Recycle
     public interface OnLoadMoreDataListener {
         void loadMoreData();
     }
+
+    protected abstract RecyclerView.ViewHolder getDaTaOverHolder(ViewGroup parent);
 
     protected abstract RecyclerView.ViewHolder getTimeoutHolder(ViewGroup parent);
 

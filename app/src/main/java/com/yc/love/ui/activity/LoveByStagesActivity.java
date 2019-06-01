@@ -63,6 +63,9 @@ public class LoveByStagesActivity extends BaseSameActivity {
             CategoryArticleChildrenBean categoryArticleChildrenBean = mCategoryArticleChildrenBeans.get(i);
             titleLists.add(categoryArticleChildrenBean.name);
             idLists.add(categoryArticleChildrenBean.id);
+
+            Log.d("mylog", "netSwitchPagerData: categoryArticleChildrenBean.name "+categoryArticleChildrenBean.name
+                    +" categoryArticleChildrenBean.id "+categoryArticleChildrenBean.id);
         }
 
         initNavigator(titleLists);

@@ -82,14 +82,22 @@ public class MainT2Fragment extends BaseMainFragment {
 
     @Override
     protected void initViews() {
-        MobclickAgent.onEvent(mMainActivity, ConstantKey.UM_INSTANCE_ID);
-        mLoveEngin = new LoveEngin(mMainActivity);
-        mCacheWorker = new CacheWorker();
-        View viewBar = rootView.findViewById(R.id.main_t2_view_bar);
-        mLlNotNet = rootView.findViewById(R.id.main_t2_not_net);
-        mMainActivity.setStateBarHeight(viewBar, 1);
 
-        initRecyclerView();
+    }
+
+    private void initView() {
+        if(mLoveEngin==null||mLlNotNet==null){
+            Log.d("mylog", "initView: MainT2Fragment 2222222222 initView ");
+            MobclickAgent.onEvent(mMainActivity, ConstantKey.UM_INSTANCE_ID);
+            mLoveEngin = new LoveEngin(mMainActivity);
+            mCacheWorker = new CacheWorker();
+
+            View viewBar = rootView.findViewById(R.id.main_t2_view_bar);
+            mLlNotNet = rootView.findViewById(R.id.main_t2_not_net);
+            mMainActivity.setStateBarHeight(viewBar, 1);
+
+            initRecyclerView();
+        }
     }
 
     private void initRecyclerView() {
@@ -155,6 +163,9 @@ public class MainT2Fragment extends BaseMainFragment {
         /*if(mIsDataToCache){
             mIsNetData=false;
         }*/
+
+        initView();
+
         if (!mIsNetData) {
             netData();
         }

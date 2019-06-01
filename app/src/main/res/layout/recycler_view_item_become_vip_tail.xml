@@ -4,23 +4,21 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:background="@color/white"
-    android:paddingTop="18dp">
+    android:paddingTop="24dp">
 
-    <View
-        android:id="@+id/item_become_vip_tail_view"
-        android:layout_width="match_parent"
-        android:layout_height="10dp"
-        android:background="@color/love_background" />
+    <!-- <View
+         android:id="@+id/item_become_vip_tail_view"
+         android:layout_width="match_parent"
+         android:layout_height="10dp"
+         android:background="@color/love_background" />-->
 
     <LinearLayout
         android:id="@+id/item_become_vip_tail_ll_pay_con"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginLeft="10dp"
-        android:layout_marginTop="16dp"
         android:layout_marginRight="10dp"
-        android:orientation="horizontal"
-        app:layout_constraintTop_toBottomOf="@+id/item_become_vip_tail_view">
+        android:orientation="horizontal">
 
         <android.support.constraint.ConstraintLayout
             android:id="@+id/item_become_vip_tail_cl_con_01"
@@ -364,13 +362,13 @@
             android:src="@mipmap/become_vip_icon_pay_zfb" />
     </LinearLayout>
 
-    <View
+   <!-- <View
         android:id="@+id/item_become_vip_tail_view2"
         android:layout_width="match_parent"
         android:layout_height="10dp"
         android:layout_marginTop="14dp"
         android:background="@color/love_background"
-        app:layout_constraintTop_toBottomOf="@+id/item_become_vip_tail_ll_pay_type_con" />
+        app:layout_constraintTop_toBottomOf="@+id/item_become_vip_tail_ll_pay_type_con" />-->
 
     <!--  android:background="@drawable/selectot_btn_pay_vip_yellow"-->
     <!--android:background="@drawable/shape_btn_vip_yellow"-->
@@ -379,18 +377,27 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginLeft="25dp"
-        android:layout_marginTop="12dp"
+        android:layout_marginTop="18dp"
         android:layout_marginRight="25dp"
         android:background="@drawable/selectot_btn_pay_vip_yellow"
         android:gravity="center_horizontal"
         android:padding="8dp"
+        android:paddingBottom="14dp"
         android:text="确   定"
         android:textColor="@color/white"
         android:textSize="@dimen/size_16"
-        app:layout_constraintTop_toBottomOf="@+id/item_become_vip_tail_view2" />
+        app:layout_constraintTop_toBottomOf="@+id/item_become_vip_tail_ll_pay_type_con" />
+
+    <View
+        android:id="@+id/item_become_vip_view_3"
+        android:layout_width="match_parent"
+        android:layout_height="24dp"
+        app:layout_constraintTop_toBottomOf="@+id/item_become_vip_tv_next" />
+
 
     <View
         android:layout_width="match_parent"
-        android:layout_height="75dp"
-        app:layout_constraintTop_toBottomOf="@+id/item_become_vip_tv_next" />
+        android:layout_height="10dp"
+        android:background="@color/love_background"
+        app:layout_constraintTop_toBottomOf="@+id/item_become_vip_view_3" />
 </android.support.constraint.ConstraintLayout>

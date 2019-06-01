@@ -22,7 +22,7 @@ public class DownloadedApkUtlis {
     //"content://downloads/my_downloads"必须这样写不可更改
     private static final Uri CONTENT_URI = Uri.parse("content://downloads/my_downloads");
 
-    public static void downLoadApk(Context context, String apkUrl, ContentObserver contentObserver) {
+    public static void downLoadApk(Context context, String apkUrl, ContentObserver contentObserver, String apkName) {
 
         //1.得到下载对象
         DownloadManager dowanloadmanager = (DownloadManager) context.getSystemService(context.DOWNLOAD_SERVICE);
@@ -52,8 +52,9 @@ public class DownloadedApkUtlis {
         }*/
         //2.创建下载请求对象，并且把下载的地址放进去
         DownloadManager.Request request = new DownloadManager.Request(Uri.parse(apkUrl));
+        Log.d("mylog", "downLoadApk: apkName " + apkName);
         //3.给下载的文件指定路径
-        request.setDestinationInExternalFilesDir(context, Environment.DIRECTORY_DOWNLOADS, "yc_data.apk");
+        request.setDestinationInExternalFilesDir(context, Environment.DIRECTORY_DOWNLOADS, apkName.concat(".apk"));
         //4.设置显示在文件下载Notification（通知栏）中显示的文字。6.0的手机Description不显示
         request.setTitle("apk文件");
         request.setDescription("正在下载");

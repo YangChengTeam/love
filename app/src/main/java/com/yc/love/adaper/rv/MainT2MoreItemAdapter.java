@@ -95,7 +95,7 @@ public abstract class MainT2MoreItemAdapter extends RecyclerView.Adapter<Recycle
             ((BaseViewHolder) holder).bindData(mPersonList.get(position));
         } else if (holder instanceof MainT2ViewHolder) {
             ((BaseViewHolder) holder).bindData(mPersonList.get(position));
-        }else if (holder instanceof MainT2ToPayVipHolder) {
+        } else if (holder instanceof MainT2ToPayVipHolder) {
             ((BaseViewHolder) holder).bindData(mPersonList.get(position));
         } else if (holder instanceof ProgressBarViewHolder) {
             ProgressBarViewHolder viewHolder = (ProgressBarViewHolder) holder;
@@ -137,6 +137,15 @@ public abstract class MainT2MoreItemAdapter extends RecyclerView.Adapter<Recycle
 
 //            if (!isLoading && totalItemCount <= (lastVisibleItemPosition + visibleThreshold)) {
             if (!isLoading && totalItemCount == lastVisibleItemPosition + 1) {
+                try {
+
+                    mPersonList.get(lastVisibleItemPosition);  //添加加载更多进度条的操作后，会重复触发加载数据
+                } catch (IndexOutOfBoundsException e) {
+                    Log.d("mylog", "onScrolled: mPersonList.get(lastVisibleItemPosition) " + e);
+                    Log.d("mylog", "onScrolled: mPersonList.size() " + mPersonList.size() + " lastVisibleItemPosition " + lastVisibleItemPosition);
+                    return;
+                }
+                Log.d("mylog", "onScrolled: -------------------------");
                 //此时是刷新状态
                 if (mMoreDataListener != null) {
                     if (totalItemCount == 0) {

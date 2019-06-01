@@ -26,6 +26,8 @@ public abstract class BecomeVipAdapter extends RecyclerView.Adapter<RecyclerView
     private static final int VIEW_TITLE = 1;
     private static final int VIEW_ITEM = 2;
     private static final int VIEW_TAIL = 3;
+    private static final int VIEW_VIP_TAG = 4;
+    private static final int VIEW_END = 5;
 
     public BecomeVipAdapter(List<BecomeVipBean> personList, RecyclerView recyclerView, LinearLayout llTitleCon) {
         this.mDatas = personList;
@@ -51,6 +53,10 @@ public abstract class BecomeVipAdapter extends RecyclerView.Adapter<RecyclerView
                 return VIEW_TITLE;
             case VIEW_ITEM:
                 return VIEW_ITEM;
+            case VIEW_VIP_TAG:
+                return VIEW_VIP_TAG;
+            case VIEW_END:
+                return VIEW_END;
             default:
                 return VIEW_TAIL;
         }
@@ -63,6 +69,10 @@ public abstract class BecomeVipAdapter extends RecyclerView.Adapter<RecyclerView
             holder = getTitleHolder(parent);
         } else if (viewType == VIEW_ITEM) {
             holder = getHolder(parent);
+        } else if (viewType == VIEW_VIP_TAG) {
+            holder = getVipTagHolder(parent);
+        }else if (viewType == VIEW_END) {
+            holder = getEndHolder(parent);
         } else {
             holder = getTailViewHolder(parent);
         }
@@ -115,6 +125,8 @@ public abstract class BecomeVipAdapter extends RecyclerView.Adapter<RecyclerView
     public void addOnScrollListenerPacked() {
         mRecyclerView.addOnScrollListener(onScrollListener);
     }
+    protected abstract RecyclerView.ViewHolder getEndHolder(ViewGroup parent);
+    protected abstract RecyclerView.ViewHolder getVipTagHolder(ViewGroup parent);
 
     public abstract BaseViewHolder getHolder(ViewGroup parent);
 

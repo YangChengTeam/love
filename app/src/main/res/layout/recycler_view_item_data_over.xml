@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <TextView
+        android:padding="8dp"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        android:id="@+id/item_data_over_tv_des"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="没有更多数据了"
+        android:textColor="@color/gray_loading_01"
+        android:textSize="@dimen/size_14" />
+
+</android.support.constraint.ConstraintLayout>
