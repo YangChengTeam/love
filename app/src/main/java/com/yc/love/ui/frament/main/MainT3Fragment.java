@@ -118,17 +118,6 @@ public class MainT3Fragment extends BaseMainFragment {
         Log.d("mylog", "onMessageEvent: NetWorkChangT3Bean ");
         List<String> connectionTypeList = netWorkChangBean.connectionTypeList;
         checkNetChangUI(connectionTypeList);
-
-        //1213455
-        //1213455
-        //1213455
-        //1213455
-        //1213455
-        //1213455
-        //1213455
-        //1213455
-        //1213455
-        //1213455
     }
 
     private void checkNetChangUI(List<String> connectionTypeList) {
