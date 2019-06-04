@@ -4,12 +4,17 @@ import android.graphics.Color;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.RelativeLayout;
+import android.widget.TextView;
 
 import com.yc.love.R;
 import com.yc.love.adaper.vp.UsingHelpPagerAdapter;
+import com.yc.love.ui.activity.base.BaseActivity;
+import com.yc.love.ui.activity.base.BasePushPhotoActivity;
 import com.yc.love.ui.activity.base.BaseSameActivity;
 
 import net.lucode.hackware.magicindicator.MagicIndicator;
@@ -27,11 +32,29 @@ public class UsingHelpActivity extends BaseSameActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_using_help);
+//        invadeStatusBar(); //侵入状态栏
 
         initViews();
     }
 
+    boolean isTransparency = false;
+
     private void initViews() {
+//        RelativeLayout rlCon = findViewById(R.id.using_help_rl_con);
+
+
+        /*if (!isTransparency) {
+            View viewBar = findViewById(R.id.activity_base_same_view_bar);
+            TextView mTvTitle = findViewById(R.id.activity_base_same_tv_title);
+            mTvTitle.setText("使用帮助");
+            setStateBarHeight(viewBar);
+            rlCon.setBackgroundColor(getResources().getColor(R.color.white));
+        } else {
+            RelativeLayout rlTitle = findViewById(R.id.using_help_rl_title);
+            rlTitle.setVisibility(View.GONE);
+            rlCon.setBackgroundColor(getResources().getColor(R.color.transparency_gray));
+        }*/
+
         viewPager = findViewById(R.id.using_help_viewpager);
 //        llVpIndicate = findViewById(R.id.using_help_ll_vp_indicate);
 
@@ -58,58 +81,14 @@ public class UsingHelpActivity extends BaseSameActivity {
     private void initViewPager() {
         UsingHelpPagerAdapter usingHelpPagerAdapter = new UsingHelpPagerAdapter(getSupportFragmentManager(), imageResId);
         viewPager.setAdapter(usingHelpPagerAdapter);
-//        viewPager.setCurrentItem(imageResId.length);
-//        initSwitchIndicate();
-
-//        viewPager.addOnPageChangeListener(onPageChangeListener);
     }
 
-  /*  private void initSwitchIndicate() {
-        ImageView[] tips = new ImageView[imageResId.length];
-        for (int i = 0; i < tips.length / 2; i++) {
-            ImageView imageView = new ImageView(this);
-            imageView.setScaleType(ImageView.ScaleType.FIT_XY);
-            tips[i] = imageView;
-            if (i == 0) {
-                tips[i].setBackgroundResource(R.mipmap.loginpage_indicator_select);
-            } else {
-                tips[i].setBackgroundResource(R.mipmap.loginpage_indicator_normal);
-            }
-            LinearLayout.LayoutParams layoutParams = new LinearLayout.LayoutParams(
-                    new ViewGroup.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT,
-                            LinearLayout.LayoutParams.WRAP_CONTENT));
-            layoutParams.leftMargin = 5;
-            layoutParams.rightMargin = 5;
-            llVpIndicate.addView(imageView, layoutParams);
-        }
-    }*/
-
-/*    private ViewPager.OnPageChangeListener onPageChangeListener = new ViewPager.OnPageChangeListener() {
-        @Override
-        public void onPageScrolled(int i, float v, int i1) {
-
-        }
-
-        @Override
-        public void onPageSelected(int i) {
-            int childCount = llVpIndicate.getChildCount();
-            for (int mm = 0; mm < childCount; mm++) {
-                ImageView childAt = (ImageView) llVpIndicate.getChildAt(mm);
-                if (i % 3 == mm) {
-                    childAt.setBackgroundResource(R.mipmap.loginpage_indicator_select);
-                } else {
-                    childAt.setBackgroundResource(R.mipmap.loginpage_indicator_normal);
-                }
-            }
-        }
-
-        @Override
-        public void onPageScrollStateChanged(int i) {
-        }
-    };*/
 
     @Override
     protected String offerActivityTitle() {
+        if(isTransparency){
+            return "";
+        }
         return "使用帮助";
     }
 

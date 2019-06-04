@@ -33,11 +33,13 @@ import com.yc.love.model.bean.ExampDataBean;
 import com.yc.love.model.bean.ExampListsBean;
 import com.yc.love.model.bean.event.NetWorkChangT1Bean;
 import com.yc.love.model.engin.LoveEngin;
+import com.yc.love.model.util.SPUtils;
 import com.yc.love.ui.activity.ExampleDetailActivity;
 import com.yc.love.ui.activity.LoveByStagesActivity;
 import com.yc.love.ui.activity.LoveHealActivity;
 import com.yc.love.ui.activity.LoveHealingActivity;
 import com.yc.love.ui.activity.ShareActivity;
+import com.yc.love.ui.activity.UsingHelpHomeActivity;
 import com.yc.love.ui.frament.base.BaseMainFragment;
 import com.yc.love.ui.view.LoadDialog;
 
@@ -74,6 +76,7 @@ public class MainT1Fragment extends BaseMainFragment {
     private List<CategoryArticleBean> mCategoryArticleBeans;
     private boolean mIsDataToCache;
     private LoadDialog mLoadDialog;
+//    private boolean mIsOpenUsingHelp;
 
     @Override
     protected int setContentView() {
@@ -277,6 +280,12 @@ public class MainT1Fragment extends BaseMainFragment {
     }
 
     private void initRecyclerViewData() {
+        boolean isOpenUsingHelp = (boolean) SPUtils.get(mMainActivity, SPUtils.IS_OPEN_USING_HELP_HOME, false);
+        if (!isOpenUsingHelp) {
+            SPUtils.put(mMainActivity, SPUtils.IS_OPEN_USING_HELP_HOME, true);
+            mMainActivity.startActivity(new Intent(mMainActivity, UsingHelpHomeActivity.class));
+        }
+
         Log.d("mylog", "initRecyclerViewData: ");
         mAdapter = new MainT1MoreItemAdapter(mExampListsBeans, mRecyclerView) {
 
@@ -379,7 +388,7 @@ public class MainT1Fragment extends BaseMainFragment {
         }
         CategoryArticleBean categoryArticleBean = mCategoryArticleBeans.get(position);
 
-        Log.d("mylog", "startLoveByStagesActivity: categoryArticleBean "+categoryArticleBean);
+        Log.d("mylog", "startLoveByStagesActivity: categoryArticleBean " + categoryArticleBean);
 
         ArrayList<CategoryArticleChildrenBean> children = categoryArticleBean.children;
         LoveByStagesActivity.startLoveByStagesActivity(mMainActivity, title, children);

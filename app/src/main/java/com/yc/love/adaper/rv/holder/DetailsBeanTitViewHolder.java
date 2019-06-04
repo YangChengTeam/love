@@ -37,18 +37,18 @@ public class DetailsBeanTitViewHolder extends BaseViewHolder<LoveHealDetDetailsB
         tvName.setText(detailsBean.content);
         String ansSex = detailsBean.ans_sex;
         if (!TextUtils.isEmpty(ansSex)) {
-            if ("1".equals(ansSex)) { //1男2女0bi'a
+
+            ivSex.setImageDrawable(context.getResources().getDrawable(R.mipmap.icon_dialogue_women));
+
+            /*if ("1".equals(ansSex)) { //1男2女0bi'a
                 ivSex.setImageDrawable(context.getResources().getDrawable(R.mipmap.icon_dialogue_men));
             } else if ("2".equals(ansSex)) {
                 ivSex.setImageDrawable(context.getResources().getDrawable(R.mipmap.icon_dialogue_women));
             } else {
                 ivSex.setImageDrawable(context.getResources().getDrawable(R.mipmap.icon_dialogue_nothing));
-            }
+            }*/
         }
     }
-
-
-
 
 
 }

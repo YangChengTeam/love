@@ -139,4 +139,9 @@
         <item name="android:background">#FFFFFF</item>
     </style>
 
+    　<style name="ActivityV7Translucent" parent="Theme.AppCompat.Light.NoActionBar">
+    <item name="android:windowBackground">@color/transparency</item>
+    <item name="android:windowIsTranslucent">true</item>
+</style>
+
 </resources>
