@@ -6,6 +6,7 @@
     android:layout_height="wrap_content">
 
     <com.yc.love.ui.view.RoundCornerImg
+        app:layout_constraintTop_toTopOf="parent"
         android:paddingLeft="12dp"
         android:paddingRight="12dp"
         android:paddingTop="4dp"

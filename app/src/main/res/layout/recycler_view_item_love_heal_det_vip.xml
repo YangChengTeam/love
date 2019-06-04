@@ -12,6 +12,7 @@
     android:paddingBottom="12dp">
 
     <LinearLayout
+        app:layout_constraintTop_toTopOf="parent"
         android:id="@+id/item_love_heal_det_vip_ll_tit_con"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"

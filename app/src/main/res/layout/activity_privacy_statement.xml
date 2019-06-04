@@ -14,7 +14,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="8dp"
-            android:layout_marginBottom="65dp">
+            >
 
             <TextView
                 android:layout_width="match_parent"
@@ -24,5 +24,9 @@
                 android:textColor="@color/black"
                 android:textSize="@dimen/size_16" />
         </LinearLayout>
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="65dp"/>
     </ScrollView>
 </android.support.constraint.ConstraintLayout>

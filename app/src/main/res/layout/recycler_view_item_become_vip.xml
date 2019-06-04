@@ -12,6 +12,7 @@
     android:paddingBottom="14dp">
 
     <ImageView
+        app:layout_constraintLeft_toLeftOf="parent"
         android:id="@+id/item_become_vip_iv_icon"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -22,10 +23,11 @@
         app:layout_constraintTop_toTopOf="parent" />
 
     <TextView
+        app:layout_constraintTop_toTopOf="parent"
         android:id="@+id/item_become_vip_tv_name"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="66"
+        android:text="6655"
         android:textColor="@color/black"
         android:textSize="@dimen/size_16"
         android:textStyle="bold"

@@ -2,6 +2,7 @@ package com.yc.love.ui.frament;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
@@ -30,6 +31,7 @@ import java.util.List;
 
 public class LoveByStagesFragment extends BaseLoveByStagesFragment {
 
+    private SwipeRefreshLayout mSwipeRefresh;
     private RecyclerView mRecyclerView;
     private int mCategoryId;
     private LoveEngin mLoveEngin;
@@ -66,9 +68,21 @@ public class LoveByStagesFragment extends BaseLoveByStagesFragment {
 
 
     private void initRecyclerView() {
+        mSwipeRefresh = rootView.findViewById(R.id.fragment_love_by_stages_swipe_refresh);
         mRecyclerView = rootView.findViewById(R.id.fragment_love_by_stages_rv);
         LinearLayoutManager layoutManager = new LinearLayoutManager(mLoveByStagesActivity);
         mRecyclerView.setLayoutManager(layoutManager);
+
+
+        mSwipeRefresh.setColorSchemeResources(R.color.red_crimson);
+        mSwipeRefresh.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+            @Override
+            public void onRefresh() {
+                loadMoreEnd = false;
+                PAGE_NUM = 1;
+                netData();
+            }
+        });
     }
 
     @Override
@@ -89,12 +103,12 @@ public class LoveByStagesFragment extends BaseLoveByStagesFragment {
 
             @Override
             protected void onNetError(Throwable e) {
-
+                mSwipeRefresh.setRefreshing(false);
             }
 
             @Override
             protected void onNetCompleted() {
-
+                mSwipeRefresh.setRefreshing(false);
             }
         });
     }

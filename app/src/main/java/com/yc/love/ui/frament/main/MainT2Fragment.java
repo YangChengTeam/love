@@ -142,6 +142,7 @@ public class MainT2Fragment extends BaseMainFragment {
 
     @Subscribe(threadMode = ThreadMode.MAIN)
     public void onMessageEvent(NetWorkChangT2Bean netWorkChangBean) {
+        if(mLlNotNet!=null){
         List<String> connectionTypeList = netWorkChangBean.connectionTypeList;
         if (connectionTypeList == null || connectionTypeList.size() == 0) {
             mIsNotNet = true;
@@ -154,6 +155,7 @@ public class MainT2Fragment extends BaseMainFragment {
                 mLlNotNet.setVisibility(View.GONE);
                 lazyLoad();
             }
+        }
         }
     }
 

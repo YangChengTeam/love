@@ -79,7 +79,7 @@ public class MainT3Fragment extends BaseMainFragment {
     }
 
     private void initView() {
-        if(mLoveEngin==null&&mLlNotNet==null){
+        if (mLoveEngin == null && mLlNotNet == null) {
 
             Log.d("mylog", "initView: MainT3Fragment 333333333 initView ");
 
@@ -121,14 +121,16 @@ public class MainT3Fragment extends BaseMainFragment {
     }
 
     private void checkNetChangUI(List<String> connectionTypeList) {
-        if (connectionTypeList == null || connectionTypeList.size() == 0) {
-            if (mLlNotNet.getVisibility() != View.VISIBLE) {
-                mLlNotNet.setVisibility(View.VISIBLE);
-            }
-        } else {
-            if (mLlNotNet.getVisibility() != View.GONE) {
-                mLlNotNet.setVisibility(View.GONE);
-                lazyLoad();
+        if (mLlNotNet != null) {
+            if (connectionTypeList == null || connectionTypeList.size() == 0) {
+                if (mLlNotNet.getVisibility() != View.VISIBLE) {
+                    mLlNotNet.setVisibility(View.VISIBLE);
+                }
+            } else {
+                if (mLlNotNet.getVisibility() != View.GONE) {
+                    mLlNotNet.setVisibility(View.GONE);
+                    lazyLoad();
+                }
             }
         }
     }
@@ -156,7 +158,7 @@ public class MainT3Fragment extends BaseMainFragment {
                 mIsNetData = true;
                 mCategoryArticleBeans = listAResultInfo.data;
                 for (CategoryArticleBean categoryArticleBean : mCategoryArticleBeans
-                        ) {
+                ) {
                     Log.d("mylog", "onNetNext: categoryArticleBean " + categoryArticleBean.toString());
                 }
             }
@@ -175,7 +177,7 @@ public class MainT3Fragment extends BaseMainFragment {
 
     private void netData() {
 //        mDatas = (List<MainT3Bean>) SerializableFileUtli.checkReadPermission(mMainActivity, "main3_example_ts_category");
-        mDatas = (List<MainT3Bean>)  mCacheWorker.getCache(mMainActivity, "main3_example_ts_category");
+        mDatas = (List<MainT3Bean>) mCacheWorker.getCache(mMainActivity, "main3_example_ts_category");
         if (mDatas != null && mDatas.size() != 0) {
             initRecyclerViewData();
         } else {

@@ -7,6 +7,8 @@
     android:orientation="vertical">
 
     <ImageView
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintLeft_toLeftOf="parent"
         android:id="@+id/item_main_t2_iv_icon"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"

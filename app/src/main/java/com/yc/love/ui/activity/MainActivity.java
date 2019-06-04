@@ -89,7 +89,7 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
     public boolean onKeyDown(int keyCode, KeyEvent event) {
         if (keyCode == KeyEvent.KEYCODE_BACK) {
             int currentItem = mVpFragment.getCurrentItem();
-            if (MainFragmentFactory.MAIN_FRAGMENT_3 == currentItem && onChildDisposeMainKeyDownListent.onChildDisposeMainKeyDown()) {
+            if (MainFragmentFactory.MAIN_FRAGMENT_3 == currentItem && onChildDisposeMainKeyDownListent != null && onChildDisposeMainKeyDownListent.onChildDisposeMainKeyDown()) {
                 Log.d("mylog", "onKeyDown: WebView goBack");
                 return true;
             } else {

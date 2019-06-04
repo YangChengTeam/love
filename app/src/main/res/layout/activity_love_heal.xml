@@ -7,6 +7,7 @@
     tools:context=".ui.activity.LoveHealActivity">
 
     <android.support.v7.widget.RecyclerView
+        app:layout_constraintTop_toTopOf="parent"
         android:layout_width="match_parent"
         android:id="@+id/love_heal_rv"
         android:layout_height="wrap_content"/>

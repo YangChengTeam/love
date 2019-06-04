@@ -56,7 +56,7 @@ public abstract class BaseActivity extends AppCompatActivity {
         if (id <= 0) {
             String idInfo = (String) SPUtils.get(this, SPUtils.ID_INFO_BEAN, "");
             if (!TextUtils.isEmpty(idInfo)) {
-                MobclickAgent.onEvent(this, ConstantKey.UM_INFO_LOSE_ID);
+//                MobclickAgent.onEvent(this, ConstantKey.UM_INFO_LOSE_ID);
                 BackfillSingle.backfillLoginData(this, "");
             }
         }
