@@ -126,6 +126,9 @@ public class MainT3Fragment extends BaseMainFragment {
         //1213455
         //1213455
         //1213455
+        //1213455
+        //1213455
+        //1213455
     }
 
     private void checkNetChangUI(List<String> connectionTypeList) {
