@@ -86,5 +86,14 @@
     <!--<color name="colorAccent">#FF4081</color>
     <color name="colorPrimary">#3F51B5</color>
     <color name="colorPrimaryDark">#303F9F</color>-->
+    <color name="black1">#ff333333</color>
+    <color name="line_color">#FE5000</color>
+    <color name="send_title_color">#8d8d8d</color>
+    <color name="input_color">#e2e2e2</color>
+    <color name="bg_color">#f2f2f2</color>
+    <color name="bg_line_color">#ded9d7</color>
+
+    <color name="overlay">#AA1C1C1C</color>
+
 
 </resources>

@@ -350,6 +350,7 @@ public class BecomeVipActivity extends PayActivity implements View.OnClickListen
         alertDialog.setCancelable(false);
         alertDialog.setTitle("提示");
         if (result) {
+            MobclickAgent.onEvent(BecomeVipActivity.this, ConstantKey.UM_PAY_SUCCESS_ID);
             EventBus.getDefault().post(new EventPayVipSuccess());
         }
         alertDialog.setMessage(des);

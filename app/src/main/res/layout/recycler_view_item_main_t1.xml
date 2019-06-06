@@ -7,6 +7,7 @@
    >
 
     <LinearLayout
+        app:layout_constraintTop_toTopOf="parent"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="horizontal">
@@ -38,6 +39,8 @@
                 android:layout_height="wrap_content">
 
                 <TextView
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:layout_constraintLeft_toLeftOf="parent"
                     android:id="@+id/item_main_t1_tv_label"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"

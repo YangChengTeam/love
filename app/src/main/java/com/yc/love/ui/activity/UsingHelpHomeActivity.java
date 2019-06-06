@@ -24,7 +24,8 @@ public class UsingHelpHomeActivity extends BaseActivity implements View.OnClickL
     private ViewPager viewPager;
 //    private LinearLayout llVpIndicate;
 
-    private int[] imageResId = new int[]{R.mipmap.using_help_01, R.mipmap.using_help_02, R.mipmap.using_help_03, R.mipmap.using_help_04, R.mipmap.using_help_05};
+    //    private int[] imageResId = new int[]{R.mipmap.using_help_01, R.mipmap.using_help_02, R.mipmap.using_help_03, R.mipmap.using_help_04, R.mipmap.using_help_05};
+    private int[] imageResId = new int[]{R.mipmap.using_help_01, R.mipmap.using_help_02, R.mipmap.using_help_03};
     private TextView mTvNext;
     private MagicIndicator mMagicIndicator;
 
@@ -78,12 +79,12 @@ public class UsingHelpHomeActivity extends BaseActivity implements View.OnClickL
             public void onPageSelected(int position) {
                 Log.d("mylog", "onPageScrolled: " + position);
                 if (position == imageResId.length - 1) {
-                    if (mTvNext.getVisibility() != View.VISIBLE && mTvNext != null && mMagicIndicator != null) {
+                    if (mTvNext != null && mTvNext.getVisibility() != View.VISIBLE && mMagicIndicator != null) {
                         mTvNext.setVisibility(View.VISIBLE);
                         mMagicIndicator.setVisibility(View.GONE);
                     }
                 } else {
-                    if (mTvNext.getVisibility() != View.GONE && mTvNext != null && mMagicIndicator != null) {
+                    if (mTvNext != null && mTvNext.getVisibility() != View.GONE && mMagicIndicator != null) {
                         mTvNext.setVisibility(View.GONE);
                         mMagicIndicator.setVisibility(View.VISIBLE);
                     }

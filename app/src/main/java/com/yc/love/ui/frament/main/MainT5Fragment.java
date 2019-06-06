@@ -72,7 +72,7 @@ public class MainT5Fragment extends BaseMainFragment implements View.OnClickList
 
     @Override
     protected void initViews() {
-        MobclickAgent.onEvent(mMainActivity, ConstantKey.UM_PERSONAL_ID);
+
 
         mLoveEngin = new LoveEngin(mMainActivity);
         View viewBar = rootView.findViewById(R.id.main_t5_view_bar);
@@ -104,6 +104,7 @@ public class MainT5Fragment extends BaseMainFragment implements View.OnClickList
 
     @Override
     protected void lazyLoad() {
+        MobclickAgent.onEvent(mMainActivity, ConstantKey.UM_PERSONAL_ID);
         netIsVipData();
     }
 

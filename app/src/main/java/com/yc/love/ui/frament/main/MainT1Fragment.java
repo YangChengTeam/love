@@ -279,9 +279,13 @@ public class MainT1Fragment extends BaseMainFragment {
         });
     }
 
+//    boolean isOpenUsingHelp = false;
+
     private void initRecyclerViewData() {
         boolean isOpenUsingHelp = (boolean) SPUtils.get(mMainActivity, SPUtils.IS_OPEN_USING_HELP_HOME, false);
+//        isOpenUsingHelp = false;
         if (!isOpenUsingHelp) {
+//            isOpenUsingHelp = true;
             SPUtils.put(mMainActivity, SPUtils.IS_OPEN_USING_HELP_HOME, true);
             mMainActivity.startActivity(new Intent(mMainActivity, UsingHelpHomeActivity.class));
         }

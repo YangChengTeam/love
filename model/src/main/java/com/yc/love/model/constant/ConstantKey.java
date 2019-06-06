@@ -24,6 +24,7 @@ public class ConstantKey {
 //    public static final String UM_INFO_LOSE_ID = "info_lose_id";
     public static final String UM_INSTALL_OUT_ID = "install_out_id";
     public static final String UM_DOWNLOAD_OUT_ID = "download_out_id";
+    public static final String UM_PAY_SUCCESS_ID = "pay_success_id";
 
 
 }

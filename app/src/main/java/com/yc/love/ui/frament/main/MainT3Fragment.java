@@ -1,5 +1,6 @@
 package com.yc.love.ui.frament.main;
 
+import android.content.Intent;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
@@ -28,6 +29,7 @@ import com.yc.love.model.bean.event.NetWorkChangT3Bean;
 import com.yc.love.model.constant.ConstantKey;
 import com.yc.love.model.engin.LoveEngin;
 import com.yc.love.ui.activity.LoveByStagesActivity;
+import com.yc.love.ui.activity.LoveCaseActivity;
 import com.yc.love.ui.activity.LoveIntroductionActivity;
 import com.yc.love.ui.frament.base.BaseMainFragment;
 import com.yc.love.ui.view.LoadDialog;
@@ -83,7 +85,7 @@ public class MainT3Fragment extends BaseMainFragment {
 
             Log.d("mylog", "initView: MainT3Fragment 333333333 initView ");
 
-            MobclickAgent.onEvent(mMainActivity, ConstantKey.UM_PROMOTION_ID);
+
             mLoveEngin = new LoveEngin(mMainActivity);
             mCacheWorker = new CacheWorker();
             mLlNotNet = rootView.findViewById(R.id.main_t3_not_net);
@@ -138,6 +140,7 @@ public class MainT3Fragment extends BaseMainFragment {
 
     @Override
     protected void lazyLoad() {
+        MobclickAgent.onEvent(mMainActivity, ConstantKey.UM_PROMOTION_ID);
         initView();
 //        List<String> connectionTypeList = YcSingle.getInstance().connectionTypeList;
 //        checkNetChangUI(connectionTypeList);
@@ -251,7 +254,16 @@ public class MainT3Fragment extends BaseMainFragment {
 
             @Override
             public BaseViewHolder getTitleHolder(ViewGroup parent) {
-                return new MainT3TitleViewHolder(mMainActivity, null, parent);
+                MainT3TitleViewHolder mainT3TitleViewHolder = new MainT3TitleViewHolder(mMainActivity, null, parent);
+                mainT3TitleViewHolder.setOnClickTitleIconListener(new MainT3TitleViewHolder.OnClickTitleIconListener() {
+                    @Override
+                    public void clickTitleIcon(int position) {
+                        if (10 == position) {
+                            mMainActivity.startActivity(new Intent(mMainActivity, LoveCaseActivity.class));
+                        }
+                    }
+                });
+                return mainT3TitleViewHolder;
             }
 
             @Override

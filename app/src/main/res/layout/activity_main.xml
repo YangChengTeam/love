@@ -45,7 +45,7 @@
             style="@style/tv_main_icon_bottom"
             android:background="?attr/selectableItemBackgroundBorderless"
             android:drawableTop="@mipmap/main_icon_tab_03"
-            android:text="提升"
+            android:text="表白"
             android:textColor="@color/text_gray" />
 
         <TextView

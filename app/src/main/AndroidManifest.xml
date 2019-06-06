@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     package="com.yc.love">
 
     <uses-permission android:name="android.permission.INTERNET" />
@@ -24,9 +25,11 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/JK.SwipeBack.Transparent.Theme">
-        <activity
-            android:name=".ui.activity.UsingHelpHomeActivity"
-           />
+        <activity android:name=".ui.activity.LoveCaseActivity"></activity>
+        <activity android:name=".ui.activity.ResultActivity" />
+        <activity android:name=".ui.activity.ImageCropActivity" />
+        <activity android:name=".ui.activity.CreateBeforeActivity" />
+        <activity android:name=".ui.activity.UsingHelpHomeActivity" />
         <activity
             android:name=".wxapi.WXEntryActivity"
             android:exported="true"
@@ -99,10 +102,12 @@
             android:name="android.support.v4.content.FileProvider"
             android:authorities="com.yc.love.fileProvider"
             android:exported="false"
-            android:grantUriPermissions="true">
+            android:grantUriPermissions="true"
+            tools:replace="android:authorities">
             <meta-data
                 android:name="android.support.FILE_PROVIDER_PATHS"
-                android:resource="@xml/file_paths" />
+                android:resource="@xml/file_paths"
+                tools:replace="android:resource" />
         </provider>
 
         <activity android:name=".ui.activity.FeedbackActivity" />
@@ -151,9 +156,7 @@
         <activity android:name=".ui.activity.ProtocolActivity" />
         <activity android:name=".ui.activity.AboutUsActivity" />
         <activity android:name=".ui.activity.PrivacyStatementActivity" />
-        <activity android:name=".ui.activity.UsingHelpActivity"
-            />
-        <!--   android:theme="@style/ActivityV7Translucent"-->
+        <activity android:name=".ui.activity.UsingHelpActivity" /> <!-- android:theme="@style/ActivityV7Translucent" -->
         <activity android:name=".ui.activity.TestWebViewActivity" />
 
         <receiver android:name=".receiver.UpdataBroadcastReceiver">
@@ -161,6 +164,13 @@
                 <action android:name="android.intent.action.DOWNLOAD_COMPLETE" />
             </intent-filter>
         </receiver>
+
+        <activity
+            android:name="me.iwf.photopicker.PhotoPickerActivity"
+            android:theme="@style/customTheme" />
+        <activity
+            android:name="me.iwf.photopicker.PhotoPagerActivity"
+            android:theme="@style/customTheme" />
     </application>
 
 </manifest>

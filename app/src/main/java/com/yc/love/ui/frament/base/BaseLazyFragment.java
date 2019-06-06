@@ -22,7 +22,6 @@ public abstract class BaseLazyFragment extends BaseFragment {
         initBundle();
         initViews();
         isInitView = true;
-        Log.d("mylog", "onFragmentCreateView: isInitView "+isInitView);
         isCanLoadData();
         return rootView;
     }

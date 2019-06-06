@@ -64,7 +64,7 @@ public class MainT4Fragment extends BaseMainFragment implements View.OnClickList
 
     @Override
     protected void initViews() {
-        MobclickAgent.onEvent(mMainActivity, ConstantKey.UM_WELFEAR_ID);
+
 
         View viewBar = rootView.findViewById(R.id.main_t4_view_bar);
         mMainActivity.setStateBarHeight(viewBar, 1);
@@ -277,6 +277,7 @@ public class MainT4Fragment extends BaseMainFragment implements View.OnClickList
 
     @Override
     protected void lazyLoad() {
+        MobclickAgent.onEvent(mMainActivity, ConstantKey.UM_WELFEAR_ID);
 //        netData();
     }
 

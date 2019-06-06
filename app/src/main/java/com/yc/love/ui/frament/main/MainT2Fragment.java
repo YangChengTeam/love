@@ -58,23 +58,23 @@ public class MainT2Fragment extends BaseMainFragment {
     private boolean showProgressBar = false;
     private MainT2MoreItemAdapter mAdapter;
     //    private int num = 10;
-    private ProgressBarViewHolder progressBarViewHolder;
-    private RecyclerView mRecyclerView;
+//    private ProgressBarViewHolder progressBarViewHolder;
     private boolean mUserIsVip = false;
     private boolean mIsAddToPayVipItem = false;
     private boolean mIsShowLogined = false;
+    private RecyclerView mRecyclerView;
     private SwipeRefreshLayout mSwipeRefresh;
     private boolean mIsNotNet;
     private LoadDialog mLoadDialog;
     private CacheWorker mCacheWorker;
-
+    private LoveEngin mLoveEngin;
 
     @Override
     protected int setContentView() {
         return R.layout.fragment_main_t2;
     }
 
-    private LoveEngin mLoveEngin;
+
     private LinearLayout mLlNotNet;
     private boolean mIsNetData = false;
     //    private boolean mIsDataToCache;
@@ -87,8 +87,6 @@ public class MainT2Fragment extends BaseMainFragment {
 
     private void initView() {
         if(mLoveEngin==null||mLlNotNet==null){
-            Log.d("mylog", "initView: MainT2Fragment 2222222222 initView ");
-            MobclickAgent.onEvent(mMainActivity, ConstantKey.UM_INSTANCE_ID);
             mLoveEngin = new LoveEngin(mMainActivity);
             mCacheWorker = new CacheWorker();
 
@@ -162,6 +160,7 @@ public class MainT2Fragment extends BaseMainFragment {
 
     @Override
     protected void lazyLoad() {
+        MobclickAgent.onEvent(mMainActivity, ConstantKey.UM_INSTANCE_ID);
         /*if(mIsDataToCache){
             mIsNetData=false;
         }*/
@@ -263,7 +262,7 @@ public class MainT2Fragment extends BaseMainFragment {
             @Override
             protected RecyclerView.ViewHolder getBarViewHolder(ViewGroup parent) {
                 View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.recycler_view_test_item_footer, parent, false);
-                progressBarViewHolder = new ProgressBarViewHolder(view);
+                ProgressBarViewHolder   progressBarViewHolder = new ProgressBarViewHolder(view);
                 return progressBarViewHolder;
             }
 

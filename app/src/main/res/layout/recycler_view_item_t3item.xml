@@ -34,6 +34,7 @@
         app:layout_constraintLeft_toLeftOf="@+id/item_t3item_iv" />
 
     <TextView
+        app:layout_constraintLeft_toLeftOf="parent"
         android:id="@+id/item_t3item_tv_des"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"

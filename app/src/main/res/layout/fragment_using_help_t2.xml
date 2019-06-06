@@ -10,9 +10,9 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:paddingTop="15dp"
-        android:text="可以搜索到跟妹子说的话\n相匹配的回复"
-        android:textColor="@color/text_gray"
-        android:textSize="@dimen/size_14"
+        android:text="轻松搜到与之相匹配的回复"
+        android:textColor="@color/black"
+        android:textSize="@dimen/size_16"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
@@ -31,11 +31,11 @@
         android:id="@+id/using_help_t2_tv_des_02"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="点击复制按钮，可以复制这句话，\n然后粘贴到QQ或者微信输入框发送给妹子"
-        android:textColor="@color/text_gray"
-        android:textSize="@dimen/size_14"
-        app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintRight_toRightOf="parent"
+        android:layout_marginRight="6dp"
+        android:text="点击加号，即可复制这句话 "
+        android:textColor="@color/black"
+        android:textSize="@dimen/size_16"
+        app:layout_constraintRight_toRightOf="@+id/using_help_t2_iv"
         app:layout_constraintTop_toBottomOf="@+id/using_help_t2_iv" />
 
 </android.support.constraint.ConstraintLayout>
