@@ -53,6 +53,8 @@ public class ImageCropActivity extends BaseSameActivity {
 
         cancelBtn.setOnClickListener(this);
         confirmBtn.setOnClickListener(this);
+        mBaseSameTvSub.setText("确定");
+        mBaseSameTvSub.setOnClickListener(this);
     }
 
     private void initData() {
@@ -96,6 +98,14 @@ public class ImageCropActivity extends BaseSameActivity {
                 finish();
                 break;
             case R.id.crop_confirm_btn:
+//                loadDialog = new ProgressDialog(ImageCropActivity.this, ProgressDialog.THEME_HOLO_LIGHT);
+//                loadDialog.setMessage("图片裁剪中...");
+                if (isValidContext(ImageCropActivity.this)) {
+                    mLoadingDialog.showLoadingDialog();
+                }
+                mCropImageView.startCrop(createSaveUri(), mCropCallback, mSaveCallback);
+                break;
+            case R.id.activity_base_same_tv_sub:
 //                loadDialog = new ProgressDialog(ImageCropActivity.this, ProgressDialog.THEME_HOLO_LIGHT);
 //                loadDialog.setMessage("图片裁剪中...");
                 if (isValidContext(ImageCropActivity.this)) {

@@ -109,7 +109,7 @@ public class ShareActivity extends BaseSameActivity {
 
         //修改键入的文字字体大小、颜色和hint的字体颜色
         final EditText editText = mSearchView.findViewById(R.id.search_src_text);
-        editText.setTextSize(TypedValue.COMPLEX_UNIT_PX,getResources()
+        editText.setTextSize(TypedValue.COMPLEX_UNIT_PX, getResources()
                 .getDimension(R.dimen.size_16));
 //        editText.setTextColor(ContextCompat.getColor(this,R.color.nb_text_primary));
 
@@ -258,7 +258,7 @@ public class ShareActivity extends BaseSameActivity {
         if (!TextUtils.isEmpty(shareHistory)) {
             String[] split = shareHistory.split("__");
             for (String s : split
-                    ) {
+            ) {
                 historyList.add(s);
             }
             if (historyList.contains(query)) {

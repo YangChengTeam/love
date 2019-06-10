@@ -29,6 +29,8 @@ public class OkHttpRequest implements IOkHttpBiz {
         OkHttpUtils.post().params(requestMap).url(requestUrl).build().execute(new StringCallback() {
             @Override
             public void onError(Call call, Exception e, int id) {
+                Log.d("mylog", "onError: call-- "+call+" e-- "+e+" id-- "+id);
+                Log.d("securityhttp", "onError: call-- "+call+" e-- "+e+" id-- "+id);
                 //Logger.e("---data error---");
                 iResultListener.onFailed(call, e, id);
                 e.printStackTrace();
@@ -64,6 +66,8 @@ public class OkHttpRequest implements IOkHttpBiz {
         OkHttpUtils.post().addHeader("Cookie", "cookie_tnzbsq").params(requestMap).addFile("img", fileName, upFile).url(requestUrl).build().execute(new StringCallback() {
             @Override
             public void onError(Call call, Exception e, int id) {
+                Log.d("mylog", "onError: call-- "+call+" e-- "+e+" id-- "+id);
+                Log.d("securityhttp", "onError: call-- "+call+" e-- "+e+" id-- "+id);
                 //Logger.e("---data error---");
                 iResultListener.onFailed(call,e,id);
                 e.printStackTrace();

@@ -1,0 +1,88 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="@drawable/shape_white_circular"
+    android:padding="18dp">
+
+    <TextView
+        android:id="@+id/dialog_share_show_img_tv_tit"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:paddingTop="18dp"
+        android:paddingBottom="8dp"
+        android:text="发送表情到"
+        android:textColor="@color/text_gray"
+        android:textSize="@dimen/size_16"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <ImageView
+        android:id="@+id/dialog_share_show_img_iv_img"
+        android:layout_width="245dp"
+        android:layout_height="245dp"
+        android:layout_marginLeft="25dp"
+        android:layout_marginTop="8dp"
+        android:layout_marginRight="25dp"
+        android:layout_marginBottom="8dp"
+        android:src="@mipmap/main_bg_t3_placeholder"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/dialog_share_show_img_tv_tit" />
+
+
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
+        android:orientation="horizontal"
+        android:paddingBottom="25dp"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/dialog_share_show_img_iv_img">
+
+        <TextView
+            android:id="@+id/dialog_share_show_img_tv_share_qq"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:background="?attr/selectableItemBackgroundBorderless"
+            android:drawableTop="@mipmap/umeng_socialize_qq_on"
+            android:drawablePadding="2dp"
+            android:gravity="center_horizontal"
+            android:padding="12dp"
+            android:text="QQ"
+            android:textColor="@color/text_gray"
+            android:textSize="@dimen/size_12" />
+
+        <TextView
+            android:id="@+id/dialog_share_show_img_tv_share_wx"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="28dp"
+            android:layout_marginRight="28dp"
+            android:background="?attr/selectableItemBackgroundBorderless"
+            android:drawableTop="@mipmap/umeng_socialize_wechat"
+            android:drawablePadding="2dp"
+            android:gravity="center_horizontal"
+            android:padding="12dp"
+            android:text="微信"
+            android:textColor="@color/text_gray"
+            android:textSize="@dimen/size_12" />
+
+        <TextView
+            android:id="@+id/dialog_share_show_img_tv_share_save"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:background="?attr/selectableItemBackgroundBorderless"
+            android:drawableTop="@mipmap/save_to_local"
+            android:drawablePadding="2dp"
+            android:gravity="center_horizontal"
+            android:padding="12dp"
+            android:text="保存到本地"
+            android:textColor="@color/text_gray"
+            android:textSize="@dimen/size_12" />
+    </LinearLayout>
+
+</android.support.constraint.ConstraintLayout>

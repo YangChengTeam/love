@@ -22,8 +22,8 @@ android {
         applicationId "com.yc.love"
         minSdkVersion 17
         targetSdkVersion 27
-        versionCode 8
-        versionName "1.0.7"
+        versionCode 9
+        versionName "1.0.8"
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
         ndk {
             //设置支持的SO库架构
@@ -88,4 +88,5 @@ dependencies {
     implementation 'me.iwf.photopicker:PhotoPicker:0.9.5@aar'
     implementation 'com.isseiaoki:simplecropview:1.1.4'
     implementation files('libs/universal-image-loader-1.9.5.jar')
+    implementation files('libs/open_sdk_r6019_lite.jar')
 }

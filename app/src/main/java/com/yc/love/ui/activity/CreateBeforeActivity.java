@@ -45,6 +45,7 @@ import com.yc.love.R;
 import com.yc.love.model.bean.confession.ConfessionDataBean;
 import com.yc.love.model.bean.confession.ConfessionFieldBean;
 import com.yc.love.model.bean.confession.ImageCreateBean;
+import com.yc.love.model.constant.ConstantKey;
 import com.yc.love.model.domain.URLConfig;
 import com.yc.love.model.util.InputLenLimit;
 import com.yc.love.model.util.SPUtils;
@@ -85,6 +86,7 @@ public class CreateBeforeActivity extends BaseSameActivity implements INormalUiV
     private List<String> mSelectedImages;
 
     private NormalPresenter mNormalPresenter;
+    private Map<String, String> netCompoundRequestData;
 //    private Map<String, String> mRequestMap;
 //    private String mDataUrl;
 
@@ -327,6 +329,7 @@ public class CreateBeforeActivity extends BaseSameActivity implements INormalUiV
             createBtn.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
+                    MobclickAgent.onEvent(CreateBeforeActivity.this, ConstantKey.UM_CREAT_ID);
 //                    checkSdPermissions();
                     checkCameraPermissions();
                 }
@@ -479,7 +482,7 @@ public class CreateBeforeActivity extends BaseSameActivity implements INormalUiV
         }
     }
 
-    private void createImage() {
+    private void createImage() {  //一键生成
 
         Map<String, String> requestData = new HashMap<String, String>();
         if (mCreateTypeLayout != null) {
@@ -544,104 +547,33 @@ public class CreateBeforeActivity extends BaseSameActivity implements INormalUiV
 //            MobclickAgent.onEvent(CreateBeforeActivity.this, "create_click", SystemTool.getAppVersionName(this));
 
             if (isValidate) {
+//                String mime="";
 
-                /*boolean isAuth = false;
-                if ("0".equals(mConfessionDataBean.is_vip) ) {
-                    isAuth = true;
-                } else {
-                    if (App.loginUser == null) {
-                        Intent intent = new Intent(context, LoginActivity.class);
-                        startActivity(intent);
-                        return;
-                    } else {
-                        if (App.loginUser.is_vip == 1) {
-                            isAuth = true;
-                        } else {
-                            if (isBuy) {
-                                isAuth = true;
-                            }
-                        }
-                    }
-                }*/
-
-                //登录
-               /* if (!isAuth) {
-                    ChargeDialog dialog = new ChargeDialog(CreateBeforeActivity.this, mConfessionDataBean != null ? mConfessionDataBean.id : "");
-                    dialog.setTimeListener(this);
-                    dialog.showChargeDialog(dialog);
-                    return;
-                }*/
-
-                Log.d("mylog", "createImage: mLoadingDialog " + mLoadingDialog);
-
-                if (mLoadingDialog == null) {
-                    mLoadingDialog = new LoadDialog(this);
-//                    dialog = CustomProgress.create(CreateBeforeActivity.this, "正在生成图片...", true, null);
-                }
-
-                mLoadingDialog.showLoadingDialog();
-
-//                Logger.e("create field json data--->" + JSON.toJSONString(requestData) + "file path--->" + HeadImageUtils.imgResultPath);
-
-                /*Map<String, String> params = new HashMap<String, String>();
-                params.put("id", mConfessionDataBean != null ? mConfessionDataBean.id : "");
-                String ANDROID_ID = getPhoneIMEI(getApplicationContext());
-                params.put("mime", ANDROID_ID);
-
-                if (requestData.size() > 0) {
-                    params.put("requestData", JSON.toJSONString(requestData));
-                }*/
-
-                String ANDROID_ID = getPhoneIMEI(getApplicationContext());
-                Map<String, String> params = new HashMap<String, String>();
-                params.put("id", mConfessionDataBean != null ? mConfessionDataBean.id : "");
-                params.put("mime", ANDROID_ID);
-
-                if (requestData.size() > 0) {
-                    params.put("requestData", JSON.toJSONString(requestData));
-                }
-                if (isChooseImage) {
-                    mNormalPresenter.netUpFileNet(params, new File(HeadImageUtils.imgResultPath), URLConfig.URL_IMAGE_CREATE);
-
-                    /*okHttpRequest.aget(Server.URL_IMAGE_CREATE, params, new File(HeadImageUtils.imgResultPath), new OnResponseListener() {
-                        @Override
-                        public void onSuccess(String response) {
-
-
-                        }
-
-                        @Override
-                        public void onError(Exception e) {
-                        }
-
-                        @Override
-                        public void onBefore() {
-                        }
-                    });*/
-                } else {
-
-                    mNormalPresenter.netNormalData(params, URLConfig.URL_IMAGE_CREATE);
-
-                    /*okHttpRequest.aget(Server.URL_IMAGE_CREATE, params, new OnResponseListener() {
-                        @Override
-                        public void onSuccess(String response) {
-
-                            if (dialog != null && dialog.isShowing()) {
-                                dialog.dismiss();
-                            }
-                            doResult(response);
-                        }
-
-                        @Override
-                        public void onError(Exception e) {
-                        }
-
-                        @Override
-                        public void onBefore() {
-                        }
-                    });*/
-                }
+                this.netCompoundRequestData = requestData;
+                checkIMEIPermissions();
             }
+        }
+    }
+
+    private void netCompoundData(String mime) {
+        if (mLoadingDialog == null) {
+            mLoadingDialog = new LoadDialog(this);
+        }
+//        mLoadingDialog.showLoadingDialog();
+        mLoadingDialog.show();
+//        String ANDROID_ID = getPhoneIMEI(getApplicationContext());
+        Map<String, String> params = new HashMap<String, String>();
+        params.put("id", mConfessionDataBean != null ? mConfessionDataBean.id : "");
+//                params.put("mime", ANDROID_ID);
+        params.put("mime", mime);
+
+        if (netCompoundRequestData.size() > 0) {
+            params.put("requestData", JSON.toJSONString(netCompoundRequestData));
+        }
+        if (isChooseImage) {
+            mNormalPresenter.netUpFileNet(params, new File(HeadImageUtils.imgResultPath), URLConfig.URL_IMAGE_CREATE);
+        } else {
+            mNormalPresenter.netNormalData(params, URLConfig.URL_IMAGE_CREATE);
         }
     }
 
@@ -649,18 +581,34 @@ public class CreateBeforeActivity extends BaseSameActivity implements INormalUiV
         TelephonyManager tm = (TelephonyManager) cxt
                 .getSystemService(Context.TELEPHONY_SERVICE);
         if (ActivityCompat.checkSelfPermission(this, Manifest.permission.READ_PHONE_STATE) != PackageManager.PERMISSION_GRANTED) {
-            // TODO: Consider calling
-            //    ActivityCompat#requestPermissions
-            // here to request the missing permissions, and then overriding
-            //   public void onRequestPermissionsResult(int requestCode, String[] permissions,
-            //                                          int[] grantResults)
-            // to handle the case where the user grants the permission. See the documentation
-            // for ActivityCompat#requestPermissions for more details.
             return "123456";
         }
         return tm.getDeviceId();
     }
 
+
+    private void checkIMEIPermissions() {
+        SoulPermission.getInstance().checkAndRequestPermission(Manifest.permission.READ_PHONE_STATE,
+                //if you want do noting or no need all the callbacks you may use SimplePermissionAdapter instead
+                new CheckRequestPermissionListener() {
+                    @Override
+                    public void onPermissionOk(Permission permission) {
+                        TelephonyManager tm = (TelephonyManager)
+                                getSystemService(Context.TELEPHONY_SERVICE);
+                        if (ActivityCompat.checkSelfPermission(CreateBeforeActivity.this, Manifest.permission.READ_PHONE_STATE) != PackageManager.PERMISSION_GRANTED) {
+//                            phoneIMEI = "99000854223779";
+                            netCompoundData("99000854223779");
+                        } else {
+                            netCompoundData(tm.getDeviceId());
+                        }
+                    }
+
+                    @Override
+                    public void onPermissionDenied(Permission permission) {
+                        netCompoundData("99000854223779");
+                    }
+                });
+    }
 
     @Override
     protected String offerActivityTitle() {
@@ -686,7 +634,7 @@ public class CreateBeforeActivity extends BaseSameActivity implements INormalUiV
     @Override
     public void onUpFileSuccess(String jsonData) {
         if (mLoadingDialog != null && mLoadingDialog.isShowing()) {
-            mLoadingDialog.dismiss();
+            mLoadingDialog.dismissLoadingDialog();
         }
         doResult(jsonData);
     }
@@ -695,7 +643,7 @@ public class CreateBeforeActivity extends BaseSameActivity implements INormalUiV
     @Override
     public void onSuccess(String jsonData) {
         if (mLoadingDialog != null && mLoadingDialog.isShowing()) {
-            mLoadingDialog.dismiss();
+            mLoadingDialog.dismissLoadingDialog();
         }
         doResult(jsonData);
     }
@@ -730,13 +678,16 @@ public class CreateBeforeActivity extends BaseSameActivity implements INormalUiV
 
     @Override
     public void onFailed(Call call, Exception e, int id) {
-
+        if (mLoadingDialog != null && mLoadingDialog.isShowing()) {
+            mLoadingDialog.dismissLoadingDialog();
+        }
     }
 
     @Override
     public void onBefore(Request request, int id) {
-
+        /*if (mLoadingDialog != null && mLoadingDialog.isShowing()) {
+            mLoadingDialog.dismissLoadingDialog();
+        }*/
     }
-
 
 }

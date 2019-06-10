@@ -1,18 +1,26 @@
 package com.yc.love.ui.frament.main;
 
 import android.Manifest;
-import android.app.Activity;
 import android.app.DownloadManager;
 import android.app.ProgressDialog;
+import android.content.ClipData;
+import android.content.ClipboardManager;
+import android.content.ComponentName;
 import android.content.Context;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.database.ContentObserver;
 import android.database.Cursor;
-import android.graphics.Bitmap;
+import android.net.Uri;
+import android.os.Build;
+import android.support.annotation.RequiresApi;
 import android.support.v7.app.AlertDialog;
+import android.text.TextUtils;
 import android.util.Log;
 import android.view.View;
+import android.webkit.JavascriptInterface;
 import android.webkit.WebChromeClient;
+import android.webkit.WebResourceRequest;
 import android.webkit.WebSettings;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
@@ -29,11 +37,17 @@ import com.yc.love.model.bean.AResultInfo;
 import com.yc.love.model.bean.MenuadvInfoBean;
 import com.yc.love.model.constant.ConstantKey;
 import com.yc.love.model.engin.LoveEngin;
+import com.yc.love.model.util.PackageUtils;
 import com.yc.love.model.util.SPUtils;
+import com.yc.love.ui.activity.BecomeVipActivity;
+import com.yc.love.ui.activity.IdCorrelationSlidingActivity;
 import com.yc.love.ui.activity.MainActivity;
+import com.yc.love.ui.activity.base.BaseActivity;
 import com.yc.love.ui.frament.base.BaseMainFragment;
 import com.yc.love.ui.view.LoadDialog;
 import com.yc.love.utils.DownloadedApkUtlis;
+
+import java.util.List;
 
 /**
  * Created by mayn on 2019/5/22.
@@ -50,6 +64,7 @@ public class MainT4Fragment extends BaseMainFragment implements View.OnClickList
     private String homeUrl;
     private int mProgress;
     //    private boolean mIsHome;
+    private String mWechat;
 
     @Override
     protected int setContentView() {
@@ -74,7 +89,7 @@ public class MainT4Fragment extends BaseMainFragment implements View.OnClickList
         tvBen.setOnClickListener(this);
 
 
-//        initWebView();
+        initWebView();
     }
 
     @Override
@@ -89,7 +104,7 @@ public class MainT4Fragment extends BaseMainFragment implements View.OnClickList
                             public void onPermissionOk(Permission permission) {
                                 String downloadUrl = "http://sp.5gchang.com/Uploads/apk/2/ssyy.apk";
                                 long deadline = System.currentTimeMillis();
-                                DownloadedApkUtlis.downLoadApk(mMainActivity, downloadUrl, contentObserver,String.valueOf(deadline));
+                                DownloadedApkUtlis.downLoadApk(mMainActivity, downloadUrl, contentObserver, String.valueOf(deadline));
                                 MobclickAgent.onEvent(mMainActivity, ConstantKey.UM_DOWNLOAD_OUT_ID);
                                 showDownloadDialog();
                             }
@@ -189,6 +204,7 @@ public class MainT4Fragment extends BaseMainFragment implements View.OnClickList
         mWebView.getSettings().setAppCacheEnabled(true);
         mWebView.getSettings().setLoadWithOverviewMode(true);
         mWebView.getSettings().setDatabaseEnabled(true);
+        mWebView.addJavascriptInterface(new JsInterface(), "android");
 
 
         mWebView.setWebViewClient(new WebViewClient() {
@@ -215,7 +231,19 @@ public class MainT4Fragment extends BaseMainFragment implements View.OnClickList
                 super.onLoadResource(view, url);
             }
 
+            @Override
+            public boolean shouldOverrideUrlLoading(WebView view, String url) {
+                Log.d("mylog", "shouldOverrideUrlLoading: 22222222222 url " + url);
+                return super.shouldOverrideUrlLoading(view, url);
+            }
 
+            @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
+            @Override
+            public boolean shouldOverrideUrlLoading(WebView view, WebResourceRequest request) {
+                Uri url = request.getUrl();
+                Log.d("mylog", "shouldOverrideUrlLoading: 11111111 url " + url);
+                return super.shouldOverrideUrlLoading(view, request);
+            }
         });
         mWebView.setWebChromeClient(new WebChromeClient() {
             @Override
@@ -278,7 +306,7 @@ public class MainT4Fragment extends BaseMainFragment implements View.OnClickList
     @Override
     protected void lazyLoad() {
         MobclickAgent.onEvent(mMainActivity, ConstantKey.UM_WELFEAR_ID);
-//        netData();
+        netData();
     }
 
     private void netData() {
@@ -291,13 +319,13 @@ public class MainT4Fragment extends BaseMainFragment implements View.OnClickList
             protected void onNetNext(AResultInfo<MenuadvInfoBean> menuadvInfoBeanAResultInfo) {
                 MenuadvInfoBean menuadvInfoBean = menuadvInfoBeanAResultInfo.data;
                 String url = menuadvInfoBean.url;
+                mWechat = menuadvInfoBean.wechat;
 
 //                url = "http://en.upkao.com";
                 //        String url = "https://fir.im/cloudreader";
                 Log.d("mylog", "onNetNext: url " + url);
                 mWebView.loadUrl(url);
                 MainT4Fragment.this.homeUrl = url;
-//                urlList.add(url);
             }
 
             @Override
@@ -331,6 +359,59 @@ public class MainT4Fragment extends BaseMainFragment implements View.OnClickList
             mWebView = null;
         }
 
+    }
+
+    public class JsInterface {
+
+
+        //JS交互
+        @JavascriptInterface
+        public void toNext() {
+            MobclickAgent.onEvent(mMainActivity, ConstantKey.UM_WECHAT_ID);
+            Log.d("mylog", "toNext: ---------------");
+//            mMainActivity.showToastShort("123456");
+            if (!TextUtils.isEmpty(mWechat)) {
+                ClipboardManager myClipboard = (ClipboardManager) mMainActivity.getSystemService(mMainActivity.CLIPBOARD_SERVICE);
+                ClipData myClip = ClipData.newPlainText("text", mWechat);
+                myClipboard.setPrimaryClip(myClip);
+//                mMainActivity.showToastShort("微信号已复制到剪切板");
+                AlertDialog alertDialog = new AlertDialog.Builder(mMainActivity).create();
+                alertDialog.setMessage("微信号已复制到剪切板,去添加好友吧");
+                alertDialog.setButton(DialogInterface.BUTTON_POSITIVE, "确定", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialogInterface, int i) {
+                        openWeiXin();
+                    }
+                });
+                DialogInterface.OnClickListener listent = null;
+                alertDialog.setButton(DialogInterface.BUTTON_NEGATIVE, "取消", listent);
+                alertDialog.show();
+
+            }
+        }
+
+        private void openWeiXin() {
+            boolean mIsInstall = false;
+            List<String> apkList = PackageUtils.getApkList(mMainActivity);
+            for (int i = 0; i < apkList.size(); i++) {
+                String apkPkgName = apkList.get(i);
+                if ("com.tencent.mm".equals(apkPkgName)) {
+                    mIsInstall = true;
+                    break;
+                }
+            }
+            if (mIsInstall) {
+                Intent intent = new Intent();
+                ComponentName cmp = new ComponentName("com.tencent.mm", "com.tencent.mm.ui.LauncherUI");
+                intent.setAction(Intent.ACTION_MAIN);
+                intent.addCategory(Intent.CATEGORY_LAUNCHER);
+                intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                intent.setComponent(cmp);
+                mMainActivity.startActivity(intent);
+            } else {
+                mMainActivity.showToastShort("未安装微信");
+            }
+        }
     }
 
 

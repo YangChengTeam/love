@@ -26,6 +26,7 @@ import com.yc.love.okhttp.view.IMoreUiView;
 import com.yc.love.okhttp.view.INormalUiView;
 import com.yc.love.ui.activity.CreateBeforeActivity;
 import com.yc.love.ui.frament.base.BaseMainFragment;
+import com.yc.love.ui.view.LoadDialog;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -53,6 +54,7 @@ public class MainT3NewFragment extends BaseMainFragment implements INormalUiView
     private NormalPresenter mNormalPresenter;
     private Map<String, String> mRequestMap;
     private String mDataUrl;
+    private LoadDialog mLoadDialog;
 
 
     @Override
@@ -62,7 +64,7 @@ public class MainT3NewFragment extends BaseMainFragment implements INormalUiView
 
     @Override
     protected void initViews() {
-        initView();
+//        initView();
 
     }
 
@@ -87,6 +89,21 @@ public class MainT3NewFragment extends BaseMainFragment implements INormalUiView
 
     @Override
     protected void lazyLoad() {
+        initView();
+        initData();
+
+    }
+
+    private void initData() {
+
+        mConfessionDataBeans = (List<ConfessionDataBean>) mCacheWorker.getCache(mMainActivity, "main3_new");
+        if (mConfessionDataBeans != null && mConfessionDataBeans.size() != 0) {
+            initRecyclerViewData();
+        } else {
+            mLoadDialog = new LoadDialog(mMainActivity);
+            mLoadDialog.showLoadingDialog();
+        }
+
         mNormalPresenter = new NormalPresenter(this);
         mRequestMap = new HashMap<>();
         mDataUrl = URLConfig.CATEGORY_LIST_URL;
@@ -109,17 +126,24 @@ public class MainT3NewFragment extends BaseMainFragment implements INormalUiView
             mConfessionDataBeans = new ArrayList<>();
         }
         mConfessionDataBeans.add(0, new ConfessionDataBean(0, "data_title"));
+
+        mCacheWorker.setCache("main3_new", mConfessionDataBeans);
+
         initRecyclerViewData();
     }
 
     @Override
     public void onFailed(Call call, Exception e, int id) {
-
+        if (mLoadDialog != null) {
+            mLoadDialog.dismissLoadingDialog();
+        }
     }
 
     @Override
     public void onBefore(Request request, int id) {
-
+        if (mLoadDialog != null) {
+            mLoadDialog.dismissLoadingDialog();
+        }
     }
 
 
@@ -183,7 +207,7 @@ public class MainT3NewFragment extends BaseMainFragment implements INormalUiView
             ConfessionDataBean confessionDataBean = mConfessionDataBeans.get(position);
 //            String title=confessionDataBean.title;
 
-            CreateBeforeActivity.startCreateBeforeActivity(mMainActivity,confessionDataBean);
+            CreateBeforeActivity.startCreateBeforeActivity(mMainActivity, confessionDataBean);
         }
 
         @Override
@@ -205,11 +229,11 @@ public class MainT3NewFragment extends BaseMainFragment implements INormalUiView
         List<ConfessionDataBean> netLoadMoreData = confessionBean.data;
         Log.d("mylog", "onMoreSuccess: " + netLoadMoreData.size());
 
-        if (PAGE_NUM == 4) {
+        /*if (PAGE_NUM == 4) {
             netLoadMoreData.remove(10);
             netLoadMoreData.remove(10);
             netLoadMoreData.remove(10);
-        }
+        }*/
 
         if (netLoadMoreData != null) {
 
