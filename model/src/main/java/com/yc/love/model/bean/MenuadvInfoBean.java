@@ -18,5 +18,6 @@ public class MenuadvInfoBean {
     public String url;
     public String img;
     public String statistics;
+    public String wechat;
     public int add_time;
 }
