@@ -8,6 +8,12 @@ android {
             storeFile file('D:/app_key_store/ycLove.jks')
             storePassword '123456'
         }
+        debug {
+            keyAlias 'ycLove'
+            keyPassword '123456'
+            storeFile file('D:/app_key_store/ycLove.jks')
+            storePassword '123456'
+        }
     }
     compileSdkVersion 27
     /* packagingOptions {
@@ -22,8 +28,8 @@ android {
         applicationId "com.yc.love"
         minSdkVersion 17
         targetSdkVersion 27
-        versionCode 9
-        versionName "1.0.8"
+        versionCode 10
+        versionName "1.0.9"
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
         ndk {
             //设置支持的SO库架构
@@ -84,6 +90,7 @@ dependencies {
     implementation 'com.umeng.umsdk:common:2.0.0'
     implementation 'com.qw:soulpermission:1.1.6'
     implementation 'com.zhy:okhttputils:2.6.2'
+//    implementation 'com.squareup.okhttp3:okhttp:3.4.1'
     implementation 'com.github.bumptech.glide:glide:3.7.0'
     implementation 'me.iwf.photopicker:PhotoPicker:0.9.5@aar'
     implementation 'com.isseiaoki:simplecropview:1.1.4'

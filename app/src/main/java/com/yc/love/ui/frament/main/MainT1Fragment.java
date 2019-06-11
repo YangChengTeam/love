@@ -416,7 +416,7 @@ public class MainT1Fragment extends BaseMainFragment {
                 if (PAGE_NUM != 1) {
                     PAGE_NUM--;
                 }
-                changLoadMoreView(null);
+//                changLoadMoreView(null);
             }
 
             @Override

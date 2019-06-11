@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:background="@color/white"
@@ -18,7 +19,95 @@
         android:layout_height="wrap_content"
         android:layout_marginLeft="10dp"
         android:layout_marginRight="10dp"
-        android:orientation="horizontal">
+        android:orientation="horizontal"
+        tools:ignore="MissingConstraints">
+
+        <android.support.constraint.ConstraintLayout
+            android:id="@+id/item_become_vip_tail_cl_con_00"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_marginRight="4dp"
+            android:layout_weight="1"
+            android:background="@mipmap/become_vip_bg_pay"
+            android:gravity="center_horizontal"
+            android:orientation="vertical"
+            android:paddingLeft="22dp"
+            android:paddingTop="14dp">
+
+            <TextView
+                android:id="@+id/item_become_vip_tail_tv_pay_tit_00"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="购买永久"
+                android:textColor="@color/yellow_vip_text_tit"
+                android:textSize="@dimen/size_18" />
+
+            <TextView
+                android:id="@+id/item_become_vip_tail_tv_pay_des_00"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="4dp"
+                android:layout_marginRight="4dp"
+                android:layout_marginBottom="18dp"
+                android:background="@drawable/shape_tv_asymmetry_yellow"
+                android:paddingLeft="8dp"
+                android:paddingTop="3dp"
+                android:paddingRight="8dp"
+                android:paddingBottom="3dp"
+                android:text="最低1.2元/天"
+                android:textColor="@color/white"
+                android:textSize="@dimen/size_10"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintLeft_toLeftOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/item_become_vip_tail_tv_pay_tit_00" />
+
+
+            <LinearLayout
+                android:id="@+id/item_become_vip_tail_ll_pay_con_00"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:paddingRight="22dp"
+                app:layout_constraintRight_toRightOf="parent">
+
+                <TextView
+                    android:id="@+id/item_become_vip_tail_tv_pay_unit_00"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="限时促销￥"
+                    android:textColor="@color/yellow_vip_text_mon"
+                    android:textSize="@dimen/size_14" />
+
+                <TextView
+                    android:id="@+id/item_become_vip_tail_tv_pay_mon_00"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="56"
+                    android:textColor="@color/yellow_vip_text_mon"
+                    android:textSize="@dimen/size_26" />
+            </LinearLayout>
+
+            <TextView
+                android:id="@+id/item_become_vip_tail_tv_pay_price_00"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:paddingRight="22dp"
+                android:text="原价555"
+                android:textColor="@color/yellow_vip_text_elide"
+                android:textSize="@dimen/size_12"
+                app:layout_constraintRight_toRightOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/item_become_vip_tail_ll_pay_con_00" />
+
+
+            <ImageView
+                android:id="@+id/item_become_vip_tail_iv_pay_sel_00"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:src="@mipmap/become_vip_icon_pay_s"
+                android:visibility="gone"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintRight_toRightOf="parent" />
+        </android.support.constraint.ConstraintLayout>
 
         <android.support.constraint.ConstraintLayout
             android:id="@+id/item_become_vip_tail_cl_con_01"
@@ -28,7 +117,8 @@
             android:layout_weight="1"
             android:background="@mipmap/become_vip_bg_pay"
             android:gravity="center_horizontal"
-            android:orientation="vertical">
+            android:orientation="vertical"
+            android:visibility="gone">
 
             <TextView
                 android:id="@+id/item_become_vip_tail_tv_pay_tit_01"
@@ -106,7 +196,8 @@
             android:layout_weight="1"
             android:background="@mipmap/become_vip_bg_pay"
             android:gravity="center_horizontal"
-            android:orientation="vertical">
+            android:orientation="vertical"
+            android:visibility="gone">
 
             <TextView
                 android:id="@+id/item_become_vip_tail_tv_pay_tit_02"
@@ -362,13 +453,13 @@
             android:src="@mipmap/become_vip_icon_pay_zfb" />
     </LinearLayout>
 
-   <!-- <View
-        android:id="@+id/item_become_vip_tail_view2"
-        android:layout_width="match_parent"
-        android:layout_height="10dp"
-        android:layout_marginTop="14dp"
-        android:background="@color/love_background"
-        app:layout_constraintTop_toBottomOf="@+id/item_become_vip_tail_ll_pay_type_con" />-->
+    <!-- <View
+         android:id="@+id/item_become_vip_tail_view2"
+         android:layout_width="match_parent"
+         android:layout_height="10dp"
+         android:layout_marginTop="14dp"
+         android:background="@color/love_background"
+         app:layout_constraintTop_toBottomOf="@+id/item_become_vip_tail_ll_pay_type_con" />-->
 
     <!--  android:background="@drawable/selectot_btn_pay_vip_yellow"-->
     <!--android:background="@drawable/shape_btn_vip_yellow"-->
@@ -388,11 +479,47 @@
         android:textSize="@dimen/size_16"
         app:layout_constraintTop_toBottomOf="@+id/item_become_vip_tail_ll_pay_type_con" />
 
+    <LinearLayout
+        android:id="@+id/item_become_vip_ll_con"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/item_become_vip_tv_next">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:paddingTop="6dp"
+            android:text="已有 "
+            android:textColor="@color/yellow_vip_text_mon"
+            android:textSize="@dimen/size_12" />
+
+        <TextView
+            android:id="@+id/item_become_vip_tv_pay_num"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:paddingTop="6dp"
+            android:text="156592"
+            android:textColor="@color/yellow_vip_text_mon"
+            android:textSize="@dimen/size_14"
+            android:textStyle="bold" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:paddingTop="6dp"
+            android:text=" 位用户成为VIP"
+            android:textColor="@color/yellow_vip_text_mon"
+            android:textSize="@dimen/size_12" />
+    </LinearLayout>
+
     <View
         android:id="@+id/item_become_vip_view_3"
         android:layout_width="match_parent"
-        android:layout_height="24dp"
-        app:layout_constraintTop_toBottomOf="@+id/item_become_vip_tv_next" />
+        android:layout_height="12dp"
+        app:layout_constraintTop_toBottomOf="@+id/item_become_vip_ll_con" />
 
 
     <View

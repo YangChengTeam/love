@@ -41,6 +41,7 @@ import com.qw.soul.permission.SoulPermission;
 import com.qw.soul.permission.bean.Permission;
 import com.qw.soul.permission.callbcak.CheckRequestPermissionListener;
 import com.umeng.analytics.MobclickAgent;
+import com.umeng.commonsdk.statistics.common.DeviceConfig;
 import com.yc.love.R;
 import com.yc.love.model.bean.confession.ConfessionDataBean;
 import com.yc.love.model.bean.confession.ConfessionFieldBean;
@@ -59,6 +60,7 @@ import com.yc.love.ui.view.CustomProgress;
 import com.yc.love.ui.view.GlideCircleTransform;
 import com.yc.love.ui.view.LoadDialog;
 import com.yc.love.utils.HeadImageUtils;
+import com.yc.love.utils.PhoneIMEIUtil;
 
 import java.io.File;
 import java.io.FileOutputStream;
@@ -149,7 +151,7 @@ public class CreateBeforeActivity extends BaseSameActivity implements INormalUiV
                     mCreateBgImageView.setImageBitmap(resource);
 
 //                    mLoadingLayout.setVisibility(View.GONE);
-                    Logger.e("w-->" + resource.getWidth() + "---h-->" + resource.getHeight());
+                    Log.d("mylog", "onResourceReady: " + "w-->" + resource.getWidth() + "---h-->" + resource.getHeight());
                     createInputView();
                 }
 
@@ -175,7 +177,7 @@ public class CreateBeforeActivity extends BaseSameActivity implements INormalUiV
             final int tMargin = SizeUtils.dp2px(this, 42);
 
             Map<String, String> requestData = new HashMap<String, String>();
-            Logger.e("create field --->" + mConfessionDataBean.field.size());
+            Log.d("mylog", "createInputView: " + "create field --->" + mConfessionDataBean.field.size());
             for (int i = 0; i < mConfessionDataBean.field.size(); i++) {
 //                ZBDataFieldInfo zField = mConfessionDataBean.field.get(i);
                 ConfessionFieldBean confessionFieldBean = mConfessionDataBean.field.get(i);
@@ -459,7 +461,7 @@ public class CreateBeforeActivity extends BaseSameActivity implements INormalUiV
             }
             isChooseImage = true;
             HeadImageUtils.imgResultPath = tempFile.getAbsolutePath();
-            Logger.i("tempfile path--->" + HeadImageUtils.imgResultPath);
+            Log.d("mylog", "onActivityResult: " + "tempfile path--->" + HeadImageUtils.imgResultPath);
             Glide.with(this).load(tempFile).transform(new GlideCircleTransform(CreateBeforeActivity.this)).into(createSelectImageView);
         }
     }
@@ -555,23 +557,36 @@ public class CreateBeforeActivity extends BaseSameActivity implements INormalUiV
         }
     }
 
-    private void netCompoundData(String mime) {
+    private void netCompoundData() {  //一键生成 请求网络
         if (mLoadingDialog == null) {
             mLoadingDialog = new LoadDialog(this);
         }
 //        mLoadingDialog.showLoadingDialog();
-        mLoadingDialog.show();
+        mLoadingDialog.showLoadingDialog();
 //        String ANDROID_ID = getPhoneIMEI(getApplicationContext());
         Map<String, String> params = new HashMap<String, String>();
         params.put("id", mConfessionDataBean != null ? mConfessionDataBean.id : "");
 //                params.put("mime", ANDROID_ID);
-        params.put("mime", mime);
+        String phoneIMEI = PhoneIMEIUtil.getPhoneIMEI(CreateBeforeActivity.this);
+        if (TextUtils.isEmpty(phoneIMEI)) {
+            phoneIMEI = "99000854223779";
+        }
+
+        String deviceIdForGeneral = DeviceConfig.getDeviceIdForGeneral(CreateBeforeActivity.this);
+
+//        phoneIMEI  ="99000854223779";
+        params.put("mime", phoneIMEI);  //99000854223779   99001140644954  356615505655247
+
+        Log.d("mylog", "netCompoundData: mime " + phoneIMEI);
+        Log.d("mylog", "netCompoundData: deviceIdForGeneral " + deviceIdForGeneral);
 
         if (netCompoundRequestData.size() > 0) {
             params.put("requestData", JSON.toJSONString(netCompoundRequestData));
         }
         if (isChooseImage) {
             mNormalPresenter.netUpFileNet(params, new File(HeadImageUtils.imgResultPath), URLConfig.URL_IMAGE_CREATE);
+
+
         } else {
             mNormalPresenter.netNormalData(params, URLConfig.URL_IMAGE_CREATE);
         }
@@ -593,19 +608,12 @@ public class CreateBeforeActivity extends BaseSameActivity implements INormalUiV
                 new CheckRequestPermissionListener() {
                     @Override
                     public void onPermissionOk(Permission permission) {
-                        TelephonyManager tm = (TelephonyManager)
-                                getSystemService(Context.TELEPHONY_SERVICE);
-                        if (ActivityCompat.checkSelfPermission(CreateBeforeActivity.this, Manifest.permission.READ_PHONE_STATE) != PackageManager.PERMISSION_GRANTED) {
-//                            phoneIMEI = "99000854223779";
-                            netCompoundData("99000854223779");
-                        } else {
-                            netCompoundData(tm.getDeviceId());
-                        }
+                        netCompoundData();
                     }
 
                     @Override
                     public void onPermissionDenied(Permission permission) {
-                        netCompoundData("99000854223779");
+                        netCompoundData();
                     }
                 });
     }
@@ -651,9 +659,10 @@ public class CreateBeforeActivity extends BaseSameActivity implements INormalUiV
     public void doResult(String response) {
 
         Log.d("mylog", "doResult: response " + response);
+//        Log.d("securityhttp", "doResult: response " + response);
 
         if (response != null) {
-            Logger.e("create result --- >" + response);
+//            Logger.e("create result --- >" + response);
             try {
                 ImageCreateBean res = new Gson().fromJson(response, ImageCreateBean.class);
                 String data = res.data;

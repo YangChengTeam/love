@@ -35,6 +35,7 @@ import com.yc.love.model.bean.BecomeVipBean;
 import com.yc.love.model.bean.IdCorrelationLoginBean;
 import com.yc.love.model.bean.IndexDoodsBean;
 import com.yc.love.model.bean.OrdersInitBean;
+import com.yc.love.model.bean.OthersJoinNum;
 import com.yc.love.model.bean.event.EventBusWxPayResult;
 import com.yc.love.model.bean.event.EventPayVipSuccess;
 import com.yc.love.model.constant.ConstantKey;
@@ -68,6 +69,7 @@ public class BecomeVipActivity extends PayActivity implements View.OnClickListen
     private OrderEngin mOrderEngin;
     private List<BecomeVipBean> mDatas;
     private List<IndexDoodsBean> mIndexDoodsBeans;
+    private int mNumber = 1321;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -79,13 +81,37 @@ public class BecomeVipActivity extends PayActivity implements View.OnClickListen
         initViews();
 
         netIsVipData();
-        netData();
+        netJoinNum();
+
     }
+
 
     @Override
     protected void onResume() {
         super.onResume();
         MobclickAgent.onEvent(this, ConstantKey.UM_VIPPURCHASE_ID);
+    }
+
+    private void netJoinNum() {
+        mOrderEngin.othersJoinNum("Others/join_num").subscribe(new MySubscriber<AResultInfo<OthersJoinNum>>(mLoadingDialog) {
+
+            @Override
+            protected void onNetNext(AResultInfo<OthersJoinNum> othersJoinNumAResultInfo) {
+                OthersJoinNum othersJoinNum = othersJoinNumAResultInfo.data;
+                mNumber = othersJoinNum.number;
+                netData();
+            }
+
+            @Override
+            protected void onNetError(Throwable e) {
+                netData();
+            }
+
+            @Override
+            protected void onNetCompleted() {
+
+            }
+        });
     }
 
     private void netIsVipData() {
@@ -94,6 +120,7 @@ public class BecomeVipActivity extends PayActivity implements View.OnClickListen
             showToLoginDialog();
             return;
         }
+        mLoadingDialog.showLoadingDialog();
         mOrderEngin.userInfo(String.valueOf(id), "user/info").subscribe(new MySubscriber<AResultInfo<IdCorrelationLoginBean>>(mLoadingDialog) {
 
             @Override
@@ -237,7 +264,7 @@ public class BecomeVipActivity extends PayActivity implements View.OnClickListen
 
             @Override
             protected RecyclerView.ViewHolder getTailViewHolder(ViewGroup parent) {
-                BecomeVipTailViewHolder becomeVipTailViewHolder = new BecomeVipTailViewHolder(BecomeVipActivity.this, null, parent);
+                BecomeVipTailViewHolder becomeVipTailViewHolder = new BecomeVipTailViewHolder(BecomeVipActivity.this, null, parent, mNumber);
                 becomeVipTailViewHolder.setOnClickTailListener(new BecomeVipTailViewHolder.OnClickTailListener() {
                     @Override
                     public void onClickTailNext(int payType, int selectPosition) {

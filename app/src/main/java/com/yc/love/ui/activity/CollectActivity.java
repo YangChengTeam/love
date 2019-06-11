@@ -115,7 +115,7 @@ public class CollectActivity extends BaseSameActivity {
                 if (index == 0) {
                     return 1.0f;
                 } else if (index == 1) {
-                    return 2.5f;
+                    return 1.8f;
                 } else {
                     return 1.0f;
                 }

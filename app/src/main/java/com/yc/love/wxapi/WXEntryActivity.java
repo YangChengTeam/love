@@ -67,7 +67,7 @@ public class WXEntryActivity extends Activity implements IWXAPIEventHandler {
                         //正确返回
                     } else {
                         //正确返回
-                        Toast.makeText(WXEntryActivity.this, "微信分享--成功", Toast.LENGTH_SHORT).show();
+//                        Toast.makeText(WXEntryActivity.this, "微信分享--成功", Toast.LENGTH_SHORT).show();
                     }
                 }
                 break;

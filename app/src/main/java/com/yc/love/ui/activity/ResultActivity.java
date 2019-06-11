@@ -1,5 +1,6 @@
 package com.yc.love.ui.activity;
 
+import android.Manifest;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
@@ -19,6 +20,12 @@ import android.view.View;
 import android.widget.ImageView;
 import android.widget.Toast;
 
+import com.bumptech.glide.Glide;
+import com.bumptech.glide.request.animation.GlideAnimation;
+import com.bumptech.glide.request.target.SimpleTarget;
+import com.qw.soul.permission.SoulPermission;
+import com.qw.soul.permission.bean.Permission;
+import com.qw.soul.permission.callbcak.CheckRequestPermissionListener;
 import com.squareup.picasso.Picasso;
 import com.squareup.picasso.Target;
 import com.tencent.connect.share.QQShare;
@@ -56,6 +63,7 @@ public class ResultActivity extends BaseSameActivity {
 
     private Bitmap fileBitmap;
     private ImageView mImageView;
+    private boolean mIsRepeat = false;
 
     public static void startResultActivity(Context context, String resImagePath, String createTitle) {
         Intent intent = new Intent(context, ResultActivity.class);
@@ -101,16 +109,44 @@ public class ResultActivity extends BaseSameActivity {
         mImageView = findViewById(R.id.result_iv_img);
         ImageView shareLayoutImg = findViewById(R.id.result_iv_share_img);
 
-        Log.d("mylog", "initViews: mResImagePath  " + mResImagePath);
+
         creatBitmapLoadImg();
         shareLayoutImg.setOnClickListener(this);
     }
 
-    private void creatBitmapLoadImg() {
+    private void creatBitmapLoadImg() {  //网络图片转Bitmap 对象
+        Log.d("mylog", "initViews: mResImagePath  " + mResImagePath);
         if (TextUtils.isEmpty(mResImagePath)) {
             return;
         }
-        Picasso.with(ResultActivity.this).load(mResImagePath).into(new Target() {
+        mLoadingDialog.showLoadingDialog();
+        Glide.with(ResultActivity.this).load(mResImagePath).asBitmap().into(new SimpleTarget<Bitmap>() {
+            @Override
+            public void onResourceReady(Bitmap resource, GlideAnimation<? super Bitmap> glideAnimation) {
+                fileBitmap = resource;
+                mImageView.setImageBitmap(fileBitmap);
+//                mFilePath = saveToSystemGallery(bitmap);
+
+                Log.d("mylog", "onBitmapLoaded: fileBitmap " + fileBitmap);
+
+                mLoadingDialog.dismissLoadingDialog();
+            }
+
+            @Override
+            public void onLoadFailed(Exception e, Drawable errorDrawable) {
+                super.onLoadFailed(e, errorDrawable);
+                Log.d("mylog", "onLoadFailed: ");
+                mLoadingDialog.dismissLoadingDialog();
+            }
+
+            @Override
+            public void onLoadCleared(Drawable placeholder) {
+                super.onLoadCleared(placeholder);
+                Log.d("mylog", "onLoadCleared: ");
+                mLoadingDialog.dismissLoadingDialog();
+            }
+        });
+        /*Picasso.with(ResultActivity.this).load(mResImagePath).into(new Target() {
             @Override
             public void onBitmapLoaded(Bitmap bitmap, Picasso.LoadedFrom from) {
                 fileBitmap = bitmap;
@@ -119,18 +155,44 @@ public class ResultActivity extends BaseSameActivity {
 
                 Log.d("mylog", "onBitmapLoaded: fileBitmap " + fileBitmap);
 
+                if (fileBitmap != null) {
+                    mLoadingDialog.dismissLoadingDialog();
+                }
             }
 
             @Override
             public void onBitmapFailed(Drawable errorDrawable) {
-
+                Log.d("mylog", "onBitmapFailed:  fileBitmap " + fileBitmap);
+                if (fileBitmap == null) {
+                    creatBitmapLoadImg();
+                }
             }
 
             @Override
             public void onPrepareLoad(Drawable placeHolderDrawable) {
+                Log.d("mylog", "onPrepareLoad: fileBitmap " + fileBitmap);
+                Log.d("mylog", "onPrepareLoad: placeHolderDrawable " + placeHolderDrawable);
 
+                *//*if (fileBitmap == null) {
+                    creatBitmapLoadImg();
+                }*//*
+
+         *//* if (fileBitmap != null || mIsRepeat) {
+                    mLoadingDialog.dismissLoadingDialog();
+                } else {
+                    mImageView.postDelayed(new Runnable() {
+                        @Override
+                        public void run() {
+                            if (mIsRepeat) {
+                                return;
+                            }
+                            creatBitmapLoadImg();
+                            mIsRepeat = true;
+                        }
+                    }, 200);
+                }*//*
             }
-        });
+        });*/
     }
 
     @Override
@@ -296,6 +358,12 @@ public class ResultActivity extends BaseSameActivity {
         }
     }
 
+    /**
+     * Bitmap 转成 本地图片
+     *
+     * @param bmp Bitmap对象
+     * @return
+     */
     private String saveToSystemGallery(Bitmap bmp) {
         if (bmp == null) {
             creatBitmapLoadImg();
@@ -344,37 +412,52 @@ public class ResultActivity extends BaseSameActivity {
         sendBroadcast(intent);
         //图片保存成功，图片路径：
         if (isShowToast) {
-            showToastShort("图片保存路径：" + file.getAbsolutePath());
-//            Toast.makeText(this,
-//                    "图片保存路径：" + file.getAbsolutePath(), Toast.LENGTH_SHORT).show();
-
-
-            /*String filePath = file.getAbsolutePath();
+            String filePath = file.getAbsolutePath();
             Log.d("mylog", "onClick: filePath  filePath---------- " + filePath);
+            if (Build.VERSION.SDK_INT >= 24) {
+                Snackbar.make(mImageView, "图片已保存至相册", Snackbar.LENGTH_LONG)
+                        .setAction("查看", new View.OnClickListener() {
+                            @Override
+                            public void onClick(View v) {
 
-            Snackbar.make(mImageView, "图片已保存至相册", Snackbar.LENGTH_LONG)
-                    .setAction("查看", new View.OnClickListener() {
-                        @Override
-                        public void onClick(View v) {
-                            String filePath = file.getAbsolutePath();
-                            Log.d("mylog", "onClick: filePath  filePath" + filePath);
-                            if (!TextUtils.isEmpty(filePath)) {
-                                File file = new File(filePath);
-                                if (file.exists()) {
-                                    Uri uriForFile = FileProvider.getUriForFile(ResultActivity.this, ResultActivity.this.getApplicationContext().getPackageName() + ".provider", file);
-//                                    Uri uriForFile = Uri.fromFile(file);
-                                    if (uriForFile != null) {
-                                        Intent intent = new Intent();
-                                        intent.setAction(android.content.Intent.ACTION_VIEW);
-                                        intent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
-                                        intent.setDataAndType(uriForFile, "image/*");
-                                        startActivity(intent);
-                                    }
-                                }
+                                SoulPermission.getInstance().checkAndRequestPermission(Manifest.permission.READ_EXTERNAL_STORAGE,
+                                        //if you want do noting or no need all the callbacks you may use SimplePermissionAdapter instead
+                                        new CheckRequestPermissionListener() {
+                                            @Override
+                                            public void onPermissionOk(Permission permission) {
+
+                                                Intent photoInten = new Intent();
+                                                String path = file.getAbsolutePath();   //图片路径
+                                                File file = new File(path);
+
+                                                Log.d("mylog", "onPermissionOk: path " + path);
+                                                Log.d("mylog", "onPermissionOk: file " + file);
+                                                Log.d("mylog", "onPermissionOk: file.exists() " + file.exists());
+
+                                                Uri uri;
+                                                photoInten.setAction(Intent.ACTION_VIEW);
+                                                if (Build.VERSION.SDK_INT >= 24) {
+                                                    uri = FileProvider.getUriForFile(getApplicationContext(), getPackageName() + ".provider", file);
+                                                    photoInten.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
+                                                } else {
+                                                    uri = Uri.fromFile(file);
+                                                }
+                                                photoInten.setDataAndType(uri, "image/*");
+                                                startActivity(photoInten);
+                                            }
+
+                                            @Override
+                                            public void onPermissionDenied(Permission permission) {
+                                            }
+                                        });
+
+
                             }
-                        }
-                    })
-                    .show();*/
+                        })
+                        .show();
+            } else {
+                showToastShort("图片保存路径：" + file.getAbsolutePath());
+            }
         }
 //        Toast.makeText(this,
 //                "图片保存路径：" + file.getAbsolutePath(), Toast.LENGTH_SHORT).show();
