@@ -386,7 +386,6 @@ public class MainT4Fragment extends BaseMainFragment implements View.OnClickList
                 DialogInterface.OnClickListener listent = null;
                 alertDialog.setButton(DialogInterface.BUTTON_NEGATIVE, "取消", listent);
                 alertDialog.show();
-
             }
         }
 

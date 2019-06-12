@@ -14,6 +14,7 @@ import com.yc.love.R;
 import com.yc.love.adaper.rv.CreateMainT3Adapter;
 import com.yc.love.adaper.rv.base.RecyclerViewItemListener;
 import com.yc.love.adaper.rv.holder.BaseViewHolder;
+import com.yc.love.adaper.rv.holder.MainT3ItemLocalityViewHolder;
 import com.yc.love.adaper.rv.holder.MainT3ItemTitleViewHolder;
 import com.yc.love.adaper.rv.holder.MainT3ItemViewHolder;
 import com.yc.love.adaper.rv.holder.MainT3TitleViewHolder;
@@ -30,6 +31,7 @@ import com.yc.love.model.constant.ConstantKey;
 import com.yc.love.model.engin.LoveEngin;
 import com.yc.love.ui.activity.LoveByStagesActivity;
 import com.yc.love.ui.activity.LoveCaseActivity;
+import com.yc.love.ui.activity.LoveHealingActivity;
 import com.yc.love.ui.activity.LoveIntroductionActivity;
 import com.yc.love.ui.frament.base.BaseMainFragment;
 import com.yc.love.ui.view.LoadDialog;
@@ -66,6 +68,9 @@ public class MainT3Fragment extends BaseMainFragment {
     private boolean mIsDataToCache;
     private LoadDialog mLoadDialog;
     private CacheWorker mCacheWorker;
+
+    private final int ID_ITEM_TITLE_CASE = -1;
+    private final int ID_ITEM_TITLE_CURE = -2;
 
     @Override
     protected int setContentView() {
@@ -194,7 +199,12 @@ public class MainT3Fragment extends BaseMainFragment {
                 mIsNetData = true;
                 mDatas = new ArrayList<>();
                 mDatas.add(new MainT3Bean(1));
-//                mDatas.add(new MainT3Bean(2, "入门秘籍"));
+
+
+                mDatas.add(new MainT3Bean(4, "2", "学学别人怎么把女神撩到手", ID_ITEM_TITLE_CASE, mMainActivity.getResources().getDrawable(R.mipmap.main_bg_item_title_case), "实战学习", 18));
+                mDatas.add(new MainT3Bean(4, "2", "浪漫情话让你撩妹不愁", ID_ITEM_TITLE_CURE, mMainActivity.getResources().getDrawable(R.mipmap.main_bg_item_title_cure), "治愈情话", 18));
+
+                mDatas.add(new MainT3Bean(2, "入门秘籍"));
                 ExampleTsCategory exampleTsCategory = exampleTsCategoryAResultInfo.data;
                 List<ExampleTsCategoryList> list1 = exampleTsCategory.list1;
                 List<ExampleTsCategoryList> list2 = exampleTsCategory.list2;
@@ -219,21 +229,6 @@ public class MainT3Fragment extends BaseMainFragment {
 
             @Override
             protected void onNetError(Throwable e) {
-                /*mDatas = (List<MainT3Bean>) SerializableFileUtli.checkReadPermission(mMainActivity, "main3_example_ts_category");
-                if (mDatas != null && mDatas.size() != 0) {
-                    mIsDataToCache = true;
-                    mIsNetData = true;
-                    initRecyclerViewData();
-                }*/
-
-                /*String data = (String) SPUtils.get(mMainActivity, "main3_example_ts_category", "");
-                mDatas = new Gson().fromJson(data, new TypeToken<ArrayList<MainT3Bean>>() {
-                }.getType());
-                if (mDatas != null && mDatas.size() != 0) {
-                    mIsDataToCache = true;
-                    mIsNetData = true;
-                    initRecyclerViewData();
-                }*/
             }
 
             @Override
@@ -253,16 +248,21 @@ public class MainT3Fragment extends BaseMainFragment {
             }
 
             @Override
+            protected RecyclerView.ViewHolder getLocalityHolder(ViewGroup viewGroup) {
+                return new MainT3ItemLocalityViewHolder(mMainActivity, recyclerViewItemListener, viewGroup);
+            }
+
+            @Override
             public BaseViewHolder getTitleHolder(ViewGroup parent) {
                 MainT3TitleViewHolder mainT3TitleViewHolder = new MainT3TitleViewHolder(mMainActivity, null, parent);
-                mainT3TitleViewHolder.setOnClickTitleIconListener(new MainT3TitleViewHolder.OnClickTitleIconListener() {
+               /* mainT3TitleViewHolder.setOnClickTitleIconListener(new MainT3TitleViewHolder.OnClickTitleIconListener() {
                     @Override
                     public void clickTitleIcon(int position) {
                         if (10 == position) {
                             mMainActivity.startActivity(new Intent(mMainActivity, LoveCaseActivity.class));
                         }
                     }
-                });
+                });*/
                 return mainT3TitleViewHolder;
             }
 
@@ -290,7 +290,19 @@ public class MainT3Fragment extends BaseMainFragment {
                 return;
             }
             MainT3Bean mainT3Bean = mDatas.get(position);
-            LoveIntroductionActivity.startLoveIntroductionActivity(mMainActivity, mainT3Bean.name, String.valueOf(mainT3Bean.id));
+            int id = mainT3Bean.id;
+            if (id < 0) {
+                switch (id) {
+                    case ID_ITEM_TITLE_CASE:
+                        mMainActivity.startActivity(new Intent(mMainActivity, LoveCaseActivity.class));
+                        break;
+                    case ID_ITEM_TITLE_CURE:
+                        mMainActivity.startActivity(new Intent(mMainActivity, LoveHealingActivity.class));
+                        break;
+                }
+            } else {
+                LoveIntroductionActivity.startLoveIntroductionActivity(mMainActivity, mainT3Bean.name, String.valueOf(id));
+            }
 //            ExampleDetailActivity.startExampleDetailActivity(mMainActivity, mainT3Bean.id, mainT3Bean.desp);
 
         }

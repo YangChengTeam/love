@@ -29,6 +29,7 @@ public abstract class MainT2MoreItemAdapter extends RecyclerView.Adapter<Recycle
     private static final int VIEW_VIP = 2;
     private static final int VIEW_PROG = 4;
     private static final int VIEW_TO_PAY_VIP = 3;
+    private static final int VIEW_END = 5;
     private boolean isLoading;
     private int totalItemCount;
     private int lastVisibleItemPosition;
@@ -65,6 +66,8 @@ public abstract class MainT2MoreItemAdapter extends RecyclerView.Adapter<Recycle
                 return VIEW_TO_PAY_VIP;
             case VIEW_ITEM:
                 return VIEW_ITEM;
+            case VIEW_END:
+                return VIEW_END;
         }
         return VIEW_PROG;
     }
@@ -80,11 +83,15 @@ public abstract class MainT2MoreItemAdapter extends RecyclerView.Adapter<Recycle
             holder = getVipHolder(parent);
         } else if (viewType == VIEW_ITEM) {
             holder = getHolder(parent);
-        } else {
+        } else if (viewType == VIEW_END) {
+            holder = getEndHolder(parent);
+        }else {
             holder = getBarViewHolder(parent);
         }
         return holder;
     }
+
+
 
 
     @Override
@@ -198,4 +205,6 @@ public abstract class MainT2MoreItemAdapter extends RecyclerView.Adapter<Recycle
     protected abstract RecyclerView.ViewHolder getBarViewHolder(ViewGroup parent);
 
     protected abstract RecyclerView.ViewHolder getVipHolder(ViewGroup parent);
+
+    protected abstract RecyclerView.ViewHolder getEndHolder(ViewGroup parent);
 }

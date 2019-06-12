@@ -6,6 +6,7 @@
 
 
     <ImageView
+        app:layout_constraintTop_toTopOf="parent"
         android:scaleType="fitXY"
         android:id="@+id/item_become_vip_title_iv_title"
         android:layout_width="match_parent"

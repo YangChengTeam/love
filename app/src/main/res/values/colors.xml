@@ -16,6 +16,7 @@
     <color name="xiaofeng_orange_33">#11ff8200</color>
     <color name="text_gray_deep">#555555</color>
     <color name="text_gray">#9a9a9a</color>
+    <color name="pay_vip_gray">#e5e5e5</color>
     <color name="gray_loading_01">#9b9b9b</color>
     <color name="gray_loading_02">#c1c0c0</color>
     <color name="gray_loading_03">#eaeaea</color>
@@ -76,8 +77,8 @@
     <color name="gray_brim_gray_02">#44f7f9fc</color>
     <color name="gray_brim_gray_01">#11fcfdfe</color>
 
-    <color name="red_gray">#faf6f8</color>
-    <color name="red_gray_s">#88faf6f8</color>
+    <color name="red_gray">#FFF0F5</color>
+    <color name="red_gray_s">#88FFF0F5</color>
     <color name="text_gray_dark">#666666</color>
     <color name="text_gray_dark_s">#88666666</color>
 

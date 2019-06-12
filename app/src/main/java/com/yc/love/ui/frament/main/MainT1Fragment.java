@@ -2,41 +2,39 @@ package com.yc.love.ui.frament.main;
 
 import android.content.Intent;
 import android.support.v7.widget.DefaultItemAnimator;
-import android.support.v7.widget.LinearLayoutManager;
-import android.support.v7.widget.OrientationHelper;
+import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
-import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Adapter;
 import android.widget.LinearLayout;
 
+import com.alibaba.fastjson.JSON;
 import com.yc.love.R;
-import com.yc.love.adaper.rv.MainT1MoreItemAdapter;
-import com.yc.love.adaper.rv.base.BaseEmptyViewHolder;
+import com.yc.love.adaper.rv.MainT1CreateAdapter;
 import com.yc.love.adaper.rv.base.RecyclerViewItemListener;
 import com.yc.love.adaper.rv.base.RecyclerViewTimeoutListener;
 import com.yc.love.adaper.rv.holder.BaseViewHolder;
-import com.yc.love.adaper.rv.holder.DataOverViewHolder;
-import com.yc.love.adaper.rv.holder.EmptyViewHolder;
-import com.yc.love.adaper.rv.holder.MainT1ItemHolder;
-import com.yc.love.adaper.rv.holder.ProgressBarViewHolder;
-import com.yc.love.adaper.rv.holder.TimeoutItemHolder;
-import com.yc.love.adaper.rv.holder.TitleT1ViewHolder;
+import com.yc.love.adaper.rv.holder.LoveHealItemViewHolder;
+import com.yc.love.adaper.rv.holder.LoveHealTitleViewHolder;
+import com.yc.love.adaper.rv.holder.MainT1CategoryViewHolder;
 import com.yc.love.cache.CacheWorker;
 import com.yc.love.model.base.MySubscriber;
 import com.yc.love.model.bean.AResultInfo;
 import com.yc.love.model.bean.CategoryArticleBean;
 import com.yc.love.model.bean.CategoryArticleChildrenBean;
-import com.yc.love.model.bean.ExampDataBean;
-import com.yc.love.model.bean.ExampListsBean;
+import com.yc.love.model.bean.IdCorrelationLoginBean;
+import com.yc.love.model.bean.LoveHealBean;
+import com.yc.love.model.bean.LoveHealDateBean;
+import com.yc.love.model.bean.event.EventLoginState;
 import com.yc.love.model.bean.event.NetWorkChangT1Bean;
+import com.yc.love.model.data.BackfillSingle;
 import com.yc.love.model.engin.LoveEngin;
+import com.yc.love.model.engin.LoveEnginV2;
 import com.yc.love.model.util.SPUtils;
-import com.yc.love.ui.activity.ExampleDetailActivity;
 import com.yc.love.ui.activity.LoveByStagesActivity;
 import com.yc.love.ui.activity.LoveHealActivity;
+import com.yc.love.ui.activity.LoveHealDetailsActivity;
 import com.yc.love.ui.activity.LoveHealingActivity;
 import com.yc.love.ui.activity.ShareActivity;
 import com.yc.love.ui.activity.UsingHelpHomeActivity;
@@ -55,17 +53,9 @@ import java.util.List;
  */
 
 public class MainT1Fragment extends BaseMainFragment {
-    //    private List<StringBean> mExampListsBeans;
-    private int PAGE_SIZE = 10;
-    private int PAGE_NUM = 1;
-    private boolean loadMoreEnd;
-    private boolean loadDataEnd;
-    private boolean showProgressBar = false;
-    private MainT1MoreItemAdapter mAdapter;
-    private ProgressBarViewHolder progressBarViewHolder;
     private LoveEngin mLoveEngin;
+//    private LoveEnginV2 LoveEnginV2;
     private CacheWorker mCacheWorker;
-    private List<ExampListsBean> mExampListsBeans = new ArrayList<>();
     ;
     private RecyclerView mRecyclerView;
     private LinearLayout mLlNotNet;
@@ -74,9 +64,8 @@ public class MainT1Fragment extends BaseMainFragment {
     private boolean mIsCacheData = false;
     private boolean mIsCacheTitleData = false;
     private List<CategoryArticleBean> mCategoryArticleBeans;
-    private boolean mIsDataToCache;
     private LoadDialog mLoadDialog;
-//    private boolean mIsOpenUsingHelp;
+    private List<LoveHealBean> mDatas = new ArrayList<>();
 
     @Override
     protected int setContentView() {
@@ -87,15 +76,21 @@ public class MainT1Fragment extends BaseMainFragment {
     @Override
     protected void initViews() {
         mLoveEngin = new LoveEngin(mMainActivity);
+//        LoveEnginV2 = new LoveEnginV2(mMainActivity);
         mCacheWorker = new CacheWorker();
         mLlNotNet = rootView.findViewById(R.id.main_t1_not_net);
 
         mRecyclerView = rootView.findViewById(R.id.main_t1_rl);
-        LinearLayoutManager layoutManager = new LinearLayoutManager(mMainActivity);
+        /*LinearLayoutManager layoutManager = new LinearLayoutManager(mMainActivity);
         mRecyclerView.setLayoutManager(layoutManager);
         layoutManager.setOrientation(OrientationHelper.VERTICAL);
         //设置增加或删除条目的动画
+        mRecyclerView.setItemAnimator(new DefaultItemAnimator());*/
+
+        GridLayoutManager gridLayoutManager = new GridLayoutManager(mMainActivity, 3, GridLayoutManager.VERTICAL, false);
+        mRecyclerView.setLayoutManager(gridLayoutManager);
         mRecyclerView.setItemAnimator(new DefaultItemAnimator());
+
     }
 
     RecyclerViewTimeoutListener recyclerViewTimeoutListener = new RecyclerViewTimeoutListener() {
@@ -109,13 +104,12 @@ public class MainT1Fragment extends BaseMainFragment {
     RecyclerViewItemListener recyclerViewItemListener = new RecyclerViewItemListener() {
         @Override
         public void onItemClick(int position) {
-//            ExampListsBean exampListsBean = mExampListsBeans.get(position);
-//            LoveByStagesDetailsActivity.startLoveByStagesDetailsActivity(mMainActivity, exampListsBean.id, exampListsBean.post_title);
             if (position < 0) {
                 return;
             }
-            ExampListsBean exampListsBean = mExampListsBeans.get(position);
-            ExampleDetailActivity.startExampleDetailActivity(mMainActivity, exampListsBean.id, exampListsBean.post_title);
+            LoveHealBean loveHealBean = mDatas.get(position);
+            Log.d("mylog", "onItemClick: " + loveHealBean.toString());
+            LoveHealDetailsActivity.startLoveHealDetailsActivity(mMainActivity, loveHealBean.name, String.valueOf(loveHealBean.id));
         }
 
         @Override
@@ -158,42 +152,87 @@ public class MainT1Fragment extends BaseMainFragment {
 
     @Override
     protected void lazyLoad() {
-        if (mIsDataToCache) {
-            mIsNetData = false;
-            mIsNetTitleData = false;
-        }
-//        mIsNetData = false;
-        if (!mIsNetData) {
-            netData();
-        }
-        if (!mIsNetTitleData) {
-            netTitleData();
-        }
+        netUserReg();
+        netOtherData();
     }
 
-    private void netData() {
-//        mExampListsBeans = (List<ExampListsBean>) SerializableFileUtli.checkReadPermission(mMainActivity, "main1_example_index");
-        mExampListsBeans = (List<ExampListsBean>) mCacheWorker.getCache(mMainActivity, "main1_example_index");
-        if (mExampListsBeans != null && mExampListsBeans.size() != 0) {
+    private void netOtherData() {
+        netDialogueData();
+        netTitleData();
+    }
+
+    private void netUserReg() {
+        LoadDialog loadDialog = new LoadDialog(mMainActivity);
+        LoveEnginV2 loveEnginV2 = new LoveEnginV2(mMainActivity);
+        loveEnginV2.userReg("user/reg").subscribe(new MySubscriber<AResultInfo<IdCorrelationLoginBean>>(loadDialog) {
+            @Override
+            protected void onNetNext(AResultInfo<IdCorrelationLoginBean> idCorrelationLoginBeanAResultInfo) {
+
+                final IdCorrelationLoginBean data = idCorrelationLoginBeanAResultInfo.data;
+                mRecyclerView.postDelayed(new Runnable() {
+                    @Override
+                    public void run() {
+                        loginSuccess(data);
+                    }
+                }, 500);
+
+            }
+
+            @Override
+            protected void onNetError(Throwable e) {
+
+            }
+
+            @Override
+            protected void onNetCompleted() {
+
+            }
+        });
+    }
+
+    private void loginSuccess(IdCorrelationLoginBean data) {
+        //持久化存储登录信息
+        String str = JSON.toJSONString(data);// java对象转为jsonString
+        BackfillSingle.backfillLoginData(mMainActivity, str);
+
+        EventBus.getDefault().post(new EventLoginState(EventLoginState.STATE_LOGINED));
+    }
+
+
+    private void netDialogueData() {
+        LoadDialog loadDialog = null;
+        mDatas = (List<LoveHealBean>) mCacheWorker.getCache(mMainActivity, "main1_Dialogue_category");
+        if (mDatas != null && mDatas.size() != 0) {
             mIsCacheData = true;
             if (mIsCacheData && mIsCacheTitleData) {
                 initRecyclerViewData();
             }
         } else {
-            mLoadDialog = new LoadDialog(mMainActivity);
-            mLoadDialog.showLoadingDialog();
+            loadDialog = new LoadDialog(mMainActivity);
+            loadDialog.showLoadingDialog();
         }
-        mLoveEngin.indexExample(String.valueOf(PAGE_NUM), String.valueOf(PAGE_SIZE), "example/index").subscribe(new MySubscriber<AResultInfo<ExampDataBean>>(mLoadDialog) {
+        mLoveEngin.loveCategory("Dialogue/category").subscribe(new MySubscriber<AResultInfo<List<LoveHealDateBean>>>(loadDialog) {
             @Override
-            protected void onNetNext(AResultInfo<ExampDataBean> exampDataBeanAResultInfo) {
-                ExampDataBean exampDataBean = exampDataBeanAResultInfo.data;
-                if (exampDataBean != null) {
-                    mExampListsBeans = exampDataBean.lists;
+            protected void onNetNext(AResultInfo<List<LoveHealDateBean>> loveHealDateBeanAResultInfo) {
+                List<LoveHealDateBean> loveHealDateBeans = loveHealDateBeanAResultInfo.data;
+                if (loveHealDateBeans == null || loveHealDateBeans.size() == 0) {
+                    return;
                 }
-//                mExampListsBeans.add(0, new ExampListsBean(3, "Article_Category"));
-                mExampListsBeans.add(0, new ExampListsBean(0, "title"));
-//                SerializableFileUtli.checkPermissionWriteData(mExampListsBeans, "main1_example_index");
-                mCacheWorker.setCache("main1_example_index", mExampListsBeans);
+                mDatas = new ArrayList<>();
+                for (LoveHealDateBean loveHealDateBean : loveHealDateBeans) {
+                    LoveHealBean loveHealBean = new LoveHealBean(1, loveHealDateBean._level, loveHealDateBean.id, loveHealDateBean.name, loveHealDateBean.parent_id);
+                    mDatas.add(loveHealBean);
+                    List<LoveHealDateBean.ChildrenBean> childrenBeans = loveHealDateBean.children;
+                    for (LoveHealDateBean.ChildrenBean childrenBean : childrenBeans) {
+                        LoveHealBean loveHealChildrenBean = new LoveHealBean(2, childrenBean._level, childrenBean.id, childrenBean.name, childrenBean.parent_id);
+                        mDatas.add(loveHealChildrenBean);
+                    }
+                }
+                mDatas.add(0, new LoveHealBean(0, "title"));
+
+                Log.d("mylog", "onNetNext: mDatas.size() " + mDatas.size());
+
+                mCacheWorker.setCache("main1_Dialogue_category", mDatas);
                 mIsNetData = true;
                 if (mIsNetData && mIsNetTitleData) {
                     initRecyclerViewData();
@@ -202,20 +241,7 @@ public class MainT1Fragment extends BaseMainFragment {
 
             @Override
             protected void onNetError(Throwable e) {
-              /*  mExampListsBeans = (List<ExampListsBean>) SerializableFileUtli.checkReadPermission(mMainActivity, "main1_example_index");
-                if (mExampListsBeans != null && mExampListsBeans.size() != 0) {
-                    mIsCacheTitleData = true;
-                    if (mIsCacheData && mIsCacheTitleData) {
-                        initRecyclerViewData();
-                    }
-                }
-//                java.net.SocketTimeoutException: timeout
-//                java.net.UnknownHostException: Unable to resolve host "love.bshu.com": No address associated with hostname
-                if (e instanceof SocketTimeoutException || e instanceof UnknownHostException) {
-//                    mExampListsBeans.add(new ExampListsBean(-1, "title"));
-//                    initRecyclerViewData();
-                    Log.d("mylog", "onNetError: SocketTimeoutException 网络超时 " + e.toString());
-                }*/
+
             }
 
             @Override
@@ -226,8 +252,6 @@ public class MainT1Fragment extends BaseMainFragment {
     }
 
     private void netTitleData() {
-
-//        mCategoryArticleBeans = (List<CategoryArticleBean>) SerializableFileUtli.checkReadPermission(mMainActivity, "main1_Article_category");
         mCategoryArticleBeans = (List<CategoryArticleBean>) mCacheWorker.getCache(mMainActivity, "main1_Article_category");
         if (mCategoryArticleBeans != null && mCategoryArticleBeans.size() != 0) {
             mIsCacheTitleData = true;
@@ -242,8 +266,6 @@ public class MainT1Fragment extends BaseMainFragment {
             @Override
             protected void onNetNext(AResultInfo<List<CategoryArticleBean>> listAResultInfo) {
                 mCategoryArticleBeans = listAResultInfo.data;
-//                CacheUtils.cacheBeanData(mMainActivity, "main_Article_category", mCategoryArticleBeans);
-//                SerializableFileUtli.checkPermissionWriteData(mCategoryArticleBeans, "main1_Article_category");
                 mCacheWorker.setCache("main1_Article_category", mCategoryArticleBeans);
                 mIsNetTitleData = true;
                 if (mIsNetData && mIsNetTitleData) {
@@ -253,23 +275,6 @@ public class MainT1Fragment extends BaseMainFragment {
 
             @Override
             protected void onNetError(Throwable e) {
-              /*  mCategoryArticleBeans = (List<CategoryArticleBean>) SerializableFileUtli.checkReadPermission(mMainActivity, "main1_Article_category");
-                if (mCategoryArticleBeans != null && mCategoryArticleBeans.size() != 0) {
-                    mIsNetTitleData = true;
-                    if (mIsNetData && mIsNetTitleData) {
-                        initRecyclerViewData();
-                    }
-                }*/
-
-                /*String data = (String) SPUtils.get(mMainActivity, "main_Article_category", "");
-                mCategoryArticleBeans = new Gson().fromJson(data, new TypeToken<ArrayList<CategoryArticleBean>>() {
-                }.getType());
-                if (mCategoryArticleBeans != null && mCategoryArticleBeans.size() != 0) {
-                    mIsNetTitleData = true;
-                    if (mIsNetData && mIsNetTitleData) {
-                        initRecyclerViewData();
-                    }
-                }*/
             }
 
             @Override
@@ -279,39 +284,29 @@ public class MainT1Fragment extends BaseMainFragment {
         });
     }
 
-//    boolean isOpenUsingHelp = false;
-
     private void initRecyclerViewData() {
         boolean isOpenUsingHelp = (boolean) SPUtils.get(mMainActivity, SPUtils.IS_OPEN_USING_HELP_HOME, false);
-//        isOpenUsingHelp = false;
         if (!isOpenUsingHelp) {
-//            isOpenUsingHelp = true;
             SPUtils.put(mMainActivity, SPUtils.IS_OPEN_USING_HELP_HOME, true);
             mMainActivity.startActivity(new Intent(mMainActivity, UsingHelpHomeActivity.class));
         }
 
-        Log.d("mylog", "initRecyclerViewData: ");
-        mAdapter = new MainT1MoreItemAdapter(mExampListsBeans, mRecyclerView) {
-
-            @Override
-            protected RecyclerView.ViewHolder getDaTaOverHolder(ViewGroup parent) {
-                return new DataOverViewHolder(mMainActivity, parent, "");
-            }
-
-            @Override
-            protected RecyclerView.ViewHolder getTimeoutHolder(ViewGroup parent) {
-                return new TimeoutItemHolder(mMainActivity, parent, "", recyclerViewTimeoutListener);
-            }
+        MainT1CreateAdapter adapter = new MainT1CreateAdapter(mMainActivity, mDatas) {
 
             @Override
             public BaseViewHolder getHolder(ViewGroup parent) {
-                return new MainT1ItemHolder(mMainActivity, recyclerViewItemListener, parent);
+                return new LoveHealItemViewHolder(mMainActivity, recyclerViewItemListener, parent);
+            }
+
+            @Override
+            protected RecyclerView.ViewHolder getTypeTitleHolder(ViewGroup viewGroup) {
+                return new LoveHealTitleViewHolder(mMainActivity, null, viewGroup);
             }
 
             @Override
             public BaseViewHolder getTitleHolder(ViewGroup parent) {
-                TitleT1ViewHolder titleT1ViewHolder = new TitleT1ViewHolder(mMainActivity, null, parent);
-                titleT1ViewHolder.setOnClickTitleIconListener(new TitleT1ViewHolder.OnClickTitleIconListener() {
+                MainT1CategoryViewHolder mainT1CategoryViewHolder = new MainT1CategoryViewHolder(mMainActivity, null, parent);
+                mainT1CategoryViewHolder.setOnClickTitleIconListener(new MainT1CategoryViewHolder.OnClickTitleIconListener() {
                     @Override
                     public void clickTitleIcon(int position) {
                         switch (position) {
@@ -342,48 +337,10 @@ public class MainT1Fragment extends BaseMainFragment {
                         }
                     }
                 });
-                return titleT1ViewHolder;
-            }
-
-            @Override
-            protected RecyclerView.ViewHolder getBarViewHolder(ViewGroup parent) {
-                View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.recycler_view_test_item_footer, parent, false);
-                progressBarViewHolder = new ProgressBarViewHolder(view);
-                return progressBarViewHolder;
+                return mainT1CategoryViewHolder;
             }
         };
-        mRecyclerView.setAdapter(mAdapter);
-        if (mExampListsBeans.size() < PAGE_SIZE) {
-            Log.d("ssss", "loadMoreData: data---end");
-        } else {
-            mAdapter.setOnMoreDataLoadListener(new MainT1MoreItemAdapter.OnLoadMoreDataListener() {
-                @Override
-                public void loadMoreData() {
-                    if (loadDataEnd == false) {
-                        return;
-                    }
-                    if (showProgressBar == false) {
-                        //加入null值此时adapter会判断item的type
-                        mExampListsBeans.add(null);
-//                        mAdapter.setIsLoading();
-                        mAdapter.notifyItemChanged(mExampListsBeans.size() - 1);
-//                        mAdapter.notifyDataSetChanged();
-                        showProgressBar = true;
-                    }
-                    if (!loadMoreEnd) {
-                        netLoadMore();
-                    } else {
-                        Log.d("mylog", "loadMoreData: loadMoreEnd end 已加载全部数据 ");
-                        ExampListsBean exampListsBean = mExampListsBeans.get(mExampListsBeans.size() - 1);
-                        if (exampListsBean == null) {
-                            mExampListsBeans.remove(mExampListsBeans.size() - 1);
-                            mAdapter.notifyItemChanged(mExampListsBeans.size() - 1);
-                        }
-                    }
-                }
-            });
-        }
-        loadDataEnd = true;
+        mRecyclerView.setAdapter(adapter);
     }
 
     private void startLoveByStagesActivity(int position, String title) {
@@ -391,59 +348,7 @@ public class MainT1Fragment extends BaseMainFragment {
             return;
         }
         CategoryArticleBean categoryArticleBean = mCategoryArticleBeans.get(position);
-
-        Log.d("mylog", "startLoveByStagesActivity: categoryArticleBean " + categoryArticleBean);
-
         ArrayList<CategoryArticleChildrenBean> children = categoryArticleBean.children;
         LoveByStagesActivity.startLoveByStagesActivity(mMainActivity, title, children);
-    }
-
-
-    private void netLoadMore() {
-        mLoveEngin.indexExample(String.valueOf(++PAGE_NUM), String.valueOf(PAGE_SIZE), "example/index").subscribe(new MySubscriber<AResultInfo<ExampDataBean>>(mMainActivity) {
-            @Override
-            protected void onNetNext(AResultInfo<ExampDataBean> exampDataBeanAResultInfo) {
-
-                ExampDataBean exampDataBean = exampDataBeanAResultInfo.data;
-                if (exampDataBean != null) {
-                    List<ExampListsBean> netLoadMoreData = exampDataBean.lists;
-                    changLoadMoreView(netLoadMoreData);
-                }
-            }
-
-            @Override
-            protected void onNetError(Throwable e) {
-                if (PAGE_NUM != 1) {
-                    PAGE_NUM--;
-                }
-//                changLoadMoreView(null);
-            }
-
-            @Override
-            protected void onNetCompleted() {
-
-            }
-        });
-    }
-
-    private void changLoadMoreView(List<ExampListsBean> netLoadMoreData) {
-        showProgressBar = false;
-        ExampListsBean exampListsBean = mExampListsBeans.get(mExampListsBeans.size() - 1);
-        if (exampListsBean == null) {
-            mExampListsBeans.remove(mExampListsBeans.size() - 1);
-            mAdapter.notifyItemChanged(mExampListsBeans.size() - 1);
-        }
-//        mExampListsBeans.remove(mExampListsBeans.size() - 1);
-//        mAdapter.notifyDataSetChanged();
-        if (netLoadMoreData != null) {
-            if (netLoadMoreData.size() < PAGE_SIZE) {
-                loadMoreEnd = true;
-                mExampListsBeans.add(new ExampListsBean(4, "data_over"));
-            }
-            mExampListsBeans.addAll(netLoadMoreData);
-//            mAdapter.notifyDataSetChanged();
-            mAdapter.notifyItemRangeChanged(mExampListsBeans.size(), netLoadMoreData.size());
-        }
-        mAdapter.setLoaded();
     }
 }

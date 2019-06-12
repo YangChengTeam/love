@@ -11,7 +11,8 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:adjustViewBounds="true"
-        android:src="@mipmap/main_bg_title" />
+        android:src="@mipmap/main_bg_title"
+        tools:ignore="MissingConstraints" />
 
 
     <ImageView
@@ -147,7 +148,7 @@
                 android:layout_weight="1"
                 android:adjustViewBounds="true"
                 android:padding="8dp"
-                android:src="@mipmap/main_img_card_01" />
+                android:src="@mipmap/main_bg_item_title_cure" />
 
             <ImageView
                 android:id="@+id/item_title_view_iv_module_03"
@@ -156,7 +157,7 @@
                 android:layout_weight="1"
                 android:adjustViewBounds="true"
                 android:padding="8dp"
-                android:src="@mipmap/main_img_card_02" />
+                android:src="@mipmap/main_bg_item_title_case" />
         </LinearLayout>
 
         <com.yc.love.ui.view.MainNavigationLin

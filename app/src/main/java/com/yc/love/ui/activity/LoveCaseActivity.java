@@ -18,6 +18,7 @@ import com.yc.love.adaper.rv.MainT2MoreItemAdapter;
 import com.yc.love.adaper.rv.base.RecyclerViewItemListener;
 import com.yc.love.adaper.rv.holder.BaseViewHolder;
 import com.yc.love.adaper.rv.holder.CaseTitleViewHolder;
+import com.yc.love.adaper.rv.holder.EndEmptyViewHolder;
 import com.yc.love.adaper.rv.holder.MainT2TitleViewHolder;
 import com.yc.love.adaper.rv.holder.MainT2ToPayVipHolder;
 import com.yc.love.adaper.rv.holder.MainT2ViewHolder;
@@ -26,6 +27,7 @@ import com.yc.love.adaper.rv.holder.VipViewHolder;
 import com.yc.love.cache.CacheWorker;
 import com.yc.love.model.base.MySubscriber;
 import com.yc.love.model.bean.AResultInfo;
+import com.yc.love.model.bean.BecomeVipBean;
 import com.yc.love.model.bean.ExampDataBean;
 import com.yc.love.model.bean.ExampListsBean;
 import com.yc.love.model.bean.MainT2Bean;
@@ -134,6 +136,7 @@ public class LoveCaseActivity extends BaseSameActivity {
                         if (!mUserIsVip && mMainT2Beans != null && mMainT2Beans.size() > 6) {
                             mMainT2Beans.add(6, new MainT2Bean("vip", 2));
                         }
+//                        mMainT2Beans.add(new MainT2Bean("底部空白",5));
 
 
                         mCacheWorker.setCache("main2_example_lists", mMainT2Beans);
@@ -188,6 +191,11 @@ public class LoveCaseActivity extends BaseSameActivity {
                 return vipViewHolder;
             }
 
+            @Override
+            protected RecyclerView.ViewHolder getEndHolder(ViewGroup parent) {
+                return new EndEmptyViewHolder(LoveCaseActivity.this, null, parent);
+            }
+
 
             @Override
             protected RecyclerView.ViewHolder getBarViewHolder(ViewGroup parent) {
@@ -211,7 +219,8 @@ public class LoveCaseActivity extends BaseSameActivity {
                     if (showProgressBar == false) {
                         //加入null值此时adapter会判断item的type
                         mMainT2Beans.add(null);
-                        mAdapter.notifyDataSetChanged();
+//                        mAdapter.notifyDataSetChanged();
+                        mAdapter.notifyItemChanged(mMainT2Beans.size() - 1);
                         showProgressBar = true;
                     }
                     if (!loadMoreEnd) {
@@ -225,7 +234,8 @@ public class LoveCaseActivity extends BaseSameActivity {
                     } else {
                         Log.d("mylog", "loadMoreData: loadMoreEnd end 已加载全部数据 ");
                         mMainT2Beans.remove(mMainT2Beans.size() - 1);
-                        mAdapter.notifyDataSetChanged();
+//                        mAdapter.notifyDataSetChanged();
+                        mAdapter.notifyItemChanged(mMainT2Beans.size() - 1);
                     }
                 }
             });
@@ -275,12 +285,22 @@ public class LoveCaseActivity extends BaseSameActivity {
         MainT2Bean mainT2Bean = mMainT2Beans.get(mMainT2Beans.size() - 1);
         if (mainT2Bean == null) {
             showProgressBar = false;
+
+//            mAdapter.notifyDataSetChanged();
+//            Log.d("mylog", "changLoadMoreView: mMainT2Beans.size() "+mMainT2Beans.size());
+//            mAdapter.notifyItemChanged(mMainT2Beans.size()-1);
+
             mMainT2Beans.remove(mMainT2Beans.size() - 1);
+
+            Log.d("mylog", "changLoadMoreView: mMainT2Beans.size() "+mMainT2Beans.size());
             mAdapter.notifyDataSetChanged();
+//            mAdapter.notifyItemChanged(mMainT2Beans.size() - 1);
+
         }
         if (netLoadMoreData != null && netLoadMoreData.size() != 0) {
             mMainT2Beans.addAll(netLoadMoreData);
-            mAdapter.notifyDataSetChanged();
+//            mAdapter.notifyDataSetChanged();
+            mAdapter.notifyItemChanged(mMainT2Beans.size() - 1);
         } else {
             dataEmptyCheck();
         }
@@ -326,8 +346,9 @@ public class LoveCaseActivity extends BaseSameActivity {
             @Override
             public void run() {
                 mMainT2Beans.add(new MainT2Bean("toPayVip", 3, mMainT2Beans.size()));
-                mAdapter.notifyDataSetChanged();
-//                mRecyclerView.scrollToPosition(mMainT2Beans.size()-1);
+                mAdapter.notifyItemChanged(mMainT2Beans.size() - 1);
+//                mAdapter.notifyDataSetChanged();
+//                mRecyclerView.scrollToPosition(mMainT2Beans.size() - 1);
             }
         }, 600);
     }
@@ -367,6 +388,6 @@ public class LoveCaseActivity extends BaseSameActivity {
 
     @Override
     protected String offerActivityTitle() {
-        return "实例分析";
+        return "实战学习";
     }
 }

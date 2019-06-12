@@ -24,6 +24,7 @@ import com.umeng.analytics.MobclickAgent;
 import com.yc.love.R;
 import com.yc.love.adaper.rv.BecomeVipAdapter;
 import com.yc.love.adaper.rv.holder.BaseViewHolder;
+import com.yc.love.adaper.rv.holder.BecomeVipItemNewViewHolder;
 import com.yc.love.adaper.rv.holder.BecomeVipItemViewHolder;
 import com.yc.love.adaper.rv.holder.BecomeVipTagViewHolder;
 import com.yc.love.adaper.rv.holder.BecomeVipTailViewHolder;
@@ -80,7 +81,7 @@ public class BecomeVipActivity extends PayActivity implements View.OnClickListen
         setAndroidNativeLightStatusBar(); //状态栏字体颜色改变
         initViews();
 
-        netIsVipData();
+//        netIsVipData();
         netJoinNum();
 
     }
@@ -93,6 +94,7 @@ public class BecomeVipActivity extends PayActivity implements View.OnClickListen
     }
 
     private void netJoinNum() {
+        mLoadingDialog.showLoadingDialog();
         mOrderEngin.othersJoinNum("Others/join_num").subscribe(new MySubscriber<AResultInfo<OthersJoinNum>>(mLoadingDialog) {
 
             @Override
@@ -164,11 +166,9 @@ public class BecomeVipActivity extends PayActivity implements View.OnClickListen
     }
 
     private void netData() {
-        if (mLoadingDialog == null) {
-            mLoadingDialog = new LoadDialog(this);
-        }
-        mLoadingDialog.showLoadingDialog();
-        mOrderEngin.indexDoods("goods/index").subscribe(new MySubscriber<AResultInfo<List<IndexDoodsBean>>>(mLoadingDialog) {
+        LoadDialog loadDialog = new LoadDialog(this);
+        loadDialog.showLoadingDialog();
+        mOrderEngin.indexDoods("goods/index").subscribe(new MySubscriber<AResultInfo<List<IndexDoodsBean>>>(loadDialog) {
 
             @Override
             protected void onNetNext(AResultInfo<List<IndexDoodsBean>> listAResultInfo) {
@@ -181,9 +181,10 @@ public class BecomeVipActivity extends PayActivity implements View.OnClickListen
                 }
                 mDatas.add(new BecomeVipBean(3, mIndexDoodsBeans));
                 mDatas.add(new BecomeVipBean(4, "vip标识"));
-                for (int i = 0; i < imgResIds.length; i++) {
+               /* for (int i = 0; i < imgResIds.length; i++) {
                     mDatas.add(new BecomeVipBean(2, names[i], subNames[i], imgResIds[i]));
-                }
+                }*/
+                mDatas.add(new BecomeVipBean(2, names[0], subNames[0], imgResIds[0]));
                 mDatas.add(new BecomeVipBean(5, "底部空白"));
 
                /* List<IndexDoodsBean> mIndexDoodsBe=new ArrayList<>();
@@ -225,7 +226,7 @@ public class BecomeVipActivity extends PayActivity implements View.OnClickListen
         ivBack.setOnClickListener(this);
         ivBack.setImageDrawable(getResources().getDrawable(R.mipmap.icon_arr_lift_white));
         tvTitle.setTextColor(Color.WHITE);
-        tvTitle.setText("开通会员");
+        tvTitle.setText("开通VIP");
 //        tvTitle.setText("");
         setStateBarHeight(viewBar, 25);
 
@@ -259,7 +260,8 @@ public class BecomeVipActivity extends PayActivity implements View.OnClickListen
 
             @Override
             public BaseViewHolder getHolder(ViewGroup parent) {
-                return new BecomeVipItemViewHolder(BecomeVipActivity.this, null, parent);
+//                return new BecomeVipItemViewHolder(BecomeVipActivity.this, null, parent);
+                return new BecomeVipItemNewViewHolder(BecomeVipActivity.this, null, parent);
             }
 
             @Override

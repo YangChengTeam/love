@@ -19,9 +19,15 @@ import android.view.WindowManager;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.Toast;
 
+import com.alibaba.fastjson.JSON;
 import com.umeng.analytics.MobclickAgent;
+import com.yc.love.model.base.MySubscriber;
+import com.yc.love.model.bean.AResultInfo;
+import com.yc.love.model.bean.IdCorrelationLoginBean;
+import com.yc.love.model.bean.event.EventLoginState;
 import com.yc.love.model.constant.ConstantKey;
 import com.yc.love.model.data.BackfillSingle;
+import com.yc.love.model.engin.LoveEnginV2;
 import com.yc.love.model.single.YcSingle;
 import com.yc.love.model.util.SPUtils;
 import com.yc.love.ui.activity.IdCorrelationSlidingActivity;
@@ -29,6 +35,8 @@ import com.yc.love.ui.activity.MainActivity;
 import com.yc.love.ui.activity.SpecializedActivity;
 import com.yc.love.ui.view.LoadDialog;
 import com.yc.love.utils.StatusBarUtil;
+
+import org.greenrobot.eventbus.EventBus;
 
 /**
  * Created by mayn on 2019/4/25.
@@ -231,6 +239,11 @@ public abstract class BaseActivity extends AppCompatActivity {
     }
 
     public void showToLoginDialog() {
+        netUserReg();
+        if (3 > 0) {
+            return;
+        }
+
         AlertDialog alertDialog = new AlertDialog.Builder(this).create();
         alertDialog.setTitle("提示");
         alertDialog.setMessage("您还未登录，请先登录");
@@ -243,6 +256,36 @@ public abstract class BaseActivity extends AppCompatActivity {
         DialogInterface.OnClickListener listent = null;
         alertDialog.setButton(DialogInterface.BUTTON_NEGATIVE, "取消", listent);
         alertDialog.show();
+    }
+
+    private void netUserReg() {
+        LoadDialog loadDialog = new LoadDialog(this);
+        LoveEnginV2 loveEnginV2 = new LoveEnginV2(this);
+        loveEnginV2.userReg("user/reg").subscribe(new MySubscriber<AResultInfo<IdCorrelationLoginBean>>(loadDialog) {
+            @Override
+            protected void onNetNext(AResultInfo<IdCorrelationLoginBean> idCorrelationLoginBeanAResultInfo) {
+                IdCorrelationLoginBean data = idCorrelationLoginBeanAResultInfo.data;
+                loginSuccess(data);
+            }
+
+            @Override
+            protected void onNetError(Throwable e) {
+
+            }
+
+            @Override
+            protected void onNetCompleted() {
+
+            }
+        });
+    }
+
+    private void loginSuccess(IdCorrelationLoginBean data) {
+        //持久化存储登录信息
+        String str = JSON.toJSONString(data);// java对象转为jsonString
+        BackfillSingle.backfillLoginData(this, str);
+
+        EventBus.getDefault().post(new EventLoginState(EventLoginState.STATE_LOGINED));
     }
 
     @Override

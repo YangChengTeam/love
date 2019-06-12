@@ -15,7 +15,7 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:scaleType="fitXY"
-            android:src="@mipmap/main_t4_bg" />
+         />
 
         <TextView
             android:id="@+id/main_t4_tv_btn"

@@ -36,7 +36,7 @@
                 android:id="@+id/main_t5_tv_name"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="未登录"
+                android:text="普通用户"
                 android:textColor="@color/black"
                 android:textSize="@dimen/size_22"
                 android:textStyle="bold" />
@@ -119,13 +119,13 @@
         app:isAddIntervalBom="true"
         app:textNameMyItem="意见反馈" />
 
+    <!-- app:textSubMyItem="13164125027"-->
     <com.yc.love.ui.view.MainMyItemLin
         android:id="@+id/main_t5_ll_item_05"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         app:imgSrc="@mipmap/main_icon_my_05"
-        app:textNameMyItem="客服电话"
-        app:textSubMyItem="13164125027" />
+        app:textNameMyItem="联系客服" />
 
     <com.yc.love.ui.view.MainMyItemLin
         android:id="@+id/main_t5_ll_item_04"

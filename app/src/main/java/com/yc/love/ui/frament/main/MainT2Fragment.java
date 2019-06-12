@@ -86,7 +86,7 @@ public class MainT2Fragment extends BaseMainFragment {
     }
 
     private void initView() {
-        if(mLoveEngin==null||mLlNotNet==null){
+        if (mLoveEngin == null || mLlNotNet == null) {
             mLoveEngin = new LoveEngin(mMainActivity);
             mCacheWorker = new CacheWorker();
 
@@ -140,20 +140,20 @@ public class MainT2Fragment extends BaseMainFragment {
 
     @Subscribe(threadMode = ThreadMode.MAIN)
     public void onMessageEvent(NetWorkChangT2Bean netWorkChangBean) {
-        if(mLlNotNet!=null){
-        List<String> connectionTypeList = netWorkChangBean.connectionTypeList;
-        if (connectionTypeList == null || connectionTypeList.size() == 0) {
-            mIsNotNet = true;
-            if (mLlNotNet.getVisibility() != View.VISIBLE) {
-                mLlNotNet.setVisibility(View.VISIBLE);
+        if (mLlNotNet != null) {
+            List<String> connectionTypeList = netWorkChangBean.connectionTypeList;
+            if (connectionTypeList == null || connectionTypeList.size() == 0) {
+                mIsNotNet = true;
+                if (mLlNotNet.getVisibility() != View.VISIBLE) {
+                    mLlNotNet.setVisibility(View.VISIBLE);
+                }
+            } else {
+                mIsNotNet = false;
+                if (mLlNotNet.getVisibility() != View.GONE) {
+                    mLlNotNet.setVisibility(View.GONE);
+                    lazyLoad();
+                }
             }
-        } else {
-            mIsNotNet = false;
-            if (mLlNotNet.getVisibility() != View.GONE) {
-                mLlNotNet.setVisibility(View.GONE);
-                lazyLoad();
-            }
-        }
         }
     }
 
@@ -258,11 +258,16 @@ public class MainT2Fragment extends BaseMainFragment {
                 return vipViewHolder;
             }
 
+            @Override
+            protected RecyclerView.ViewHolder getEndHolder(ViewGroup parent) {
+                return null;
+            }
+
 
             @Override
             protected RecyclerView.ViewHolder getBarViewHolder(ViewGroup parent) {
                 View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.recycler_view_test_item_footer, parent, false);
-                ProgressBarViewHolder   progressBarViewHolder = new ProgressBarViewHolder(view);
+                ProgressBarViewHolder progressBarViewHolder = new ProgressBarViewHolder(view);
                 return progressBarViewHolder;
             }
 

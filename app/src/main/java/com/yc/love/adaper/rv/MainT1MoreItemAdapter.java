@@ -7,7 +7,6 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 
 import com.yc.love.adaper.rv.holder.BaseViewHolder;
-import com.yc.love.adaper.rv.holder.MainT1CategoryViewHolder;
 import com.yc.love.adaper.rv.holder.MainT1ItemHolder;
 import com.yc.love.adaper.rv.holder.ProgressBarViewHolder;
 import com.yc.love.adaper.rv.holder.TitleT1ViewHolder;

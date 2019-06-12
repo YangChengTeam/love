@@ -57,8 +57,6 @@ public class LoveHealActivity extends BaseSameActivity {
         initRecyclerView();
     }
 
-    int num = 10;
-
     public void initRecyclerView() {
         mRecyclerView = findViewById(R.id.love_heal_rv);
         GridLayoutManager gridLayoutManager = new GridLayoutManager(this, 3, GridLayoutManager.VERTICAL, false);

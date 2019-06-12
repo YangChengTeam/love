@@ -246,7 +246,7 @@ public class UserInfoActivity extends BasePushPhotoActivity {
                 String str = JSON.toJSONString(data);// java对象转为jsonString
                 BackfillSingle.backfillLoginData(UserInfoActivity.this, str);
 
-                EventBus.getDefault().post(new EventLoginState(EventLoginState.STATE_UPDATE_INFO));
+                EventBus.getDefault().post(new EventLoginState(EventLoginState.STATE_UPDATE_INFO,data.nick_name));
                 showToastShort("完善信息成功");
                 finish();
             }

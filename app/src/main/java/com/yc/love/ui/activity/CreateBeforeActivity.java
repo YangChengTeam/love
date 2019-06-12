@@ -125,6 +125,8 @@ public class CreateBeforeActivity extends BaseSameActivity implements INormalUiV
 
     private void initData() {
 
+        Log.d("mylog", "initData: mConfessionDataBean "+mConfessionDataBean);
+
         final int maxWidth = ScreenUtils.getScreenWidth(this);
         final int maxHeight = ScreenUtils.getScreenHeight(this) / 2;
 
@@ -158,6 +160,7 @@ public class CreateBeforeActivity extends BaseSameActivity implements INormalUiV
                 @Override
                 public void onLoadFailed(Exception e, Drawable errorDrawable) {
                     super.onLoadFailed(e, errorDrawable);
+                    Log.d("mylog", "onLoadFailed: ");
 //                    mLoadingLayout.setVisibility(View.VISIBLE);
 //                    mGifLoadingView.setVisibility(View.GONE);
 //                    mNoDataView.setVisibility(View.VISIBLE);

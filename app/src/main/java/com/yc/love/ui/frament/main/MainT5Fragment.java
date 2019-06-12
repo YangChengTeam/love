@@ -3,6 +3,7 @@ package com.yc.love.ui.frament.main;
 import android.Manifest;
 import android.content.ClipData;
 import android.content.ClipboardManager;
+import android.content.ComponentName;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.net.Uri;
@@ -27,6 +28,7 @@ import com.yc.love.model.bean.event.EventLoginState;
 import com.yc.love.model.constant.ConstantKey;
 import com.yc.love.model.engin.LoveEngin;
 import com.yc.love.model.single.YcSingle;
+import com.yc.love.model.util.PackageUtils;
 import com.yc.love.ui.activity.BecomeVipActivity;
 import com.yc.love.ui.activity.CollectActivity;
 import com.yc.love.ui.activity.FeedbackActivity;
@@ -41,6 +43,8 @@ import com.yc.love.ui.view.LoadDialog;
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
 import org.greenrobot.eventbus.ThreadMode;
+
+import java.util.List;
 
 /**
  * Created by mayn on 2019/4/23.
@@ -111,6 +115,7 @@ public class MainT5Fragment extends BaseMainFragment implements View.OnClickList
     private void netIsVipData() {
         int id = YcSingle.getInstance().id;
         if (id <= 0) {
+            mMainActivity.showToLoginDialog();
             return;
         }
         LoadDialog loadDialog = new LoadDialog(mMainActivity);
@@ -128,11 +133,13 @@ public class MainT5Fragment extends BaseMainFragment implements View.OnClickList
                 }
                 Log.d("mylog", "onNetNext: is_vip " + is_vip);
                 if (is_vip > 0) {
+                    setTitleName(true);
                     mTvVipState.setText("已开通");
                 } else {
+                    setTitleName(false);
                     mTvVipState.setText("未开通");
                 }
-                setTitleName();
+
             }
 
             @Override
@@ -161,6 +168,11 @@ public class MainT5Fragment extends BaseMainFragment implements View.OnClickList
                 netIsVipData();
                 break;
             case EventLoginState.STATE_UPDATE_INFO:
+                String nickName = event.nick_name;
+                if (!TextUtils.isEmpty(nickName)) {
+                    mTvName.setText(nickName);
+                }
+
                 mTvBtnInfo.setText("信息已完善");
                 String face = YcSingle.getInstance().face;
                 if (face != null) {
@@ -170,15 +182,27 @@ public class MainT5Fragment extends BaseMainFragment implements View.OnClickList
         }
     }
 
-    private void setTitleName() {
+    private void setTitleName(boolean isVip) {
         String nick_name = YcSingle.getInstance().nick_name;
         String mobile = YcSingle.getInstance().mobile;
         String face = YcSingle.getInstance().face;
-        if (!TextUtils.isEmpty(nick_name)) {
+        if (!TextUtils.isEmpty(nick_name) && !"123456".equals(nick_name)) {
             mTvBtnInfo.setText("信息已完善");
             mTvName.setText(nick_name);
+
+            if (isVip) {
+            } else {
+            }
+
         } else {
-            mTvName.setText(mobile);
+            int id = YcSingle.getInstance().id;
+            if (id > 0) {
+                if (isVip) {
+                    mTvName.setText("VIP用户:".concat(String.valueOf(id)));
+                } else {
+                    mTvName.setText("普通用户:".concat(String.valueOf(id)));
+                }
+            }
         }
         if (face != null) {
             Picasso.with(mMainActivity).load(face).error(R.mipmap.main_icon_default_head).transform(new CircleTransform()).into(mIvIcon);
@@ -212,10 +236,55 @@ public class MainT5Fragment extends BaseMainFragment implements View.OnClickList
                 mMainActivity.startActivity(new Intent(mMainActivity, SettingActivity.class));
                 break;
             case R.id.main_t5_ll_item_05:
-                showToCallDialog();
+                showToWxDialog();
+//                showToCallDialog();
                 break;
         }
     }
+
+    private void showToWxDialog() {
+        String mWechat = "13164125027";
+
+        ClipboardManager myClipboard = (ClipboardManager) mMainActivity.getSystemService(mMainActivity.CLIPBOARD_SERVICE);
+        ClipData myClip = ClipData.newPlainText("text", mWechat);
+        myClipboard.setPrimaryClip(myClip);
+//                mMainActivity.showToastShort("微信号已复制到剪切板");
+        AlertDialog alertDialog = new AlertDialog.Builder(mMainActivity).create();
+        alertDialog.setMessage("专属客服微信号已复制到剪切板,去添加好友吧");
+        alertDialog.setButton(DialogInterface.BUTTON_POSITIVE, "确定", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialogInterface, int i) {
+                openWeiXin();
+            }
+        });
+        DialogInterface.OnClickListener listent = null;
+        alertDialog.setButton(DialogInterface.BUTTON_NEGATIVE, "取消", listent);
+        alertDialog.show();
+    }
+
+    private void openWeiXin() {
+        boolean mIsInstall = false;
+        List<String> apkList = PackageUtils.getApkList(mMainActivity);
+        for (int i = 0; i < apkList.size(); i++) {
+            String apkPkgName = apkList.get(i);
+            if ("com.tencent.mm".equals(apkPkgName)) {
+                mIsInstall = true;
+                break;
+            }
+        }
+        if (mIsInstall) {
+            Intent intent = new Intent();
+            ComponentName cmp = new ComponentName("com.tencent.mm", "com.tencent.mm.ui.LauncherUI");
+            intent.setAction(Intent.ACTION_MAIN);
+            intent.addCategory(Intent.CATEGORY_LAUNCHER);
+            intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+            intent.setComponent(cmp);
+            mMainActivity.startActivity(intent);
+        } else {
+            mMainActivity.showToastShort("未安装微信");
+        }
+    }
+
 
     private void showToCallDialog() {
         final String telPhone = "13164125027";

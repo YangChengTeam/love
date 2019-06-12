@@ -1,5 +1,7 @@
 package com.yc.love.model.bean;
 
+import android.graphics.drawable.Drawable;
+
 import java.io.Serializable;
 
 /**
@@ -28,6 +30,7 @@ public class MainT3Bean implements Serializable {
     public String desp;
     public int id;
     public String image;
+    public Drawable imageResourceldId;
     public String name;
     public int parent_id;
 
@@ -46,6 +49,16 @@ public class MainT3Bean implements Serializable {
         this.desp = desp;
         this.id = id;
         this.image = image;
+        this.name = name;
+        this.parent_id = parent_id;
+    }
+
+    public MainT3Bean(int type, String _level, String desp, int id, Drawable imageResourceldId, String name, int parent_id) {
+        this.type = type;
+        this._level = _level;
+        this.desp = desp;
+        this.id = id;
+        this.imageResourceldId = imageResourceldId;
         this.name = name;
         this.parent_id = parent_id;
     }

@@ -67,7 +67,7 @@ public class SettingActivity extends BaseSameActivity {
 
         int id = YcSingle.getInstance().id;
         if (id > 0) {
-            tvExit.setVisibility(View.VISIBLE);
+//            tvExit.setVisibility(View.VISIBLE);
         }
     }
 

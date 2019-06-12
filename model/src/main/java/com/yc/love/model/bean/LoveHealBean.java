@@ -1,12 +1,13 @@
 package com.yc.love.model.bean;
 
+import java.io.Serializable;
 import java.util.List;
 
 /**
  * Created by mayn on 2019/4/30.
  */
 
-public class LoveHealBean {
+public class LoveHealBean implements Serializable {
     public int type;
     public String _level;
     public int id;
@@ -19,6 +20,11 @@ public class LoveHealBean {
         this.id = id;
         this.name = name;
         this.parent_id = parent_id;
+    }
+
+    public LoveHealBean(int type, String name) {
+        this.type = type;
+        this.name = name;
     }
 
     @Override
