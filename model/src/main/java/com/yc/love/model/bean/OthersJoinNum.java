@@ -1,10 +1,12 @@
 package com.yc.love.model.bean;
 
+import java.io.Serializable;
+
 /**
  * Created by mayn on 2019/6/11.
  */
 
-public class OthersJoinNum {
+public class OthersJoinNum implements Serializable {
 
 
 
@@ -13,4 +15,11 @@ public class OthersJoinNum {
          */
 
         public int number;
+
+        @Override
+        public String toString() {
+                return "OthersJoinNum{" +
+                        "number=" + number +
+                        '}';
+        }
 }

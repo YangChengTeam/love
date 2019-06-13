@@ -1,12 +1,13 @@
 package com.yc.love.model.bean;
 
+import java.io.Serializable;
 import java.util.List;
 
 /**
  * Created by mayn on 2019/5/5.
  */
 
-public class BecomeVipBean {
+public class BecomeVipBean  implements Serializable {
 
 
     public int type;

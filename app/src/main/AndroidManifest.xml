@@ -6,8 +6,7 @@
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.CAMERA" />
     <uses-permission android:name="android.permission.READ_LOGS" />
-    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
-    <!--<uses-permission android:name="android.permission.CALL_PHONE" />-->
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" /> <!-- <uses-permission android:name="android.permission.CALL_PHONE" /> -->
     <uses-permission android:name="android.permission.ACCESS_WIFI_STATE" />
     <uses-permission android:name="android.permission.READ_PHONE_STATE" />
     <uses-permission android:name="android.permission.CHANGE_WIFI_STATE" />
@@ -25,7 +24,8 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/JK.SwipeBack.Transparent.Theme">
-        <activity android:name=".ui.activity.LoveCaseActivity"></activity>
+        <activity android:name=".ui.activity.PayVipActivity"></activity>
+        <activity android:name=".ui.activity.LoveCaseActivity" />
         <activity android:name=".ui.activity.ResultActivity" />
         <activity android:name=".ui.activity.ImageCropActivity" />
         <activity android:name=".ui.activity.CreateBeforeActivity" />
@@ -170,9 +170,7 @@
             android:theme="@style/customTheme" />
         <activity
             android:name="me.iwf.photopicker.PhotoPagerActivity"
-            android:theme="@style/customTheme" />
-
-        <!-- ############ QQ空间和QQ SSO授权的Activity注册 ############ -->
+            android:theme="@style/customTheme" /> <!-- ############ QQ空间和QQ SSO授权的Activity注册 ############ -->
         <activity
             android:name="com.tencent.tauth.AuthActivity"
             android:launchMode="singleTask"
@@ -190,8 +188,6 @@
             android:name="com.tencent.connect.common.AssistActivity"
             android:screenOrientation="portrait"
             android:theme="@android:style/Theme.Translucent.NoTitleBar" />
-        <!-- ############ QQ空间和QQ SSO授权的Activity注册 ############ -->
-
     </application>
 
 </manifest>

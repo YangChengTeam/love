@@ -33,14 +33,19 @@ public class MainT3ItemLocalityViewHolder extends BaseViewHolder<MainT3Bean> {
         tvTitle.setText(mainT3Bean.name);
         tvDes.setText(mainT3Bean.desp);
 //        imageView.setImageResource(mainT3Bean.imgResId);
-        Drawable imageResourceldId = mainT3Bean.imageResourceldId;
+//        Drawable imageResourceldId = mainT3Bean.imageResourceldId;
 
-        Log.d("mylog", "bindData: imageResourceldId "+imageResourceldId);
-
-        if (imageResourceldId !=null) {
-
-
-            imageView.setImageDrawable(imageResourceldId);
+//        Log.d("mylog", "bindData: imageResourceldId " + imageResourceldId);
+        int imageResourceld = mainT3Bean.imageResourceld;
+        if (imageResourceld > 0) {
+            Drawable imageResourceldId = null;
+            try {
+                imageResourceldId = context.getResources().getDrawable(imageResourceld);
+            } catch (Exception e) {
+            }
+            if (imageResourceldId != null) {
+                imageView.setImageDrawable(imageResourceldId);
+            }
         }
     }
 }

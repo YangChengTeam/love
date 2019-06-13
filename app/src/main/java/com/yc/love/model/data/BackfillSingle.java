@@ -83,6 +83,13 @@ public class BackfillSingle {
                         idCorrelationLogin.vip = vip;
                     }
                 }
+                if (jsonObject.has("is_vip")) {
+                    int is_vip = jsonObject.getInt("is_vip");
+                    if (is_vip > 0) {
+                        ycSingle.is_vip = is_vip;
+                        idCorrelationLogin.is_vip = is_vip;
+                    }
+                }
             } catch (JSONException e) {
                 e.printStackTrace();
                 Log.d("mylog", "backfillLoginData: " + e);

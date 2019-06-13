@@ -414,7 +414,7 @@ public class ResultActivity extends BaseSameActivity {
         if (isShowToast) {
             String filePath = file.getAbsolutePath();
             Log.d("mylog", "onClick: filePath  filePath---------- " + filePath);
-            if (Build.VERSION.SDK_INT >= 24) {
+            if (Build.VERSION.SDK_INT < 24) {
                 Snackbar.make(mImageView, "图片已保存至相册", Snackbar.LENGTH_LONG)
                         .setAction("查看", new View.OnClickListener() {
                             @Override
@@ -456,7 +456,8 @@ public class ResultActivity extends BaseSameActivity {
                         })
                         .show();
             } else {
-                showToastShort("图片保存路径：" + file.getAbsolutePath());
+//                showToastShort("图片已保存路径：" + file.getAbsolutePath());
+                showToastShort("图片已保存至设备图库");
             }
         }
 //        Toast.makeText(this,

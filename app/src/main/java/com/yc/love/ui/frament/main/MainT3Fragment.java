@@ -186,6 +186,7 @@ public class MainT3Fragment extends BaseMainFragment {
     private void netData() {
 //        mDatas = (List<MainT3Bean>) SerializableFileUtli.checkReadPermission(mMainActivity, "main3_example_ts_category");
         mDatas = (List<MainT3Bean>) mCacheWorker.getCache(mMainActivity, "main3_example_ts_category");
+        Log.d("securityhttp", "netData: mDatas " + mDatas);
         if (mDatas != null && mDatas.size() != 0) {
             initRecyclerViewData();
         } else {
@@ -201,8 +202,8 @@ public class MainT3Fragment extends BaseMainFragment {
                 mDatas.add(new MainT3Bean(1));
 
 
-                mDatas.add(new MainT3Bean(4, "2", "学学别人怎么把女神撩到手", ID_ITEM_TITLE_CASE, mMainActivity.getResources().getDrawable(R.mipmap.main_bg_item_title_case), "实战学习", 18));
-                mDatas.add(new MainT3Bean(4, "2", "浪漫情话让你撩妹不愁", ID_ITEM_TITLE_CURE, mMainActivity.getResources().getDrawable(R.mipmap.main_bg_item_title_cure), "治愈情话", 18));
+                mDatas.add(new MainT3Bean(4, "2", "学学别人怎么把女神撩到手", ID_ITEM_TITLE_CASE, R.mipmap.main_bg_item_title_case, "实战学习", 18));
+                mDatas.add(new MainT3Bean(4, "2", "浪漫情话让你撩妹不愁", ID_ITEM_TITLE_CURE, R.mipmap.main_bg_item_title_cure, "治愈情话", 18));
 
                 mDatas.add(new MainT3Bean(2, "入门秘籍"));
                 ExampleTsCategory exampleTsCategory = exampleTsCategoryAResultInfo.data;
@@ -223,6 +224,20 @@ public class MainT3Fragment extends BaseMainFragment {
                 }
 //                SerializableFileUtli.checkPermissionWriteData(mDatas, "main3_example_ts_category");
                 mCacheWorker.setCache("main3_example_ts_category", mDatas);
+
+                mRecyclerView.postDelayed(new Runnable() {
+                    @Override
+                    public void run() {
+                        mDatas = (List<MainT3Bean>) mCacheWorker.getCache(mMainActivity, "main3_example_ts_category");
+                        Log.d("securityhttp", "netData: mDatas " + mDatas);
+                        if (mDatas != null && mDatas.size() != 0) {
+                            for (int i = 0; i < mDatas.size(); i++) {
+                                Log.d("mylog", "run: ------  mDatas.get(i) "+i+" "+mDatas.get(i));
+                            }
+                        }
+                    }
+                }, 1000);
+
 //                CacheUtils.cacheBeanData(mMainActivity, "main3_example_ts_category", mDatas);
                 initRecyclerViewData();
             }

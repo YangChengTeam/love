@@ -195,7 +195,7 @@ public class MainT1Fragment extends BaseMainFragment {
         String str = JSON.toJSONString(data);// java对象转为jsonString
         BackfillSingle.backfillLoginData(mMainActivity, str);
 
-        EventBus.getDefault().post(new EventLoginState(EventLoginState.STATE_LOGINED));
+//        EventBus.getDefault().post(new EventLoginState(EventLoginState.STATE_LOGINED));
     }
 
 

@@ -30,6 +30,7 @@ import com.yc.love.adaper.rv.holder.BecomeVipTagViewHolder;
 import com.yc.love.adaper.rv.holder.BecomeVipTailViewHolder;
 import com.yc.love.adaper.rv.holder.BecomeVipTitleViewHolder;
 import com.yc.love.adaper.rv.holder.EndEmptyViewHolder;
+import com.yc.love.cache.CacheWorker;
 import com.yc.love.model.base.MySubscriber;
 import com.yc.love.model.bean.AResultInfo;
 import com.yc.love.model.bean.BecomeVipBean;
@@ -70,7 +71,9 @@ public class BecomeVipActivity extends PayActivity implements View.OnClickListen
     private OrderEngin mOrderEngin;
     private List<BecomeVipBean> mDatas;
     private List<IndexDoodsBean> mIndexDoodsBeans;
-    private int mNumber = 1321;
+    private int mNumber;
+    private CacheWorker mCacheWorker;
+    private boolean mIsCacheNumberExist;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -79,6 +82,8 @@ public class BecomeVipActivity extends PayActivity implements View.OnClickListen
         mOrderEngin = new OrderEngin(this);
         invadeStatusBar(); //侵入状态栏
         setAndroidNativeLightStatusBar(); //状态栏字体颜色改变
+
+        mCacheWorker = new CacheWorker();
         initViews();
 
 //        netIsVipData();
@@ -94,14 +99,25 @@ public class BecomeVipActivity extends PayActivity implements View.OnClickListen
     }
 
     private void netJoinNum() {
-        mLoadingDialog.showLoadingDialog();
+        OthersJoinNum othersJoinNum = (OthersJoinNum) mCacheWorker.getCache(this, "pay_vip_Others_join_num");
+        Log.d("mylog", "netJoinNum: othersJoinNum " + othersJoinNum);
+        if (othersJoinNum != null) {
+            mNumber = othersJoinNum.number;
+            if (mNumber > 0) {
+                mIsCacheNumberExist = true;
+                netData();
+            }
+        }
         mOrderEngin.othersJoinNum("Others/join_num").subscribe(new MySubscriber<AResultInfo<OthersJoinNum>>(mLoadingDialog) {
 
             @Override
             protected void onNetNext(AResultInfo<OthersJoinNum> othersJoinNumAResultInfo) {
                 OthersJoinNum othersJoinNum = othersJoinNumAResultInfo.data;
                 mNumber = othersJoinNum.number;
-                netData();
+                mCacheWorker.setCache("pay_vip_Others_join_num", othersJoinNum);
+                if (!mIsCacheNumberExist) {
+                    netData();
+                }
             }
 
             @Override
@@ -166,8 +182,16 @@ public class BecomeVipActivity extends PayActivity implements View.OnClickListen
     }
 
     private void netData() {
-        LoadDialog loadDialog = new LoadDialog(this);
-        loadDialog.showLoadingDialog();
+        LoadDialog loadDialog = null;
+        mDatas = (List<BecomeVipBean>) mCacheWorker.getCache(BecomeVipActivity.this, "pay_vip_goods_index");
+        if (mDatas != null && mDatas.size() != 0) {
+            initRecyclerData();
+        } else {
+            loadDialog = new LoadDialog(this);
+            loadDialog.showLoadingDialog();
+        }
+//        LoadDialog loadDialog = new LoadDialog(this);
+//        loadDialog.showLoadingDialog();
         mOrderEngin.indexDoods("goods/index").subscribe(new MySubscriber<AResultInfo<List<IndexDoodsBean>>>(loadDialog) {
 
             @Override
@@ -194,7 +218,7 @@ public class BecomeVipActivity extends PayActivity implements View.OnClickListen
                     }
                 }
                 mDatas.add(new BecomeVipBean(3, mIndexDoodsBe));*/
-
+                mCacheWorker.setCache("pay_vip_goods_index", mDatas);
                 initRecyclerData();
             }
 

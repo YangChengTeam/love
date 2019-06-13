@@ -145,11 +145,9 @@ public abstract class MainT2MoreItemAdapter extends RecyclerView.Adapter<Recycle
 //            if (!isLoading && totalItemCount <= (lastVisibleItemPosition + visibleThreshold)) {
             if (!isLoading && totalItemCount == lastVisibleItemPosition + 1) {
                 try {
-
                     mPersonList.get(lastVisibleItemPosition);  //添加加载更多进度条的操作后，会重复触发加载数据
                 } catch (IndexOutOfBoundsException e) {
-                    Log.d("mylog", "onScrolled: mPersonList.get(lastVisibleItemPosition) " + e);
-                    Log.d("mylog", "onScrolled: mPersonList.size() " + mPersonList.size() + " lastVisibleItemPosition " + lastVisibleItemPosition);
+                    Log.d("mylog", "onScrolled: mPersonList.size() " + mPersonList.size() + " lastVisibleItemPosition " + lastVisibleItemPosition + " e " + e);
                     return;
                 }
                 Log.d("mylog", "onScrolled: -------------------------");

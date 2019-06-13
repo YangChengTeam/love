@@ -1,10 +1,12 @@
 package com.yc.love.model.bean;
 
+import java.io.Serializable;
+
 /**
  * Created by mayn on 2019/5/14.
  */
 
-public class IndexDoodsBean {
+public class IndexDoodsBean  implements Serializable {
 
     /**
      * app_id : 0

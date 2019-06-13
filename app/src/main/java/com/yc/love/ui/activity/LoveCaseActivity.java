@@ -2,7 +2,6 @@ package com.yc.love.ui.activity;
 
 import android.content.Intent;
 import android.support.v4.widget.SwipeRefreshLayout;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
@@ -19,7 +18,6 @@ import com.yc.love.adaper.rv.base.RecyclerViewItemListener;
 import com.yc.love.adaper.rv.holder.BaseViewHolder;
 import com.yc.love.adaper.rv.holder.CaseTitleViewHolder;
 import com.yc.love.adaper.rv.holder.EndEmptyViewHolder;
-import com.yc.love.adaper.rv.holder.MainT2TitleViewHolder;
 import com.yc.love.adaper.rv.holder.MainT2ToPayVipHolder;
 import com.yc.love.adaper.rv.holder.MainT2ViewHolder;
 import com.yc.love.adaper.rv.holder.ProgressBarViewHolder;
@@ -27,14 +25,12 @@ import com.yc.love.adaper.rv.holder.VipViewHolder;
 import com.yc.love.cache.CacheWorker;
 import com.yc.love.model.base.MySubscriber;
 import com.yc.love.model.bean.AResultInfo;
-import com.yc.love.model.bean.BecomeVipBean;
 import com.yc.love.model.bean.ExampDataBean;
 import com.yc.love.model.bean.ExampListsBean;
 import com.yc.love.model.bean.MainT2Bean;
 import com.yc.love.model.engin.LoveEngin;
 import com.yc.love.model.single.YcSingle;
 import com.yc.love.ui.activity.base.BaseSameActivity;
-import com.yc.love.ui.view.LoadDialog;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -58,6 +54,7 @@ public class LoveCaseActivity extends BaseSameActivity {
     private boolean mUserIsVip = false;
     private boolean loadDataEnd;
     private boolean showProgressBar = false;
+    private int mRvLastPosition;
 
 
     @Override
@@ -81,21 +78,16 @@ public class LoveCaseActivity extends BaseSameActivity {
         mSwipeRefresh = findViewById(R.id.love_case_swipe_refresh);
         mRecyclerView = findViewById(R.id.love_case_rl);
         LinearLayoutManager layoutManager = new LinearLayoutManager(this);
+//        RecyclerViewNoBugLinearLayoutManager layoutManager = new RecyclerViewNoBugLinearLayoutManager(this);
         mRecyclerView.setLayoutManager(layoutManager);
         layoutManager.setOrientation(OrientationHelper.VERTICAL);
         //设置增加或删除条目的动画
         mRecyclerView.setItemAnimator(new DefaultItemAnimator());
-//        mRecyclerView.addItemDecoration(new DividerItemDecoration(mMainActivity,DividerItemDecoration.VERTICAL));
 
         mSwipeRefresh.setColorSchemeResources(R.color.red_crimson);
         mSwipeRefresh.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
             public void onRefresh() {
-//                obtainWalletData();
-                /*if (mMainT2Beans != null) {
-                    mMainT2Beans.clear();
-                    mAdapter.notifyDataSetChanged();
-                }*/
                 mIsHandRefresh = true;
                 mIsAddToPayVipItem = false;
                 loadMoreEnd = false;
@@ -135,28 +127,17 @@ public class LoveCaseActivity extends BaseSameActivity {
                         }
                         if (!mUserIsVip && mMainT2Beans != null && mMainT2Beans.size() > 6) {
                             mMainT2Beans.add(6, new MainT2Bean("vip", 2));
+                            mMainT2Beans.add(new MainT2Bean("toPayVip", 3, mMainT2Beans.size()));
                         }
-//                        mMainT2Beans.add(new MainT2Bean("底部空白",5));
 
 
                         mCacheWorker.setCache("main2_example_lists", mMainT2Beans);
-
-//                SerializableFileUtli.checkPermissionWriteData(mMainT2Beans, "main2_example_lists");
-//                CacheUtils.cacheBeanData(mMainActivity, "main2_example_lists", mMainT2Beans);
                         initRecyclerViewData();
                     }
 
                     @Override
                     protected void onNetError(Throwable e) {
                         mSwipeRefresh.setRefreshing(false);
-                /*String data = (String) SPUtils.get(mMainActivity, "main2_example_lists", "");
-                mMainT2Beans = new Gson().fromJson(data, new TypeToken<ArrayList<MainT2Bean>>() {
-                }.getType());
-                if (mMainT2Beans != null && mMainT2Beans.size() != 0) {
-                    mIsDataToCache = true;
-                    mIsNetData = true;
-                    initRecyclerViewData();
-                }*/
                     }
 
                     @Override
@@ -168,8 +149,6 @@ public class LoveCaseActivity extends BaseSameActivity {
 
     private void initRecyclerViewData() {
         mAdapter = new MainT2MoreItemAdapter(mMainT2Beans, mRecyclerView) {
-
-
             @Override
             public BaseViewHolder getTitleHolder(ViewGroup parent) {
                 return new CaseTitleViewHolder(LoveCaseActivity.this, null, parent);
@@ -207,6 +186,9 @@ public class LoveCaseActivity extends BaseSameActivity {
 
         };
         mRecyclerView.setAdapter(mAdapter);
+        if (!mUserIsVip) {
+            return;
+        }
         if (mMainT2Beans.size() < PAGE_SIZE) {
             Log.d("ssss", "loadMoreData: data---end");
         } else {
@@ -257,20 +239,10 @@ public class LoveCaseActivity extends BaseSameActivity {
                     }
                 }
                 changLoadMoreView(netLoadMoreData);
-              /*  showProgressBar = false;
-                mMainT2Beans.remove(mMainT2Beans.size() - 1);
-                mAdapter.notifyDataSetChanged();
-                if (netLoadMoreData.size() < PAGE_SIZE) {
-                    loadMoreEnd = true;
-                }
-                mMainT2Beans.addAll(netLoadMoreData);
-                mAdapter.notifyDataSetChanged();
-                mAdapter.setLoaded();*/
             }
 
             @Override
             protected void onNetError(Throwable e) {
-
                 changLoadMoreView(null);
             }
 
@@ -282,9 +254,13 @@ public class LoveCaseActivity extends BaseSameActivity {
     }
 
     private void changLoadMoreView(List<MainT2Bean> netLoadMoreData) {
-        MainT2Bean mainT2Bean = mMainT2Beans.get(mMainT2Beans.size() - 1);
+        int rvLastPosition = mMainT2Beans.size() - 1;
+        MainT2Bean mainT2Bean = mMainT2Beans.get(rvLastPosition);
+//        if (mainT2Bean == null && rvLastPosition != mRvLastPosition) {
         if (mainT2Bean == null) {
             showProgressBar = false;
+            this.mRvLastPosition = rvLastPosition;
+            Log.d("mylog", "changLoadMoreView: mRvLastPosition " + mRvLastPosition);
 
 //            mAdapter.notifyDataSetChanged();
 //            Log.d("mylog", "changLoadMoreView: mMainT2Beans.size() "+mMainT2Beans.size());
@@ -292,9 +268,11 @@ public class LoveCaseActivity extends BaseSameActivity {
 
             mMainT2Beans.remove(mMainT2Beans.size() - 1);
 
-            Log.d("mylog", "changLoadMoreView: mMainT2Beans.size() "+mMainT2Beans.size());
+            Log.d("mylog", "changLoadMoreView: mMainT2Beans.size() " + mMainT2Beans.size());
             mAdapter.notifyDataSetChanged();
-//            mAdapter.notifyItemChanged(mMainT2Beans.size() - 1);
+            int itemCount = mAdapter.getItemCount();
+            Log.d("mylog", "changLoadMoreView: itemCount " + itemCount);
+//            mAdapter.notifyItemChanged(itemCount - 1);
 
         }
         if (netLoadMoreData != null && netLoadMoreData.size() != 0) {
@@ -311,21 +289,6 @@ public class LoveCaseActivity extends BaseSameActivity {
         if (PAGE_NUM != 1) {  //如果购买成功，依然请求这一页
             PAGE_NUM--;
         }
-        int id = YcSingle.getInstance().id;
-        /*if (id <= 0) {   //数据为空
-            Log.d("mylog", "dataEmptyCheck: PAGE_NUM "+PAGE_NUM);
-            if (PAGE_NUM <= 2) {
-                addToPayVipData(); //数据为空 不是VIP
-            }
-            *//*if (mIsShowLogined) {
-                addToPayVipData(); //数据为空 不是VIP
-                return;
-            }
-            if(!mIsNotNet){
-                mMainActivity.showToLoginDialog();
-                mIsShowLogined = true;
-            }*//*
-        }*/
         if (PAGE_NUM <= 2) {
             if (!mIsAddToPayVipItem) {
                 addToPayVipData(); //数据为空 不是VIP

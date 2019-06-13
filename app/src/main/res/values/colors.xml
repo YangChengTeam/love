@@ -23,6 +23,7 @@
     <color name="red_crimson">#fa4a65</color>
     <color name="red_crimson_im_bg">#fdf7f8</color>
     <color name="red_crimson_s">#88fa4a65</color>
+    <color name="red_crimson_thin">#fff8f8</color>
     <color name="red_crimson_66">#66fa4a65</color>
     <color name="red_crimson_99">#99fa4a65</color>
     <color name="red_crimson_login_start">#ff6a9a</color>

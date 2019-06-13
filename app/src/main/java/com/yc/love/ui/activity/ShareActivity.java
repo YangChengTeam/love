@@ -10,6 +10,7 @@ import android.support.v4.view.ViewPager;
 import android.os.Bundle;
 import android.support.v7.widget.SearchView;
 import android.text.TextUtils;
+import android.util.Log;
 import android.util.TypedValue;
 import android.view.View;
 import android.view.animation.AccelerateInterpolator;
@@ -22,7 +23,12 @@ import android.widget.TextView;
 import com.umeng.analytics.MobclickAgent;
 import com.yc.love.R;
 import com.yc.love.adaper.vp.SharePagerAdapter;
+import com.yc.love.model.base.MySubscriber;
+import com.yc.love.model.bean.AResultInfo;
+import com.yc.love.model.bean.LoveHealDetBean;
+import com.yc.love.model.bean.SearchDialogueBean;
 import com.yc.love.model.constant.ConstantKey;
+import com.yc.love.model.engin.LoveEngin;
 import com.yc.love.model.single.YcSingle;
 import com.yc.love.model.util.SPUtils;
 import com.yc.love.model.util.TimeUtils;
@@ -60,6 +66,9 @@ public class ShareActivity extends BaseSameActivity {
     private SearchView mSearchView;
     private ShareFragment mShareFragment;
     private FrameLayout mFrameLayout;
+    private LoveEngin mLoveEngin;
+    private int PAGE_SIZE = 10;
+    private int PAGE_NUM = 1;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -67,6 +76,16 @@ public class ShareActivity extends BaseSameActivity {
         setContentView(R.layout.activity_share);
 
         initViews();
+        initData();
+
+    }
+
+    private void initData() {
+        int id = YcSingle.getInstance().id;
+        if (id <= 0) {
+            showToLoginDialog();
+            return;
+        }
     }
 
     @Override
@@ -87,6 +106,7 @@ public class ShareActivity extends BaseSameActivity {
         mSearchView = findViewById(R.id.share_searview);
         TextView tvNext = findViewById(R.id.share_tv_next);
         TextView tvTodayAdd = findViewById(R.id.share_tv_today_add);
+        TextView tvToHelp = findViewById(R.id.share_tv_to_help);
         String sDay = String.valueOf(TimeUtils.dateToStamp(new Date(System.currentTimeMillis())));
         tvTodayAdd.setText("今日新增".concat(sDay.substring(5, 8).replace("0", "1")).concat("条话术")); //.contains("条话术")
 
@@ -104,6 +124,7 @@ public class ShareActivity extends BaseSameActivity {
         tvNext.setOnClickListener(this);
         tvDelete.setOnClickListener(this);
         ivToVip.setOnClickListener(this);
+        tvToHelp.setOnClickListener(this);
 
         initSwitchPagerData();
 
@@ -147,6 +168,15 @@ public class ShareActivity extends BaseSameActivity {
         //提交事务
         mShareFragment = new ShareFragment();
         fragmentTransaction.add(R.id.share_frame_layout, mShareFragment).commit();
+
+        YcSingle instance = YcSingle.getInstance();
+        int vip = instance.vip;
+        if (vip > 0) {
+            Log.d("mylog", "initViews:  已经购买了vip");
+            ivToVip.setVisibility(View.GONE);
+        } else {
+            Log.d("mylog", "initViews:  未购买了vip");
+        }
 
     }
 
@@ -229,8 +259,11 @@ public class ShareActivity extends BaseSameActivity {
 
         hindKeyboard(mViewPager);
 
-        mShareFragment.netData(query);
-        showShareItemHindInfo();
+        netPagerOneData(query); //为了解决Fragment切换白屏的问题，第一页数据在Activity中请求
+
+
+//        mShareFragment.netData(query);
+//        showShareItemHindInfo();
 
         if (3 > 0) {
             return;
@@ -245,6 +278,52 @@ public class ShareActivity extends BaseSameActivity {
                 break;
         }
     }
+
+    private void netPagerOneData(final String keyword) {
+        int id = YcSingle.getInstance().id;
+        if (id <= 0) {
+            showToLoginDialog();
+            return;
+        }
+        if (mLoveEngin == null) {
+            mLoveEngin = new LoveEngin(this);
+        }
+        mLoadingDialog.showLoadingDialog();
+        mLoveEngin.searchDialogue2(String.valueOf(id), keyword, String.valueOf(PAGE_NUM), String.valueOf(PAGE_SIZE), "Dialogue/search").subscribe(new MySubscriber<AResultInfo<SearchDialogueBean>>(mLoadingDialog) {
+
+
+            @Override
+            protected void onNetNext(AResultInfo<SearchDialogueBean> searchDialogueBeanAResultInfo) {
+                SearchDialogueBean searchDialogueBean = searchDialogueBeanAResultInfo.data;
+                int searchBuyVip = searchDialogueBean.search_buy_vip;
+                if (1 == searchBuyVip) { //1 弹窗 0不弹
+                    startActivity(new Intent(ShareActivity.this, BecomeVipActivity.class));
+                    return;
+                } else {
+                    List<LoveHealDetBean> list = searchDialogueBean.list;
+                    Log.d("mylog", "onNetNext: list " + list.size());
+                    boolean isCanLoadPagerMore = true;
+                    if (list == null || list.size() < PAGE_SIZE) {
+                        isCanLoadPagerMore = false;
+                    }
+                    Log.d("mylog", "onNetNext: isCanLoadPagerMore " + isCanLoadPagerMore);
+                    mShareFragment.loadOnePagerData(keyword, list, isCanLoadPagerMore);
+                    showShareItemHindInfo();
+                }
+            }
+
+            @Override
+            protected void onNetError(Throwable e) {
+//                mSwipeRefresh.setRefreshing(false);
+            }
+
+            @Override
+            protected void onNetCompleted() {
+//                mSwipeRefresh.setRefreshing(false);
+            }
+        });
+    }
+
 
     /**
      * 增加搜索历史
@@ -306,6 +385,9 @@ public class ShareActivity extends BaseSameActivity {
             case R.id.share_iv_to_vip:
                 //TODO 购买VIP刷新数据
                 startActivity(new Intent(ShareActivity.this, BecomeVipActivity.class));
+                break;
+            case R.id.share_tv_to_help:
+                startActivity(new Intent(this, UsingHelpActivity.class));
                 break;
         }
     }

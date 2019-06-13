@@ -246,7 +246,7 @@ public class UserInfoActivity extends BasePushPhotoActivity {
                 String str = JSON.toJSONString(data);// java对象转为jsonString
                 BackfillSingle.backfillLoginData(UserInfoActivity.this, str);
 
-                EventBus.getDefault().post(new EventLoginState(EventLoginState.STATE_UPDATE_INFO,data.nick_name));
+                EventBus.getDefault().post(new EventLoginState(EventLoginState.STATE_UPDATE_INFO, data.nick_name));
                 showToastShort("完善信息成功");
                 finish();
             }
@@ -337,14 +337,21 @@ public class UserInfoActivity extends BasePushPhotoActivity {
             public void onResponse(Call call, Response response) throws IOException {
 //                Log.d("mylog", "onFailure: " + response.body().string());
                 String string = response.body().string();
-                Log.d("securityhttp", "onResponse: response body "+string);
-                Log.d("mylog", "onResponse: response body "+string);
+                Log.d("securityhttp", "common/upload: response body " + string);
+                Log.d("mylog", "onResponse: response body " + string);
                 if (!TextUtils.isEmpty(string)) {
-                    UploadPhotoBean uploadPhotoBean = new Gson().fromJson(string, UploadPhotoBean.class);
-                    List<UploadPhotoBean.DataBean> data = uploadPhotoBean.data;
-                    if (data != null && data.size() > 0) {
-                        UploadPhotoBean.DataBean dataBean = data.get(0);
-                        mPhotoUrl = dataBean.url;
+                    UploadPhotoBean uploadPhotoBean = null;
+                    try {
+                        uploadPhotoBean = new Gson().fromJson(string, UploadPhotoBean.class);
+                    } catch (IllegalStateException e) {
+
+                    }
+                    if (uploadPhotoBean != null) {
+                        List<UploadPhotoBean.DataBean> data = uploadPhotoBean.data;
+                        if (data != null && data.size() > 0) {
+                            UploadPhotoBean.DataBean dataBean = data.get(0);
+                            mPhotoUrl = dataBean.url;
+                        }
                     }
                 }
             }

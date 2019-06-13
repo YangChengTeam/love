@@ -21,6 +21,7 @@ import com.qw.soul.permission.callbcak.CheckRequestPermissionListener;
 import com.squareup.picasso.Picasso;
 import com.umeng.analytics.MobclickAgent;
 import com.yc.love.R;
+import com.yc.love.cache.CacheWorker;
 import com.yc.love.model.base.MySubscriber;
 import com.yc.love.model.bean.AResultInfo;
 import com.yc.love.model.bean.IdCorrelationLoginBean;
@@ -113,33 +114,28 @@ public class MainT5Fragment extends BaseMainFragment implements View.OnClickList
     }
 
     private void netIsVipData() {
-        int id = YcSingle.getInstance().id;
+        final int id = YcSingle.getInstance().id;
         if (id <= 0) {
             mMainActivity.showToLoginDialog();
             return;
         }
-        LoadDialog loadDialog = new LoadDialog(mMainActivity);
+        LoadDialog loadDialog = null;
+        final CacheWorker cacheWorker = new CacheWorker();
+        IdCorrelationLoginBean idCorrelationLoginBean = (IdCorrelationLoginBean) cacheWorker.getCache(mMainActivity, "main_t5_user_info");
+        Log.d("mylog", "netIsVipData: idCorrelationLoginBean " + idCorrelationLoginBean);
+        Log.d("securityhttp", "netIsVipData: idCorrelationLoginBean " + idCorrelationLoginBean);
+        if (idCorrelationLoginBean != null) {
+            fillData(idCorrelationLoginBean);
+        } else {
+            loadDialog = new LoadDialog(mMainActivity);
+        }
         mLoveEngin.userInfo(String.valueOf(id), "user/info").subscribe(new MySubscriber<AResultInfo<IdCorrelationLoginBean>>(loadDialog) {
 
             @Override
             protected void onNetNext(AResultInfo<IdCorrelationLoginBean> idCorrelationLoginBeanAResultInfo) {
                 IdCorrelationLoginBean idCorrelationLoginBean = idCorrelationLoginBeanAResultInfo.data;
-                int is_vip = idCorrelationLoginBean.is_vip;
-                String nickName = idCorrelationLoginBean.nick_name;
-                if (!TextUtils.isEmpty(nickName)) {
-                    mTvBtnInfo.setText("信息已完善");
-                } else {
-                    mTvBtnInfo.setText("信息未完善");
-                }
-                Log.d("mylog", "onNetNext: is_vip " + is_vip);
-                if (is_vip > 0) {
-                    setTitleName(true);
-                    mTvVipState.setText("已开通");
-                } else {
-                    setTitleName(false);
-                    mTvVipState.setText("未开通");
-                }
-
+                fillData(idCorrelationLoginBean);
+                cacheWorker.setCache("main_t5_user_info", idCorrelationLoginBean);
             }
 
             @Override
@@ -152,6 +148,24 @@ public class MainT5Fragment extends BaseMainFragment implements View.OnClickList
 
             }
         });
+    }
+
+    private void fillData(IdCorrelationLoginBean idCorrelationLoginBean) {
+        int is_vip = idCorrelationLoginBean.is_vip;
+        String nickName = idCorrelationLoginBean.nick_name;
+        if (!TextUtils.isEmpty(nickName)) {
+            mTvBtnInfo.setText("信息已完善");
+        } else {
+            mTvBtnInfo.setText("信息未完善");
+        }
+        Log.d("mylog", "onNetNext: is_vip " + is_vip);
+        if (is_vip > 0) {
+            setTitleName(true);
+            mTvVipState.setText("已开通");
+        } else {
+            setTitleName(false);
+            mTvVipState.setText("未开通");
+        }
     }
 
 
@@ -250,7 +264,7 @@ public class MainT5Fragment extends BaseMainFragment implements View.OnClickList
         myClipboard.setPrimaryClip(myClip);
 //                mMainActivity.showToastShort("微信号已复制到剪切板");
         AlertDialog alertDialog = new AlertDialog.Builder(mMainActivity).create();
-        alertDialog.setMessage("专属客服微信号已复制到剪切板,去添加好友吧");
+        alertDialog.setMessage("客服微信号已复制到剪切板,前往微信添加朋友即可,客服工作时间为8:00--22:00");
         alertDialog.setButton(DialogInterface.BUTTON_POSITIVE, "确定", new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialogInterface, int i) {

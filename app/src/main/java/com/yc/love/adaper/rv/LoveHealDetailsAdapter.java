@@ -73,15 +73,13 @@ public abstract class LoveHealDetailsAdapter extends RecyclerView.Adapter<Recycl
             holder = getPayVipHolder(parent);
         } else if (viewType == VIEW_ITEM) {
             holder = getHolder(parent);
-        }  else if (viewType == VIEW_EMPTY) {
+        } else if (viewType == VIEW_EMPTY) {
             holder = getEmptyHolder(parent);
         } else {
             holder = getBarViewHolder(parent);
         }
         return holder;
     }
-
-
 
 
     @Override
@@ -102,14 +100,22 @@ public abstract class LoveHealDetailsAdapter extends RecyclerView.Adapter<Recycl
             super.onScrolled(recyclerView, dx, dy);
             final LinearLayoutManager linearLayoutManager = (LinearLayoutManager) mRecyclerView.getLayoutManager();
 
-            totalItemCount = linearLayoutManager.getItemCount();
-            lastVisibleItemPosition = linearLayoutManager.findLastVisibleItemPosition();
+            totalItemCount = linearLayoutManager.getItemCount(); //总条数
+            lastVisibleItemPosition = linearLayoutManager.findLastVisibleItemPosition(); //可见的最后一条
             if (totalItemCount == lastVisibleItemPosition + 1) {
                 if (totalItemCount == 0) {
                     return;
                 }
             }
             if (!isLoading && totalItemCount == lastVisibleItemPosition + 1) {
+                try {
+                    mPersonList.get(lastVisibleItemPosition);  //添加加载更多进度条的操作后，会重复触发加载数据
+                } catch (IndexOutOfBoundsException e) {
+//                    Log.d("mylog", "onScrolled: mPersonList.get(lastVisibleItemPosition) " + e);
+                    Log.d("mylog", "onScrolled: mPersonList.size() " + mPersonList.size() + " lastVisibleItemPosition " + lastVisibleItemPosition + " e " + e);
+                    return;
+                }
+                Log.d("mylog", "onScrolled: -------------------------");
                 //此时是刷新状态
                 if (mMoreDataListener != null) {
                     if (totalItemCount == 0) {

@@ -30,7 +30,8 @@ public class MainT3Bean implements Serializable {
     public String desp;
     public int id;
     public String image;
-    public Drawable imageResourceldId;
+    public transient Drawable imageResourceldId;
+    public  int imageResourceld;
     public String name;
     public int parent_id;
 
@@ -53,12 +54,12 @@ public class MainT3Bean implements Serializable {
         this.parent_id = parent_id;
     }
 
-    public MainT3Bean(int type, String _level, String desp, int id, Drawable imageResourceldId, String name, int parent_id) {
+    public MainT3Bean(int type, String _level, String desp, int id, int imageResourceld, String name, int parent_id) {
         this.type = type;
         this._level = _level;
         this.desp = desp;
         this.id = id;
-        this.imageResourceldId = imageResourceldId;
+        this.imageResourceld = imageResourceld;
         this.name = name;
         this.parent_id = parent_id;
     }

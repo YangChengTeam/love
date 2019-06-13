@@ -1,10 +1,12 @@
 package com.yc.love.model.bean;
 
+import java.io.Serializable;
+
 /**
  * Created by mayn on 2019/5/7.
  */
 
-public class IdCorrelationLoginBean {
+public class IdCorrelationLoginBean implements Serializable {
     /**
      * id : 2
      * name :

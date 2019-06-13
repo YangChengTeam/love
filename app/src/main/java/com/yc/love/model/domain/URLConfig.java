@@ -28,7 +28,7 @@ public class URLConfig {
     private static String baseUrlV2 = baseUrl.concat("v2/");
     private static String debugBaseUrl = "http://en.qqtn.com/api/";
 
-    public static String uploadPhotoUrl = baseUrl.concat("common/upload");
+    public static String uploadPhotoUrl = baseUrlV1.concat("common/upload");
 
 
     public static final String ID_INFO_SMS = getBaseUrl() + "user/code";

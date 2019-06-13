@@ -109,6 +109,13 @@ public class ShareFragment extends BaseLazyFragment {
 
     }
 
+
+    public void loadOnePagerData(String keyword, List<LoveHealDetBean> list, boolean isCanLoadPagerMore) {
+        this.keyword = keyword;
+        mLoveHealDetBeans = list;
+        initRecyclerData(isCanLoadPagerMore);
+    }
+
     /**
      * @param keyword
      */
@@ -129,12 +136,22 @@ public class ShareFragment extends BaseLazyFragment {
                 int searchBuyVip = searchDialogueBean.search_buy_vip;
                 if (1 == searchBuyVip) { //1 弹窗 0不弹
                     startActivity(new Intent(mShareActivity, BecomeVipActivity.class));
-                    mShareActivity.childDisposeOnBack();
+                    mRecyclerView.postDelayed(new Runnable() {
+                        @Override
+                        public void run() {
+                            mShareActivity.childDisposeOnBack();
+                        }
+                    }, 1000);
+
 //                    notCanShart();
                     return;
                 }
                 mLoveHealDetBeans = searchDialogueBean.list;
-                initRecyclerData();
+                boolean isCanLoadPagerMore = true;
+                if (mLoveHealDetBeans == null || mLoveHealDetBeans.size() < PAGE_SIZE) {
+                    isCanLoadPagerMore = false;
+                }
+                initRecyclerData(isCanLoadPagerMore);
             }
 
             @Override
@@ -149,7 +166,7 @@ public class ShareFragment extends BaseLazyFragment {
         });
     }
 
-    private void initRecyclerData() {
+    private void initRecyclerData(boolean isCanLoadPagerMore) {
         mLoveHealDetBeans = addTitle(mLoveHealDetBeans);
 
         mAdapter = new LoveHealDetailsAdapter(mLoveHealDetBeans, mRecyclerView) {
@@ -183,32 +200,38 @@ public class ShareFragment extends BaseLazyFragment {
             }
         };
         mRecyclerView.setAdapter(mAdapter);
-        if (mLoveHealDetBeans.size() < PAGE_SIZE) {
-            Log.d("ssss", "loadMoreData: data---end");
-        } else {
-            mAdapter.setOnMoreDataLoadListener(new LoveHealDetailsAdapter.OnLoadMoreDataListener() {
-                @Override
-                public void loadMoreData() {
-                    if (loadDataEnd == false) {
-                        return;
-                    }
-                    if (showProgressBar == false) {
-                        //加入null值此时adapter会判断item的type
-                        mLoveHealDetBeans.add(null);
-                        mAdapter.notifyDataSetChanged();
-                        showProgressBar = true;
-                    }
-                    if (!loadMoreEnd) {
-                        netLoadMore();
-                    } else {
-                        Log.d("mylog", "loadMoreData: loadMoreEnd end 已加载全部数据 ");
-                        if (mLoveHealDetBeans != null && mLoveHealDetBeans.size() > 0) {
-                            mLoveHealDetBeans.remove(mLoveHealDetBeans.size() - 1);
+        Log.d("mylog", "initRecyclerData: isCanLoadPagerMore " + isCanLoadPagerMore);
+        if (isCanLoadPagerMore) {
+            if (mLoveHealDetBeans.size() < PAGE_SIZE) {
+                Log.d("ssss", "loadMoreData: data---end");
+            } else {
+                mAdapter.setOnMoreDataLoadListener(new LoveHealDetailsAdapter.OnLoadMoreDataListener() {
+                    @Override
+                    public void loadMoreData() {
+
+                        Log.d("mylog", "loadMoreData: ++++++++++++++++++++++++++++++ ");
+
+                        if (loadDataEnd == false) {
+                            return;
                         }
-                        mAdapter.notifyDataSetChanged();
+                        if (showProgressBar == false) {
+                            //加入null值此时adapter会判断item的type
+                            mLoveHealDetBeans.add(null);
+                            mAdapter.notifyDataSetChanged();
+                            showProgressBar = true;
+                        }
+                        if (!loadMoreEnd) {
+                            netLoadMore();
+                        } else {
+                            Log.d("mylog", "loadMoreData: loadMoreEnd end 已加载全部数据 ");
+                            if (mLoveHealDetBeans != null && mLoveHealDetBeans.size() > 0) {
+                                mLoveHealDetBeans.remove(mLoveHealDetBeans.size() - 1);
+                            }
+                            mAdapter.notifyDataSetChanged();
+                        }
                     }
-                }
-            });
+                });
+            }
         }
         loadDataEnd = true;
     }
@@ -251,7 +274,7 @@ public class ShareFragment extends BaseLazyFragment {
 
     private List<LoveHealDetBean> addTitle(List<LoveHealDetBean> loveHealDetBeans) {
         for (LoveHealDetBean loveHealDetBean : loveHealDetBeans
-                ) {
+        ) {
             List<LoveHealDetDetailsBean> details = loveHealDetBean.details;
             if (details == null || details.size() == 0) {
                 details = loveHealDetBean.detail;
@@ -319,9 +342,15 @@ public class ShareFragment extends BaseLazyFragment {
     };
 
     public void recoverData() {
+        if(mAdapter!=null){
+            mAdapter.removeOnMoreDataLoadListener();
+        }
         if (PAGE_NUM != 1) {
             PAGE_NUM = 1;
         }
+        loadMoreEnd = false;
+        loadDataEnd = false;
+        showProgressBar = false;
     }
 
 }
