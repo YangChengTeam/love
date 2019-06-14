@@ -75,6 +75,7 @@ public class ShareActivity extends BaseSameActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_share);
 
+        mLoveEngin = new LoveEngin(this);
         initViews();
         initData();
 
@@ -181,6 +182,10 @@ public class ShareActivity extends BaseSameActivity {
     }
 
     private void showShareItemHindInfo() {
+
+        Log.d("mylog", mClInfo.getVisibility()==View.VISIBLE?"   VISIBLE   ":"   GONE   "+"mClInfo.getVisibility()==View.VISIBLE   showShareItemHindInfo: ");
+        Log.d("mylog", mFrameLayout.getVisibility()==View.VISIBLE?"   VISIBLE   ":"   GONE   "+"mFrameLayout.getVisibility()==View.VISIBLE   showShareItemHindInfo: ");
+
         if (mClInfo.getVisibility() != View.GONE) {
             mClInfo.setVisibility(View.GONE);
         }
@@ -261,6 +266,7 @@ public class ShareActivity extends BaseSameActivity {
 
         netPagerOneData(query); //为了解决Fragment切换白屏的问题，第一页数据在Activity中请求
 
+        saveKeywordToService(query);
 
 //        mShareFragment.netData(query);
 //        showShareItemHindInfo();
@@ -279,14 +285,15 @@ public class ShareActivity extends BaseSameActivity {
         }
     }
 
+    private void saveKeywordToService(String query) {
+
+    }
+
     private void netPagerOneData(final String keyword) {
         int id = YcSingle.getInstance().id;
         if (id <= 0) {
             showToLoginDialog();
             return;
-        }
-        if (mLoveEngin == null) {
-            mLoveEngin = new LoveEngin(this);
         }
         mLoadingDialog.showLoadingDialog();
         mLoveEngin.searchDialogue2(String.valueOf(id), keyword, String.valueOf(PAGE_NUM), String.valueOf(PAGE_SIZE), "Dialogue/search").subscribe(new MySubscriber<AResultInfo<SearchDialogueBean>>(mLoadingDialog) {

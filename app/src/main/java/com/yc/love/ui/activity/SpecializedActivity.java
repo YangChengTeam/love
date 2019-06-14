@@ -32,13 +32,14 @@ public class SpecializedActivity extends BaseActivity {
             finish();
             return;
         }
-        new Handler().postDelayed(new Runnable() {
+        startNextActivity();
+        /*new Handler().postDelayed(new Runnable() {
             @Override
             public void run() {
 //                checkNetwork();
                 startNextActivity();
             }
-        }, 600);
+        }, 600);*/
 
 
        /* String[] testDeviceInfo = getTestDeviceInfo(this);
@@ -49,9 +50,9 @@ public class SpecializedActivity extends BaseActivity {
     }
 
     private void startNextActivity() {
-        BackfillSingle.backfillLoginData(SpecializedActivity.this, ""); //初始化单例，回填ID数据
         startActivity(new Intent(SpecializedActivity.this, MainActivity.class));
-        overridePendingTransition(R.anim.screen_zoom_in, R.anim.screen_zoom_out);
+        BackfillSingle.backfillLoginData(SpecializedActivity.this, ""); //初始化单例，回填ID数据
+//        overridePendingTransition(R.anim.screen_zoom_in, R.anim.screen_zoom_out);  //开屏动画
         finish();
     }
 

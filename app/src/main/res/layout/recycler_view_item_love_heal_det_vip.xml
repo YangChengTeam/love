@@ -12,20 +12,29 @@
     android:paddingBottom="12dp">
 
     <LinearLayout
-        app:layout_constraintTop_toTopOf="parent"
         android:id="@+id/item_love_heal_det_vip_ll_tit_con"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:gravity="center_vertical"
         android:orientation="horizontal"
-        android:padding="4dp">
+        android:padding="4dp"
+        app:layout_constraintTop_toTopOf="parent">
 
-        <ImageView
+        <TextView
+            android:id="@+id/item_love_heal_det_vip_tv_sex"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:padding="3dp"
+            android:textColor="@color/black"
+            android:textSize="@dimen/size_16"
+            android:textStyle="bold" />
+
+        <!--<ImageView
             android:id="@+id/item_love_heal_det_vip_iv_sex"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:padding="8dp"
-            android:src="@mipmap/icon_dialogue_men" />
+            android:src="@mipmap/icon_dialogue_men" />-->
 
         <TextView
             android:id="@+id/item_love_heal_det_vip_tv_name"

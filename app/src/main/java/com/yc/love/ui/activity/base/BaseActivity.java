@@ -1,8 +1,12 @@
 package com.yc.love.ui.activity.base;
 
 import android.app.Activity;
+import android.content.ClipData;
+import android.content.ClipboardManager;
+import android.content.ComponentName;
 import android.content.Context;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.graphics.Color;
 import android.os.Build;
 import android.os.Bundle;
@@ -29,6 +33,7 @@ import com.yc.love.model.constant.ConstantKey;
 import com.yc.love.model.data.BackfillSingle;
 import com.yc.love.model.engin.LoveEnginV2;
 import com.yc.love.model.single.YcSingle;
+import com.yc.love.model.util.PackageUtils;
 import com.yc.love.model.util.SPUtils;
 import com.yc.love.ui.activity.IdCorrelationSlidingActivity;
 import com.yc.love.ui.activity.MainActivity;
@@ -37,6 +42,8 @@ import com.yc.love.ui.view.LoadDialog;
 import com.yc.love.utils.StatusBarUtil;
 
 import org.greenrobot.eventbus.EventBus;
+
+import java.util.List;
 
 /**
  * Created by mayn on 2019/4/25.
@@ -286,6 +293,51 @@ public abstract class BaseActivity extends AppCompatActivity {
         BackfillSingle.backfillLoginData(this, str);
 
         EventBus.getDefault().post(new EventLoginState(EventLoginState.STATE_LOGINED));
+    }
+
+
+    public void showToWxServiceDialog() {
+        String mWechat = "pai201807";
+
+        ClipboardManager myClipboard = (ClipboardManager) getSystemService(CLIPBOARD_SERVICE);
+        ClipData myClip = ClipData.newPlainText("text", mWechat);
+        myClipboard.setPrimaryClip(myClip);
+//                mMainActivity.showToastShort("微信号已复制到剪切板");
+        AlertDialog alertDialog = new AlertDialog.Builder(this).create();
+        alertDialog.setTitle("联系客服");
+        alertDialog.setMessage("添加老师微信进学员群，美女导师不定期指导，提高您的情商！\n老师微信号：pai201807\n在线时间：9:00-21:00");
+        alertDialog.setButton(DialogInterface.BUTTON_POSITIVE, "复制并打开微信", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialogInterface, int i) {
+                openWeiXin();
+            }
+        });
+        DialogInterface.OnClickListener listent = null;
+        alertDialog.setButton(DialogInterface.BUTTON_NEGATIVE, "取消", listent);
+        alertDialog.show();
+    }
+
+    private void openWeiXin() {
+        boolean mIsInstall = false;
+        List<String> apkList = PackageUtils.getApkList(this);
+        for (int i = 0; i < apkList.size(); i++) {
+            String apkPkgName = apkList.get(i);
+            if ("com.tencent.mm".equals(apkPkgName)) {
+                mIsInstall = true;
+                break;
+            }
+        }
+        if (mIsInstall) {
+            Intent intent = new Intent();
+            ComponentName cmp = new ComponentName("com.tencent.mm", "com.tencent.mm.ui.LauncherUI");
+            intent.setAction(Intent.ACTION_MAIN);
+            intent.addCategory(Intent.CATEGORY_LAUNCHER);
+            intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+            intent.setComponent(cmp);
+            startActivity(intent);
+        } else {
+            showToastShort("未安装微信");
+        }
     }
 
     @Override

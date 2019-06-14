@@ -8,6 +8,6 @@ import java.util.List;
 
 public class SearchDialogueBean {
 
-public int search_buy_vip;
-        public List<LoveHealDetBean> list;
+    public int search_buy_vip;
+    public List<LoveHealDetBean> list;
 }

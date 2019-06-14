@@ -11,6 +11,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 
 import com.yc.love.R;
 import com.yc.love.adaper.rv.MainT2MoreItemAdapter;
@@ -70,8 +71,19 @@ public class LoveCaseActivity extends BaseSameActivity {
     }
 
     private void initViews() {
-
+        ImageView ivToWx = findViewById(R.id.love_case_iv_to_wx);
+        ivToWx.setOnClickListener(this);
         initRecyclerView();
+    }
+
+    @Override
+    public void onClick(View v) {
+        super.onClick(v);
+        switch (v.getId()) {
+            case R.id.love_case_iv_to_wx:
+                showToWxServiceDialog();
+                break;
+        }
     }
 
     private void initRecyclerView() {

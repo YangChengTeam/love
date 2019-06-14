@@ -6,12 +6,20 @@
     android:orientation="horizontal"
     android:padding="4dp">
 
-    <ImageView
+    <TextView
+        android:id="@+id/item_details_bean_titiv_tv_sex"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:padding="3dp"
+        android:textColor="@color/black"
+        android:textSize="@dimen/size_18"
+        android:textStyle="bold" />
+    <!--<ImageView
         android:id="@+id/item_details_bean_titiv_sex"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:padding="3dp"
-        android:src="@mipmap/icon_dialogue_men" />
+        android:src="@mipmap/icon_dialogue_men" />-->
 
     <TextView
         android:id="@+id/item_details_bean_tittv_name"

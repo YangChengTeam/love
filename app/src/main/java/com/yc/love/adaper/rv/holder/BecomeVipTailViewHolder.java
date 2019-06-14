@@ -6,6 +6,7 @@ import android.support.constraint.ConstraintLayout;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.yc.love.R;
@@ -95,6 +96,8 @@ public class BecomeVipTailViewHolder extends BaseViewHolder<BecomeVipBean> {
         mIvPayZfb = itemView.findViewById(R.id.item_become_vip_tail_iv_pay_zfb);
         mIvPayWx = itemView.findViewById(R.id.item_become_vip_tail_iv_pay_wx);
         mTvNext = itemView.findViewById(R.id.item_become_vip_tv_next);
+        RelativeLayout rlBtnZfb = itemView.findViewById(R.id.item_become_vip_rl_btn_zfb);
+        RelativeLayout rlBtnWx = itemView.findViewById(R.id.item_become_vip_rl_btn_wx);
         TextView tvPayNum = itemView.findViewById(R.id.item_become_vip_tv_pay_num);
 //        String sDay = String.valueOf(TimeUtils.dateToStamp(new Date(System.currentTimeMillis())));
 //        tvPayNum.setText("已有".concat(sDay.substring(5, 8).replace("0", "3").replace("2", "7").replace("6", "9")).concat("位学员成为VIP"));
@@ -149,6 +152,8 @@ public class BecomeVipTailViewHolder extends BaseViewHolder<BecomeVipBean> {
         mIvPayZfb.setOnClickListener(this);
         mIvPayWx.setOnClickListener(this);
         mTvNext.setOnClickListener(this);
+        rlBtnZfb.setOnClickListener(this);
+        rlBtnWx.setOnClickListener(this);
 
         mSelectPayType = PAY_TYPE_WX;
         selectPayType(mSelectPayType);
@@ -211,6 +216,12 @@ public class BecomeVipTailViewHolder extends BaseViewHolder<BecomeVipBean> {
                 break;
             case R.id.item_become_vip_tv_next:
                 onClickTailListener.onClickTailNext(mSelectPayType, mSelectPosition);
+                break;
+            case R.id.item_become_vip_rl_btn_zfb:
+                onClickTailListener.onClickTailNext(PAY_TYPE_ZFB, mSelectPosition);
+                break;
+            case R.id.item_become_vip_rl_btn_wx:
+                onClickTailListener.onClickTailNext(PAY_TYPE_WX, mSelectPosition);
                 break;
         }
     }

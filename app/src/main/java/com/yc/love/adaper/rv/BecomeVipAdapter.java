@@ -123,7 +123,7 @@ public abstract class BecomeVipAdapter extends RecyclerView.Adapter<RecyclerView
     };
 
     public void addOnScrollListenerPacked() {
-        mRecyclerView.addOnScrollListener(onScrollListener);
+//        mRecyclerView.addOnScrollListener(onScrollListener);
     }
     protected abstract RecyclerView.ViewHolder getEndHolder(ViewGroup parent);
     protected abstract RecyclerView.ViewHolder getVipTagHolder(ViewGroup parent);

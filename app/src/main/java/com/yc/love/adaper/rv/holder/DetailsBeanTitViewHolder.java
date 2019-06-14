@@ -31,14 +31,15 @@ public class DetailsBeanTitViewHolder extends BaseViewHolder<LoveHealDetDetailsB
 
     @Override
     public void bindData(final LoveHealDetDetailsBean detailsBean) {
-        ImageView ivSex = itemView.findViewById(R.id.item_details_bean_titiv_sex);
+//        ImageView ivSex = itemView.findViewById(R.id.item_details_bean_titiv_sex);
+        TextView tvSex = itemView.findViewById(R.id.item_details_bean_titiv_tv_sex);
         TextView tvName = itemView.findViewById(R.id.item_details_bean_tittv_name);
 
         tvName.setText(detailsBean.content);
         String ansSex = detailsBean.ans_sex;
         if (!TextUtils.isEmpty(ansSex)) {
-
-            ivSex.setImageDrawable(context.getResources().getDrawable(R.mipmap.icon_dialogue_women));
+            tvSex.setText("女:");
+//            ivSex.setImageDrawable(context.getResources().getDrawable(R.mipmap.icon_dialogue_women));
 
             /*if ("1".equals(ansSex)) { //1男2女0bi'a
                 ivSex.setImageDrawable(context.getResources().getDrawable(R.mipmap.icon_dialogue_men));

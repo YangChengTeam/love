@@ -7,7 +7,7 @@
     <ImageView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="24dp"
+        android:layout_marginTop="16dp"
         android:layout_marginBottom="18dp"
         android:src="@mipmap/become_vip_bg_vip"
         app:layout_constraintLeft_toLeftOf="parent"

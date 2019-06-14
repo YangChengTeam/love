@@ -235,6 +235,9 @@ public class BecomeVipActivity extends PayActivity implements View.OnClickListen
     }
 
     protected void initViews() {
+        ImageView ivToWx = findViewById(R.id.become_vip_iv_to_wx);
+        ivToWx.setOnClickListener(this);
+
         initTitleView();
         initRecyclerView();
     }
@@ -250,8 +253,8 @@ public class BecomeVipActivity extends PayActivity implements View.OnClickListen
         ivBack.setOnClickListener(this);
         ivBack.setImageDrawable(getResources().getDrawable(R.mipmap.icon_arr_lift_white));
         tvTitle.setTextColor(Color.WHITE);
-        tvTitle.setText("开通VIP");
-//        tvTitle.setText("");
+//        tvTitle.setText("开通VIP");
+        tvTitle.setText("");
         setStateBarHeight(viewBar, 25);
 
     }
@@ -444,6 +447,9 @@ public class BecomeVipActivity extends PayActivity implements View.OnClickListen
         switch (v.getId()) {
             case R.id.activity_base_same_iv_back:
                 finish();
+                break;
+            case R.id.become_vip_iv_to_wx:
+                showToWxServiceDialog();
                 break;
         }
     }

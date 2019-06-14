@@ -15,6 +15,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.Toast;
 
 import com.yc.love.R;
@@ -83,10 +84,23 @@ public class LoveHealDetailsActivity extends BaseSameActivity {
 
 
     private void initViews() {
+        ImageView ivToWx = findViewById(R.id.love_heal_details_iv_to_wx);
+        ivToWx.setOnClickListener(this);
         initRecyclerView();
     }
 
+    @Override
+    public void onClick(View v) {
+        super.onClick(v);
+        switch (v.getId()) {
+            case R.id.love_heal_details_iv_to_wx:
+                showToWxServiceDialog();
+                break;
+        }
+    }
+
     private void initRecyclerView() {
+
         mSwipeRefresh = findViewById(R.id.love_heal_details_swipe_refresh);
         mRecyclerView = findViewById(R.id.love_heal_details_rl);
         LinearLayoutManager layoutManager = new LinearLayoutManager(this);

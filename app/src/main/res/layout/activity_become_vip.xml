@@ -20,5 +20,15 @@
 
         <include layout="@layout/layout_activity_title" />
     </LinearLayout>
+    <ImageView
+        android:layout_alignParentRight="true"
+        android:layout_alignParentBottom="true"
+        android:id="@+id/become_vip_iv_to_wx"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginRight="15dp"
+        android:layout_marginBottom="62dp"
+        android:src="@mipmap/icon_floating_weixin" />
+
 
 </RelativeLayout>

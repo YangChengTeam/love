@@ -1,6 +1,9 @@
 package com.yc.love.ui.activity;
 
 import android.app.DownloadManager;
+import android.content.ClipData;
+import android.content.ClipboardManager;
+import android.content.ComponentName;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -17,10 +20,13 @@ import android.net.wifi.WifiManager;
 import android.os.Bundle;
 import android.os.Environment;
 import android.os.Handler;
+import android.support.design.widget.FloatingActionButton;
+import android.support.v4.view.ViewPager;
 import android.support.v7.app.AlertDialog;
 import android.util.Log;
 import android.view.KeyEvent;
 import android.view.View;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.yc.love.R;
@@ -28,6 +34,7 @@ import com.yc.love.adaper.vp.MainPagerAdapter;
 import com.yc.love.factory.MainFragmentFactory;
 import com.yc.love.model.domain.URLConfig;
 import com.yc.love.model.single.YcSingle;
+import com.yc.love.model.util.PackageUtils;
 import com.yc.love.utils.DownloadedApkUtlis;
 import com.yc.love.model.util.SPUtils;
 import com.yc.love.receiver.NetWorkChangReceiver;
@@ -35,13 +42,15 @@ import com.yc.love.ui.activity.base.BaseActivity;
 import com.yc.love.ui.view.ControlScrollViewPager;
 import com.yc.love.utils.InstallApkUtlis;
 
+import java.util.List;
+
 //import cn.trinea.android.common.util.PreferencesUtils;
 
 public class MainActivity extends BaseActivity implements View.OnClickListener {
 
     private ControlScrollViewPager mVpFragment;
     private TextView mTvTab1, mTvTab2, mTvTab3, mTvTab4, mTvTab5;
-//    private boolean isRegistered = false;
+    //    private boolean isRegistered = false;
     private NetWorkChangReceiver netWorkChangReceiver;
     private String mPackageVersionName;
     public String mDownloadIdKey = "mDownloadIdKey";
@@ -134,14 +143,12 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
     }
 
 
-
-
     @Override
     protected void onDestroy() {
         super.onDestroy();
         //解绑
 //        if (isRegistered) {
-        if(netWorkChangReceiver!=null){
+        if (netWorkChangReceiver != null) {
             unregisterReceiver(netWorkChangReceiver);
         }
 //        }
@@ -157,6 +164,11 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
         mTvTab3 = findViewById(R.id.comp_main_tv_tab_3);
         mTvTab4 = findViewById(R.id.comp_main_tv_tab_4);
         mTvTab5 = findViewById(R.id.comp_main_tv_tab_5);
+
+//        FloatingActionButton fabToWx = findViewById(R.id.comp_main_floating_action_button_to_wx);
+        final ImageView ivToWx = findViewById(R.id.comp_main_iv_to_wx);
+//        fabToWx.setOnClickListener(this);
+        ivToWx.setOnClickListener(this);
 
         mTvTab1.setOnClickListener(this);
         mTvTab2.setOnClickListener(this);
@@ -174,6 +186,31 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
                 initNetWorkChangReceiver();
             }
         }, 200);
+
+        mVpFragment.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
+            @Override
+            public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
+
+            }
+
+            @Override
+            public void onPageSelected(int position) {
+                if (position == MainFragmentFactory.MAIN_FRAGMENT_3) {
+                    if (ivToWx.getVisibility() != View.GONE) {
+                        ivToWx.setVisibility(View.GONE);
+                    }
+                } else {
+                    if (ivToWx.getVisibility() != View.VISIBLE) {
+                        ivToWx.setVisibility(View.VISIBLE);
+                    }
+                }
+            }
+
+            @Override
+            public void onPageScrollStateChanged(int state) {
+
+            }
+        });
     }
 
 
@@ -210,8 +247,12 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
                 mVpFragment.setCurrentItem(MainFragmentFactory.MAIN_FRAGMENT_4, false);
                 iconSelect(MainFragmentFactory.MAIN_FRAGMENT_4);
                 break;
+            case R.id.comp_main_iv_to_wx:
+                showToWxServiceDialog();
+                break;
         }
     }
+
 
     private void iconSelect(int current) {
         cleatIconState();

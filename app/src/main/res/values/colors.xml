@@ -97,6 +97,10 @@
     <color name="bg_line_color">#ded9d7</color>
 
     <color name="overlay">#AA1C1C1C</color>
+    <color name="pay_vip_blue">#00a8f2</color>
+    <color name="pay_vip_blue_s">#8800a8f2</color>
+    <color name="pay_vip_green">#00bb00</color>
+    <color name="pay_vip_green_s">#8800bb00</color>
 
 
 </resources>

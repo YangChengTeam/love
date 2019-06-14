@@ -5,7 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:background="@color/white"
-    android:paddingTop="24dp">
+    android:paddingTop="8dp">
 
     <!-- <View
          android:id="@+id/item_become_vip_tail_view"
@@ -424,12 +424,14 @@
         </android.support.constraint.ConstraintLayout>
     </LinearLayout>
 
+
     <LinearLayout
         android:id="@+id/item_become_vip_tail_ll_pay_type_con"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="16dp"
         android:orientation="horizontal"
+        android:visibility="gone"
         app:layout_constraintTop_toBottomOf="@+id/item_become_vip_tail_ll_pay_con">
 
         <ImageView
@@ -477,7 +479,56 @@
         android:text="确   定"
         android:textColor="@color/white"
         android:textSize="@dimen/size_16"
+        android:visibility="gone"
         app:layout_constraintTop_toBottomOf="@+id/item_become_vip_tail_ll_pay_type_con" />
+
+
+    <RelativeLayout
+        android:id="@+id/item_become_vip_rl_btn_wx"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="45dp"
+        android:layout_marginTop="20dp"
+        android:layout_marginRight="45dp"
+        android:background="@drawable/selectot_btn_pay_vip_green"
+        app:layout_constraintTop_toBottomOf="@+id/item_become_vip_tail_ll_pay_con">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerInParent="true"
+            android:drawableLeft="@mipmap/icon_pay_wx"
+            android:drawablePadding="12dp"
+            android:paddingTop="8dp"
+            android:paddingBottom="8dp"
+            android:text="微信支付"
+            android:textColor="@color/white"
+            android:textSize="@dimen/size_16" />
+    </RelativeLayout>
+
+    <RelativeLayout
+        android:id="@+id/item_become_vip_rl_btn_zfb"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="45dp"
+        android:layout_marginTop="12dp"
+        android:layout_marginRight="45dp"
+        android:background="@drawable/selectot_btn_pay_vip_blue"
+        app:layout_constraintTop_toBottomOf="@+id/item_become_vip_rl_btn_wx">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerInParent="true"
+            android:drawableLeft="@mipmap/icon_pay_ali"
+            android:drawablePadding="12dp"
+            android:paddingTop="8dp"
+            android:paddingBottom="8dp"
+            android:text="支付宝支付"
+            android:textColor="@color/white"
+            android:textSize="@dimen/size_16" />
+    </RelativeLayout>
+
 
     <LinearLayout
         android:id="@+id/item_become_vip_ll_con"
@@ -486,7 +537,7 @@
         android:orientation="horizontal"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/item_become_vip_tv_next">
+        app:layout_constraintTop_toBottomOf="@+id/item_become_vip_rl_btn_zfb">
 
         <TextView
             android:layout_width="wrap_content"
@@ -518,7 +569,9 @@
     <View
         android:id="@+id/item_become_vip_view_3"
         android:layout_width="match_parent"
-        android:layout_height="12dp"
+        android:layout_height="24dp"
+        android:visibility="gone"
         app:layout_constraintTop_toBottomOf="@+id/item_become_vip_ll_con" />
+
 
 </android.support.constraint.ConstraintLayout>
