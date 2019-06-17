@@ -9,6 +9,7 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.google.gson.Gson;
+import com.umeng.analytics.MobclickAgent;
 import com.yc.love.R;
 import com.yc.love.adaper.rv.ConfessionAdapter;
 import com.yc.love.adaper.rv.base.RecyclerViewItemListener;
@@ -20,6 +21,7 @@ import com.yc.love.cache.CacheWorker;
 import com.yc.love.model.bean.ExampListsBean;
 import com.yc.love.model.bean.confession.ConfessionBean;
 import com.yc.love.model.bean.confession.ConfessionDataBean;
+import com.yc.love.model.constant.ConstantKey;
 import com.yc.love.model.domain.URLConfig;
 import com.yc.love.okhttp.presenter.NormalPresenter;
 import com.yc.love.okhttp.view.IMoreUiView;
@@ -89,6 +91,7 @@ public class MainT3NewFragment extends BaseMainFragment implements INormalUiView
 
     @Override
     protected void lazyLoad() {
+        MobclickAgent.onEvent(mMainActivity, ConstantKey.UM_CONFESSION_ID);
         initView();
         initData();
 

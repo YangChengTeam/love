@@ -115,15 +115,16 @@ public class BecomeVipTailViewHolder extends BaseViewHolder<BecomeVipBean> {
         tvUnits = new TextView[]{tvUnit01, tvUnit02, tvUnit03, tvUnit04, tvUnit00,};
 
         mPayBeans = becomeVipBean.payBeans;
-        /*if (mPayBeans.size() >= 5) {
+        if (mPayBeans.size() >= 5) {
             // 四条数据，删除两条
             mPayBeans.remove(0);
             mPayBeans.remove(0);
-        }*/
-
-        if (mPayBeans.size() >= 5) {
-            mSelectPosition = 4;
         }
+        mSelectPosition = 0;
+
+        /*if (mPayBeans.size() >= 5) {
+            mSelectPosition = 4;
+        }*/
         cancelAllSelectPosition(mSelectPosition);
 
         for (int i = 0; i < mPayBeans.size(); i++) {

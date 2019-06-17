@@ -217,7 +217,8 @@ public class UserInfoActivity extends BasePushPhotoActivity {
                 }
                 break;
             case R.id.user_info_rl_tit_con:
-                showSelsctPhotoDialog(mIvIcon);
+//                showToastShort("");
+//                showSelsctPhotoDialog(mIvIcon);
                 break;
             case R.id.activity_base_same_tv_sub:
                 boolean isCanSub = checkInput();

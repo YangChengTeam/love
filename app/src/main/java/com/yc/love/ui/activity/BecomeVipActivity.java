@@ -321,8 +321,10 @@ public class BecomeVipActivity extends PayActivity implements View.OnClickListen
         }
         String payWayName;
         if (payType == 0) {
+            MobclickAgent.onEvent(this, ConstantKey.UM_PAY_ORDERS_ALIPAY);
             payWayName = "alipay";
         } else {
+            MobclickAgent.onEvent(this, ConstantKey.UM_PAY_ORDERS_WXPAY);
             payWayName = "wxpay";
         }
         Map<String, String> params = new HashMap<>();

@@ -28,8 +28,8 @@ android {
         applicationId "com.yc.love"
         minSdkVersion 17
         targetSdkVersion 27
-        versionCode 12
-        versionName "1.1.1"
+        versionCode 13
+        versionName "1.1.2"
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
         ndk {
             //设置支持的SO库架构

@@ -19,7 +19,7 @@
 
     <!--过渡图-->
     <style name="SplashTheme" parent="Theme.AppCompat.Light.NoActionBar">
-        <item name="android:windowBackground">@mipmap/lightning_bg</item>
+        <!--<item name="android:windowBackground">@mipmap/lightning_bg</item>-->
         <item name="android:windowFullscreen">true</item>
     </style>
 
@@ -152,6 +152,7 @@
         <item name="actionBarSize">48dp</item>
         <item name="colorPrimaryDark">@color/colorAccent</item>
     </style>
+
     <style name="actionBarTheme" parent="ThemeOverlay.AppCompat.Dark.ActionBar">
         <item name="android:textColorPrimary">@android:color/primary_text_light</item>
         <item name="actionBarSize">48dp</item>

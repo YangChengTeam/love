@@ -297,6 +297,7 @@ public abstract class BaseActivity extends AppCompatActivity {
 
 
     public void showToWxServiceDialog() {
+        MobclickAgent.onEvent(this, ConstantKey.UM_CONTACT_US_CLICK_ID);
         String mWechat = "pai201807";
 
         ClipboardManager myClipboard = (ClipboardManager) getSystemService(CLIPBOARD_SERVICE);
@@ -328,6 +329,7 @@ public abstract class BaseActivity extends AppCompatActivity {
             }
         }
         if (mIsInstall) {
+            MobclickAgent.onEvent(this, ConstantKey.UM_CONTACT_US_TO_WECHAT_ID);
             Intent intent = new Intent();
             ComponentName cmp = new ComponentName("com.tencent.mm", "com.tencent.mm.ui.LauncherUI");
             intent.setAction(Intent.ACTION_MAIN);

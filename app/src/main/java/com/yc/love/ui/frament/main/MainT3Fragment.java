@@ -232,7 +232,7 @@ public class MainT3Fragment extends BaseMainFragment {
                         Log.d("securityhttp", "netData: mDatas " + mDatas);
                         if (mDatas != null && mDatas.size() != 0) {
                             for (int i = 0; i < mDatas.size(); i++) {
-                                Log.d("mylog", "run: ------  mDatas.get(i) "+i+" "+mDatas.get(i));
+                                Log.d("mylog", "run: ------  mDatas.get(i) " + i + " " + mDatas.get(i));
                             }
                         }
                     }
@@ -301,10 +301,14 @@ public class MainT3Fragment extends BaseMainFragment {
     RecyclerViewItemListener recyclerViewItemListener = new RecyclerViewItemListener() {
         @Override
         public void onItemClick(int position) {
-            if (position < 0) {
+            if (position < 0 || mDatas == null || mDatas.size() == 0) {
                 return;
             }
             MainT3Bean mainT3Bean = mDatas.get(position);
+            if (mainT3Bean == null) {
+                Log.d("mylog", "onItemClick: mainT3Bean == null ");
+                return;
+            }
             int id = mainT3Bean.id;
             if (id < 0) {
                 switch (id) {

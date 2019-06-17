@@ -60,7 +60,7 @@ public class ShareActivity extends BaseSameActivity {
     private ViewPager mViewPager;
     private ShareT1Fragment mFragmentT1;
     private ShareT2Fragment mFragmentT2;
-    private ConstraintLayout mClInfo;
+    //    private ConstraintLayout mClInfo;
     private ConstraintLayout mClItemCon;
     private FluidLayout mFluidLayout;
     private SearchView mSearchView;
@@ -69,6 +69,19 @@ public class ShareActivity extends BaseSameActivity {
     private LoveEngin mLoveEngin;
     private int PAGE_SIZE = 10;
     private int PAGE_NUM = 1;
+    private String mKeyword;
+
+    public static void startShareActivity(Context context, String keyword) {
+        Intent intent = new Intent(context, ShareActivity.class);
+        intent.putExtra("keyword", keyword);
+        context.startActivity(intent);
+    }
+
+    @Override
+    protected void initIntentData() {
+        Intent intent = getIntent();
+        mKeyword = intent.getStringExtra("keyword");
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -81,7 +94,7 @@ public class ShareActivity extends BaseSameActivity {
 
     }
 
-    private void initData() {
+    private void initData() {  //没有用户id 重新请求
         int id = YcSingle.getInstance().id;
         if (id <= 0) {
             showToLoginDialog();
@@ -105,13 +118,15 @@ public class ShareActivity extends BaseSameActivity {
 
     private void initViews() {
         mSearchView = findViewById(R.id.share_searview);
+
+
         TextView tvNext = findViewById(R.id.share_tv_next);
         TextView tvTodayAdd = findViewById(R.id.share_tv_today_add);
         TextView tvToHelp = findViewById(R.id.share_tv_to_help);
         String sDay = String.valueOf(TimeUtils.dateToStamp(new Date(System.currentTimeMillis())));
         tvTodayAdd.setText("今日新增".concat(sDay.substring(5, 8).replace("0", "1")).concat("条话术")); //.contains("条话术")
 
-        mClInfo = findViewById(R.id.share_cons_lay_info);
+//        mClInfo = findViewById(R.id.share_cons_lay_info);
         TextView tvDelete = findViewById(R.id.share_tv_delete);
         mFluidLayout = findViewById(R.id.share_fluid_layout);
         changHistoryFluidLayout("");  //初始化搜索记录
@@ -143,7 +158,7 @@ public class ShareActivity extends BaseSameActivity {
                 @Override
                 public void onClick(View view) {
                     //清除搜索框并加载默认数据
-                    hindShareItemShowInfo();
+//                    hindShareItemShowInfo();
                     textView.setText(null);
                 }
             });
@@ -179,19 +194,21 @@ public class ShareActivity extends BaseSameActivity {
             Log.d("mylog", "initViews:  未购买了vip");
         }
 
+        hindKeyboard(mSearchView);
+
+        textView.setText(mKeyword);
+        editText.setSelection(mKeyword.length());
+        staryShare(mKeyword);
+
     }
 
-    private void showShareItemHindInfo() {
-
-        Log.d("mylog", mClInfo.getVisibility()==View.VISIBLE?"   VISIBLE   ":"   GONE   "+"mClInfo.getVisibility()==View.VISIBLE   showShareItemHindInfo: ");
-        Log.d("mylog", mFrameLayout.getVisibility()==View.VISIBLE?"   VISIBLE   ":"   GONE   "+"mFrameLayout.getVisibility()==View.VISIBLE   showShareItemHindInfo: ");
-
+   /* private void showShareItemHindInfo() {
         if (mClInfo.getVisibility() != View.GONE) {
             mClInfo.setVisibility(View.GONE);
         }
-        /*if (mClItemCon.getVisibility() == View.INVISIBLE) {
+        *//*if (mClItemCon.getVisibility() == View.INVISIBLE) {
             mClItemCon.setVisibility(View.VISIBLE);
-        }*/
+        }*//*
         if (mFrameLayout.getVisibility() != View.VISIBLE) {
             mFrameLayout.setVisibility(View.VISIBLE);
         }
@@ -201,16 +218,16 @@ public class ShareActivity extends BaseSameActivity {
         if (mClInfo.getVisibility() != View.VISIBLE) {
             mClInfo.setVisibility(View.VISIBLE);
         }
-       /* if (mClItemCon.getVisibility() == View.VISIBLE) {
+       *//* if (mClItemCon.getVisibility() == View.VISIBLE) {
             mClItemCon.setVisibility(View.INVISIBLE);
 
             mFragmentT1.recoverData();
             mFragmentT2.recoverData();
-        }*/
+        }*//*
         if (mFrameLayout.getVisibility() != View.GONE) {
             mFrameLayout.setVisibility(View.GONE);
         }
-    }
+    }*/
 
     /**
      * 启动搜索
@@ -257,7 +274,7 @@ public class ShareActivity extends BaseSameActivity {
             return;
         }
 
-        mShareFragment.recoverData();
+        mShareFragment.recoverData();  //移除上次请求的监听
 //        mFragmentT2.recoverData();
 
         changHistoryFluidLayout(query);
@@ -266,7 +283,6 @@ public class ShareActivity extends BaseSameActivity {
 
         netPagerOneData(query); //为了解决Fragment切换白屏的问题，第一页数据在Activity中请求
 
-        saveKeywordToService(query);
 
 //        mShareFragment.netData(query);
 //        showShareItemHindInfo();
@@ -285,9 +301,6 @@ public class ShareActivity extends BaseSameActivity {
         }
     }
 
-    private void saveKeywordToService(String query) {
-
-    }
 
     private void netPagerOneData(final String keyword) {
         int id = YcSingle.getInstance().id;
@@ -315,7 +328,7 @@ public class ShareActivity extends BaseSameActivity {
                     }
                     Log.d("mylog", "onNetNext: isCanLoadPagerMore " + isCanLoadPagerMore);
                     mShareFragment.loadOnePagerData(keyword, list, isCanLoadPagerMore);
-                    showShareItemHindInfo();
+//                    showShareItemHindInfo();
                 }
             }
 
@@ -468,13 +481,18 @@ public class ShareActivity extends BaseSameActivity {
         return false;
     }
 
-    @Override
+    /*@Override
     public boolean childDisposeOnBack() {
         if (mFrameLayout.getVisibility() != View.GONE) {
             hindShareItemShowInfo();
         } else {
             finish();
         }
+        return true;
+    }*/
+    @Override
+    public boolean childDisposeOnBack() {
+        finish();
         return true;
     }
 }

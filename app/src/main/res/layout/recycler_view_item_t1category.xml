@@ -4,7 +4,9 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/relativeLayout"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content">
+    android:layout_height="wrap_content"
+    android:focusable="true"
+    android:focusableInTouchMode="true">
 
     <ImageView
         android:id="@+id/item_t1category_iv_title"
@@ -25,6 +27,39 @@
         app:layout_constraintRight_toRightOf="@id/item_t1category_iv_title"
         app:layout_constraintTop_toBottomOf="@id/item_t1category_iv_title" />
 
+
+    <android.support.v7.widget.SearchView
+        android:id="@+id/item_t1category_share_view"
+        android:layout_width="285dp"
+        android:layout_height="36dp"
+        android:layout_marginLeft="16dp"
+        android:layout_marginBottom="6dp"
+        android:background="@color/white"
+        app:iconifiedByDefault="false"
+        app:layout_constraintBottom_toBottomOf="@id/item_t1category_iv_share"
+        app:layout_constraintLeft_toLeftOf="@id/item_t1category_iv_share"
+        app:layout_constraintTop_toTopOf="@id/item_t1category_iv_share"
+        app:queryBackground="@null"
+        app:queryHint="@string/share_des"
+        app:showDividers="none"
+        app:submitBackground="@null" />
+
+    <!-- android:inputType="text"-->
+    <EditText
+        android:id="@+id/item_t1category_et_share"
+        android:layout_width="285dp"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="22dp"
+        android:layout_marginBottom="6dp"
+        android:background="@null"
+        android:hint="@string/share_des"
+        android:maxLines="1"
+        android:textSize="@dimen/size_16"
+        android:visibility="gone"
+        app:layout_constraintBottom_toBottomOf="@id/item_t1category_iv_share"
+        app:layout_constraintLeft_toLeftOf="@id/item_t1category_iv_share"
+        app:layout_constraintTop_toTopOf="@id/item_t1category_iv_share" />
+
     <TextView
         android:id="@+id/item_t1category_tv_share"
         android:layout_width="wrap_content"
@@ -34,15 +69,20 @@
         android:text="@string/share_des"
         android:textColor="@color/text_gray"
         android:textSize="@dimen/size_16"
+        android:visibility="gone"
         app:layout_constraintBottom_toBottomOf="@id/item_t1category_iv_share"
         app:layout_constraintLeft_toLeftOf="@id/item_t1category_iv_share"
         app:layout_constraintTop_toTopOf="@id/item_t1category_iv_share" />
 
+    <!--android:layout_marginBottom="6dp"-->
     <ImageView
+        android:id="@+id/item_t1category_iv_icon_share"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginRight="24dp"
-        android:layout_marginBottom="6dp"
+        android:layout_marginRight="12dp"
+        android:paddingLeft="12dp"
+        android:paddingRight="12dp"
+        android:paddingBottom="6dp"
         android:src="@mipmap/main_icon_share"
         app:layout_constraintBottom_toBottomOf="@id/item_t1category_iv_share"
         app:layout_constraintRight_toRightOf="@id/item_t1category_iv_share"

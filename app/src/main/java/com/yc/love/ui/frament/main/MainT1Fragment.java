@@ -4,9 +4,11 @@ import android.content.Intent;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.text.TextUtils;
 import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.EditText;
 import android.widget.LinearLayout;
 
 import com.alibaba.fastjson.JSON;
@@ -26,12 +28,16 @@ import com.yc.love.model.bean.CategoryArticleChildrenBean;
 import com.yc.love.model.bean.IdCorrelationLoginBean;
 import com.yc.love.model.bean.LoveHealBean;
 import com.yc.love.model.bean.LoveHealDateBean;
+import com.yc.love.model.bean.LoveHealDetBean;
+import com.yc.love.model.bean.SearchDialogueBean;
 import com.yc.love.model.bean.event.EventLoginState;
 import com.yc.love.model.bean.event.NetWorkChangT1Bean;
 import com.yc.love.model.data.BackfillSingle;
 import com.yc.love.model.engin.LoveEngin;
 import com.yc.love.model.engin.LoveEnginV2;
+import com.yc.love.model.single.YcSingle;
 import com.yc.love.model.util.SPUtils;
+import com.yc.love.ui.activity.BecomeVipActivity;
 import com.yc.love.ui.activity.LoveByStagesActivity;
 import com.yc.love.ui.activity.LoveHealActivity;
 import com.yc.love.ui.activity.LoveHealDetailsActivity;
@@ -54,7 +60,7 @@ import java.util.List;
 
 public class MainT1Fragment extends BaseMainFragment {
     private LoveEngin mLoveEngin;
-//    private LoveEnginV2 LoveEnginV2;
+    //    private LoveEnginV2 LoveEnginV2;
     private CacheWorker mCacheWorker;
     ;
     private RecyclerView mRecyclerView;
@@ -66,6 +72,8 @@ public class MainT1Fragment extends BaseMainFragment {
     private List<CategoryArticleBean> mCategoryArticleBeans;
     private LoadDialog mLoadDialog;
     private List<LoveHealBean> mDatas = new ArrayList<>();
+    private LoadDialog mLoadingDialog;
+    private LoadDialog mLoadDialogInfo;
 
     @Override
     protected int setContentView() {
@@ -81,6 +89,9 @@ public class MainT1Fragment extends BaseMainFragment {
         mLlNotNet = rootView.findViewById(R.id.main_t1_not_net);
 
         mRecyclerView = rootView.findViewById(R.id.main_t1_rl);
+
+
+
         /*LinearLayoutManager layoutManager = new LinearLayoutManager(mMainActivity);
         mRecyclerView.setLayoutManager(layoutManager);
         layoutManager.setOrientation(OrientationHelper.VERTICAL);
@@ -90,6 +101,7 @@ public class MainT1Fragment extends BaseMainFragment {
         GridLayoutManager gridLayoutManager = new GridLayoutManager(mMainActivity, 3, GridLayoutManager.VERTICAL, false);
         mRecyclerView.setLayoutManager(gridLayoutManager);
         mRecyclerView.setItemAnimator(new DefaultItemAnimator());
+
 
     }
 
@@ -331,16 +343,49 @@ public class MainT1Fragment extends BaseMainFragment {
                             case 6:
                                 startActivity(new Intent(mMainActivity, LoveHealingActivity.class));
                                 break;
-                            case 7:
+                            case 7:  //去搜索页面
                                 mMainActivity.startActivity(new Intent(mMainActivity, ShareActivity.class));
                                 break;
                         }
+                    }
+
+                    @Override
+                    public void clickIconShare(String keyword) {  //搜索icon 直接搜索
+                        /*if (etShare == null) {
+                            return;
+                        }
+                        String keyword = etShare.getText().toString().trim();*/
+                        if (TextUtils.isEmpty(keyword)) {
+                            mMainActivity.showToastShort("请输入搜索关键字");
+                            return;
+                        }
+
+//                        netPagerOneData(keyword);
+                        netIsVipData(keyword);
                     }
                 });
                 return mainT1CategoryViewHolder;
             }
         };
         mRecyclerView.setAdapter(adapter);
+
+        /*mRecyclerView.addOnScrollListener(new RecyclerView.OnScrollListener() {
+            @Override
+            public void onScrollStateChanged(RecyclerView recyclerView, int newState) {
+                super.onScrollStateChanged(recyclerView, newState);
+
+                Log.d("mylog", "onScrollStateChanged: 77777777777777777");
+                mMainActivity.hindKeyboard(mRecyclerView);
+            }
+
+            @Override
+            public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
+                super.onScrolled(recyclerView, dx, dy);
+                Log.d("mylog", "onScrolled: 8888888888");
+            }
+        });*/
+
+        mMainActivity.hindKeyboard(mRecyclerView);
     }
 
     private void startLoveByStagesActivity(int position, String title) {
@@ -350,5 +395,83 @@ public class MainT1Fragment extends BaseMainFragment {
         CategoryArticleBean categoryArticleBean = mCategoryArticleBeans.get(position);
         ArrayList<CategoryArticleChildrenBean> children = categoryArticleBean.children;
         LoveByStagesActivity.startLoveByStagesActivity(mMainActivity, title, children);
+    }
+
+    private int PAGE_SIZE = 10;
+    private int PAGE_NUM = 1;
+
+    private void netPagerOneData(final String keyword) {
+        int id = YcSingle.getInstance().id;
+        if (id <= 0) {
+            mMainActivity.showToLoginDialog();
+            return;
+        }
+        if (mLoadingDialog == null) {
+            mLoadingDialog = new LoadDialog(mMainActivity);
+        }
+        mLoadingDialog.showLoadingDialog();
+        mLoveEngin.searchDialogue2(String.valueOf(id), keyword, String.valueOf(PAGE_NUM), String.valueOf(PAGE_SIZE), "Dialogue/search").subscribe(new MySubscriber<AResultInfo<SearchDialogueBean>>(mLoadingDialog) {
+
+
+            @Override
+            protected void onNetNext(AResultInfo<SearchDialogueBean> searchDialogueBeanAResultInfo) {
+                SearchDialogueBean searchDialogueBean = searchDialogueBeanAResultInfo.data;
+                int searchBuyVip = searchDialogueBean.search_buy_vip;
+                if (1 == searchBuyVip) { //1 弹窗 0不弹
+                    startActivity(new Intent(mMainActivity, BecomeVipActivity.class));
+                    return;
+                } else {
+                    List<LoveHealDetBean> list = searchDialogueBean.list;
+
+                }
+            }
+
+            @Override
+            protected void onNetError(Throwable e) {
+//                mSwipeRefresh.setRefreshing(false);
+            }
+
+            @Override
+            protected void onNetCompleted() {
+//                mSwipeRefresh.setRefreshing(false);
+            }
+        });
+    }
+
+    private void netIsVipData(final String keyword) {
+        final int id = YcSingle.getInstance().id;
+        if (id <= 0) {
+            mMainActivity.showToLoginDialog();
+            return;
+        }
+        if (mLoadDialogInfo == null) {
+            mLoadDialogInfo = new LoadDialog(mMainActivity);
+        }
+        mLoadDialogInfo.showLoadingDialog();
+        mLoveEngin.userInfo(String.valueOf(id), "user/info").subscribe(new MySubscriber<AResultInfo<IdCorrelationLoginBean>>(mLoadDialogInfo) {
+
+            @Override
+            protected void onNetNext(AResultInfo<IdCorrelationLoginBean> idCorrelationLoginBeanAResultInfo) {
+                IdCorrelationLoginBean idCorrelationLoginBean = idCorrelationLoginBeanAResultInfo.data;
+//                ShareActivity.startShareActivity(mMainActivity, keyword);
+                int isVip = idCorrelationLoginBean.is_vip;
+                if (isVip < 1) { // 0弹窗 1不弹
+                    startActivity(new Intent(mMainActivity, BecomeVipActivity.class));
+                    return;
+                } else {
+                    ShareActivity.startShareActivity(mMainActivity, keyword);
+                }
+            }
+
+            @Override
+            protected void onNetError(Throwable e) {
+
+            }
+
+            @Override
+            protected void onNetCompleted() {
+
+            }
+        });
     }
 }

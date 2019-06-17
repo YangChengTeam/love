@@ -19,8 +19,10 @@ import android.view.WindowManager;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.umeng.analytics.MobclickAgent;
 import com.yc.love.R;
 import com.yc.love.model.bean.OpenApkPkgInfo;
+import com.yc.love.model.constant.ConstantKey;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -75,6 +77,14 @@ public class OpenAkpDialog extends AlertDialog {
                     Toast.makeText(context, "未安装该应用", Toast.LENGTH_SHORT).show();
                 } else {
                     openApk(pkg);
+
+                    if ("com.tencent.mobileqq".equals(pkg)) {
+                        MobclickAgent.onEvent(context, ConstantKey.UM_OPEN_DIALOGUE_QQ);
+                    } else if ("com.tencent.mm".equals(pkg)) {
+                        MobclickAgent.onEvent(context, ConstantKey.UM_OPEN_DIALOGUE_WX);
+                    } else if ("com.immomo.momo".equals(pkg)) {
+                        MobclickAgent.onEvent(context, ConstantKey.UM_OPEN_DIALOGUE_MOMO);
+                    }
                 }
                 if (isShowing()) {
                     dismiss();
@@ -112,6 +122,7 @@ public class OpenAkpDialog extends AlertDialog {
             }
         }
     }
+
     private void openWeiXin() {
         Intent intent = new Intent();
         ComponentName cmp = new ComponentName("com.tencent.mm", "com.tencent.mm.ui.LauncherUI");

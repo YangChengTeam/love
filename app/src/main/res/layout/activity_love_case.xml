@@ -18,14 +18,16 @@
             android:background="@color/white" />
 
     </android.support.v4.widget.SwipeRefreshLayout>
+
     <ImageView
         android:id="@+id/love_case_iv_to_wx"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
         android:layout_gravity="bottom|end"
         android:layout_marginRight="15dp"
-        android:src="@mipmap/icon_floating_weixin"
         android:layout_marginBottom="62dp"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content" />
+        android:src="@mipmap/icon_floating_weixin"
+        android:visibility="gone" />
 
 
 </FrameLayout>

@@ -18,6 +18,7 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.Toast;
 
+import com.umeng.analytics.MobclickAgent;
 import com.yc.love.R;
 import com.yc.love.adaper.rv.LoveHealDetailsAdapter;
 import com.yc.love.adaper.rv.base.RecyclerViewItemListener;
@@ -31,6 +32,7 @@ import com.yc.love.model.bean.AResultInfo;
 import com.yc.love.model.bean.LoveHealDetBean;
 import com.yc.love.model.bean.LoveHealDetDetailsBean;
 import com.yc.love.model.bean.OpenApkPkgInfo;
+import com.yc.love.model.constant.ConstantKey;
 import com.yc.love.model.engin.LoveEngin;
 import com.yc.love.model.single.YcSingle;
 import com.yc.love.model.util.PackageUtils;
@@ -213,6 +215,7 @@ public class LoveHealDetailsActivity extends BaseSameActivity {
     }
 
     private void toCopy(String content) {
+        MobclickAgent.onEvent(this, ConstantKey.UM_COPY_DIALOGUE_HEAL);
         ClipboardManager myClipboard = (ClipboardManager) getSystemService(CLIPBOARD_SERVICE);
         ClipData myClip = ClipData.newPlainText("text", content);
         myClipboard.setPrimaryClip(myClip);

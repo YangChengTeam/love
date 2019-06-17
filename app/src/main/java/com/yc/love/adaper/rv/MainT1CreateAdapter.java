@@ -109,6 +109,9 @@ public abstract class MainT1CreateAdapter extends RecyclerView.Adapter<RecyclerV
         return 0;
     }
 
+
+
+
     public abstract BaseViewHolder getHolder(ViewGroup parent);
 
     protected abstract RecyclerView.ViewHolder getTypeTitleHolder(ViewGroup viewGroup);

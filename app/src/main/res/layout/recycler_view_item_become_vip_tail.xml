@@ -23,6 +23,7 @@
         tools:ignore="MissingConstraints">
 
         <android.support.constraint.ConstraintLayout
+            android:visibility="gone"
             android:id="@+id/item_become_vip_tail_cl_con_00"
             android:layout_width="0dp"
             android:layout_height="match_parent"
@@ -118,7 +119,7 @@
             android:background="@mipmap/become_vip_bg_pay"
             android:gravity="center_horizontal"
             android:orientation="vertical"
-            android:visibility="gone">
+            >
 
             <TextView
                 android:id="@+id/item_become_vip_tail_tv_pay_tit_01"
@@ -197,7 +198,7 @@
             android:background="@mipmap/become_vip_bg_pay"
             android:gravity="center_horizontal"
             android:orientation="vertical"
-            android:visibility="gone">
+           >
 
             <TextView
                 android:id="@+id/item_become_vip_tail_tv_pay_tit_02"

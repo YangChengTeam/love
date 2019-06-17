@@ -13,6 +13,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import com.umeng.analytics.MobclickAgent;
 import com.yc.love.R;
 import com.yc.love.adaper.rv.LoveHealDetailsAdapter;
 import com.yc.love.adaper.rv.base.RecyclerViewItemListener;
@@ -27,6 +28,7 @@ import com.yc.love.model.bean.LoveHealDetBean;
 import com.yc.love.model.bean.LoveHealDetDetailsBean;
 import com.yc.love.model.bean.OpenApkPkgInfo;
 import com.yc.love.model.bean.SearchDialogueBean;
+import com.yc.love.model.constant.ConstantKey;
 import com.yc.love.model.engin.LoveEngin;
 import com.yc.love.model.single.YcSingle;
 import com.yc.love.model.util.PackageUtils;
@@ -237,6 +239,7 @@ public class ShareFragment extends BaseLazyFragment {
     }
 
     private void toCopy(String content) {
+        MobclickAgent.onEvent(mShareActivity, ConstantKey.UM_COPY_DIALOGUE_SHARE);
         ClipboardManager myClipboard = (ClipboardManager) mShareActivity.getSystemService(mShareActivity.CLIPBOARD_SERVICE);
         ClipData myClip = ClipData.newPlainText("text", content);
         myClipboard.setPrimaryClip(myClip);

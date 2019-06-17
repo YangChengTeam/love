@@ -1,12 +1,15 @@
 package com.yc.love.model.bean;
 
+import android.os.Parcel;
+import android.os.Parcelable;
+
 import java.util.List;
 
 /**
  * Created by mayn on 2019/5/9.
  */
 
-public class LoveHealDetBean {
+public class LoveHealDetBean  {
 
 //    public int type=0;
     /**

@@ -13,6 +13,8 @@
         android:id="@+id/share_ll_sear_title"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:focusable="true"
+        android:focusableInTouchMode="true"
         android:orientation="horizontal">
 
         <android.support.v7.widget.SearchView
@@ -49,7 +51,8 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_alignBottom="@+id/share_ll_sear_title"
-        android:layout_marginTop="12dp">
+        android:layout_marginTop="12dp"
+        android:visibility="gone">
 
         <!-- tools:ignore="MissingConstraints"-->
         <RelativeLayout
@@ -168,8 +171,7 @@
         android:id="@+id/share_frame_layout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="12dp"
-        android:visibility="gone" />
+        android:layout_marginTop="12dp" />
 
     <android.support.constraint.ConstraintLayout
         android:id="@+id/share_cons_lay_item_con"
