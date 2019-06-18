@@ -27,23 +27,23 @@ public class MainT3TitleViewHolder extends BaseViewHolder<MainT3Bean> {
     public void bindData(MainT3Bean mainT3Bean) {
 
 //        View viewBar = itemView.findViewById(R.id.item_t3title_view_bar);
-//        ImageView ivTitle = itemView.findViewById(R.id.item_t3title_iv_title);
-//        TextView tvIcon01 = itemView.findViewById(R.id.item_t3title_tv_icon_01);
-//        TextView tvIcon02 = itemView.findViewById(R.id.item_t3title_tv_icon_02);
-//        TextView tvIcon03 = itemView.findViewById(R.id.item_t3title_tv_icon_03);
-//        TextView tvIcon04 = itemView.findViewById(R.id.item_t3title_tv_icon_04);
-//        TextView tvIcon05 = itemView.findViewById(R.id.item_t3title_tv_icon_05);
+        ImageView ivTitle = itemView.findViewById(R.id.item_t3title_iv_title);
+        TextView tvIcon01 = itemView.findViewById(R.id.item_t3title_tv_icon_01);
+        TextView tvIcon02 = itemView.findViewById(R.id.item_t3title_tv_icon_02);
+        TextView tvIcon03 = itemView.findViewById(R.id.item_t3title_tv_icon_03);
+        TextView tvIcon04 = itemView.findViewById(R.id.item_t3title_tv_icon_04);
+        TextView tvIcon05 = itemView.findViewById(R.id.item_t3title_tv_icon_05);
 //        ImageView  ivTitleCase = itemView.findViewById(R.id.item_t3title_iv_title_case);
 //        MainActivity mainActivity = (MainActivity) context;
 //        mainActivity.setStateBarHeight(viewBar);
 
-       /* ivTitleCase.setOnClickListener(new View.OnClickListener() {
+        ivTitle.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 onClickTitleIconListener.clickTitleIcon(10);
             }
-        });*/
-        /*tvIcon01.setOnClickListener(new View.OnClickListener() {
+        });
+        tvIcon01.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 onClickTitleIconListener.clickTitleIcon(0);
@@ -72,19 +72,11 @@ public class MainT3TitleViewHolder extends BaseViewHolder<MainT3Bean> {
             public void onClick(View v) {
                 onClickTitleIconListener.clickTitleIcon(4);
             }
-        });*/
+        });
     }
 
     public interface OnClickTitleIconListener {
         void clickTitleIcon(int position);
-
-        /*void clickTitleIcon02();
-
-        void clickTitleIcon03();
-
-        void clickTitleIcon04();
-
-        void clickTitleIcon05();*/
     }
 
     public void setOnClickTitleIconListener(OnClickTitleIconListener onClickTitleIconListener) {

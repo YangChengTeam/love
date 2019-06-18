@@ -24,7 +24,8 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/JK.SwipeBack.Transparent.Theme">
-        <activity android:name=".ui.activity.PayVipActivity"></activity>
+        <activity android:name=".ui.activity.ExpressActivity"></activity>
+        <activity android:name=".ui.activity.PayVipActivity" />
         <activity android:name=".ui.activity.LoveCaseActivity" />
         <activity android:name=".ui.activity.ResultActivity" />
         <activity android:name=".ui.activity.ImageCropActivity" />

@@ -34,6 +34,7 @@ public class BecomeVipTailViewHolder extends BaseViewHolder<BecomeVipBean> {
     private ImageView[] ivSels;
     private TextView[] tvUnits;
     private TextView[] tvMoneys;
+    private TextView[] tvOriginalPrices;
     private ImageView mIvPayZfb;
     private ImageView mIvPayWx;
     private TextView mTvNext;
@@ -77,6 +78,12 @@ public class BecomeVipTailViewHolder extends BaseViewHolder<BecomeVipBean> {
         TextView tvMoney03 = itemView.findViewById(R.id.item_become_vip_tail_tv_pay_mon_03);
         TextView tvMoney04 = itemView.findViewById(R.id.item_become_vip_tail_tv_pay_mon_04);
 
+        TextView tvOriginalPrice00 = itemView.findViewById(R.id.item_become_vip_tail_tv_original_price_00);
+        TextView tvOriginalPrice01 = itemView.findViewById(R.id.item_become_vip_tail_tv_original_price_01);
+        TextView tvOriginalPrice02 = itemView.findViewById(R.id.item_become_vip_tail_tv_original_price_02);
+        TextView tvOriginalPrice03 = itemView.findViewById(R.id.item_become_vip_tail_tv_original_price_03);
+        TextView tvOriginalPrice04 = itemView.findViewById(R.id.item_become_vip_tail_tv_original_price_04);
+
         TextView tvDes00 = itemView.findViewById(R.id.item_become_vip_tail_tv_pay_des_00);
         TextView tvDes01 = itemView.findViewById(R.id.item_become_vip_tail_tv_pay_des_01);
         TextView tvDes02 = itemView.findViewById(R.id.item_become_vip_tail_tv_pay_des_02);
@@ -109,6 +116,7 @@ public class BecomeVipTailViewHolder extends BaseViewHolder<BecomeVipBean> {
 //       List<TextView> tvTits= new ArrayList<>();
         TextView[] tvTits = {tvTit01, tvTit02, tvTit03, tvTit04, tvTit00};
         tvMoneys = new TextView[]{tvMoney01, tvMoney02, tvMoney03, tvMoney04, tvMoney00,};
+        tvOriginalPrices = new TextView[]{tvOriginalPrice01, tvOriginalPrice02, tvOriginalPrice03, tvOriginalPrice04, tvOriginalPrice00};
         mTvDess = new TextView[]{tvDes01, tvDes02, tvDes03, tvDes04, tvDes00,};
         clCons = new ConstraintLayout[]{clCon01, clCon02, clCon03, clCon04, clCon00,};
         ivSels = new ImageView[]{ivSel01, ivSel02, ivSel03, ivSel04, ivSel00,};
@@ -131,6 +139,8 @@ public class BecomeVipTailViewHolder extends BaseViewHolder<BecomeVipBean> {
             IndexDoodsBean indexDoodsBean = mPayBeans.get(i);
             tvTits[i].setText(indexDoodsBean.name);
             tvMoneys[i].setText(DoubleToStringUtils.doubleStringToString(indexDoodsBean.m_price));
+            tvOriginalPrices[i].setText("原价".concat(DoubleToStringUtils.doubleStringToString(indexDoodsBean.price)));
+            tvOriginalPrices[i].setPaintFlags(tvOriginalPrices[i].getPaintFlags() | Paint.STRIKE_THRU_TEXT_FLAG);
             mTvDess[i].setText(indexDoodsBean.desp);
 
             if (i == 4) {

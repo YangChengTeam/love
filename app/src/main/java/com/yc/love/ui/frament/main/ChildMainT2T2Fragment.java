@@ -1,7 +1,5 @@
-package com.yc.love.ui.activity;
+package com.yc.love.ui.frament.main;
 
-import android.content.Intent;
-import android.os.Bundle;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.OrientationHelper;
@@ -18,31 +16,30 @@ import com.yc.love.adaper.rv.base.RecyclerViewItemListener;
 import com.yc.love.adaper.rv.holder.BaseViewHolder;
 import com.yc.love.adaper.rv.holder.LoveHealingItemTitleViewHolder;
 import com.yc.love.adaper.rv.holder.LoveHealingItemViewHolder;
-import com.yc.love.adaper.rv.holder.ProgressBarViewHolder;
 import com.yc.love.adaper.rv.holder.LoveHealingTitleViewHolder;
+import com.yc.love.adaper.rv.holder.ProgressBarViewHolder;
+import com.yc.love.cache.CacheWorker;
 import com.yc.love.model.base.MySubscriber;
 import com.yc.love.model.bean.AResultInfo;
 import com.yc.love.model.bean.LoveHealingBean;
-import com.yc.love.model.bean.event.EventLoginState;
-import com.yc.love.model.bean.event.EventLoveUpDownCollectChangBean;
+import com.yc.love.model.bean.MainT2Bean;
 import com.yc.love.model.constant.ConstantKey;
 import com.yc.love.model.engin.LoveEngin;
 import com.yc.love.model.single.YcSingle;
-import com.yc.love.ui.activity.base.BaseSameActivity;
-
-import org.greenrobot.eventbus.EventBus;
-import org.greenrobot.eventbus.Subscribe;
-import org.greenrobot.eventbus.ThreadMode;
+import com.yc.love.ui.activity.LoveUpDownPhotoActivity;
+import com.yc.love.ui.frament.base.BaseMainT2ChildFragment;
+import com.yc.love.ui.view.LoadDialog;
 
 import java.util.ArrayList;
 import java.util.List;
 
-
 /**
- * 治愈情话
+ * Created by mayn on 2019/6/18.
  */
 
-public class LoveHealingActivity extends BaseSameActivity {
+//LoveHealingActivity
+public class ChildMainT2T2Fragment extends BaseMainT2ChildFragment {
+
     private List<LoveHealingBean> loveHealingBeans = new ArrayList<>();
     private LoveHealingAdapter mAdapter;
     private int PAGE_SIZE = 10;
@@ -53,39 +50,57 @@ public class LoveHealingActivity extends BaseSameActivity {
     //    private MainT2MoreItemAdapter mAdapter;
     private ProgressBarViewHolder progressBarViewHolder;
     private LoveEngin mLoveEngin;
+    private CacheWorker mCacheWorker;
     private RecyclerView mRecyclerView;
-//    private int clickToPosition;
+    private LoadDialog mLoadingDialog;
 
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_love_healing);
-        mLoveEngin = new LoveEngin(this);
-        initViews();
-        netData();
-
+    protected int setContentView() {
+        return R.layout.fragment_child_main_t2_t2;
     }
+
     @Override
-    protected void onResume() {
-        super.onResume();
-
-    }
-
     protected void initViews() {
-        mRecyclerView = findViewById(R.id.love_healing_rv);
-        LinearLayoutManager layoutManager = new LinearLayoutManager(LoveHealingActivity.this);
+        mLoveEngin = new LoveEngin(mMainActivity);
+        mCacheWorker = new CacheWorker();
+
+        initRecyclerView();
+    }
+
+    private void initRecyclerView() {
+        mRecyclerView = rootView.findViewById(R.id.child_main_t2_t2_rv);
+        LinearLayoutManager layoutManager = new LinearLayoutManager(mMainActivity);
         mRecyclerView.setLayoutManager(layoutManager);
         layoutManager.setOrientation(OrientationHelper.VERTICAL);
         //设置增加或删除条目的动画
         mRecyclerView.setItemAnimator(new DefaultItemAnimator());
     }
 
+    @Override
+    protected void lazyLoad() {
+        MobclickAgent.onEvent(mMainActivity, ConstantKey.UM_HONEYEDWORDS_ID);
+        netData();
+    }
+
     private void netData() {
-        mLoadingDialog.showLoadingDialog();
-        mLoveEngin.recommendLovewords(String.valueOf(YcSingle.getInstance().id),String.valueOf(PAGE_NUM), String.valueOf(PAGE_SIZE), "lovewords/recommend")
+        loveHealingBeans = (List<LoveHealingBean>) mCacheWorker.getCache(mMainActivity, "maint2_t2_lovewords_recommend");
+        if (loveHealingBeans != null && loveHealingBeans.size() != 0) {
+
+            for (LoveHealingBean loveHealingBean:loveHealingBeans
+                 ) {
+                Log.d("mylog", "netData: loveHealingBean "+loveHealingBean.toString());
+            }
+
+            initRecyclerData();
+        } else {
+            mLoadingDialog = new LoadDialog(mMainActivity);
+            mLoadingDialog.showLoadingDialog();
+        }
+        mLoveEngin.recommendLovewords(String.valueOf(YcSingle.getInstance().id), String.valueOf(PAGE_NUM), String.valueOf(PAGE_SIZE), "lovewords/recommend")
                 .subscribe(new MySubscriber<AResultInfo<List<LoveHealingBean>>>(mLoadingDialog) {
                     @Override
                     protected void onNetNext(AResultInfo<List<LoveHealingBean>> listAResultInfo) {
+                        loveHealingBeans = new ArrayList<>();
                         List<LoveHealingBean> loveHealingBeanList = listAResultInfo.data;
                         loveHealingBeans.add(new LoveHealingBean(0, "title_img"));
                         loveHealingBeans.add(new LoveHealingBean(1, "为你推荐 "));
@@ -93,6 +108,7 @@ public class LoveHealingActivity extends BaseSameActivity {
                             LoveHealingBean loveHealingBean = loveHealingBeanList.get(i);
                             loveHealingBeans.add(new LoveHealingBean(2, loveHealingBean.chat_count, loveHealingBean.chat_name, loveHealingBean.id, loveHealingBean.quiz_sex, loveHealingBean.search_type));
                         }
+                        mCacheWorker.setCache("maint2_t2_lovewords_recommend", loveHealingBeans);
                         initRecyclerData();
                     }
 
@@ -112,17 +128,17 @@ public class LoveHealingActivity extends BaseSameActivity {
         mAdapter = new LoveHealingAdapter(loveHealingBeans, mRecyclerView) {
             @Override
             public BaseViewHolder getHolder(ViewGroup parent) {
-                return new LoveHealingItemViewHolder(LoveHealingActivity.this, recyclerViewItemListener, parent);
+                return new LoveHealingItemViewHolder(mMainActivity, recyclerViewItemListener, parent);
             }
 
             @Override
             public BaseViewHolder getTitleHolder(ViewGroup parent) {
-                return new LoveHealingTitleViewHolder(LoveHealingActivity.this, null, parent);
+                return new LoveHealingTitleViewHolder(mMainActivity, null, parent);
             }
 
             @Override
             protected RecyclerView.ViewHolder getItemTitleHolder(ViewGroup parent) {
-                return new LoveHealingItemTitleViewHolder(LoveHealingActivity.this, null, parent);
+                return new LoveHealingItemTitleViewHolder(mMainActivity, null, parent);
             }
 
             @Override
@@ -165,8 +181,8 @@ public class LoveHealingActivity extends BaseSameActivity {
     }
 
     private void netLoadMoreData() {
-        mLoveEngin.recommendLovewords(String.valueOf(YcSingle.getInstance().id),String.valueOf(++PAGE_NUM), String.valueOf(PAGE_SIZE), "lovewords/recommend")
-                .subscribe(new MySubscriber<AResultInfo<List<LoveHealingBean>>>(mLoadingDialog) {
+        mLoveEngin.recommendLovewords(String.valueOf(YcSingle.getInstance().id), String.valueOf(++PAGE_NUM), String.valueOf(PAGE_SIZE), "lovewords/recommend")
+                .subscribe(new MySubscriber<AResultInfo<List<LoveHealingBean>>>(mMainActivity) {
                     @Override
                     protected void onNetNext(AResultInfo<List<LoveHealingBean>> listAResultInfo) {
                         List<LoveHealingBean> netLoadMoreData = listAResultInfo.data;
@@ -176,7 +192,7 @@ public class LoveHealingActivity extends BaseSameActivity {
                         if (netLoadMoreData.size() < PAGE_SIZE) {
                             loadMoreEnd = true;
                         }
-                        if(netLoadMoreData!=null&&netLoadMoreData.size()!=0) {
+                        if (netLoadMoreData != null && netLoadMoreData.size() != 0) {
                             for (int i = 0; i < netLoadMoreData.size(); i++) {
                                 LoveHealingBean loveHealingBean = netLoadMoreData.get(i);
                                 loveHealingBeans.add(new LoveHealingBean(2, loveHealingBean.chat_count, loveHealingBean.chat_name, loveHealingBean.id, loveHealingBean.quiz_sex, loveHealingBean.search_type));
@@ -203,7 +219,7 @@ public class LoveHealingActivity extends BaseSameActivity {
         @Override
         public void onItemClick(int position) {
             if (position >= 2) {
-                LoveUpDownPhotoActivity.startLoveUpDownPhotoActivity(LoveHealingActivity.this, position-2,"lovewords/recommend" );
+                LoveUpDownPhotoActivity.startLoveUpDownPhotoActivity(mMainActivity, position - 2, "lovewords/recommend");
             }
         }
 
@@ -212,34 +228,4 @@ public class LoveHealingActivity extends BaseSameActivity {
 
         }
     };
-
-   /* @Subscribe(threadMode = ThreadMode.MAIN)
-    public void onMessageEvent(EventLoveUpDownCollectChangBean event) {
-        boolean isCollectLovewords = event.isCollectLovewords;
-        LoveHealingBean loveHealingBean = loveHealingBeans.get(clickToPosition);
-        Log.d("mylog", "onMessageEvent: isCollectLovewords  " + isCollectLovewords + " clickToPosition " + clickToPosition);
-        if (isCollectLovewords) {
-            loveHealingBean.is_collect = 1;
-        } else {
-            loveHealingBean.is_collect = 0;
-        }
-        mAdapter.notifyItemChanged(clickToPosition);
-    }
-
-    @Override
-    public void onStart() {
-        super.onStart();
-        EventBus.getDefault().register(this);
-    }
-
-    @Override
-    public void onStop() {
-        super.onStop();
-        EventBus.getDefault().unregister(this);
-    }*/
-
-    @Override
-    protected String offerActivityTitle() {
-        return "治愈情话";
-    }
 }

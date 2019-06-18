@@ -70,8 +70,8 @@ public abstract class BaseFileStrategy implements CacheStrategy {
     private void writeDataToFile(Object obj, String fileName) {
         FileOutputStream fileOutputStream = null;
         ObjectOutputStream objectOutputStream = null;
-        FileInputStream fileInputStream = null;
-        ObjectInputStream objectInputStream = null;
+//        FileInputStream fileInputStream = null;
+//        ObjectInputStream objectInputStream = null;
         try {
             //存入数据
             File file = new File(mDirName
@@ -88,11 +88,11 @@ public abstract class BaseFileStrategy implements CacheStrategy {
             objectOutputStream = new ObjectOutputStream(fileOutputStream);
             objectOutputStream.writeObject(obj);
 
-            fileInputStream = new FileInputStream(file.toString());
-            objectInputStream = new ObjectInputStream(fileInputStream);
-            Object o = objectInputStream.readObject();
+//            fileInputStream = new FileInputStream(file.toString());
+//            objectInputStream = new ObjectInputStream(fileInputStream);
+//            Object o = objectInputStream.readObject();
         } catch (Exception e) {
-            Log.d("mylog", "writeDataToFile: 取出的数据 Exception " + e);
+            Log.d("mylog", "writeDataToFile: 存入数据 322 Exception " + e);
         } finally {
             if (objectOutputStream != null) {
                 try {
@@ -139,7 +139,7 @@ public abstract class BaseFileStrategy implements CacheStrategy {
             objectInputStream = new ObjectInputStream(fileInputStream);
             return objectInputStream.readObject();
         } catch (Exception e) {
-            Log.d("mylog", "writeDataToFile: 取出的数据 Exception " + e);
+            Log.d("mylog", "writeDataToFile: 取出的数据 332 Exception " + e);
         } finally {
             if (objectInputStream != null) {
                 try {

@@ -2,8 +2,6 @@ package com.yc.love.adaper.rv.holder;
 
 import android.content.Context;
 import android.support.v7.widget.SearchView;
-import android.text.InputType;
-import android.text.TextUtils;
 import android.util.TypedValue;
 import android.view.View;
 import android.view.ViewGroup;
@@ -13,15 +11,12 @@ import android.widget.TextView;
 
 import com.yc.love.R;
 import com.yc.love.adaper.rv.base.RecyclerViewItemListener;
-import com.yc.love.model.bean.ExampListsBean;
 import com.yc.love.model.bean.LoveHealBean;
-import com.yc.love.ui.activity.ShareActivity;
 
 
 public class MainT1CategoryViewHolder extends BaseViewHolder<LoveHealBean> {
 
     private final Context context;
-    private TextView mTvShare;
     private OnClickTitleIconListener onClickTitleIconListener;
 
     public MainT1CategoryViewHolder(Context context, RecyclerViewItemListener listener, ViewGroup parent) {
@@ -32,7 +27,6 @@ public class MainT1CategoryViewHolder extends BaseViewHolder<LoveHealBean> {
     @Override
     public void bindData(LoveHealBean exampListsBean) {
 
-//        final EditText etShare = itemView.findViewById(R.id.item_t1category_et_share);
         final SearchView searchView = itemView.findViewById(R.id.item_t1category_share_view);
         final ImageView ivIconShare = itemView.findViewById(R.id.item_t1category_iv_icon_share);
 
@@ -78,83 +72,9 @@ public class MainT1CategoryViewHolder extends BaseViewHolder<LoveHealBean> {
             }
         });
 
-//        etShare.setInputType(InputType.TYPE_CLASS_TEXT); //输入类型
-
-//        etShare.setFocusable(false);
-//        etShare.setFocusableInTouchMode(false);
-
-
-        ImageView ivTitle = itemView.findViewById(R.id.item_t1category_iv_title);
-        ImageView ivShare = itemView.findViewById(R.id.item_t1category_iv_share);
-        mTvShare = itemView.findViewById(R.id.item_t1category_tv_share);
-        ImageView ivModule02 = itemView.findViewById(R.id.item_t1category_iv_module_02);
-        ImageView ivModule03 = itemView.findViewById(R.id.item_t1category_iv_module_03);
-
-        TextView tvIcon01 = itemView.findViewById(R.id.item_t1category_tv_icon_01);
-        TextView tvIcon02 = itemView.findViewById(R.id.item_t1category_tv_icon_02);
-        TextView tvIcon03 = itemView.findViewById(R.id.item_t1category_tv_icon_03);
-        TextView tvIcon04 = itemView.findViewById(R.id.item_t1category_tv_icon_04);
-        TextView tvIcon05 = itemView.findViewById(R.id.item_t1category_tv_icon_05);
-//        MainActivity mainActivity = (MainActivity) context;?
-//        mainActivity.setStateBarHeight(viewBar);
-
-        tvIcon01.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                onClickTitleIconListener.clickTitleIcon(0);
-            }
-        });
-        tvIcon02.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                onClickTitleIconListener.clickTitleIcon(1);
-            }
-        });
-        tvIcon03.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                onClickTitleIconListener.clickTitleIcon(2);
-            }
-        });
-        tvIcon04.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                onClickTitleIconListener.clickTitleIcon(3);
-            }
-        });
-        tvIcon05.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                onClickTitleIconListener.clickTitleIcon(4);
-            }
-        });
-
-
-        ivModule02.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                onClickTitleIconListener.clickTitleIcon(5);
-//                onClickMainT1TitleListent.clickIvModule02Listent();
-            }
-        });
-        ivModule03.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                onClickTitleIconListener.clickTitleIcon(6);
-//                onClickMainT1TitleListent.clickIvModule03Listent();
-            }
-        });
-       /* ivShare.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                onClickTitleIconListener.clickTitleIcon(7);
-//                onClickMainT1TitleListent.clickShareListent();
-            }
-        });*/
         ivIconShare.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-//                onClickTitleIconListener.clickIconShare(etShare.getText().toString().trim());
                 onClickTitleIconListener.clickIconShare(searchView.getQuery().toString().trim());
             }
         });
@@ -162,8 +82,6 @@ public class MainT1CategoryViewHolder extends BaseViewHolder<LoveHealBean> {
     }
 
     public interface OnClickTitleIconListener {
-        void clickTitleIcon(int position);
-
         void clickIconShare(String keyword);
     }
 
@@ -172,10 +90,5 @@ public class MainT1CategoryViewHolder extends BaseViewHolder<LoveHealBean> {
     }
 
 
-    public void setTvShareText(String text) {
-        if (TextUtils.isEmpty(text)) {
-            mTvShare.setText(text);
-        }
-    }
 
 }

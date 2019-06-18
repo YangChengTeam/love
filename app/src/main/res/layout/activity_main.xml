@@ -41,7 +41,7 @@
                 style="@style/tv_main_icon_bottom"
                 android:background="?attr/selectableItemBackgroundBorderless"
                 android:drawableTop="@mipmap/main_icon_tab_02"
-                android:text="实例"
+                android:text="实战"
                 android:textColor="@color/text_gray" />
 
             <TextView
@@ -49,7 +49,7 @@
                 style="@style/tv_main_icon_bottom"
                 android:background="?attr/selectableItemBackgroundBorderless"
                 android:drawableTop="@mipmap/main_icon_tab_03"
-                android:text="表白"
+                android:text="秘籍"
                 android:textColor="@color/text_gray" />
 
             <TextView

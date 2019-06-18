@@ -23,7 +23,6 @@
         tools:ignore="MissingConstraints">
 
         <android.support.constraint.ConstraintLayout
-            android:visibility="gone"
             android:id="@+id/item_become_vip_tail_cl_con_00"
             android:layout_width="0dp"
             android:layout_height="match_parent"
@@ -33,7 +32,8 @@
             android:gravity="center_horizontal"
             android:orientation="vertical"
             android:paddingLeft="22dp"
-            android:paddingTop="14dp">
+            android:paddingTop="14dp"
+            android:visibility="gone">
 
             <TextView
                 android:id="@+id/item_become_vip_tail_tv_pay_tit_00"
@@ -77,7 +77,7 @@
                     android:layout_height="wrap_content"
                     android:text="限时促销￥"
                     android:textColor="@color/yellow_vip_text_mon"
-                    android:textSize="@dimen/size_14" />
+                    android:textSize="@dimen/size_12" />
 
                 <TextView
                     android:id="@+id/item_become_vip_tail_tv_pay_mon_00"
@@ -86,6 +86,17 @@
                     android:text="56"
                     android:textColor="@color/yellow_vip_text_mon"
                     android:textSize="@dimen/size_26" />
+
+                <TextView
+                    android:id="@+id/item_become_vip_tail_tv_original_price_00"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:paddingLeft="8dp"
+                    android:paddingRight="4dp"
+                    android:text="555"
+                    android:textColor="@color/text_gray"
+                    android:textSize="@dimen/size_10"
+                    app:layout_constraintRight_toRightOf="parent" />
             </LinearLayout>
 
             <TextView
@@ -118,8 +129,7 @@
             android:layout_weight="1"
             android:background="@mipmap/become_vip_bg_pay"
             android:gravity="center_horizontal"
-            android:orientation="vertical"
-            >
+            android:orientation="vertical">
 
             <TextView
                 android:id="@+id/item_become_vip_tail_tv_pay_tit_01"
@@ -145,9 +155,9 @@
                     android:id="@+id/item_become_vip_tail_tv_pay_unit_01"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="￥"
+                    android:text="限时促销￥"
                     android:textColor="@color/yellow_vip_text_mon"
-                    android:textSize="@dimen/size_14" />
+                    android:textSize="@dimen/size_12" />
 
                 <TextView
                     android:id="@+id/item_become_vip_tail_tv_pay_mon_01"
@@ -156,6 +166,17 @@
                     android:text="56"
                     android:textColor="@color/yellow_vip_text_mon"
                     android:textSize="@dimen/size_26" />
+
+                <TextView
+                    android:id="@+id/item_become_vip_tail_tv_original_price_01"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:paddingLeft="8dp"
+                    android:paddingRight="4dp"
+                    android:text="555"
+                    android:textColor="@color/text_gray"
+                    android:textSize="@dimen/size_10"
+                    app:layout_constraintRight_toRightOf="parent" />
             </LinearLayout>
 
             <TextView
@@ -197,8 +218,7 @@
             android:layout_weight="1"
             android:background="@mipmap/become_vip_bg_pay"
             android:gravity="center_horizontal"
-            android:orientation="vertical"
-           >
+            android:orientation="vertical">
 
             <TextView
                 android:id="@+id/item_become_vip_tail_tv_pay_tit_02"
@@ -224,9 +244,9 @@
                     android:id="@+id/item_become_vip_tail_tv_pay_unit_02"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="￥"
+                    android:text="限时促销￥"
                     android:textColor="@color/yellow_vip_text_mon"
-                    android:textSize="@dimen/size_14" />
+                    android:textSize="@dimen/size_12" />
 
                 <TextView
                     android:id="@+id/item_become_vip_tail_tv_pay_mon_02"
@@ -235,6 +255,17 @@
                     android:text="56"
                     android:textColor="@color/yellow_vip_text_mon"
                     android:textSize="@dimen/size_26" />
+
+                <TextView
+                    android:id="@+id/item_become_vip_tail_tv_original_price_02"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:paddingLeft="8dp"
+                    android:paddingRight="4dp"
+                    android:text="555"
+                    android:textColor="@color/text_gray"
+                    android:textSize="@dimen/size_10"
+                    app:layout_constraintRight_toRightOf="parent" />
             </LinearLayout>
 
             <TextView
@@ -304,9 +335,9 @@
                     android:id="@+id/item_become_vip_tail_tv_pay_unit_03"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="￥"
+                    android:text="限时促销￥"
                     android:textColor="@color/yellow_vip_text_mon"
-                    android:textSize="@dimen/size_14" />
+                    android:textSize="@dimen/size_12" />
 
                 <TextView
                     android:id="@+id/item_become_vip_tail_tv_pay_mon_03"
@@ -315,6 +346,17 @@
                     android:text="56"
                     android:textColor="@color/yellow_vip_text_mon"
                     android:textSize="@dimen/size_26" />
+
+                <TextView
+                    android:id="@+id/item_become_vip_tail_tv_original_price_03"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:paddingLeft="8dp"
+                    android:paddingRight="4dp"
+                    android:text="555"
+                    android:textColor="@color/text_gray"
+                    android:textSize="@dimen/size_10"
+                    app:layout_constraintRight_toRightOf="parent" />
             </LinearLayout>
 
             <TextView
@@ -381,9 +423,9 @@
                     android:id="@+id/item_become_vip_tail_tv_pay_unit_04"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="￥"
+                    android:text="限时促销￥"
                     android:textColor="@color/yellow_vip_text_mon"
-                    android:textSize="@dimen/size_14" />
+                    android:textSize="@dimen/size_12" />
 
                 <TextView
                     android:id="@+id/item_become_vip_tail_tv_pay_mon_04"
@@ -392,6 +434,17 @@
                     android:text="56"
                     android:textColor="@color/yellow_vip_text_mon"
                     android:textSize="@dimen/size_26" />
+
+                <TextView
+                    android:id="@+id/item_become_vip_tail_tv_original_price_04"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:paddingLeft="8dp"
+                    android:paddingRight="4dp"
+                    android:text="555"
+                    android:textColor="@color/text_gray"
+                    android:textSize="@dimen/size_10"
+                    app:layout_constraintRight_toRightOf="parent" />
             </LinearLayout>
 
             <TextView

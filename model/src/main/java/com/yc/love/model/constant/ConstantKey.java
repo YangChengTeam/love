@@ -40,6 +40,8 @@ public class ConstantKey {
     public static final String UM_OPEN_DIALOGUE_QQ = "open_dialogue_qq";
     public static final String UM_COPY_DIALOGUE_HEAL = "copy_dialogue_heal";
     public static final String UM_COPY_DIALOGUE_SHARE = "copy_dialogue_share";
+    public static final String UM_PRACTICE_ID= "practice_id";
+    public static final String UM_LOVE_SECRET_ID= "love_secret_id";
 
 
 }

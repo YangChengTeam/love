@@ -26,22 +26,17 @@ import com.bumptech.glide.request.target.SimpleTarget;
 import com.qw.soul.permission.SoulPermission;
 import com.qw.soul.permission.bean.Permission;
 import com.qw.soul.permission.callbcak.CheckRequestPermissionListener;
-import com.squareup.picasso.Picasso;
-import com.squareup.picasso.Target;
 import com.tencent.connect.share.QQShare;
 import com.tencent.mm.opensdk.modelmsg.SendMessageToWX;
 import com.tencent.mm.opensdk.modelmsg.WXImageObject;
 import com.tencent.mm.opensdk.modelmsg.WXMediaMessage;
-import com.tencent.mm.opensdk.modelmsg.WXWebpageObject;
 import com.tencent.mm.opensdk.openapi.IWXAPI;
 import com.tencent.mm.opensdk.openapi.WXAPIFactory;
 import com.tencent.tauth.IUiListener;
 import com.tencent.tauth.Tencent;
 import com.tencent.tauth.UiError;
 import com.yc.love.R;
-import com.yc.love.factory.ThreadPoolProxyFactory;
 import com.yc.love.model.constant.ConstantKey;
-import com.yc.love.proxy.ThreadPoolProxy;
 import com.yc.love.ui.activity.base.BaseSameActivity;
 import com.yc.love.ui.view.ShareShowImgDialog;
 
@@ -50,7 +45,6 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
-import java.util.concurrent.ThreadFactory;
 
 public class ResultActivity extends BaseSameActivity {
 

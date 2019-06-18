@@ -1,13 +1,14 @@
 package com.yc.love.ui.frament.main;
 
 import android.content.Intent;
+import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.GridLayoutManager;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.OrientationHelper;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.LinearLayout;
-import android.widget.TextView;
 
 import com.umeng.analytics.MobclickAgent;
 import com.yc.love.R;
@@ -26,151 +27,80 @@ import com.yc.love.model.bean.CategoryArticleChildrenBean;
 import com.yc.love.model.bean.ExampleTsCategory;
 import com.yc.love.model.bean.ExampleTsCategoryList;
 import com.yc.love.model.bean.MainT3Bean;
-import com.yc.love.model.bean.event.NetWorkChangT3Bean;
 import com.yc.love.model.constant.ConstantKey;
 import com.yc.love.model.engin.LoveEngin;
+import com.yc.love.ui.activity.ExpressActivity;
 import com.yc.love.ui.activity.LoveByStagesActivity;
 import com.yc.love.ui.activity.LoveCaseActivity;
-import com.yc.love.ui.activity.LoveHealActivity;
 import com.yc.love.ui.activity.LoveHealingActivity;
 import com.yc.love.ui.activity.LoveIntroductionActivity;
-import com.yc.love.ui.activity.ShareActivity;
 import com.yc.love.ui.frament.base.BaseMainFragment;
 import com.yc.love.ui.view.LoadDialog;
-
-import org.greenrobot.eventbus.EventBus;
-import org.greenrobot.eventbus.Subscribe;
-import org.greenrobot.eventbus.ThreadMode;
 
 import java.util.ArrayList;
 import java.util.List;
 
 /**
- * Created by mayn on 2019/4/23.
+ * Created by mayn on 2019/6/17.
  */
 
-public class MainT3Fragment extends BaseMainFragment {
-    private TextView tvName;
-    /*private int[] imgResId01s = {R.mipmap.main_bg_t3_01, R.mipmap.main_bg_t3_02, R.mipmap.main_bg_t3_03,
-            R.mipmap.main_bg_t3_04, R.mipmap.main_bg_t3_05, R.mipmap.main_bg_t3_06};
-    private int[] imgResId02s = {R.mipmap.main_bg_t3_07, R.mipmap.main_bg_t3_08, R.mipmap.main_bg_t3_09,
-            R.mipmap.main_bg_t3_10, R.mipmap.main_bg_t3_11, R.mipmap.main_bg_t3_12, R.mipmap.main_bg_t3_13};*/
-    private String[] name01s = {"线上撩妹", "线下撩妹", "开场搭讪", "约会邀请", "把握主权", "完美告白"};
-    private String[] name02s = {"自我提升", "相亲妙招", "关系确定", "关系进阶", "甜蜜异地", "分手挽回", "婚姻经营"};
-    private String[] des01s = {"用话语撩动屏幕前的TA", "用情感感染你面前的TA", "搭讪有窍门，开场不尴尬",
-            "邀请有方法，约会不尴尬", "把握有窍门，轻松搞定TA", "遇见对的TA，告白要完美"};
-    private String[] des02s = {"让自己优秀，妹子自然来", "相亲小妙招，牵住女神心", "确认过眼神，TA是对的人",
-            "情感升温后，水到渠自成", "距离也可以因爱产生美", "不想和TA分，那就看看吧", "婚姻并不是爱情的坟墓"};
-    private RecyclerView mRecyclerView;
-    private List<MainT3Bean> mDatas;
-    //    private LoadDialog mLoadingDialog;
-    private List<CategoryArticleBean> mCategoryArticleBeans;
-    private LinearLayout mLlNotNet;
-    private boolean mIsNetData = false;
-    private boolean mIsDataToCache;
-    private LoadDialog mLoadDialog;
-    private CacheWorker mCacheWorker;
+public class MainT3CourseFragment extends BaseMainFragment {
 
+    private RecyclerView mRecyclerView;
+    private List<CategoryArticleBean> mCategoryArticleBeans;
+    private CacheWorker mCacheWorker;
+    private List<MainT3Bean> mDatas;
+    private LoadDialog mLoadDialog;
+    private LoveEngin mLoveEngin;
+    private boolean mIsNetData = false;
     private final int ID_ITEM_TITLE_CASE = -1;
     private final int ID_ITEM_TITLE_CURE = -2;
 
     @Override
     protected int setContentView() {
-        return R.layout.fragment_main_t3;
+        return R.layout.fragment_main_t3_course;
     }
-
-    private LoveEngin mLoveEngin;
 
     @Override
     protected void initViews() {
 
-
-    }
-
-    private void initView() {
-        if (mLoveEngin == null && mLlNotNet == null) {
-
-            Log.d("mylog", "initView: MainT3Fragment 333333333 initView ");
-
-
-            mLoveEngin = new LoveEngin(mMainActivity);
-            mCacheWorker = new CacheWorker();
-            mLlNotNet = rootView.findViewById(R.id.main_t3_not_net);
-            View viewBar = rootView.findViewById(R.id.main_t3_view_bar);
-            mMainActivity.setStateBarHeight(viewBar, 1);
-//        mLoadingDialog = mMainActivity.mLoadingDialog;
-            initRecyclerView();
-        }
-    }
-
-    public void initRecyclerView() {
-        mRecyclerView = rootView.findViewById(R.id.main_t3_rv);
-        GridLayoutManager gridLayoutManager = new GridLayoutManager(mMainActivity, 2, GridLayoutManager.VERTICAL, false);
-        mRecyclerView.setLayoutManager(gridLayoutManager);
-//        mRecyclerView.setItemAnimator(new DefaultItemAnimator());
-    }
-
-    @Override
-    public void onStart() {
-        super.onStart();
-        EventBus.getDefault().register(this);
-    }
-
-    @Override
-    public void onStop() {
-        super.onStop();
-        EventBus.getDefault().unregister(this);
-    }
-
-    @Subscribe(threadMode = ThreadMode.MAIN)
-    public void onMessageEvent(NetWorkChangT3Bean netWorkChangBean) {
-        Log.d("mylog", "onMessageEvent: NetWorkChangT3Bean ");
-        List<String> connectionTypeList = netWorkChangBean.connectionTypeList;
-        checkNetChangUI(connectionTypeList);
-    }
-
-    private void checkNetChangUI(List<String> connectionTypeList) {
-        if (mLlNotNet != null) {
-            if (connectionTypeList == null || connectionTypeList.size() == 0) {
-                if (mLlNotNet.getVisibility() != View.VISIBLE) {
-                    mLlNotNet.setVisibility(View.VISIBLE);
-                }
-            } else {
-                if (mLlNotNet.getVisibility() != View.GONE) {
-                    mLlNotNet.setVisibility(View.GONE);
-                    lazyLoad();
-                }
-            }
-        }
     }
 
 
     @Override
     protected void lazyLoad() {
-        MobclickAgent.onEvent(mMainActivity, ConstantKey.UM_PROMOTION_ID);
+        MobclickAgent.onEvent(mMainActivity, ConstantKey.UM_LOVE_SECRET_ID);
         initView();
-//        List<String> connectionTypeList = YcSingle.getInstance().connectionTypeList;
-//        checkNetChangUI(connectionTypeList);
-        if (mIsDataToCache) {
-            mIsNetData = false;
-        }
-        if (!mIsNetData) {
-            netData();
-        }
+        netData();
+        netTitleData();
+    }
+
+    private void initView() {
+        mLoveEngin = new LoveEngin(mMainActivity);
+        mCacheWorker = new CacheWorker();
+
+        View viewBar = rootView.findViewById(R.id.main_t3_course_view_bar);
+        mMainActivity.setStateBarHeight(viewBar, 1);
+
+        initRecyclerView();
+    }
+
+    private void initRecyclerView() {
+        mRecyclerView = rootView.findViewById(R.id.main_t3_course_rl);
+        GridLayoutManager gridLayoutManager = new GridLayoutManager(mMainActivity, 2, GridLayoutManager.VERTICAL, false);
+        mRecyclerView.setLayoutManager(gridLayoutManager);
     }
 
     private void netTitleData() {
-        LoadDialog loadDialog = new LoadDialog(mMainActivity);
-        loadDialog.show();
-        mLoveEngin.categoryArticle("Article/category").subscribe(new MySubscriber<AResultInfo<List<CategoryArticleBean>>>(loadDialog) {
+        mCategoryArticleBeans = (List<CategoryArticleBean>) mCacheWorker.getCache(mMainActivity, "main1_Article_category");
+//        LoadDialog loadDialog = new LoadDialog(mMainActivity);
+//        loadDialog.show();
+        mLoveEngin.categoryArticle("Article/category").subscribe(new MySubscriber<AResultInfo<List<CategoryArticleBean>>>(mMainActivity) {
             @Override
             protected void onNetNext(AResultInfo<List<CategoryArticleBean>> listAResultInfo) {
                 mIsNetData = true;
                 mCategoryArticleBeans = listAResultInfo.data;
-                for (CategoryArticleBean categoryArticleBean : mCategoryArticleBeans
-                ) {
-                    Log.d("mylog", "onNetNext: categoryArticleBean " + categoryArticleBean.toString());
-                }
+                mCacheWorker.setCache("main1_Article_category", mCategoryArticleBeans);
             }
 
             @Override
@@ -187,7 +117,6 @@ public class MainT3Fragment extends BaseMainFragment {
 
     private void netData() {
         mDatas = (List<MainT3Bean>) mCacheWorker.getCache(mMainActivity, "main3_example_ts_category");
-        Log.d("securityhttp", "netData: mDatas " + mDatas);
         if (mDatas != null && mDatas.size() != 0) {
             initRecyclerViewData();
         } else {
@@ -202,9 +131,8 @@ public class MainT3Fragment extends BaseMainFragment {
                 mDatas = new ArrayList<>();
                 mDatas.add(new MainT3Bean(1));
 
-
-                mDatas.add(new MainT3Bean(4, "2", "学学别人怎么把女神撩到手", ID_ITEM_TITLE_CASE, R.mipmap.main_bg_item_title_case, "实战学习", 18));
-                mDatas.add(new MainT3Bean(4, "2", "浪漫情话让你撩妹不愁", ID_ITEM_TITLE_CURE, R.mipmap.main_bg_item_title_cure, "治愈情话", 18));
+//                mDatas.add(new MainT3Bean(4, "2", "学学别人怎么把女神撩到手", ID_ITEM_TITLE_CASE, R.mipmap.main_bg_item_title_case, "实战学习", 18));
+//                mDatas.add(new MainT3Bean(4, "2", "浪漫情话让你撩妹不愁", ID_ITEM_TITLE_CURE, R.mipmap.main_bg_item_title_cure, "治愈情话", 18));
 
                 mDatas.add(new MainT3Bean(2, "入门秘籍"));
                 ExampleTsCategory exampleTsCategory = exampleTsCategoryAResultInfo.data;
@@ -224,8 +152,6 @@ public class MainT3Fragment extends BaseMainFragment {
                     }
                 }
                 mCacheWorker.setCache("main3_example_ts_category", mDatas);
-
-//                CacheUtils.cacheBeanData(mMainActivity, "main3_example_ts_category", mDatas);
                 initRecyclerViewData();
             }
 
@@ -274,6 +200,9 @@ public class MainT3Fragment extends BaseMainFragment {
                             case 4:
                                 startLoveByStagesActivity(4, "婚后期");
                                 break;
+                            case 10: //表白入口
+                                startActivity(new Intent(mMainActivity, ExpressActivity.class));
+                                break;
                         }
                     }
                 });
@@ -297,7 +226,7 @@ public class MainT3Fragment extends BaseMainFragment {
         LoveByStagesActivity.startLoveByStagesActivity(mMainActivity, title, children);
     }
 
-    RecyclerViewItemListener recyclerViewItemListener = new RecyclerViewItemListener() {
+    private RecyclerViewItemListener recyclerViewItemListener = new RecyclerViewItemListener() {
         @Override
         public void onItemClick(int position) {
             if (position < 0 || mDatas == null || mDatas.size() == 0) {
@@ -321,8 +250,6 @@ public class MainT3Fragment extends BaseMainFragment {
             } else {
                 LoveIntroductionActivity.startLoveIntroductionActivity(mMainActivity, mainT3Bean.name, String.valueOf(id));
             }
-//            ExampleDetailActivity.startExampleDetailActivity(mMainActivity, mainT3Bean.id, mainT3Bean.desp);
-
         }
 
         @Override
@@ -330,5 +257,6 @@ public class MainT3Fragment extends BaseMainFragment {
 
         }
     };
+
 
 }

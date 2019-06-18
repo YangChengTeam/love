@@ -1,12 +1,13 @@
 package com.yc.love.model.bean;
 
+import java.io.Serializable;
 import java.util.List;
 
 /**
  * Created by mayn on 2019/4/25.
  */
 
-public class LoveHealingBean {
+public class LoveHealingBean implements Serializable {
 
     /**
      * chat_count : 4

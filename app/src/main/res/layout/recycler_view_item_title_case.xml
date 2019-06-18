@@ -10,8 +10,8 @@
         android:layout_height="wrap_content"
         android:adjustViewBounds="true"
         android:paddingLeft="12dp"
-        android:paddingTop="4dp"
         android:paddingRight="12dp"
+        android:paddingTop="4dp"
         android:paddingBottom="4dp"
         android:src="@mipmap/main_bg_title_case"
         app:layout_constraintTop_toTopOf="parent" />

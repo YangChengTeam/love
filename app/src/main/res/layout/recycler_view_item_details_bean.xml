@@ -5,20 +5,20 @@
     android:orientation="horizontal"
     android:padding="4dp">
 
-    <TextView
+    <!--<TextView
         android:textColor="@color/black"
         android:textSize="@dimen/size_16"
         android:layout_width="wrap_content"
         android:padding="3dp"
         android:id="@+id/item_details_bean_tv_sex"
-        android:layout_height="wrap_content" />
+        android:layout_height="wrap_content" />-->
 
-    <!--<ImageView
+    <ImageView
         android:padding="3dp"
         android:id="@+id/item_details_bean_iv_sex"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:src="@mipmap/icon_dialogue_men" />-->
+        android:src="@mipmap/icon_dialogue_men" />
 
     <TextView
         android:id="@+id/item_details_bean_tv_name"

@@ -4,11 +4,13 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".ui.activity.LoveHealingActivity">
+    tools:context=".ui.activity.ExpressActivity">
 
     <android.support.v7.widget.RecyclerView
-        android:id="@+id/love_healing_rv"
+        android:id="@+id/express_rl"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        tools:ignore="MissingConstraints" />
+        android:background="@color/white"
+        app:layout_constraintTop_toTopOf="parent" />
+
 </android.support.constraint.ConstraintLayout>

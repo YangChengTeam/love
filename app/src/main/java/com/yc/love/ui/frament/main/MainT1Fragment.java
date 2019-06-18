@@ -65,12 +65,8 @@ public class MainT1Fragment extends BaseMainFragment {
     ;
     private RecyclerView mRecyclerView;
     private LinearLayout mLlNotNet;
-    private boolean mIsNetData = false;
-    private boolean mIsNetTitleData = false;
     private boolean mIsCacheData = false;
     private boolean mIsCacheTitleData = false;
-    private List<CategoryArticleBean> mCategoryArticleBeans;
-    private LoadDialog mLoadDialog;
     private List<LoveHealBean> mDatas = new ArrayList<>();
     private LoadDialog mLoadingDialog;
     private LoadDialog mLoadDialogInfo;
@@ -82,9 +78,25 @@ public class MainT1Fragment extends BaseMainFragment {
 
 
     @Override
+    public void onResume() {
+        super.onResume();
+        Log.d("mylog", "666666666666   onResume: ");
+
+        /*if(mRecyclerView!=null){
+            mRecyclerView.setFocusable(true);
+            mRecyclerView.setFocusableInTouchMode(true);
+//            mMainActivity.hindKeyboard(mRecyclerView);
+//            android:focusable="true"
+//            android:focusableInTouchMode="true"
+        }*/
+
+    }
+
+
+
+    @Override
     protected void initViews() {
         mLoveEngin = new LoveEngin(mMainActivity);
-//        LoveEnginV2 = new LoveEnginV2(mMainActivity);
         mCacheWorker = new CacheWorker();
         mLlNotNet = rootView.findViewById(R.id.main_t1_not_net);
 
@@ -154,9 +166,6 @@ public class MainT1Fragment extends BaseMainFragment {
             if (mLlNotNet.getVisibility() != View.GONE) {
                 mLlNotNet.setVisibility(View.GONE);
                 lazyLoad();
-              /*  if (!mIsNetData) {
-                    netData();
-                }*/
             }
         }
     }
@@ -170,7 +179,6 @@ public class MainT1Fragment extends BaseMainFragment {
 
     private void netOtherData() {
         netDialogueData();
-        netTitleData();
     }
 
     private void netUserReg() {
@@ -245,48 +253,12 @@ public class MainT1Fragment extends BaseMainFragment {
                 Log.d("mylog", "onNetNext: mDatas.size() " + mDatas.size());
 
                 mCacheWorker.setCache("main1_Dialogue_category", mDatas);
-                mIsNetData = true;
-                if (mIsNetData && mIsNetTitleData) {
-                    initRecyclerViewData();
-                }
-            }
-
-            @Override
-            protected void onNetError(Throwable e) {
-
-            }
-
-            @Override
-            protected void onNetCompleted() {
-
-            }
-        });
-    }
-
-    private void netTitleData() {
-        mCategoryArticleBeans = (List<CategoryArticleBean>) mCacheWorker.getCache(mMainActivity, "main1_Article_category");
-        if (mCategoryArticleBeans != null && mCategoryArticleBeans.size() != 0) {
-            mIsCacheTitleData = true;
-            if (mIsCacheData && mIsCacheTitleData) {
                 initRecyclerViewData();
             }
-        } else {
-            mLoadDialog = new LoadDialog(mMainActivity);
-            mLoadDialog.showLoadingDialog();
-        }
-        mLoveEngin.categoryArticle("Article/category").subscribe(new MySubscriber<AResultInfo<List<CategoryArticleBean>>>(mLoadDialog) {
-            @Override
-            protected void onNetNext(AResultInfo<List<CategoryArticleBean>> listAResultInfo) {
-                mCategoryArticleBeans = listAResultInfo.data;
-                mCacheWorker.setCache("main1_Article_category", mCategoryArticleBeans);
-                mIsNetTitleData = true;
-                if (mIsNetData && mIsNetTitleData) {
-                    initRecyclerViewData();
-                }
-            }
 
             @Override
             protected void onNetError(Throwable e) {
+
             }
 
             @Override
@@ -320,46 +292,11 @@ public class MainT1Fragment extends BaseMainFragment {
                 MainT1CategoryViewHolder mainT1CategoryViewHolder = new MainT1CategoryViewHolder(mMainActivity, null, parent);
                 mainT1CategoryViewHolder.setOnClickTitleIconListener(new MainT1CategoryViewHolder.OnClickTitleIconListener() {
                     @Override
-                    public void clickTitleIcon(int position) {
-                        switch (position) {
-                            case 0:
-                                startLoveByStagesActivity(0, "单身期");
-                                break;
-                            case 1:
-                                startLoveByStagesActivity(1, "追求期");
-                                break;
-                            case 2:
-                                startLoveByStagesActivity(2, "热恋期");
-                                break;
-                            case 3:
-                                startLoveByStagesActivity(3, "失恋期");
-                                break;
-                            case 4:
-                                startLoveByStagesActivity(4, "婚后期");
-                                break;
-                            case 5:
-                                startActivity(new Intent(mMainActivity, LoveHealActivity.class));
-                                break;
-                            case 6:
-                                startActivity(new Intent(mMainActivity, LoveHealingActivity.class));
-                                break;
-                            case 7:  //去搜索页面
-                                mMainActivity.startActivity(new Intent(mMainActivity, ShareActivity.class));
-                                break;
-                        }
-                    }
-
-                    @Override
                     public void clickIconShare(String keyword) {  //搜索icon 直接搜索
-                        /*if (etShare == null) {
-                            return;
-                        }
-                        String keyword = etShare.getText().toString().trim();*/
                         if (TextUtils.isEmpty(keyword)) {
                             mMainActivity.showToastShort("请输入搜索关键字");
                             return;
                         }
-
 //                        netPagerOneData(keyword);
                         netIsVipData(keyword);
                     }
@@ -388,14 +325,6 @@ public class MainT1Fragment extends BaseMainFragment {
         mMainActivity.hindKeyboard(mRecyclerView);
     }
 
-    private void startLoveByStagesActivity(int position, String title) {
-        if (mCategoryArticleBeans == null || mCategoryArticleBeans.size() < position + 1) {
-            return;
-        }
-        CategoryArticleBean categoryArticleBean = mCategoryArticleBeans.get(position);
-        ArrayList<CategoryArticleChildrenBean> children = categoryArticleBean.children;
-        LoveByStagesActivity.startLoveByStagesActivity(mMainActivity, title, children);
-    }
 
     private int PAGE_SIZE = 10;
     private int PAGE_NUM = 1;
