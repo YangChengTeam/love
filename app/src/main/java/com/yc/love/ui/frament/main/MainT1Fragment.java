@@ -8,6 +8,7 @@ import android.text.TextUtils;
 import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.WindowManager;
 import android.widget.EditText;
 import android.widget.LinearLayout;
 
@@ -62,17 +63,17 @@ public class MainT1Fragment extends BaseMainFragment {
     private LoveEngin mLoveEngin;
     //    private LoveEnginV2 LoveEnginV2;
     private CacheWorker mCacheWorker;
-    ;
     private RecyclerView mRecyclerView;
     private LinearLayout mLlNotNet;
-    private boolean mIsCacheData = false;
-    private boolean mIsCacheTitleData = false;
+    //    private boolean mIsCacheData = false;
+//    private boolean mIsCacheTitleData = false;
     private List<LoveHealBean> mDatas = new ArrayList<>();
     private LoadDialog mLoadingDialog;
     private LoadDialog mLoadDialogInfo;
 
     @Override
     protected int setContentView() {
+//       mMainActivity. getWindow().setSoftInputMode( WindowManager.LayoutParams.SOFT_INPUT_STATE_HIDDEN);
         return R.layout.fragment_main_t1;
     }
 
@@ -82,16 +83,16 @@ public class MainT1Fragment extends BaseMainFragment {
         super.onResume();
         Log.d("mylog", "666666666666   onResume: ");
 
-        /*if(mRecyclerView!=null){
+        if (mRecyclerView != null) {
             mRecyclerView.setFocusable(true);
             mRecyclerView.setFocusableInTouchMode(true);
+            mRecyclerView.requestFocus();
 //            mMainActivity.hindKeyboard(mRecyclerView);
 //            android:focusable="true"
 //            android:focusableInTouchMode="true"
-        }*/
+        }
 
     }
-
 
 
     @Override
@@ -115,6 +116,12 @@ public class MainT1Fragment extends BaseMainFragment {
         mRecyclerView.setItemAnimator(new DefaultItemAnimator());
 
 
+        initData();
+    }
+
+    private void initData() {
+        netUserReg();  //用户注册登录
+        netDialogueData();
     }
 
     RecyclerViewTimeoutListener recyclerViewTimeoutListener = new RecyclerViewTimeoutListener() {
@@ -173,13 +180,9 @@ public class MainT1Fragment extends BaseMainFragment {
 
     @Override
     protected void lazyLoad() {
-        netUserReg();
-        netOtherData();
+
     }
 
-    private void netOtherData() {
-        netDialogueData();
-    }
 
     private void netUserReg() {
         LoadDialog loadDialog = new LoadDialog(mMainActivity);
@@ -223,10 +226,7 @@ public class MainT1Fragment extends BaseMainFragment {
         LoadDialog loadDialog = null;
         mDatas = (List<LoveHealBean>) mCacheWorker.getCache(mMainActivity, "main1_Dialogue_category");
         if (mDatas != null && mDatas.size() != 0) {
-            mIsCacheData = true;
-            if (mIsCacheData && mIsCacheTitleData) {
-                initRecyclerViewData();
-            }
+            initRecyclerViewData();
         } else {
             loadDialog = new LoadDialog(mMainActivity);
             loadDialog.showLoadingDialog();

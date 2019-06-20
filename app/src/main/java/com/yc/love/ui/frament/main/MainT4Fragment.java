@@ -32,6 +32,7 @@ import com.qw.soul.permission.bean.Permission;
 import com.qw.soul.permission.callbcak.CheckRequestPermissionListener;
 import com.umeng.analytics.MobclickAgent;
 import com.yc.love.R;
+import com.yc.love.cache.CacheWorker;
 import com.yc.love.model.base.MySubscriber;
 import com.yc.love.model.bean.AResultInfo;
 import com.yc.love.model.bean.MenuadvInfoBean;
@@ -65,6 +66,8 @@ public class MainT4Fragment extends BaseMainFragment implements View.OnClickList
     private int mProgress;
     //    private boolean mIsHome;
     private String mWechat;
+    private MenuadvInfoBean mMenuadvInfoBean;
+    private LoadDialog mLoadDialog;
 
     @Override
     protected int setContentView() {
@@ -75,6 +78,7 @@ public class MainT4Fragment extends BaseMainFragment implements View.OnClickList
     private String mDownloadIdKey;
 
     private LoveEngin mLoveEngin;
+    private CacheWorker mCacheWorker;
     private boolean isLoadUrl = false;
 
     @Override
@@ -84,6 +88,7 @@ public class MainT4Fragment extends BaseMainFragment implements View.OnClickList
         View viewBar = rootView.findViewById(R.id.main_t4_view_bar);
         mMainActivity.setStateBarHeight(viewBar, 1);
         mLoveEngin = new LoveEngin(mMainActivity);
+        mCacheWorker = new CacheWorker();
 
         TextView tvBen = rootView.findViewById(R.id.main_t4_tv_btn);
         tvBen.setOnClickListener(this);
@@ -310,22 +315,23 @@ public class MainT4Fragment extends BaseMainFragment implements View.OnClickList
     }
 
     private void netData() {
-        LoadDialog loadDialog = new LoadDialog(mMainActivity);
-        loadDialog.show();
-        mLoveEngin.menuadvInfo("menuadv/info").subscribe(new MySubscriber<AResultInfo<MenuadvInfoBean>>(loadDialog) {
-
-
+        mMenuadvInfoBean = (MenuadvInfoBean) mCacheWorker.getCache(mMainActivity, "main4_menuadv_info");
+        if (mMenuadvInfoBean != null) {
+            loadWebViewData(mMenuadvInfoBean);
+        } else {
+            mLoadDialog = new LoadDialog(mMainActivity);
+            mLoadDialog.showLoadingDialog();
+        }
+        mLoveEngin.menuadvInfo("menuadv/info").subscribe(new MySubscriber<AResultInfo<MenuadvInfoBean>>(mLoadDialog) {
             @Override
             protected void onNetNext(AResultInfo<MenuadvInfoBean> menuadvInfoBeanAResultInfo) {
                 MenuadvInfoBean menuadvInfoBean = menuadvInfoBeanAResultInfo.data;
-                String url = menuadvInfoBean.url;
-                mWechat = menuadvInfoBean.wechat;
-
-//                url = "http://en.upkao.com";
-                //        String url = "https://fir.im/cloudreader";
-                Log.d("mylog", "onNetNext: url " + url);
-                mWebView.loadUrl(url);
-                MainT4Fragment.this.homeUrl = url;
+                if (menuadvInfoBean != null) {
+                    if (mMenuadvInfoBean == null) {  //不需要重复加载
+                        loadWebViewData(menuadvInfoBean);
+                    }
+                    mCacheWorker.setCache("main4_menuadv_info", menuadvInfoBean);
+                }
             }
 
             @Override
@@ -338,6 +344,16 @@ public class MainT4Fragment extends BaseMainFragment implements View.OnClickList
 
             }
         });
+    }
+
+    private void loadWebViewData(MenuadvInfoBean menuadvInfoBean) {
+        String url = menuadvInfoBean.url;
+        mWechat = menuadvInfoBean.wechat;
+//                url = "http://en.upkao.com";
+        //        String url = "https://fir.im/cloudreader";
+        Log.d("mylog", "onNetNext: url " + url);
+        mWebView.loadUrl(url);
+        MainT4Fragment.this.homeUrl = url;
     }
 
 

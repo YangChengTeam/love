@@ -134,6 +134,9 @@ public class MainT5Fragment extends BaseMainFragment implements View.OnClickList
             @Override
             protected void onNetNext(AResultInfo<IdCorrelationLoginBean> idCorrelationLoginBeanAResultInfo) {
                 IdCorrelationLoginBean idCorrelationLoginBean = idCorrelationLoginBeanAResultInfo.data;
+                if (idCorrelationLoginBean == null) {
+                    return;
+                }
                 fillData(idCorrelationLoginBean);
                 cacheWorker.setCache("main_t5_user_info", idCorrelationLoginBean);
             }
@@ -151,21 +154,47 @@ public class MainT5Fragment extends BaseMainFragment implements View.OnClickList
     }
 
     private void fillData(IdCorrelationLoginBean idCorrelationLoginBean) {
+
+        Log.d("mylog", "fillData: idCorrelationLoginBean "+idCorrelationLoginBean);
+
         int is_vip = idCorrelationLoginBean.is_vip;
+        String face=idCorrelationLoginBean.face;
         String nickName = idCorrelationLoginBean.nick_name;
+        int vipTips=idCorrelationLoginBean.vip_tips; //0 未开通   1 已开通   2 已过期
         if (!TextUtils.isEmpty(nickName)) {
             mTvBtnInfo.setText("信息已完善");
         } else {
             mTvBtnInfo.setText("信息未完善");
         }
-        Log.d("mylog", "onNetNext: is_vip " + is_vip);
-        if (is_vip > 0) {
+        int id = YcSingle.getInstance().id;
+        switch (vipTips){
+            case 0: //0 未开通
+                mTvVipState.setText("未开通");
+                mTvName.setText("普通用户:".concat(String.valueOf(id)));
+                break;
+            case 1: // 1 已开通
+                mTvVipState.setText("已开通");
+                mTvName.setText("VIP用户:".concat(String.valueOf(id)));
+                break;
+            case 2: //2 已过期
+                mTvVipState.setText("已过期");
+                mTvName.setText("普通用户:".concat(String.valueOf(id)));
+                break;
+        }
+        if (!TextUtils.isEmpty(face)) {
+            Picasso.with(mMainActivity).load(face).error(R.mipmap.main_icon_default_head).transform(new CircleTransform()).into(mIvIcon);
+        }
+        if(!TextUtils.isEmpty(nickName)){
+            mTvName.setText(nickName);
+        }
+
+       /* if (is_vip > 0) {
             setTitleName(true);
             mTvVipState.setText("已开通");
         } else {
             setTitleName(false);
             mTvVipState.setText("未开通");
-        }
+        }*/
     }
 
 
@@ -203,11 +232,6 @@ public class MainT5Fragment extends BaseMainFragment implements View.OnClickList
         if (!TextUtils.isEmpty(nick_name) && !"123456".equals(nick_name)) {
             mTvBtnInfo.setText("信息已完善");
             mTvName.setText(nick_name);
-
-            if (isVip) {
-            } else {
-            }
-
         } else {
             int id = YcSingle.getInstance().id;
             if (id > 0) {

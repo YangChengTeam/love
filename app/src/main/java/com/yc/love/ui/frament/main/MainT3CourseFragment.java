@@ -52,7 +52,7 @@ public class MainT3CourseFragment extends BaseMainFragment {
     private List<MainT3Bean> mDatas;
     private LoadDialog mLoadDialog;
     private LoveEngin mLoveEngin;
-    private boolean mIsNetData = false;
+    //    private boolean mIsNetData = false;
     private final int ID_ITEM_TITLE_CASE = -1;
     private final int ID_ITEM_TITLE_CURE = -2;
 
@@ -98,8 +98,11 @@ public class MainT3CourseFragment extends BaseMainFragment {
         mLoveEngin.categoryArticle("Article/category").subscribe(new MySubscriber<AResultInfo<List<CategoryArticleBean>>>(mMainActivity) {
             @Override
             protected void onNetNext(AResultInfo<List<CategoryArticleBean>> listAResultInfo) {
-                mIsNetData = true;
-                mCategoryArticleBeans = listAResultInfo.data;
+                List<CategoryArticleBean> data = listAResultInfo.data;
+                if (data == null || data.size() == 0) {
+                    return;
+                }
+                mCategoryArticleBeans = data;
                 mCacheWorker.setCache("main1_Article_category", mCategoryArticleBeans);
             }
 
@@ -127,17 +130,22 @@ public class MainT3CourseFragment extends BaseMainFragment {
         mLoveEngin.exampleTsCategory("example/ts_category").subscribe(new MySubscriber<AResultInfo<ExampleTsCategory>>(mLoadDialog) {
             @Override
             protected void onNetNext(AResultInfo<ExampleTsCategory> exampleTsCategoryAResultInfo) {
-                mIsNetData = true;
-                mDatas = new ArrayList<>();
-                mDatas.add(new MainT3Bean(1));
 
-//                mDatas.add(new MainT3Bean(4, "2", "学学别人怎么把女神撩到手", ID_ITEM_TITLE_CASE, R.mipmap.main_bg_item_title_case, "实战学习", 18));
-//                mDatas.add(new MainT3Bean(4, "2", "浪漫情话让你撩妹不愁", ID_ITEM_TITLE_CURE, R.mipmap.main_bg_item_title_cure, "治愈情话", 18));
-
-                mDatas.add(new MainT3Bean(2, "入门秘籍"));
                 ExampleTsCategory exampleTsCategory = exampleTsCategoryAResultInfo.data;
+                if (exampleTsCategory == null) {
+                    return;
+                }
                 List<ExampleTsCategoryList> list1 = exampleTsCategory.list1;
                 List<ExampleTsCategoryList> list2 = exampleTsCategory.list2;
+                if (list1 == null && list2 == null) {
+                    return;
+                }
+                mDatas = new ArrayList<>();
+                mDatas.add(new MainT3Bean(1));
+//                mDatas.add(new MainT3Bean(4, "2", "学学别人怎么把女神撩到手", ID_ITEM_TITLE_CASE, R.mipmap.main_bg_item_title_case, "实战学习", 18));
+//                mDatas.add(new MainT3Bean(4, "2", "浪漫情话让你撩妹不愁", ID_ITEM_TITLE_CURE, R.mipmap.main_bg_item_title_cure, "治愈情话", 18));
+                mDatas.add(new MainT3Bean(2, "入门秘籍"));
+
                 if (list1 != null) {
                     for (int i = 0; i < list1.size(); i++) {
                         ExampleTsCategoryList categoryList = list1.get(i);

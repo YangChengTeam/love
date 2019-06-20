@@ -30,6 +30,10 @@ public class IdCorrelationLoginBean implements Serializable {
     public String face;
     public int vip;
     public int vip_end_time;
+    /* "vip_tips": 1 已开通
+         "vip_tips":  2     已过期
+         "vip_tips": 0 未开通*/
+    public int vip_tips;
 
 
     @Override
@@ -45,6 +49,7 @@ public class IdCorrelationLoginBean implements Serializable {
                 ", face='" + face + '\'' +
                 ", vip=" + vip +
                 ", vip_end_time=" + vip_end_time +
+                ", vip_tips=" + vip_tips +
                 '}';
     }
 }
