@@ -4,9 +4,9 @@
     android:layout_height="match_parent"
     android:orientation="vertical">
 
+    <!--android:background="@mipmap/lightning_bg"-->
     <ImageView
         android:id="@+id/specialized_iv_lightning"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:background="@mipmap/lightning_bg" />
+        android:layout_height="match_parent" />
 </LinearLayout>
