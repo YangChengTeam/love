@@ -1,6 +1,9 @@
 package com.yc.love.ui.activity;
 
 import android.app.DownloadManager;
+import android.content.ClipData;
+import android.content.ClipboardManager;
+import android.content.ComponentName;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -17,18 +20,25 @@ import android.net.wifi.WifiManager;
 import android.os.Bundle;
 import android.os.Environment;
 import android.os.Handler;
+import android.support.annotation.Nullable;
+import android.support.design.widget.FloatingActionButton;
+import android.support.v4.view.ViewPager;
 import android.support.v7.app.AlertDialog;
 import android.util.Log;
 import android.view.KeyEvent;
 import android.view.View;
+import android.view.WindowManager;
+import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.music.player.lib.manager.MusicPlayerManager;
+import com.umeng.socialize.UMShareAPI;
 import com.yc.love.R;
 import com.yc.love.adaper.vp.MainPagerAdapter;
 import com.yc.love.factory.MainFragmentFactory;
 import com.yc.love.model.domain.URLConfig;
 import com.yc.love.model.single.YcSingle;
-import com.yc.love.receiver.UpdataBroadcastReceiver;
+import com.yc.love.model.util.PackageUtils;
 import com.yc.love.utils.DownloadedApkUtlis;
 import com.yc.love.model.util.SPUtils;
 import com.yc.love.receiver.NetWorkChangReceiver;
@@ -36,22 +46,24 @@ import com.yc.love.ui.activity.base.BaseActivity;
 import com.yc.love.ui.view.ControlScrollViewPager;
 import com.yc.love.utils.InstallApkUtlis;
 
+import java.util.List;
+
 //import cn.trinea.android.common.util.PreferencesUtils;
 
 public class MainActivity extends BaseActivity implements View.OnClickListener {
 
     private ControlScrollViewPager mVpFragment;
     private TextView mTvTab1, mTvTab2, mTvTab3, mTvTab4, mTvTab5;
-    private boolean isRegistered = false;
+    //    private boolean isRegistered = false;
     private NetWorkChangReceiver netWorkChangReceiver;
     private String mPackageVersionName;
     public String mDownloadIdKey = "mDownloadIdKey";
-    private UpdataBroadcastReceiver mUpdataBroadcastReceiver;
     private OnChildDisposeMainKeyDownListent onChildDisposeMainKeyDownListent;
 
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+        getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_PAN);
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
@@ -69,6 +81,8 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
         }
         mDownloadIdKey = "download_id".concat(mPackageVersionName);
         Log.d("mylog", "onCreate: download_id mDownloadIdKey " + mDownloadIdKey);
+        //初始化MusicService
+        MusicPlayerManager.getInstance().bindService(this);
         initView();
 
         checkUpdate();
@@ -91,7 +105,7 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
     public boolean onKeyDown(int keyCode, KeyEvent event) {
         if (keyCode == KeyEvent.KEYCODE_BACK) {
             int currentItem = mVpFragment.getCurrentItem();
-            if (MainFragmentFactory.MAIN_FRAGMENT_3 == currentItem && onChildDisposeMainKeyDownListent.onChildDisposeMainKeyDown()) {
+            if (MainFragmentFactory.MAIN_FRAGMENT_3 == currentItem && onChildDisposeMainKeyDownListent != null && onChildDisposeMainKeyDownListent.onChildDisposeMainKeyDown()) {
                 Log.d("mylog", "onKeyDown: WebView goBack");
                 return true;
             } else {
@@ -132,16 +146,7 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
         filter.addAction(WifiManager.NETWORK_STATE_CHANGED_ACTION);
         filter.addAction(ConnectivityManager.CONNECTIVITY_ACTION);
         registerReceiver(netWorkChangReceiver, filter);
-        isRegistered = true;
-    }
-
-    private void initUpdataBroadcastReceiver() {
-//        long spDownloadId = (long) SPUtils.get(this, mDownloadIdKey, (long) -1);
-//        Log.d("mylog", "initUpdataBroadcastReceiver: spDownloadId " + spDownloadId);
-        mUpdataBroadcastReceiver = new UpdataBroadcastReceiver(mDownloadIdKey);
-        IntentFilter filter = new IntentFilter();
-        filter.addAction(DownloadManager.ACTION_DOWNLOAD_COMPLETE);
-        registerReceiver(mUpdataBroadcastReceiver, filter);
+//        isRegistered = true;
     }
 
 
@@ -149,10 +154,12 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
     protected void onDestroy() {
         super.onDestroy();
         //解绑
-        if (isRegistered) {
+//        if (isRegistered) {
+        if (netWorkChangReceiver != null) {
             unregisterReceiver(netWorkChangReceiver);
         }
-        unregisterReceiver(mUpdataBroadcastReceiver);
+//        }
+
     }
 
     private void initView() {
@@ -164,6 +171,11 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
         mTvTab3 = findViewById(R.id.comp_main_tv_tab_3);
         mTvTab4 = findViewById(R.id.comp_main_tv_tab_4);
         mTvTab5 = findViewById(R.id.comp_main_tv_tab_5);
+
+//        FloatingActionButton fabToWx = findViewById(R.love_id.comp_main_floating_action_button_to_wx);
+        final ImageView ivToWx = findViewById(R.id.comp_main_iv_to_wx);
+//        fabToWx.setOnClickListener(this);
+        ivToWx.setOnClickListener(this);
 
         mTvTab1.setOnClickListener(this);
         mTvTab2.setOnClickListener(this);
@@ -179,9 +191,33 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
             @Override
             public void run() {
                 initNetWorkChangReceiver();
-                initUpdataBroadcastReceiver();
             }
         }, 200);
+
+        mVpFragment.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
+            @Override
+            public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
+
+            }
+
+            @Override
+            public void onPageSelected(int position) {
+                if (position == MainFragmentFactory.MAIN_FRAGMENT_4) {
+                    if (ivToWx.getVisibility() != View.VISIBLE) {
+                        ivToWx.setVisibility(View.VISIBLE);
+                    }
+                } else {
+                    if (ivToWx.getVisibility() != View.GONE) {
+                        ivToWx.setVisibility(View.GONE);
+                    }
+                }
+            }
+
+            @Override
+            public void onPageScrollStateChanged(int state) {
+
+            }
+        });
     }
 
 
@@ -218,8 +254,12 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
                 mVpFragment.setCurrentItem(MainFragmentFactory.MAIN_FRAGMENT_4, false);
                 iconSelect(MainFragmentFactory.MAIN_FRAGMENT_4);
                 break;
+            case R.id.comp_main_iv_to_wx:
+                showToWxServiceDialog();
+                break;
         }
     }
+
 
     private void iconSelect(int current) {
         cleatIconState();
@@ -284,7 +324,7 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
         alertDialog.setButton(DialogInterface.BUTTON_POSITIVE, "立即下载", new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialogInterface, int i) {
-                DownloadedApkUtlis.downLoadApk(MainActivity.this, mDownloadIdKey, netUrl, contentObserver);
+//                DownloadedApkUtlis.downLoadApk(MainActivity.this, mDownloadIdKey, netUrl, contentObserver);
             }
         });
         alertDialog.show();
@@ -401,4 +441,9 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
         }
     }*/
 
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        UMShareAPI.get(this).onActivityResult(requestCode, resultCode, data);
+    }
 }

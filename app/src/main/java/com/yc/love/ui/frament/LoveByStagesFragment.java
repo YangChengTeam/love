@@ -2,12 +2,17 @@ package com.yc.love.ui.frament;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
+import android.view.View;
 import android.view.ViewGroup;
 
+import com.chad.library.adapter.base.BaseQuickAdapter;
+import com.kk.securityhttp.net.contains.HttpConfig;
 import com.yc.love.R;
+import com.yc.love.adaper.rv.LoveByStagesAdapter;
 import com.yc.love.adaper.rv.NoThingCanEmptyAdapter;
 import com.yc.love.adaper.rv.base.RecyclerViewItemListener;
 import com.yc.love.adaper.rv.holder.BaseViewHolder;
@@ -30,17 +35,17 @@ import java.util.List;
 
 public class LoveByStagesFragment extends BaseLoveByStagesFragment {
 
+    private SwipeRefreshLayout mSwipeRefresh;
     private RecyclerView mRecyclerView;
     private int mCategoryId;
     private LoveEngin mLoveEngin;
     private int PAGE_SIZE = 10;
     private int PAGE_NUM = 1;
     private LoadDialog mLoadingDialog;
-    private List<LoveByStagesBean> mLoveByStagesBeans;
-    private boolean loadMoreEnd;
-    private boolean loadDataEnd;
-    private boolean showProgressBar = false;
-    private NoThingCanEmptyAdapter<LoveByStagesBean> mAdapter;
+
+//    private NoThingCanEmptyAdapter<LoveByStagesBean> mAdapter;
+
+    private LoveByStagesAdapter mAdapter;
 
     @Override
     protected void initBundle() {
@@ -60,15 +65,28 @@ public class LoveByStagesFragment extends BaseLoveByStagesFragment {
     protected void initViews() {
         mLoveEngin = new LoveEngin(mLoveByStagesActivity);
 //        LoadingDialog loadingDialog=mLoveByStagesActivity.mLoadingDialog;
-        mLoadingDialog = mLoveByStagesActivity.mLoadingDialog;
+        mLoadingDialog = new LoadDialog(getActivity());
         initRecyclerView();
+        initListener();
     }
 
 
     private void initRecyclerView() {
+        mSwipeRefresh = rootView.findViewById(R.id.fragment_love_by_stages_swipe_refresh);
         mRecyclerView = rootView.findViewById(R.id.fragment_love_by_stages_rv);
         LinearLayoutManager layoutManager = new LinearLayoutManager(mLoveByStagesActivity);
         mRecyclerView.setLayoutManager(layoutManager);
+        mAdapter = new LoveByStagesAdapter(null);
+        mRecyclerView.setAdapter(mAdapter);
+
+        mSwipeRefresh.setColorSchemeResources(R.color.red_crimson);
+        mSwipeRefresh.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+            @Override
+            public void onRefresh() {
+                PAGE_NUM = 1;
+                netData();
+            }
+        });
     }
 
     @Override
@@ -78,110 +96,74 @@ public class LoveByStagesFragment extends BaseLoveByStagesFragment {
 
 
     private void netData() {
-        mLoadingDialog.showLoadingDialog();
+        if (PAGE_NUM == 1) {
+            mLoadingDialog.showLoadingDialog();
+        }
         mLoveEngin.listsArticle(String.valueOf(mCategoryId), String.valueOf(PAGE_NUM), String.valueOf(PAGE_SIZE), "Article/lists").subscribe(new MySubscriber<AResultInfo<List<LoveByStagesBean>>>(mLoadingDialog) {
 
             @Override
             protected void onNetNext(AResultInfo<List<LoveByStagesBean>> listAResultInfo) {
-                mLoveByStagesBeans = listAResultInfo.data;
-                initRecyclerData();
+//                mLoveByStagesBeans = listAResultInfo.data;
+
+                if (PAGE_NUM == 1 && mLoadingDialog != null) {
+                    mLoadingDialog.dismissLoadingDialog();
+                }
+                if (listAResultInfo != null && listAResultInfo.code == HttpConfig.STATUS_OK && listAResultInfo.data != null)
+                    createNewData(listAResultInfo.data);
             }
 
             @Override
             protected void onNetError(Throwable e) {
+                if (mSwipeRefresh.isRefreshing()) mSwipeRefresh.setRefreshing(false);
+                if (PAGE_NUM == 1 && mLoadingDialog != null) {
+                    mLoadingDialog.dismissLoadingDialog();
 
+                }
             }
 
             @Override
             protected void onNetCompleted() {
+                if (PAGE_NUM == 1 && mLoadingDialog != null) {
+                    mLoadingDialog.dismissLoadingDialog();
 
+                }
+                if (mSwipeRefresh.isRefreshing()) mSwipeRefresh.setRefreshing(false);
             }
         });
     }
 
-    private void initRecyclerData() {
-        mAdapter = new NoThingCanEmptyAdapter<LoveByStagesBean>(mLoveByStagesBeans, mRecyclerView) {
-            @Override
-            public BaseViewHolder getHolder(ViewGroup parent) {
-                return new LoveByStagesViewHolder(mLoveByStagesActivity, recyclerViewItemListener, parent);
-            }
-
-            @Override
-            protected RecyclerView.ViewHolder getEmptyHolder(ViewGroup parent) {
-                return new EmptyViewHolder(mLoveByStagesActivity, parent, "");
-            }
-        };
-        mRecyclerView.setAdapter(mAdapter);
-        if (mLoveByStagesBeans.size() < PAGE_SIZE) {
-            Log.d("ssss", "loadMoreData: data---end");
+    private void createNewData(List<LoveByStagesBean> loveByStagesBeans) {
+        if (PAGE_NUM == 1) {
+            mAdapter.setNewData(loveByStagesBeans);
         } else {
-            mAdapter.setOnMoreDataLoadListener(new NoThingCanEmptyAdapter.OnLoadMoreDataListener() {
-                @Override
-                public void loadMoreData() {
-                    if (loadDataEnd == false) {
-                        return;
-                    }
-                    if (showProgressBar == false) {
-                        //加入null值此时adapter会判断item的type
-                        mLoveByStagesBeans.add(null);
-                        mAdapter.notifyDataSetChanged();
-                        showProgressBar = true;
-                    }
-                    if (!loadMoreEnd) {
-                        netLoadMore();
-                    } else {
-                        Log.d("mylog", "loadMoreData: loadMoreEnd end 已加载全部数据 ");
-                        mLoveByStagesBeans.remove(mLoveByStagesBeans.size() - 1);
-                        mAdapter.notifyDataSetChanged();
-                    }
-                }
-            });
+            mAdapter.addData(loveByStagesBeans);
         }
-        loadDataEnd = true;
+        if (PAGE_SIZE == loveByStagesBeans.size()) {
+            mAdapter.loadMoreComplete();
+            PAGE_NUM++;
+        } else {
+            mAdapter.loadMoreEnd();
+        }
+        if (mSwipeRefresh.isRefreshing()) mSwipeRefresh.setRefreshing(false);
+
     }
 
-    private void netLoadMore() {
-        mLoveEngin.listsArticle(String.valueOf(mCategoryId), String.valueOf(++PAGE_NUM), String.valueOf(PAGE_SIZE), "Article/lists").subscribe(new MySubscriber<AResultInfo<List<LoveByStagesBean>>>(mLoveByStagesActivity) {
-
+    private void initListener() {
+        mAdapter.setOnItemClickListener(new BaseQuickAdapter.OnItemClickListener() {
             @Override
-            protected void onNetNext(AResultInfo<List<LoveByStagesBean>> listAResultInfo) {
-                List<LoveByStagesBean> netLoadMoreData = listAResultInfo.data;
-                showProgressBar = false;
-                mLoveByStagesBeans.remove(mLoveByStagesBeans.size() - 1);
-                mAdapter.notifyDataSetChanged();
-                if (netLoadMoreData.size() < PAGE_SIZE) {
-                    loadMoreEnd = true;
-                }
-                mLoveByStagesBeans.addAll(netLoadMoreData);
-                mAdapter.notifyDataSetChanged();
-                mAdapter.setLoaded();
-            }
-
-            @Override
-            protected void onNetError(Throwable e) {
-
-            }
-
-            @Override
-            protected void onNetCompleted() {
-
+            public void onItemClick(BaseQuickAdapter adapter, View view, int position) {
+//                mLoveByStagesActivity.startActivity(new Intent(mLoveByStagesActivity, TestWebViewActivity.class));
+                LoveByStagesBean loveByStagesBean = mAdapter.getItem(position);
+                if (loveByStagesBean != null)
+                    LoveByStagesDetailsActivity.startLoveByStagesDetailsActivity(mLoveByStagesActivity, loveByStagesBean.id, loveByStagesBean.post_title);
             }
         });
+        mAdapter.setOnLoadMoreListener(new BaseQuickAdapter.RequestLoadMoreListener() {
+            @Override
+            public void onLoadMoreRequested() {
+                netData();
+            }
+        }, mRecyclerView);
     }
 
-    RecyclerViewItemListener recyclerViewItemListener = new RecyclerViewItemListener() {
-        @Override
-        public void onItemClick(int position) {
-
-            mLoveByStagesActivity.startActivity(new Intent(mLoveByStagesActivity, TestWebViewActivity.class));
-
-//            LoveByStagesBean loveByStagesBean = mLoveByStagesBeans.get(position);
-//            LoveByStagesDetailsActivity.startLoveByStagesDetailsActivity(mLoveByStagesActivity, loveByStagesBean.id, loveByStagesBean.post_title);
-        }
-
-        @Override
-        public void onItemLongClick(int position) {
-
-        }
-    };
 }

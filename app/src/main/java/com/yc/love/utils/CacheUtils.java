@@ -1,40 +1,67 @@
 package com.yc.love.utils;
 
 import android.content.Context;
+import android.os.Environment;
 import android.text.TextUtils;
 
-import com.alibaba.fastjson.JSON;
-import com.google.gson.Gson;
-import com.google.gson.reflect.TypeToken;
-import com.yc.love.factory.ThreadPoolProxyFactory;
-import com.yc.love.model.util.SPUtils;
-import com.yc.love.proxy.ThreadPoolProxy;
-
-import org.json.JSONObject;
-
-import java.util.ArrayList;
-import java.util.List;
+import java.io.File;
 
 /**
- * Created by mayn on 2019/5/26.
+ * Created by wanglin  on 2018/2/9 11:10.
  */
 
-public class CacheUtils<T> {
+public class CacheUtils {
 
-    public static void cacheBeanData(final Context context, final String key, final Object data) {
-        if (TextUtils.isEmpty(key) || data == null) {
-            return;
-        }
-        ThreadPoolProxy normalThreadPoolProxy = ThreadPoolProxyFactory.getNormalThreadPoolProxy();
-        normalThreadPoolProxy.execute(new Runnable() {
+    public static void writeCache(final Context context, final String key, final String json) {
+        new ThreadPoolUtils(ThreadPoolUtils.SingleThread, 5).execute(new Runnable() {
             @Override
             public void run() {
-                String str = JSON.toJSONString(data);
-                if (!TextUtils.isEmpty(str)) {
-                    SPUtils.put(context, key, str);
+
+                String path = FileUtils.createDir(makeBaseDir(context) + "/cache");
+                FileIOUtils.writeFileFromString(path + "/" + key, json);
+            }
+        });
+
+    }
+
+    public abstract static class SubmitRunable implements Runnable {
+
+        private String json;
+
+        public String getJson() {
+            return json;
+        }
+
+        public void setJson(String json) {
+            this.json = json;
+        }
+    }
+
+
+    public static void readCache(final Context context, final String key, final SubmitRunable runable) {
+
+        new ThreadPoolUtils(ThreadPoolUtils.SingleThread, 5).execute(new Runnable() {
+            @Override
+            public void run() {
+
+                String path = FileUtils.createDir(makeBaseDir(context) + "/cache");
+                String json = FileIOUtils.readFile2String(path + "/" + key);
+                if (!TextUtils.isEmpty(json)) {
+                    if (runable != null) {
+                        runable.setJson(json);
+                        runable.run();
+                    }
                 }
             }
         });
+
     }
 
+    private static String makeBaseDir(Context context) {
+        File dir = new File(Environment.getExternalStorageDirectory() + "/" + context.getPackageName());
+        if (!dir.exists()) {
+            dir.mkdir();
+        }
+        return dir.getAbsolutePath();
+    }
 }

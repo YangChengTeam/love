@@ -20,6 +20,11 @@ import org.json.JSONObject;
 
 public class BackfillSingle {
 
+    /**
+     * 更新单例数据
+     * @param context
+     * @param stringBean  服务器返回的新数据，传""表示没有新数据取本地SP的数据恢复
+     */
     public static void backfillLoginData(Context context, String stringBean) {
         YcSingle ycSingle = YcSingle.getInstance();
         //本地数据
@@ -64,8 +69,8 @@ public class BackfillSingle {
                         idCorrelationLogin.vip_end_time = (vip_end_time);
                     }
                 }
-                if (jsonObject.has("id")) {
-                    int id = jsonObject.getInt("id");
+                if (jsonObject.has("love_id")) {
+                    int id = jsonObject.getInt("love_id");
                     if (id > 0) {
                         ycSingle.id = id;
                         idCorrelationLogin.id = id;
@@ -76,6 +81,13 @@ public class BackfillSingle {
                     if (vip > 0) {
                         ycSingle.vip = vip;
                         idCorrelationLogin.vip = vip;
+                    }
+                }
+                if (jsonObject.has("is_vip")) {
+                    int is_vip = jsonObject.getInt("is_vip");
+                    if (is_vip > 0) {
+                        ycSingle.is_vip = is_vip;
+                        idCorrelationLogin.is_vip = is_vip;
                     }
                 }
             } catch (JSONException e) {
@@ -125,8 +137,8 @@ public class BackfillSingle {
                 ycSingle.vip = vip;
                 idCorrelationLogin.vip = vip;
             }
-            Log.d("mylog", "backfillLoginData: idCorrelationLoginBean " + idCorrelationLoginBean.toString());
-            Log.d("mylog", "backfillLoginData: idCorrelationLogin " + idCorrelationLogin.toString());
+//            Log.d("mylog", "backfillLoginData: idCorrelationLoginBean " + idCorrelationLoginBean.toString());
+//            Log.d("mylog", "backfillLoginData: idCorrelationLogin " + idCorrelationLogin.toString());
         }
         String string = JSON.toJSONString(idCorrelationLogin);
         Log.d("mylog", "backfillLoginData: JSON.toJSONString(idCorrelationLogin " + string);

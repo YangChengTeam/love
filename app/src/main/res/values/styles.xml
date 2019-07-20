@@ -8,20 +8,7 @@
         <item name="colorAccent">@color/colorAccent</item>
     </style>
 
-    <style name="AppTheme.NoActionBar">
-        <item name="windowActionBar">false</item>
-        <item name="windowNoTitle">true</item>
-    </style>
-
-    <style name="AppTheme.AppBarOverlay" parent="ThemeOverlay.AppCompat.Dark.ActionBar" />
-
-    <style name="AppTheme.PopupOverlay" parent="ThemeOverlay.AppCompat.Light" />
-
     <!--过渡图-->
-    <style name="SplashTheme" parent="Theme.AppCompat.Light.NoActionBar">
-        <item name="android:windowBackground">@mipmap/lightning_bg</item>
-        <item name="android:windowFullscreen">true</item>
-    </style>
 
 
     <style name="tv_main_icon_bottom">
@@ -76,14 +63,6 @@
     </style>
 
 
-    <style name="TabLayoutStyle" parent="Widget.Design.TabLayout">
-        <item name="tabTextAppearance">@style/TabTextAppearance</item>
-    </style>
-
-    <style name="TabTextAppearance" parent="TextAppearance.Design.Tab">
-        <item name="textAllCaps">false</item>
-    </style>
-
     <style name="Dialog_FS" parent="android:Theme.Dialog">
         <item name="android:windowFrame">@null</item>
         <item name="android:windowNoTitle">true</item>
@@ -123,20 +102,47 @@
         <item name="android:windowExitAnimation">@anim/dialog_exit</item>
     </style>
 
-    <style name="BaseAppTheme" parent="Theme.AppCompat.Light.NoActionBar">
-        <item name="colorPrimary">#FF4081</item>
-        <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
-        <item name="colorAccent">#FF4081</item>
-
-    </style>
-
-    <style name="SelTheme" parent="@style/BaseAppTheme"></style>
-
     <!--部分界面AlertDialog messgge不显示 自己设置样式-->
     <style name="MyAlertDialogStyle" parent="Theme.AppCompat.Light.Dialog.Alert"> <!-- Used for the buttons -->
         <item name="colorAccent">@color/red_crimson</item> <!-- Used for the title and text -->
         <item name="android:textColorPrimary">#000000</item> <!-- Used for the background -->
         <item name="android:background">#FFFFFF</item>
+    </style>
+
+    　
+
+    <style name="customTheme" parent="Theme.AppCompat.Light.NoActionBar">
+        <item name="actionBarTheme">@style/actionBarTheme</item>
+        <item name="colorPrimary">@color/colorAccent</item>
+        <item name="actionBarSize">48dp</item>
+        <item name="colorPrimaryDark">@color/colorAccent</item>
+    </style>
+
+    <style name="actionBarTheme" parent="ThemeOverlay.AppCompat.Dark.ActionBar">
+        <item name="android:textColorPrimary">@android:color/primary_text_light</item>
+        <item name="actionBarSize">48dp</item>
+    </style>
+    <!-- 自定义Dialog -->
+    <style name="Custom_Progress" parent="@android:style/Theme.Dialog">
+        <item name="android:windowFrame">@null</item>
+        <item name="android:windowIsFloating">true</item>
+        <item name="android:windowContentOverlay">@null</item>
+        <item name="android:windowAnimationStyle">@android:style/Animation.Dialog</item>
+        <item name="android:windowSoftInputMode">stateUnspecified|adjustPan</item>
+        <item name="android:windowBackground">@android:color/transparent</item>
+        <item name="android:windowNoTitle">true</item>
+    </style>
+
+    <style name="fullScreen" parent="AppTheme">
+        <item name="android:windowIsTranslucent">false</item>
+        <item name="android:windowDisablePreview">true</item>
+        <item name="android:windowBackground">@android:color/transparent</item>
+        <item name="android:windowFullscreen">true</item>
+    </style>
+
+    <style name="share_anim">
+        <item name="android:windowEnterAnimation">@anim/tup</item>
+        <item name="android:windowExitAnimation">@anim/tdown</item>
     </style>
 
 </resources>

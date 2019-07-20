@@ -1,5 +1,6 @@
 package com.yc.love.ui.activity;
 
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Handler;
@@ -8,6 +9,7 @@ import android.os.Bundle;
 import android.support.v7.app.AlertDialog;
 import android.util.Log;
 
+import com.umeng.commonsdk.statistics.common.DeviceConfig;
 import com.yc.love.R;
 import com.yc.love.model.bean.event.EventLoginState;
 import com.yc.love.model.data.BackfillSingle;
@@ -30,19 +32,27 @@ public class SpecializedActivity extends BaseActivity {
             finish();
             return;
         }
-        new Handler().postDelayed(new Runnable() {
+        startNextActivity();
+        /*new Handler().postDelayed(new Runnable() {
             @Override
             public void run() {
 //                checkNetwork();
                 startNextActivity();
             }
-        }, 600);
+        }, 600);*/
+
+
+       /* String[] testDeviceInfo = getTestDeviceInfo(this);
+        for (int i = 0; i < testDeviceInfo.length; i++) {
+            Log.d("mylog", "onCreate: i " + i + "  " + testDeviceInfo[i]);
+//            {"device_id":"7c7cce7780fb8044","mac":"1c:15:1f:b4:a9:fd"}
+        }*/
     }
 
     private void startNextActivity() {
-        BackfillSingle.backfillLoginData(SpecializedActivity.this, ""); //初始化单例，回填ID数据
         startActivity(new Intent(SpecializedActivity.this, MainActivity.class));
-        overridePendingTransition(R.anim.screen_zoom_in, R.anim.screen_zoom_out);
+        BackfillSingle.backfillLoginData(SpecializedActivity.this, ""); //初始化单例，回填ID数据
+//        overridePendingTransition(R.anim.screen_zoom_in, R.anim.screen_zoom_out);  //开屏动画
         finish();
     }
 
@@ -69,4 +79,16 @@ public class SpecializedActivity extends BaseActivity {
         });
         alertDialog.show();
     }
+
+   /* public static String[] getTestDeviceInfo(Context context) {
+        String[] deviceInfo = new String[2];
+        try {
+            if (context != null) {
+                deviceInfo[0] = DeviceConfig.getDeviceIdForGeneral(context);
+                deviceInfo[1] = DeviceConfig.getMac(context);
+            }
+        } catch (Exception e) {
+        }
+        return deviceInfo;
+    }*/
 }

@@ -1,11 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/using_help_rl_con"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/white"
     tools:context=".ui.activity.UsingHelpActivity">
+
 
     <android.support.v4.view.ViewPager
         android:id="@+id/using_help_viewpager"
@@ -18,7 +19,7 @@
         android:layout_height="45dp"
         android:layout_alignParentBottom="true"
         android:layout_centerHorizontal="true"
-        android:layout_marginBottom="45dp" />
+        android:layout_marginBottom="25dp" />
 
 
 </RelativeLayout>

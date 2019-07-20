@@ -1,0 +1,15 @@
+<resources>
+    <!-- Base application theme. -->
+
+    <style name="AppTheme" parent="Theme.AppCompat.Light.NoActionBar">
+        <!--透明导航栏-->
+        <item name="colorPrimary">@color/colorPrimary</item>
+        <item name="colorPrimaryDark">@color/gray</item>
+        <item name="colorAccent">@color/colorPrimary</item>
+    </style>
+
+    <style name="seekbar_style" parent="Base.Widget.AppCompat.SeekBar">
+        <item name="android:progressDrawable">@drawable/seekbar_progress_bg</item>
+        <item name="android:thumb">@drawable/seekbar_themb_bg</item>
+    </style>
+</resources>

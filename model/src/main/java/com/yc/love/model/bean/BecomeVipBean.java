@@ -1,12 +1,15 @@
 package com.yc.love.model.bean;
 
+import com.chad.library.adapter.base.entity.MultiItemEntity;
+
+import java.io.Serializable;
 import java.util.List;
 
 /**
  * Created by mayn on 2019/5/5.
  */
 
-public class BecomeVipBean {
+public class BecomeVipBean  implements MultiItemEntity, Serializable {
 
 
     public int type;
@@ -15,6 +18,11 @@ public class BecomeVipBean {
     public int imgResId;
 //    public List<BecomeVipPayBean> payBeans;
     public List<IndexDoodsBean> payBeans;
+
+    public static final int VIEW_TITLE = 1;
+    public static final int VIEW_ITEM = 2;
+    public static final int VIEW_TAIL = 3;
+    public static final int VIEW_VIP_TAG = 4;
 
 
     public BecomeVipBean(int type, String name) {
@@ -43,5 +51,10 @@ public class BecomeVipBean {
                 ", imgResId=" + imgResId +
                 ", payBeans=" + payBeans +
                 '}';
+    }
+
+    @Override
+    public int getItemType() {
+        return type;
     }
 }

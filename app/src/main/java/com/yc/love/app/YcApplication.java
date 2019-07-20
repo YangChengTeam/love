@@ -1,17 +1,31 @@
 package com.yc.love.app;
 
 import android.app.Activity;
+import android.database.sqlite.SQLiteDatabase;
 import android.os.Build;
 import android.support.multidex.MultiDexApplication;
 
 import com.kk.securityhttp.domain.GoagalInfo;
 import com.kk.securityhttp.net.contains.HttpConfig;
+import com.kk.share.UMShareImpl;
+import com.music.player.lib.manager.MusicPlayerManager;
 import com.tencent.bugly.Bugly;
+import com.umeng.commonsdk.UMConfigure;
+import com.umeng.socialize.UMShareAPI;
+import com.yc.love.model.ModelApp;
+import com.yc.love.model.dao.DaoMaster;
+import com.yc.love.model.dao.DaoSession;
+import com.yc.love.ui.view.imgs.Constant;
+import com.yc.love.utils.ShareInfoHelper;
 
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+
+import rx.Observable;
+import rx.functions.Action1;
+import rx.schedulers.Schedulers;
 
 /**
  * Created by mayn on 2019/4/24.
@@ -24,6 +38,7 @@ public class YcApplication extends MultiDexApplication {
     public static YcApplication getInstance() {
         return ycApplication;
     }
+
     public List<Activity> activityIdCorList;
 
 
@@ -33,8 +48,36 @@ public class YcApplication extends MultiDexApplication {
         super.onCreate();
         ycApplication = this;
 
-//        Bugly.init(getApplicationContext(), "注册时申请的APPID", false);  //腾迅自动更新
+        Observable.just("").subscribeOn(Schedulers.io()).subscribe(new Action1<String>() {
+            @Override
+            public void call(String s) {
+                init();
+            }
+        });
+
+        ModelApp.init(this);
+        MusicPlayerManager.getInstance().init(this);
+        MusicPlayerManager.getInstance().setDebug(true);
+    }
+
+
+    private void init() {
+        //        Bugly.init(getApplicationContext(), "注册时申请的APPID", false);  //腾迅自动更新
         Bugly.init(getApplicationContext(), "dc88d75f55", false);  //腾迅自动更新
+
+        UMConfigure.init(getApplicationContext(), "5cec86d84ca35779b00010b8", "Umeng", UMConfigure.DEVICE_TYPE_PHONE, null);
+
+        //初始化友盟SDK
+        UMShareAPI.get(this);//初始化sdk
+
+        //开启debug模式，方便定位错误，具体错误检查方式可以查看
+        //http://dev.umeng.com/social/android/quick-integration的报错必看，正式发布，请关闭该模式
+        UMConfigure.setLogEnabled(true);
+
+        UMShareImpl.Builder builder = new UMShareImpl.Builder();
+
+        builder.setWeixin("wx97a8dad615ab0283", "2c3424ec501402d1ecc663974117cdb5")
+                .build(this);
 
         //全局信息初始化
         GoagalInfo.get().init(getApplicationContext());
@@ -55,7 +98,10 @@ public class YcApplication extends MultiDexApplication {
         setHttpDefaultParams();
 
         activityIdCorList = new ArrayList<>();
+
+        ShareInfoHelper.getNetShareInfo(this);
     }
+
 
     private void setHttpDefaultParams() {
         //设置http默认参数
@@ -80,4 +126,7 @@ public class YcApplication extends MultiDexApplication {
         }
         HttpConfig.setDefaultParams(params);
     }
+
+
+
 }

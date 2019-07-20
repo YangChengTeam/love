@@ -41,7 +41,7 @@ public class LoveHealDetItemHolder extends BaseViewHolder<LoveHealDetBean> {
         if (details == null || details.size() == 0) {
             details = loveHealDetBean.detail;
         }
-//        details.add(0, new LoveHealDetDetailsBean(0, loveHealDetBean.id, loveHealDetBean.chat_name, loveHealDetBean.ans_sex));
+//        details.add(0, new LoveHealDetDetailsBean(0, loveHealDetBean.love_id, loveHealDetBean.chat_name, loveHealDetBean.ans_sex));
 
         LoveHealDetAdapter adapter = new LoveHealDetAdapter(details, recyclerView) {
             @Override

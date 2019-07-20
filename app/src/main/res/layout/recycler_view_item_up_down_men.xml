@@ -55,7 +55,7 @@
 
        &lt;!&ndash;  android:background="@mipmap/icon_up_down_dia_women"&ndash;&gt;
        <TextView
-           android:id="@+id/item_up_down_women_tv_name"
+           android:love_id="@+love_id/item_up_down_women_tv_name"
            android:layout_width="wrap_content"
            android:layout_height="wrap_content"
            android:layout_marginRight="8dp"
@@ -68,10 +68,10 @@
            android:text="5"
            android:textColor="@color/black"
            android:textSize="@dimen/size_16"
-           app:layout_constraintRight_toLeftOf="@+id/item_up_down_women_iv_icon" />
+           app:layout_constraintRight_toLeftOf="@+love_id/item_up_down_women_iv_icon" />
 
        <ImageView
-           android:id="@+id/item_up_down_women_iv_icon"
+           android:love_id="@+love_id/item_up_down_women_iv_icon"
            android:layout_width="wrap_content"
            android:layout_height="wrap_content"
            android:paddingLeft="8dp"

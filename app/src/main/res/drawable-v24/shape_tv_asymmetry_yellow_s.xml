@@ -4,5 +4,5 @@
         android:bottomRightRadius="20dp"
         android:topLeftRadius="20dp" />
     <!-- 填充  填充的颜色 -->
-    <solid android:color="@color/yellow_vip_tv_pay_s" />
+    <solid android:color="@color/yellow_vip_text_des_s" />
 </shape>

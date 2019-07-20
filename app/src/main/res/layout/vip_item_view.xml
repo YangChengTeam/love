@@ -1,0 +1,90 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/item_become_vip_tail_cl_con_01"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_marginBottom="@dimen/dp_10"
+    android:layout_marginRight="10dp"
+    android:background="@drawable/vip_item_selector"
+    android:gravity="center_horizontal"
+    android:orientation="vertical">
+
+    <TextView
+        android:id="@+id/item_become_vip_tail_tv_pay_tit_01"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:gravity="center_horizontal"
+        android:paddingTop="8dp"
+        android:text="66"
+        android:textColor="@color/yellow_vip_text_tit"
+        android:textSize="@dimen/size_14"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent" />
+
+    <LinearLayout
+        android:id="@+id/item_become_vip_tail_ll_pay_con_01"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/item_become_vip_tail_tv_pay_tit_01">
+
+        <TextView
+            android:id="@+id/item_become_vip_tail_tv_pay_unit_01"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="限时促销￥"
+            android:textColor="@color/vip_item_color_selector"
+            android:textSize="@dimen/size_12" />
+
+        <TextView
+            android:id="@+id/item_become_vip_tail_tv_pay_mon_01"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="56"
+            android:textColor="@color/vip_item_color_selector"
+            android:textSize="@dimen/size_26" />
+
+        <TextView
+            android:id="@+id/item_become_vip_tail_tv_original_price_01"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:paddingLeft="8dp"
+            android:paddingRight="4dp"
+            android:text="555"
+            android:textColor="@color/text_gray"
+            android:textSize="@dimen/size_10"
+            app:layout_constraintRight_toRightOf="parent" />
+    </LinearLayout>
+
+    <TextView
+        android:id="@+id/item_become_vip_tail_tv_pay_des_01"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="8dp"
+        android:layout_marginLeft="14dp"
+        android:layout_marginRight="4dp"
+        android:background="@drawable/vip_item_desc_selector"
+        android:paddingBottom="3dp"
+        android:paddingLeft="22dp"
+        android:paddingRight="22dp"
+        android:paddingTop="3dp"
+        android:text="最低1.2元/天"
+        android:textColor="@color/white"
+        android:textSize="@dimen/size_12"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/item_become_vip_tail_ll_pay_con_01" />
+
+    <ImageView
+        android:id="@+id/item_become_vip_tail_iv_pay_sel_01"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:src="@mipmap/become_vip_icon_pay_s"
+        android:visibility="gone"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintRight_toRightOf="parent" />
+</android.support.constraint.ConstraintLayout>

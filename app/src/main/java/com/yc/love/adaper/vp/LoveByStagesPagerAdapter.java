@@ -45,23 +45,23 @@ public class LoveByStagesPagerAdapter extends FragmentPagerAdapter {
         return titleList.get(position);//页卡标题
     }
 
-    @Override
-    public Fragment instantiateItem(ViewGroup container, int position) {
-        Fragment fragment = (Fragment) super.instantiateItem(container,
-                position);
-        //java.lang.IllegalStateException: Can not perform this action after onSaveInstanceState
-//        fm.beginTransaction().show(fragment).commit();
-        fm.beginTransaction().show(fragment).commitAllowingStateLoss();
-        return fragment;
-    }
-
-    @Override
-    public void destroyItem(ViewGroup container, int position, Object object) {
-        Fragment fragment = LoveByStagesFactory.fragments.get(position);
-        FragmentTransaction fragmentTransaction = fm.beginTransaction();
-        if (fragment != null) {
-            fragmentTransaction.hide(fragment);
-        }
-        fragmentTransaction.commit();
-    }
+//    @Override
+//    public Fragment instantiateItem(ViewGroup container, int position) {
+//        Fragment fragment = (Fragment) super.instantiateItem(container,
+//                position);
+//        //java.lang.IllegalStateException: Can not perform this action after onSaveInstanceState
+////        fm.beginTransaction().show(fragment).commit();
+//        fm.beginTransaction().show(fragment).commitAllowingStateLoss();
+//        return fragment;
+//    }
+//
+//    @Override
+//    public void destroyItem(ViewGroup container, int position, Object object) {
+//        Fragment fragment = LoveByStagesFactory.fragments.get(position);
+//        FragmentTransaction fragmentTransaction = fm.beginTransaction();
+//        if (fragment != null) {
+//            fragmentTransaction.hide(fragment);
+//        }
+//        fragmentTransaction.commit();
+//    }
 }

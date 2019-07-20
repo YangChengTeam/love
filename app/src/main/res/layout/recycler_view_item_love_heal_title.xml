@@ -1,23 +1,33 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:orientation="vertical">
 
+    <View
+        android:id="@+id/item_love_heal_title_view_01"
+        android:layout_width="match_parent"
+        android:layout_height="6dp"
+        android:background="@color/white"
+        app:layout_constraintTop_toTopOf="parent" />
 
     <View
+        android:id="@+id/item_love_heal_title_view_02"
         android:layout_width="match_parent"
         android:layout_height="9dp"
-        android:background="@color/love_background" />
+        android:background="@color/love_background"
+        app:layout_constraintTop_toBottomOf="@+id/item_love_heal_title_view_01" />
 
     <LinearLayout
-        android:paddingTop="2dp"
-        android:paddingLeft="12dp"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:background="@color/white"
         android:gravity="center_vertical"
-        android:orientation="horizontal">
+        android:orientation="horizontal"
+        android:paddingLeft="12dp"
+        android:paddingTop="2dp"
+        app:layout_constraintTop_toBottomOf="@+id/item_love_heal_title_view_02">
 
         <ImageView
             android:layout_width="5dp"
@@ -33,4 +43,4 @@
             android:textColor="@color/black"
             android:textSize="@dimen/size_16" />
     </LinearLayout>
-</LinearLayout>
+</android.support.constraint.ConstraintLayout>

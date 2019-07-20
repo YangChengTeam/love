@@ -58,13 +58,13 @@ public abstract class PayActivity extends BaseSlidingActivity {
         request.timeStamp = String.valueOf(paramsBean.timestamp);
         request.sign = paramsBean.sign;
 
-        Log.d("mylog", "toWxPay: request.appId "+request.appId);
-        Log.d("mylog", "toWxPay: request.partnerId "+request.partnerId);
-        Log.d("mylog", "toWxPay: request.prepayId "+request.prepayId);
-        Log.d("mylog", "toWxPay: request.packageValue "+request.packageValue);
-        Log.d("mylog", "toWxPay: request.nonceStr "+request.nonceStr);
-        Log.d("mylog", "toWxPay: request.timeStamp "+request.timeStamp);
-        Log.d("mylog", "toWxPay: request.sign "+request.sign);
+        Log.d("mylog", "toWxPay: request.appId " + request.appId);
+        Log.d("mylog", "toWxPay: request.partnerId " + request.partnerId);
+        Log.d("mylog", "toWxPay: request.prepayId " + request.prepayId);
+        Log.d("mylog", "toWxPay: request.packageValue " + request.packageValue);
+        Log.d("mylog", "toWxPay: request.nonceStr " + request.nonceStr);
+        Log.d("mylog", "toWxPay: request.timeStamp " + request.timeStamp);
+        Log.d("mylog", "toWxPay: request.sign " + request.sign);
 
         mMsgApi.sendReq(request);
     }
@@ -101,14 +101,19 @@ public abstract class PayActivity extends BaseSlidingActivity {
                      */
                     String resultInfo = payResult.getResult();// 同步返回需要验证的信息
                     String resultStatus = payResult.getResultStatus();
+
+                    Log.d("mylog", "handleMessage: resultStatus " + resultStatus);
+
                     // 判断resultStatus 为9000则代表支付成功
                     if (TextUtils.equals(resultStatus, "9000")) {
                         // 该笔订单是否真实支付成功，需要依赖服务端的异步通知。
-                        onZfbPauResult(true);
+                        onZfbPauResult(true, "支付成功");
 //                        showAlert(PayActivity.this, "001 Payment success:" + payResult);
+                    } else if (TextUtils.equals(resultStatus, "6001")) {
+                        onZfbPauResult(false, "支付取消");
                     } else {
                         // 该笔订单真实的支付结果，需要依赖服务端的异步通知。
-                        onZfbPauResult(false);
+                        onZfbPauResult(false, "支付失败");
 //                        showAlert(PayActivity.this, "002 Payment failed:" + payResult);  //用户取消
                     }
                     break;
@@ -138,7 +143,7 @@ public abstract class PayActivity extends BaseSlidingActivity {
         ;
     };
 
-    protected abstract void onZfbPauResult(boolean result) ;
+    protected abstract void onZfbPauResult(boolean result, String des);
 
     private void showAlert(Context ctx, String info) {
         showAlert(ctx, info, null);

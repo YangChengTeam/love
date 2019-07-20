@@ -1,71 +1,102 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/love_background"
-    android:orientation="vertical">
-
-    <com.yc.love.ui.view.ControlScrollViewPager
-        android:id="@+id/comp_main_vp_fragment"
-        android:layout_width="match_parent"
-        android:layout_height="0dp"
-        android:layout_weight="100"
-        app:layout_constraintBottom_toTopOf="@+id/comp_main_ll_con" />
-
+    android:background="@color/love_background">
 
     <LinearLayout
-        android:id="@+id/comp_main_ll_con"
         android:layout_width="match_parent"
-        android:layout_height="54dp"
-        android:background="@color/love_background"
-        android:orientation="horizontal"
-        app:layout_constraintBottom_toBottomOf="parent">
+        android:layout_height="match_parent"
+        android:orientation="vertical">
+
+        <com.yc.love.ui.view.ControlScrollViewPager
+            android:id="@+id/comp_main_vp_fragment"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="100"
+            app:layout_constraintBottom_toTopOf="@+id/comp_main_ll_con" />
 
 
-        <TextView
-            android:id="@+id/comp_main_tv_tab_1"
-            style="@style/tv_main_icon_bottom"
-            android:background="?attr/selectableItemBackgroundBorderless"
-            android:drawableTop="@mipmap/main_icon_tab_01_s"
-            android:text="首页"
-            android:textColor="@color/black" />
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:background="@color/gray_f6f6f6" />
 
-        <TextView
-            android:id="@+id/comp_main_tv_tab_2"
-            style="@style/tv_main_icon_bottom"
-            android:background="?attr/selectableItemBackgroundBorderless"
-            android:drawableTop="@mipmap/main_icon_tab_02"
-            android:text="实例"
-            android:textColor="@color/text_gray" />
-
-        <TextView
-            android:id="@+id/comp_main_tv_tab_3"
-            style="@style/tv_main_icon_bottom"
-            android:background="?attr/selectableItemBackgroundBorderless"
-            android:drawableTop="@mipmap/main_icon_tab_03"
-            android:text="提升"
-            android:textColor="@color/text_gray" />
-
-        <TextView
-            android:id="@+id/comp_main_tv_tab_4"
-            style="@style/tv_main_icon_bottom"
-            android:background="?attr/selectableItemBackgroundBorderless"
-            android:drawableTop="@mipmap/main_icon_tab_04"
-            android:text="福利"
-            android:textColor="@color/text_gray" />
-
-        <TextView
-            android:id="@+id/comp_main_tv_tab_5"
-            style="@style/tv_main_icon_bottom"
-            android:background="?attr/selectableItemBackgroundBorderless"
-            android:drawableTop="@mipmap/main_icon_tab_05"
-            android:text="我的"
-            android:textColor="@color/text_gray" />
+        <LinearLayout
+            android:id="@+id/comp_main_ll_con"
+            android:layout_width="match_parent"
+            android:layout_height="54dp"
+            android:background="@color/white"
+            android:orientation="horizontal"
+            app:layout_constraintBottom_toBottomOf="parent">
 
 
+            <TextView
+                android:id="@+id/comp_main_tv_tab_1"
+                style="@style/tv_main_icon_bottom"
+                android:background="?attr/selectableItemBackgroundBorderless"
+                android:drawableTop="@mipmap/main_icon_tab_01_s"
+                android:text="首页"
+                android:textColor="@color/black" />
+
+            <TextView
+                android:id="@+id/comp_main_tv_tab_2"
+                style="@style/tv_main_icon_bottom"
+                android:background="?attr/selectableItemBackgroundBorderless"
+                android:drawableTop="@mipmap/main_icon_tab_02"
+                android:text="音频"
+                android:textColor="@color/text_gray" />
+
+            <TextView
+                android:id="@+id/comp_main_tv_tab_3"
+                style="@style/tv_main_icon_bottom"
+                android:background="?attr/selectableItemBackgroundBorderless"
+                android:drawableTop="@mipmap/main_icon_tab_03"
+                android:text="秘籍"
+                android:textColor="@color/text_gray" />
+
+            <TextView
+                android:id="@+id/comp_main_tv_tab_4"
+                style="@style/tv_main_icon_bottom"
+                android:background="?attr/selectableItemBackgroundBorderless"
+                android:drawableTop="@mipmap/main_icon_tab_04"
+                android:text="福利"
+                android:textColor="@color/text_gray" />
+
+            <TextView
+                android:id="@+id/comp_main_tv_tab_5"
+                style="@style/tv_main_icon_bottom"
+                android:background="?attr/selectableItemBackgroundBorderless"
+                android:drawableTop="@mipmap/main_icon_tab_05"
+                android:text="我的"
+                android:textColor="@color/text_gray" />
+
+
+        </LinearLayout>
     </LinearLayout>
 
+    <ImageView
+        android:id="@+id/comp_main_iv_to_wx"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="bottom|end"
+        android:layout_marginBottom="62dp"
+        android:layout_marginRight="15dp"
+        android:src="@mipmap/icon_floating_weixin"
+        android:visibility="gone" />
 
-</LinearLayout>
+    <!--<android.support.design.widget.FloatingActionButton
+        android:visibility="gone"
+        android:love_id="@+love_id/comp_main_floating_action_button_to_wx"
+        android:src="@mipmap/icon_pay_wx"
+       android:background="@mipmap/icon_floating_weixin"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="bottom|end"
+        android:layout_marginRight="15dp"
+        android:layout_marginBottom="62dp" />-->
+
+
+</FrameLayout>

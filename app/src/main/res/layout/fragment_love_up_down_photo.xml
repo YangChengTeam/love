@@ -5,11 +5,11 @@
     android:layout_height="match_parent"
     android:background="@color/red_crimson_im_bg"
     android:orientation="vertical">
-    <!--android:id="@+id/fragment_love_up_down_photo_constraint_layout"-->
+    <!--android:love_id="@+love_id/fragment_love_up_down_photo_constraint_layout"-->
 
     <!--
         <TextView
-            android:id="@+id/fragment_love_up_down_photo_tv"
+            android:love_id="@+love_id/fragment_love_up_down_photo_tv"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="5"

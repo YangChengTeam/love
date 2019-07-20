@@ -4,13 +4,13 @@ import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
+import android.view.View;
 import android.view.ViewGroup;
 
 import com.yc.love.R;
 import com.yc.love.adaper.rv.NoThingCanEmptyAdapter;
 import com.yc.love.adaper.rv.base.RecyclerViewItemListener;
 import com.yc.love.adaper.rv.holder.BaseViewHolder;
-import com.yc.love.adaper.rv.holder.EmptyViewHolder;
 import com.yc.love.adaper.rv.holder.LoveHealingItemViewHolder;
 import com.yc.love.model.base.MySubscriber;
 import com.yc.love.model.bean.AResultInfo;
@@ -41,6 +41,7 @@ public class CollectLoveHealingFragment extends BaseCollectFragment {
     private NoThingCanEmptyAdapter<LoveHealingBean> mAdapter;
     private List<LoveHealingBean> mLoveHealingBeans;
 
+
     @Override
     protected void initBundle() {
         Bundle arguments = getArguments();
@@ -66,6 +67,7 @@ public class CollectLoveHealingFragment extends BaseCollectFragment {
 
     private void initRecyclerView() {
         mRecyclerView = rootView.findViewById(R.id.fragment_collect_love_healing_rv);
+
         LinearLayoutManager layoutManager = new LinearLayoutManager(mCollectActivity);
         mRecyclerView.setLayoutManager(layoutManager);
     }
@@ -88,6 +90,7 @@ public class CollectLoveHealingFragment extends BaseCollectFragment {
             @Override
             protected void onNetNext(AResultInfo<List<LoveHealingBean>> listAResultInfo) {
                 mLoveHealingBeans = listAResultInfo.data;
+
                 initRecyclerData();
             }
 
@@ -180,9 +183,9 @@ public class CollectLoveHealingFragment extends BaseCollectFragment {
         @Override
         public void onItemClick(int position) {
 //            LoveHealingBean LoveHealingBean = mLoveHealingBeans.get(position);
-//            LoveByStagesDetailsActivity.startLoveByStagesDetailsActivity(mCollectActivity, LoveHealingBean.id, LoveHealingBean.chat_name);
+//            LoveByStagesDetailsActivity.startLoveByStagesDetailsActivity(mCollectActivity, LoveHealingBean.love_id, LoveHealingBean.chat_name);
 
-            LoveUpDownPhotoActivity.startLoveUpDownPhotoActivity(mCollectActivity, position,"Lovewords/collect_list" );
+            LoveUpDownPhotoActivity.startLoveUpDownPhotoActivity(mCollectActivity, position, "Lovewords/collect_list");
         }
 
         @Override

@@ -24,6 +24,20 @@
         android:layout_marginTop="18dp"
         android:orientation="horizontal">
 
+
+        <TextView
+            android:background="?attr/selectableItemBackgroundBorderless"
+            android:id="@+id/dialog_open_collect"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:drawableTop="@mipmap/star_collect_icon"
+            android:drawablePadding="8dp"
+            android:gravity="center_horizontal"
+            android:text="@string/collect"
+            android:textColor="@color/text_gray_dark"
+            android:textSize="@dimen/size_14" />
+
         <TextView
             android:background="?attr/selectableItemBackgroundBorderless"
             android:id="@+id/dialog_open_akp_tv_qq"

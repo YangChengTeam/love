@@ -1,120 +1,94 @@
 package com.yc.love.adaper.rv;
 
-import android.graphics.Color;
-import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.view.ViewGroup;
-import android.widget.LinearLayout;
+import android.view.View;
 
-import com.yc.love.adaper.rv.holder.BaseViewHolder;
-import com.yc.love.adaper.rv.holder.BecomeVipItemViewHolder;
-import com.yc.love.adaper.rv.holder.BecomeVipTailViewHolder;
-import com.yc.love.adaper.rv.holder.BecomeVipTitleViewHolder;
-import com.yc.love.adaper.rv.holder.ProgressBarViewHolder;
-import com.yc.love.adaper.rv.holder.TitleT1ViewHolder;
+import com.chad.library.adapter.base.BaseMultiItemQuickAdapter;
+import com.chad.library.adapter.base.BaseQuickAdapter;
+import com.chad.library.adapter.base.BaseViewHolder;
+import com.yc.love.R;
 import com.yc.love.model.bean.BecomeVipBean;
-import com.yc.love.model.bean.LoveHealBean;
+import com.yc.love.model.bean.IndexDoodsBean;
 
 import java.util.List;
 
 
-public abstract class BecomeVipAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
+public class BecomeVipAdapter extends BaseMultiItemQuickAdapter<BecomeVipBean, BaseViewHolder> {
 
-    private final List<com.yc.love.model.bean.BecomeVipBean> mDatas;
-    private final LinearLayout mLlTitleCon;
-    private RecyclerView mRecyclerView;
-    private static final int VIEW_TITLE = 1;
-    private static final int VIEW_ITEM = 2;
-    private static final int VIEW_TAIL = 3;
 
-    public BecomeVipAdapter(List<BecomeVipBean> personList, RecyclerView recyclerView, LinearLayout llTitleCon) {
-        this.mDatas = personList;
-        this.mRecyclerView = recyclerView;
-        this.mLlTitleCon = llTitleCon;
-        addOnScrollListenerPacked();
+    private int mNumber;
+
+
+    /**
+     * Same as QuickAdapter#QuickAdapter(Context,int) but with
+     * some initialization data.
+     *
+     * @param data A new list is created out of this one to avoid mutable list
+     */
+    public BecomeVipAdapter(List<BecomeVipBean> data) {
+        super(data);
+        addItemType(BecomeVipBean.VIEW_TITLE, R.layout.recycler_view_item_become_vip_title);
+        addItemType(BecomeVipBean.VIEW_ITEM, R.layout.recycler_view_item_become_vip_new);
+        addItemType(BecomeVipBean.VIEW_TAIL, R.layout.recycler_view_item_become_vip_tail);
+        addItemType(BecomeVipBean.VIEW_VIP_TAG, R.layout.recycler_view_item_become_vip_tag);
+    }
+
+    public void setNumber(int mNumber) {
+        this.mNumber = mNumber;
+        notifyDataSetChanged();
     }
 
     @Override
-    public int getItemCount() {
-        if (mDatas != null) {
-            return mDatas.size();
-        }
-        return 0;
-    }
+    protected void convert(BaseViewHolder helper, BecomeVipBean item) {
+        if (item != null) {
+            switch (item.type) {
+                case BecomeVipBean.VIEW_TITLE:
+                    break;
+                case BecomeVipBean.VIEW_ITEM:
+//                    helper.setImageResource(R.love_id.item_become_vip_iv_icon, item.imgResId);
+//                    helper.setText(R.love_id.item_become_vip_tv_name, item.name)
+//                            .setText(R.love_id.item_become_vip_tv_des, item.subName);
+                    break;
+                case BecomeVipBean.VIEW_TAIL:
+                    RecyclerView recyclerView = helper.getView(R.id.pay_item_recyclerView);
+                    recyclerView.setLayoutManager(new GridLayoutManager(mContext, 2));
+                    final VipItemAdapter vipItemAdapter = new VipItemAdapter(item.payBeans);
+                    recyclerView.setAdapter(vipItemAdapter);
+                    vipItemAdapter.setOnItemClickListener(new OnItemClickListener() {
+                        @Override
+                        public void onItemClick(BaseQuickAdapter adapter, View view, int position) {
+                            vipItemAdapter.setSelect(position);
+                            IndexDoodsBean doodsBean = vipItemAdapter.getItem(position);
+                            if (onPayClickListener != null) {
+                                onPayClickListener.onPayClick(doodsBean);
+                            }
+                        }
+                    });
 
-    //根据不同的数据返回不同的viewType
-    @Override
-    public int getItemViewType(int position) {
-        BecomeVipBean becomeVipBean = mDatas.get(position);
-        switch (becomeVipBean.type) {
-            case VIEW_TITLE:
-                return VIEW_TITLE;
-            case VIEW_ITEM:
-                return VIEW_ITEM;
-            default:
-                return VIEW_TAIL;
-        }
-    }
+                    if (mNumber <= 0) {
+                        mNumber = 156592;
+                    }
+                    helper.setText(R.id.item_become_vip_tv_pay_num, String.valueOf(mNumber))
+                            .addOnClickListener(R.id.item_become_vip_rl_btn_wx)
+                            .addOnClickListener(R.id.item_become_vip_rl_btn_zfb);
 
-    @Override
-    public RecyclerView.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-        RecyclerView.ViewHolder holder;
-        if (viewType == VIEW_TITLE) {
-            holder = getTitleHolder(parent);
-        } else if (viewType == VIEW_ITEM) {
-            holder = getHolder(parent);
-        } else {
-            holder = getTailViewHolder(parent);
-        }
-        return holder;
-    }
-
-    @Override
-    public void onBindViewHolder(RecyclerView.ViewHolder holder, int position) {
-        if (holder instanceof BecomeVipItemViewHolder) {
-            ((BaseViewHolder) holder).bindData(mDatas.get(position));
-        } else if (holder instanceof BecomeVipTailViewHolder) {
-            ((BaseViewHolder) holder).bindData(mDatas.get(position));
-        } else if (holder instanceof BecomeVipTitleViewHolder) {
-            ((BaseViewHolder) holder).bindData(mDatas.get(position));
-        }
-    }
-
-    private int height = 25;// 滑动开始变色的高,真实项目中此高度是由广告轮播或其他首页view高度决定
-    private int overallXScroll = 0;
-    private RecyclerView.OnScrollListener onScrollListener = new RecyclerView.OnScrollListener() {
-        @Override
-        public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
-            super.onScrolled(recyclerView, dx, dy);
-
-            final LinearLayoutManager linearLayoutManager = (LinearLayoutManager) mRecyclerView.getLayoutManager();
-            int firstCompletelyVisibleItemPosition = linearLayoutManager.findFirstCompletelyVisibleItemPosition();
-            if (firstCompletelyVisibleItemPosition == 0) {
-                overallXScroll = 1;
-            }
-            overallXScroll = overallXScroll + dy;// 累加y值 解决滑动一半y值为0
-            if (overallXScroll <= 0) {   //设置标题的背景颜色
-//                mLlTitleCon.setBackgroundColor(Color.argb((int) 0, 255, 130, 0));
-                mLlTitleCon.setBackgroundColor(Color.argb((int) 0, 208, 180, 130));
-            } else if (overallXScroll > 0 && overallXScroll <= height) { //滑动距离小于banner图的高度时，设置背景和字体颜色颜色透明度渐变
-                float scale = (float) overallXScroll / height;
-                float alpha = (255 * scale);
-//                mLlTitleCon.setBackgroundColor(Color.argb((int) alpha, 255, 130, 0));
-                mLlTitleCon.setBackgroundColor(Color.argb((int) alpha, 208, 180, 130));
-            } else {
-//                mLlTitleCon.setBackgroundColor(Color.argb((int) 255, 255, 130, 0));
-                mLlTitleCon.setBackgroundColor(Color.argb((int) 255, 208, 180, 130));
+                    break;
+                case BecomeVipBean.VIEW_VIP_TAG:
+                    break;
             }
         }
-    };
-
-    public void addOnScrollListenerPacked() {
-        mRecyclerView.addOnScrollListener(onScrollListener);
     }
 
-    public abstract BaseViewHolder getHolder(ViewGroup parent);
+    private OnPayClickListener onPayClickListener;
 
-    public abstract BaseViewHolder getTitleHolder(ViewGroup parent);
+    public void setOnPayClickListener(OnPayClickListener onPayClickListener) {
+        this.onPayClickListener = onPayClickListener;
+    }
 
-    protected abstract RecyclerView.ViewHolder getTailViewHolder(ViewGroup parent);
+    public interface OnPayClickListener {
+        void onPayClick(IndexDoodsBean doodsBean);
+    }
+
+
 }

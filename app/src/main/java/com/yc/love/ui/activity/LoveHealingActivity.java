@@ -11,6 +11,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import com.umeng.analytics.MobclickAgent;
 import com.yc.love.R;
 import com.yc.love.adaper.rv.LoveHealingAdapter;
 import com.yc.love.adaper.rv.base.RecyclerViewItemListener;
@@ -24,6 +25,7 @@ import com.yc.love.model.bean.AResultInfo;
 import com.yc.love.model.bean.LoveHealingBean;
 import com.yc.love.model.bean.event.EventLoginState;
 import com.yc.love.model.bean.event.EventLoveUpDownCollectChangBean;
+import com.yc.love.model.constant.ConstantKey;
 import com.yc.love.model.engin.LoveEngin;
 import com.yc.love.model.single.YcSingle;
 import com.yc.love.ui.activity.base.BaseSameActivity;
@@ -61,6 +63,11 @@ public class LoveHealingActivity extends BaseSameActivity {
         mLoveEngin = new LoveEngin(this);
         initViews();
         netData();
+
+    }
+    @Override
+    protected void onResume() {
+        super.onResume();
 
     }
 
@@ -169,14 +176,15 @@ public class LoveHealingActivity extends BaseSameActivity {
                         if (netLoadMoreData.size() < PAGE_SIZE) {
                             loadMoreEnd = true;
                         }
-                        for (int i = 0; i < netLoadMoreData.size(); i++) {
-                            LoveHealingBean loveHealingBean = netLoadMoreData.get(i);
-                            loveHealingBeans.add(new LoveHealingBean(2, loveHealingBean.chat_count, loveHealingBean.chat_name, loveHealingBean.id, loveHealingBean.quiz_sex, loveHealingBean.search_type));
-                        }
+                        if(netLoadMoreData!=null&&netLoadMoreData.size()!=0) {
+                            for (int i = 0; i < netLoadMoreData.size(); i++) {
+                                LoveHealingBean loveHealingBean = netLoadMoreData.get(i);
+                                loveHealingBeans.add(new LoveHealingBean(2, loveHealingBean.chat_count, loveHealingBean.chat_name, loveHealingBean.id, loveHealingBean.quiz_sex, loveHealingBean.search_type));
+                            }
 //                        loveHealingBeans.addAll(netLoadMoreData);
-                        mAdapter.notifyDataSetChanged();
+                            mAdapter.notifyDataSetChanged();
+                        }
                         mAdapter.setLoaded();
-
                     }
 
                     @Override
@@ -197,7 +205,6 @@ public class LoveHealingActivity extends BaseSameActivity {
             if (position >= 2) {
                 LoveUpDownPhotoActivity.startLoveUpDownPhotoActivity(LoveHealingActivity.this, position-2,"lovewords/recommend" );
             }
-//            LoveHealingActivity.this.clickToPosition = position;
         }
 
         @Override

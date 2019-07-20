@@ -63,12 +63,17 @@ public class LoveByStagesActivity extends BaseSameActivity {
             CategoryArticleChildrenBean categoryArticleChildrenBean = mCategoryArticleChildrenBeans.get(i);
             titleLists.add(categoryArticleChildrenBean.name);
             idLists.add(categoryArticleChildrenBean.id);
+
+            Log.d("mylog", "netSwitchPagerData: categoryArticleChildrenBean.name " + categoryArticleChildrenBean.name
+                    + " categoryArticleChildrenBean.id " + categoryArticleChildrenBean.id);
         }
 
         initNavigator(titleLists);
 
-        LoveByStagesPagerAdapter loveByStagesPagerAdapter = new LoveByStagesPagerAdapter(getSupportFragmentManager(), titleLists,idLists);
+        LoveByStagesPagerAdapter loveByStagesPagerAdapter = new LoveByStagesPagerAdapter(getSupportFragmentManager(), titleLists, idLists);
         mViewPager.setAdapter(loveByStagesPagerAdapter);
+        if (mCategoryArticleChildrenBeans != null && mCategoryArticleChildrenBeans.size() > 0)
+            mViewPager.setOffscreenPageLimit(mCategoryArticleChildrenBeans.size() - 1);
     }
 
     private void initNavigator(final List<String> titleList) {
@@ -131,7 +136,7 @@ public class LoveByStagesActivity extends BaseSameActivity {
     public static void startLoveByStagesActivity(Context context, String title, ArrayList<CategoryArticleChildrenBean> children) {
         Intent intent = new Intent(context, LoveByStagesActivity.class);
         intent.putExtra("title", title);
-        intent.putParcelableArrayListExtra("CategoryArticleChildrenBeans",children);
+        intent.putParcelableArrayListExtra("CategoryArticleChildrenBeans", children);
         context.startActivity(intent);
     }
 

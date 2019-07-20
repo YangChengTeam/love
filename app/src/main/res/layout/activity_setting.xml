@@ -14,6 +14,7 @@
         android:layout_height="wrap_content"
         app:imgSrc="@mipmap/seting_icon_01"
         app:isAddIntervalBom="true"
+        app:layout_constraintTop_toTopOf="parent"
         app:textNameMyItem="检查更新" />
 
     <com.yc.love.ui.view.MainMyItemLin
@@ -67,6 +68,7 @@
         android:paddingBottom="18dp"
         android:text="退出登录"
         android:textColor="@color/white"
+        android:visibility="gone"
         app:layout_constraintBottom_toBottomOf="parent" />
 
     <FrameLayout

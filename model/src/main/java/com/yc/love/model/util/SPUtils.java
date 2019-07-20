@@ -20,6 +20,14 @@ public class SPUtils {
 
     public static final String SHARE_HISTORY = "SHARE_HISTORY";
 
+    public static final String SHARE_INFO = "share_info";
+
+    //外部apk下载id  用于保存系统下载文件的标识 long lastDownloadId = dowanloadmanager.enqueue(request);
+    public static final String DOWNLOAD_OUT_ID = "DOWNLOAD_OUT_ID";
+
+    //首页引导
+    public static final String IS_OPEN_USING_HELP_HOME = "IS_OPEN_USING_HELP_HOME";
+
 //    public static final String LOGIN_ = "LOGIN_BEAN";
 
 
@@ -52,6 +60,7 @@ public class SPUtils {
 
         SharedPreferencesCompat.apply(editor);
     }
+
     public static void putLong(Context context, String key, long longData) {
         SharedPreferences sp = context.getSharedPreferences(FILE_NAME,
                 Context.MODE_PRIVATE);
@@ -181,6 +190,7 @@ public class SPUtils {
             editor.commit();
         }
     }
+
     /**
      * 保存在手机里面的文件名
      */

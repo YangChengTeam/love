@@ -45,7 +45,7 @@
 
     <!--  android:background="@mipmap/icon_up_down_dia_women"-->
     <!--<TextView
-        android:id="@+id/item_up_down_women_tv_name"
+        android:love_id="@+love_id/item_up_down_women_tv_name"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:background="@drawable/icon_up_down_dia_women"

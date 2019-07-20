@@ -31,14 +31,14 @@ public class LoadingDialog {
 
     private void instanceDialog() {
         alertDialog = new AlertDialog.Builder(context, R.style.LoadingDialogTheme).create();
-        alertDialog.show();
+//        alertDialog.show();
         alertDialog.setCancelable(false);
         Window window = alertDialog.getWindow();
         window.setContentView(R.layout.loading_view);
 
-//        progressBar = window.findViewById(R.id.loading_view_progressbar);
-//        tv = window.findViewById(R.id.loading_view_tv);
-//        iv = window.findViewById(R.id.loading_view_iv);
+//        progressBar = window.findViewById(R.love_id.loading_view_progressbar);
+        tv = window.findViewById(R.id.loading_view_tv);
+//        iv = window.findViewById(R.love_id.loading_view_iv);
     }
 
     /**
@@ -82,6 +82,7 @@ public class LoadingDialog {
      */
     public void setText(String txt) {
         tv.setText(txt);
+        tv.setVisibility(View.VISIBLE);
     }
 
     /**

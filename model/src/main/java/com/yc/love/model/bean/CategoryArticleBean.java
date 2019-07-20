@@ -1,5 +1,6 @@
 package com.yc.love.model.bean;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -7,7 +8,7 @@ import java.util.List;
  * Created by mayn on 2019/5/10.
  */
 
-public class CategoryArticleBean {
+public class CategoryArticleBean implements Serializable {
         public String _level;
         public int id;
         public String name;

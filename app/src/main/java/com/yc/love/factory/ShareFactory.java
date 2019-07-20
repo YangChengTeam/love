@@ -31,7 +31,7 @@ public class ShareFactory {
             case FRAGMENT_1:
                 fragment = new ShareT2Fragment();
                /* Bundle args = new Bundle();
-                args.putInt("category_id", id);
+                args.putInt("category_id", love_id);
                 args.putInt("position", position);
                 fragment.setArguments(args);*/
                 fragments.put(FRAGMENT_1, fragment);

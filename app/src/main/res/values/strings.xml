@@ -1,14 +1,9 @@
 <resources>
     <!--<string name="app_name">YcApplication</string>-->
-    <string name="app_name">恋爱话术宝</string>
-    <string name="action_settings">Settings</string>
-    <string name="imageview_description">imageview</string>
+    <string name="app_name">西门恋爱话术库</string>
 
 
-    <string name="all_images">所有图片</string>
-    <string name="confirm">确定</string>
     <string name="confirm_format">%1$s(%2$d/%3$d)</string>
-    <string name="image">图片</string>
     <string name="maxnum">最多选择%1$d张图片</string>
     <string name="minnum">最少选择一张图片</string>
     <string name="open_camera_failure">打开相机失败</string>
@@ -21,6 +16,9 @@
     <string name="share_des_short">请输入聊天关键字</string>
     <string name="web_liability_exemption">注：本文仅作网络分享，不涉及任何商业利益，不用于任何违法用途。相关文章均来源于其他微信公众号或网络媒体，如涉及版权问题，敬请联系我们，我们会在24小时之内回复并将文章撤除。</string>
 
+
+    <string name="share_des_explain">输入妹子说的话，点击搜索即可获得与之匹配的回复，一键复制到对应聊天软件打开即可粘贴；</string>
+    <string name="share_des_help"><u>使用帮助</u></string>
 
     <string name="privacy_statement">一、介绍\n
 1.1我们深知个人信息对您的重要性，并会尽全力保护您的个人信息安全可靠。我们致力于维持您对我们的信任，恪守以下原则，保护您的个人信息：权责一致原则、目的明确原则、选择同意原则、最少够用原则、确保安全原则、主体参与原则、公开透明原则等。同时，我们承诺，我们将按业界成熟的安全标准，采取相应的安全保护措施来保护您的个人信息。\n
@@ -112,5 +110,43 @@ APP目前已集成腾讯Bugly软件崩溃日志统计SDK、友盟统计SDK。\n
 1. 此协议的生效、履行、解释及争议的解决均适用中华人民共和国法律。\n
 2. 如就此协议内容或其执行发生任何争议，应尽量友好协商解决；协商不成时，则争议各方均可向本APP注册所在地具有管辖权的人民法院提起诉讼。\n
 3. 本《协议》的一切解释权与修改权归本App所有。\n</string>
+    <string name="collect">收藏</string>
+    <string name="wx">微信</string>
+    <string name="wx_circle">朋友圈</string>
+    <string name="share_cancel">取消</string>
+    <string name="downLoad">下载</string>
+    <string name="share">分享</string>
+
+    <string-array name="love_practice">
+        <item>实战学习</item>
+        <item>实战情话</item>
+    </string-array>
+
+    <string-array name="vip_item_sub_name">
+        <item>花样幽默风趣语句，提高妹子好感度</item>
+        <item>输入TA的话，快速查找撩心话术</item>
+        <item>话术聊天实战案例，跟着套路学撩妹</item>
+        <item>恋爱脱单的爱情秘籍，撩动TA心的话术技巧</item>
+        <item>最全聊天开场白，跨出撩妹第一步</item>
+        <item>高情商表白话术，提高表白成功率</item>
+    </string-array>
+
+    <string-array name="vip_item_name">
+        <item>最少投入，恋爱成功率提高98%</item>
+        <item>20W+话术免费搜索</item>
+        <item>海量话术实战免费查看</item>
+        <item>海量话术技巧免费阅读</item>
+        <item>经典聊天开场白免费看</item>
+        <item>多样表白话术免费查看</item>
+    </string-array>
+
+    <string-array name="search_tint">
+        <item>吃了么</item>
+        <item>你好</item>
+        <item>嘻嘻</item>
+        <item>不想搭理你</item>
+        <item>我没事</item>
+        <item>没回消息</item>
+    </string-array>
 
 </resources>

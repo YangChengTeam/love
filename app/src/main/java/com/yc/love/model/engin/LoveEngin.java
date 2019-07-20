@@ -1,12 +1,19 @@
 package com.yc.love.model.engin;
 
 import android.content.Context;
-import android.util.Log;
 
 import com.alibaba.fastjson.TypeReference;
+import com.kk.securityhttp.domain.ResultInfo;
 import com.kk.securityhttp.engin.HttpCoreEngin;
+import com.kk.securityhttp.net.contains.HttpConfig;
+import com.music.player.lib.bean.MusicInfo;
+import com.music.player.lib.bean.MusicInfoWrapper;
+import com.yc.love.model.AudioItemInfo;
+import com.yc.love.model.ModelApp;
 import com.yc.love.model.base.BaseEngine;
 import com.yc.love.model.bean.AResultInfo;
+import com.yc.love.model.bean.AudioDataInfo;
+import com.yc.love.model.bean.AudioDataWrapperInfo;
 import com.yc.love.model.bean.CategoryArticleBean;
 import com.yc.love.model.bean.ExampDataBean;
 import com.yc.love.model.bean.ExampListsBean;
@@ -14,13 +21,19 @@ import com.yc.love.model.bean.ExampleTsBean;
 import com.yc.love.model.bean.ExampleTsCategory;
 import com.yc.love.model.bean.ExampleTsListBean;
 import com.yc.love.model.bean.IdCorrelationLoginBean;
+import com.yc.love.model.bean.IndexHotInfoWrapper;
 import com.yc.love.model.bean.LoveByStagesBean;
 import com.yc.love.model.bean.LoveByStagesDetailsBean;
 import com.yc.love.model.bean.LoveHealDateBean;
 import com.yc.love.model.bean.LoveHealDetBean;
+import com.yc.love.model.bean.LoveHealDetDetailsBean;
 import com.yc.love.model.bean.LoveHealingBean;
 import com.yc.love.model.bean.LoveUpDownPhotoBean;
 import com.yc.love.model.bean.MenuadvInfoBean;
+import com.yc.love.model.bean.SearchDialogueBean;
+import com.yc.love.model.bean.ShareInfo;
+import com.yc.love.model.bean.confession.ConfessionBean;
+import com.yc.love.model.dao.LoveHealDetDetailsBeanDao;
 import com.yc.love.model.domain.URLConfig;
 
 import java.util.HashMap;
@@ -28,15 +41,20 @@ import java.util.List;
 import java.util.Map;
 
 import rx.Observable;
+import rx.android.schedulers.AndroidSchedulers;
+import rx.functions.Func1;
+import rx.schedulers.Schedulers;
 
 /**
  * Created by mayn on 2019/5/9.
  */
 
 public class LoveEngin extends BaseEngine {
+    private LoveHealDetDetailsBeanDao detailsBeanDao;
 
     public LoveEngin(Context context) {
         super(context);
+        detailsBeanDao = ModelApp.getDaoSession().getLoveHealDetDetailsBeanDao();
     }
 
     public Observable<AResultInfo<IdCorrelationLoginBean>> userInfo(String userId, String url) {
@@ -66,9 +84,9 @@ public class LoveEngin extends BaseEngine {
     }
 
 
-    public Observable<AResultInfo<List<LoveHealDateBean>>> loveCategory(String url) {
+    public Observable<AResultInfo<List<LoveHealDateBean>>> loveCategory(String url, String sence) {
         Map<String, String> params = new HashMap<>();
-//        params.put("password", password);
+        params.put("sence", sence);
         requestParams(params);
         HttpCoreEngin<AResultInfo<List<LoveHealDateBean>>> httpCoreEngin = HttpCoreEngin.get(mContext);
         Observable<AResultInfo<List<LoveHealDateBean>>> rxpost = httpCoreEngin.rxpost(URLConfig.getUrl(url), new TypeReference<AResultInfo<List<LoveHealDateBean>>>() {
@@ -78,6 +96,7 @@ public class LoveEngin extends BaseEngine {
                 true, true);
         return rxpost;
     }
+
 
     public Observable<AResultInfo<List<LoveHealDetBean>>> loveListCategory(String userId, String category_id, String page, String page_size, String url) {
         Map<String, String> params = new HashMap<>();
@@ -164,6 +183,7 @@ public class LoveEngin extends BaseEngine {
                 true, true);
         return rxpost;
     }
+
     public Observable<AResultInfo<MenuadvInfoBean>> menuadvInfo(String url) {
         Map<String, String> params = new HashMap<>();
 //        params.put("password", password);
@@ -313,6 +333,24 @@ public class LoveEngin extends BaseEngine {
         return rxpost;
     }
 
+    public Observable<AResultInfo<SearchDialogueBean>> searchDialogue2(String userId, String keyword, String page, String pageSize, String url) {
+        Map<String, String> params = new HashMap<>();
+        params.put("user_id", userId);
+//        params.put("search_type", searchType);
+//        params.put("user_id", userId);
+        params.put("page", page);
+        params.put("keyword", keyword);
+        params.put("page_size", pageSize);
+        requestParams(params);
+        HttpCoreEngin<AResultInfo<SearchDialogueBean>> httpCoreEngin = HttpCoreEngin.get(mContext);
+        Observable<AResultInfo<SearchDialogueBean>> rxpost = httpCoreEngin.rxpost(URLConfig.getUrl(url), new TypeReference<AResultInfo<SearchDialogueBean>>() {
+                }.getType(),
+                params,
+                true,
+                true, true);
+        return rxpost;
+    }
+
 
     public Observable<AResultInfo<List<LoveHealingBean>>> listsCollectLovewords(String userId, String page, String pageSize, String url) {
         Map<String, String> params = new HashMap<>();
@@ -439,6 +477,174 @@ public class LoveEngin extends BaseEngine {
                 true,
                 true, true);
         return rxpost;
+    }
+
+
+    public Observable<ConfessionBean> geteExpressData(int page) {
+        Map<String, String> params = new HashMap<>();
+        params.put("id", "1");
+        params.put("page", page + "");
+
+        return HttpCoreEngin.get(mContext).rxpost(URLConfig.CATEGORY_LIST_URL, new TypeReference<ConfessionBean>() {
+                }.getType(), params,
+                false, false, false);
+
+    }
+
+
+    public Observable<String> collectLoveHeal(final LoveHealDetDetailsBean detDetailsBean) {
+
+        return Observable.just("").subscribeOn(Schedulers.io()).observeOn(AndroidSchedulers.mainThread()).map(new Func1<String, String>() {
+            @Override
+            public String call(String s) {
+                if (detDetailsBean == null) return "";
+
+                LoveHealDetDetailsBean queryBean = getCollectLoveHealById(detDetailsBean.content);
+                if (queryBean == null) {
+                    detDetailsBean.saveTime = System.currentTimeMillis();
+                    detailsBeanDao.insert(detDetailsBean);
+                } else {
+                    queryBean.saveTime = System.currentTimeMillis();
+                    detailsBeanDao.update(queryBean);
+                }
+
+                return "success";
+            }
+        });
+
+
+    }
+
+    public Observable<List<LoveHealDetDetailsBean>> getCollectLoveHeals(final int limit, final int offset) {
+        return Observable.just("").subscribeOn(Schedulers.io()).observeOn(AndroidSchedulers.mainThread()).map(new Func1<String, List<LoveHealDetDetailsBean>>() {
+            @Override
+            public List<LoveHealDetDetailsBean> call(String s) {
+
+                return detailsBeanDao.queryBuilder().offset(offset * limit).limit(limit).orderDesc(LoveHealDetDetailsBeanDao.Properties.SaveTime).list();
+            }
+        });
+    }
+
+    private LoveHealDetDetailsBean getCollectLoveHealById(String content) {
+        return detailsBeanDao.queryBuilder().where(LoveHealDetDetailsBeanDao.Properties.Content.eq(content)).unique();
+    }
+
+
+    public Observable<String> deleteCollectLoveHeals(final LoveHealDetDetailsBean detDetailsBean) {
+        return Observable.just("").subscribeOn(Schedulers.io()).observeOn(AndroidSchedulers.mainThread()).map(new Func1<String, String>() {
+            @Override
+            public String call(String s) {
+                if (detDetailsBean == null) return "";
+                detailsBeanDao.delete(detDetailsBean);
+                return "success";
+            }
+        });
+    }
+
+    public Observable<ResultInfo<ShareInfo>> getShareInfo(Context context) {
+        return HttpCoreEngin.get(context).rxpost(URLConfig.get_share_info, new TypeReference<ResultInfo<ShareInfo>>() {
+        }.getType(), null, true, true, true);
+    }
+
+
+    //分类
+    public Observable<ResultInfo<AudioDataWrapperInfo>> getAudioDataInfo() {
+        return HttpCoreEngin.get(mContext).rxpost(URLConfig.AUDIO_DATA_LIST_URL, new TypeReference<ResultInfo<AudioDataWrapperInfo>>() {
+        }.getType(), null, true, true, true);
+    }
+
+
+    //列表
+    public Observable<ResultInfo<MusicInfoWrapper>> getLoveItemList(String userId, String typeId, int page, int limit) {
+
+        Map<String, String> params = new HashMap<>();
+        params.put("cat_id", typeId);
+        params.put("page", page + "");
+        params.put("page_size", limit + "");
+        params.put("user_id", userId);
+        return HttpCoreEngin.get(mContext).rxpost(URLConfig.SPA_ITEM_LIST_URL, new TypeReference<ResultInfo<MusicInfoWrapper>>() {
+        }.getType(), params, true, true, true);
+
+    }
+
+
+    public Observable<ResultInfo<List<MusicInfo>>> randomSpaInfo(String type_id) {
+        Map<String, String> params = new HashMap<>();
+
+        params.put("user_id", "");
+        params.put("type_id", type_id);
+
+        return HttpCoreEngin.get(mContext).rxpost(URLConfig.SPA_RANDOM_URL, new TypeReference<ResultInfo<List<MusicInfo>>>() {
+        }.getType(), params, true, true, true);
+
+    }
+
+    public Observable<ResultInfo<String>> audioPlay(String spa_id) {
+        Map<String, String> params = new HashMap<>();
+
+        params.put("music_id", spa_id);
+
+        return HttpCoreEngin.get(mContext).rxpost(URLConfig.AUDIO_PLAY_URL, new TypeReference<ResultInfo<MusicInfo>>() {
+        }.getType(), params, true, true, true);
+
+    }
+
+    //user_id: 用户ID
+    //spa_id: SPAID
+    //音频收藏
+    public Observable<ResultInfo<String>> collectAudio(String user_id, String music_id) {
+        Map<String, String> params = new HashMap<>();
+        params.put("user_id", user_id);
+        params.put("music_id", music_id);
+        return HttpCoreEngin.get(mContext).rxpost(URLConfig.AUDIO_COLLECT_URL, new TypeReference<ResultInfo<String>>() {
+        }.getType(), params, true, true, true);
+    }
+
+
+    /**
+     * 首页热点
+     *
+     * @return
+     */
+    public Observable<ResultInfo<IndexHotInfoWrapper>> getIndexHotInfo() {
+        return HttpCoreEngin.get(mContext).rxpost(URLConfig.LOVE_INDEX_URL, new TypeReference<ResultInfo<IndexHotInfoWrapper>>() {
+        }.getType(), null, true, true, true);
+    }
+
+    /**
+     * 获取音频收藏列表
+     *
+     * @param userId
+     * @return
+     */
+
+    public Observable<ResultInfo<MusicInfoWrapper>> getCollectAudioList(String userId, int page, int page_size) {
+
+        Map<String, String> params = new HashMap<>();
+        params.put("user_id", userId);
+        params.put("page", page + "");
+        params.put("page_size", page_size + "");
+
+        return HttpCoreEngin.get(mContext).rxpost(URLConfig.AUDIO_COLLECT_LIST_URL, new TypeReference<ResultInfo<MusicInfoWrapper>>() {
+        }.getType(), params, true, true, true);
+    }
+
+
+    /**
+     * 统计搜索次数
+     *
+     * @param userId
+     * @param keyword
+     * @return
+     */
+    public Observable<ResultInfo<String>> searchCount(String userId, String keyword) {
+        Map<String, String> params = new HashMap<>();
+
+        params.put("user_id", userId);
+        params.put("keyword", keyword);
+
+        return HttpCoreEngin.get(mContext).rxpost(URLConfig.SEARCH_COUNT_URL, new TypeReference<ResultInfo<String>>() {
+        }.getType(), params, true, true, true);
     }
 
 

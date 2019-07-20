@@ -1,15 +1,18 @@
 package com.yc.love.ui.activity.base;
 
-import android.app.Activity;
+import android.content.ClipData;
+import android.content.ClipboardManager;
+import android.content.ComponentName;
 import android.content.Context;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.graphics.Color;
 import android.os.Build;
 import android.os.Bundle;
-import android.os.PersistableBundle;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
+import android.text.TextUtils;
 import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
@@ -18,11 +21,26 @@ import android.view.WindowManager;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.Toast;
 
+import com.alibaba.fastjson.JSON;
+import com.umeng.analytics.MobclickAgent;
+import com.yc.love.model.base.MySubscriber;
+import com.yc.love.model.bean.AResultInfo;
+import com.yc.love.model.bean.IdCorrelationLoginBean;
+import com.yc.love.model.bean.event.EventLoginState;
+import com.yc.love.model.constant.ConstantKey;
+import com.yc.love.model.data.BackfillSingle;
+import com.yc.love.model.engin.LoveEnginV2;
 import com.yc.love.model.single.YcSingle;
+import com.yc.love.model.util.PackageUtils;
+import com.yc.love.model.util.SPUtils;
 import com.yc.love.ui.activity.IdCorrelationSlidingActivity;
-import com.yc.love.ui.activity.MainActivity;
+import com.yc.love.ui.activity.SpecializedActivity;
 import com.yc.love.ui.view.LoadDialog;
 import com.yc.love.utils.StatusBarUtil;
+
+import org.greenrobot.eventbus.EventBus;
+
+import java.util.List;
 
 /**
  * Created by mayn on 2019/4/25.
@@ -37,6 +55,23 @@ public abstract class BaseActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         Log.d("ClassName", "onCreate: ClassName " + getClass().getName());
         mLoadingDialog = new LoadDialog(this);
+
+
+        checkSingle();
+    }
+
+    private void checkSingle() {
+        if (this instanceof SpecializedActivity) { //默认在闪屏页恢复数据
+            return;
+        }
+        int id = YcSingle.getInstance().id;
+        if (id <= 0) {
+            String idInfo = (String) SPUtils.get(this, SPUtils.ID_INFO_BEAN, "");
+            if (!TextUtils.isEmpty(idInfo)) {
+//                MobclickAgent.onEvent(this, ConstantKey.UM_INFO_LOSE_ID);
+                BackfillSingle.backfillLoginData(this, "");
+            }
+        }
     }
 
     public void showToastShort(String des) {
@@ -208,6 +243,11 @@ public abstract class BaseActivity extends AppCompatActivity {
     }
 
     public void showToLoginDialog() {
+        netUserReg();
+        if (3 > 0) {
+            return;
+        }
+
         AlertDialog alertDialog = new AlertDialog.Builder(this).create();
         alertDialog.setTitle("提示");
         alertDialog.setMessage("您还未登录，请先登录");
@@ -220,5 +260,96 @@ public abstract class BaseActivity extends AppCompatActivity {
         DialogInterface.OnClickListener listent = null;
         alertDialog.setButton(DialogInterface.BUTTON_NEGATIVE, "取消", listent);
         alertDialog.show();
+    }
+
+    private void netUserReg() {
+        LoadDialog loadDialog = new LoadDialog(this);
+        LoveEnginV2 loveEnginV2 = new LoveEnginV2(this);
+        loveEnginV2.userReg("user/reg").subscribe(new MySubscriber<AResultInfo<IdCorrelationLoginBean>>(loadDialog) {
+            @Override
+            protected void onNetNext(AResultInfo<IdCorrelationLoginBean> idCorrelationLoginBeanAResultInfo) {
+                IdCorrelationLoginBean data = idCorrelationLoginBeanAResultInfo.data;
+                loginSuccess(data);
+            }
+
+            @Override
+            protected void onNetError(Throwable e) {
+
+            }
+
+            @Override
+            protected void onNetCompleted() {
+
+            }
+        });
+    }
+
+    private void loginSuccess(IdCorrelationLoginBean data) {
+        //持久化存储登录信息
+        String str = JSON.toJSONString(data);// java对象转为jsonString
+        BackfillSingle.backfillLoginData(this, str);
+
+        EventBus.getDefault().post(new EventLoginState(EventLoginState.STATE_LOGINED));
+    }
+
+
+    public void showToWxServiceDialog() {
+        MobclickAgent.onEvent(this, ConstantKey.UM_CONTACT_US_CLICK_ID);
+        String mWechat = "pai201807";
+
+        ClipboardManager myClipboard = (ClipboardManager) getSystemService(CLIPBOARD_SERVICE);
+        ClipData myClip = ClipData.newPlainText("text", mWechat);
+        myClipboard.setPrimaryClip(myClip);
+//                mMainActivity.showToastShort("微信号已复制到剪切板");
+        AlertDialog alertDialog = new AlertDialog.Builder(this).create();
+        alertDialog.setTitle("联系客服");
+        alertDialog.setMessage("添加老师微信进学员群，美女导师不定期指导，提高您的情商！\n老师微信号：pai201807\n在线时间：9:00-21:00");
+        alertDialog.setButton(DialogInterface.BUTTON_POSITIVE, "复制并打开微信", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialogInterface, int i) {
+                openWeiXin();
+            }
+        });
+        DialogInterface.OnClickListener listent = null;
+        alertDialog.setButton(DialogInterface.BUTTON_NEGATIVE, "取消", listent);
+        alertDialog.show();
+    }
+
+    private void openWeiXin() {
+        boolean mIsInstall = false;
+        List<String> apkList = PackageUtils.getApkList(this);
+        for (int i = 0; i < apkList.size(); i++) {
+            String apkPkgName = apkList.get(i);
+            if ("com.tencent.mm".equals(apkPkgName)) {
+                mIsInstall = true;
+                break;
+            }
+        }
+
+        try {
+            MobclickAgent.onEvent(this, ConstantKey.UM_CONTACT_US_TO_WECHAT_ID);
+            Intent intent = new Intent();
+            ComponentName cmp = new ComponentName("com.tencent.mm", "com.tencent.mm.ui.LauncherUI");
+            intent.setAction(Intent.ACTION_MAIN);
+            intent.addCategory(Intent.CATEGORY_LAUNCHER);
+            intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+            intent.setComponent(cmp);
+            startActivity(intent);
+        } catch (Exception exception) {
+            showToastShort("未安装微信");
+        }
+
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        MobclickAgent.onResume(this);
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+        MobclickAgent.onPause(this);
     }
 }

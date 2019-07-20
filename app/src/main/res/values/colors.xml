@@ -10,9 +10,8 @@
     <color name="gray_et_gb">#f8f8f8</color>
     <color name="gray_et_text">#999999</color>
     <color name="transparency">#00FFFFFF</color>
-    <color name="xiaofeng_orange">#ff8200</color>
+    <color name="transparency_gray">#66000000</color>
     <color name="white">#FFFFFF</color>
-    <color name="xiaofeng_orange_33">#11ff8200</color>
     <color name="text_gray_deep">#555555</color>
     <color name="text_gray">#9a9a9a</color>
     <color name="gray_loading_01">#9b9b9b</color>
@@ -21,6 +20,7 @@
     <color name="red_crimson">#fa4a65</color>
     <color name="red_crimson_im_bg">#fdf7f8</color>
     <color name="red_crimson_s">#88fa4a65</color>
+    <color name="red_crimson_thin">#fff8f8</color>
     <color name="red_crimson_66">#66fa4a65</color>
     <color name="red_crimson_99">#99fa4a65</color>
     <color name="red_crimson_login_start">#ff6a9a</color>
@@ -48,20 +48,13 @@
 
 
     <color name="yellow_vip_text_mon_s">#543115</color>
+    <color name="yellow_vip_text_des_s">#b27e57</color>
     <color name="yellow_vip_text_mon">#ddae52</color>
     <color name="yellow_vip_text_tit">#6e4c2b</color>
 
     <color name="yellow_vip_btn">#bf8d53</color>
 
-    <color name="yellow_vip_tv_pay_s">#bc875d</color>
     <color name="yellow_vip_tv_pay">#ddae52</color>
-
-    <color name="yellow_vip_btn_start">#e9c98c</color>
-    <color name="yellow_vip_btn_center">#e5be75</color>
-    <color name="yellow_vip_btn_end">#e0b25c</color>
-    <color name="yellow_vip_btn_start_s">#88e9c98c</color>
-    <color name="yellow_vip_btn_center_s">#88e5be75</color>
-    <color name="yellow_vip_btn_end_s">#88e0b25c</color>
 
     <color name="red_crimson_card_01">#22ffdeea</color>
     <color name="red_crimson_card_02">#22ffe1e7</color>
@@ -73,16 +66,32 @@
     <color name="gray_brim_gray_02">#44f7f9fc</color>
     <color name="gray_brim_gray_01">#11fcfdfe</color>
 
-    <color name="red_gray">#faf6f8</color>
-    <color name="red_gray_s">#88faf6f8</color>
+    <color name="red_gray">#FFF0F5</color>
+    <color name="red_gray_s">#88FFF0F5</color>
     <color name="text_gray_dark">#666666</color>
     <color name="text_gray_dark_s">#88666666</color>
-
-    <color name="black_extreme_thin">#119b9b9b</color>
 
     <color name="bottom_bg">#aaaaaa</color>
     <!--<color name="colorAccent">#FF4081</color>
     <color name="colorPrimary">#3F51B5</color>
     <color name="colorPrimaryDark">#303F9F</color>-->
+    <color name="black1">#ff333333</color>
+    <color name="send_title_color">#8d8d8d</color>
+    <color name="input_color">#e2e2e2</color>
+    <color name="bg_color">#f2f2f2</color>
+    <color name="bg_line_color">#ded9d7</color>
+
+    <color name="overlay">#AA1C1C1C</color>
+    <color name="pay_vip_blue">#00a8f2</color>
+    <color name="pay_vip_blue_s">#8800a8f2</color>
+    <color name="pay_vip_green">#00bb00</color>
+    <color name="pay_vip_green_s">#8800bb00</color>
+    <color name="gray_f6f6f6">#F6F6F6</color>
+    <color name="gray_f6f6f6_s">#88F6F6F6</color>
+    <color name="user_name_color">#696969</color>
+    <color name="blue_08a8ea">#08A8EA</color>
+    <color name="gray_f2f4f6">#F2F4F6</color>
+    <color name="gray_898a90">#898A90</color>
+    <color name="orange_f3d8d0">#F3D8D0</color>
 
 </resources>

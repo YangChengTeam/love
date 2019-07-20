@@ -1,75 +1,64 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/relativeLayout"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:background="@color/white"
-    android:orientation="horizontal"
-    android:paddingLeft="4dp"
-    android:paddingTop="12dp"
-    android:paddingRight="4dp"
-    android:paddingBottom="14dp">
+    android:focusable="true"
+    android:focusableInTouchMode="true">
 
-
-    <TextView
-        android:id="@+id/item_t1category_tv_icon_01"
-        android:layout_width="0dp"
+    <ImageView
+        android:id="@+id/item_t1category_iv_title"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_weight="1"
-        android:drawableTop="@mipmap/main_icon_t3_01"
-        android:drawablePadding="8dp"
-        android:gravity="center_horizontal"
-        android:text="单身期"
-        android:textColor="@color/black"
-        android:textSize="@dimen/size_14" />
+        android:adjustViewBounds="true"
+        android:src="@mipmap/main_bg_title"
+        tools:ignore="MissingConstraints" />
 
-    <TextView
-        android:id="@+id/item_t1category_tv_icon_02"
-        android:layout_width="0dp"
+
+    <ImageView
+        android:id="@+id/item_t1category_iv_share"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_weight="1"
-        android:drawableTop="@mipmap/main_icon_t3_02"
-        android:drawablePadding="8dp"
-        android:gravity="center_horizontal"
-        android:text="追求期"
-        android:textColor="@color/black"
-        android:textSize="@dimen/size_14" />
+        android:src="@mipmap/main_bg_share"
+        app:layout_constraintBottom_toBottomOf="@id/item_t1category_iv_title"
+        app:layout_constraintLeft_toLeftOf="@id/item_t1category_iv_title"
+        app:layout_constraintRight_toRightOf="@id/item_t1category_iv_title"
+        app:layout_constraintTop_toBottomOf="@id/item_t1category_iv_title" />
 
-    <TextView
-        android:id="@+id/item_t1category_tv_icon_03"
-        android:layout_width="0dp"
+
+    <android.support.v7.widget.SearchView
+        android:id="@+id/item_t1category_share_view"
+        android:layout_width="285dp"
+        android:layout_height="36dp"
+        android:layout_marginBottom="6dp"
+        android:layout_marginLeft="16dp"
+        android:background="@color/white"
+        app:iconifiedByDefault="false"
+        app:layout_constraintBottom_toBottomOf="@id/item_t1category_iv_share"
+        app:layout_constraintLeft_toLeftOf="@id/item_t1category_iv_share"
+        app:layout_constraintTop_toTopOf="@id/item_t1category_iv_share"
+        app:queryBackground="@null"
+        app:queryHint="@string/share_des"
+        app:showDividers="none"
+        app:submitBackground="@null" />
+
+    <!--android:layout_marginBottom="6dp"-->
+    <ImageView
+        android:id="@+id/item_t1category_iv_icon_share"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_weight="1"
-        android:drawableTop="@mipmap/main_icon_t3_03"
-        android:drawablePadding="8dp"
-        android:gravity="center_horizontal"
-        android:text="热恋期"
-        android:textColor="@color/black"
-        android:textSize="@dimen/size_14" />
-
-    <TextView
-        android:id="@+id/item_t1category_tv_icon_04"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_weight="1"
-        android:drawableTop="@mipmap/main_icon_t3_04"
-        android:drawablePadding="8dp"
-        android:gravity="center_horizontal"
-        android:text="失恋期"
-        android:textColor="@color/black"
-        android:textSize="@dimen/size_14" />
-
-    <TextView
-        android:id="@+id/item_t1category_tv_icon_05"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_weight="1"
-        android:drawableTop="@mipmap/main_icon_t3_05"
-        android:drawablePadding="8dp"
-        android:gravity="center_horizontal"
-        android:text="婚后期"
-        android:textColor="@color/black"
-        android:textSize="@dimen/size_14" />
+        android:layout_marginRight="12dp"
+        android:paddingBottom="6dp"
+        android:paddingLeft="12dp"
+        android:paddingRight="12dp"
+        android:src="@mipmap/main_icon_share"
+        app:layout_constraintBottom_toBottomOf="@id/item_t1category_iv_share"
+        app:layout_constraintRight_toRightOf="@id/item_t1category_iv_share"
+        app:layout_constraintTop_toTopOf="@id/item_t1category_iv_share" />
 
 
-</LinearLayout>
+
+
+</android.support.constraint.ConstraintLayout>

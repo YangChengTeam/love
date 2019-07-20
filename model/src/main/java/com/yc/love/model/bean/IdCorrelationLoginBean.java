@@ -1,10 +1,12 @@
 package com.yc.love.model.bean;
 
+import java.io.Serializable;
+
 /**
  * Created by mayn on 2019/5/7.
  */
 
-public class IdCorrelationLoginBean {
+public class IdCorrelationLoginBean implements Serializable {
     /**
      * id : 2
      * name :
@@ -28,6 +30,10 @@ public class IdCorrelationLoginBean {
     public String face;
     public int vip;
     public int vip_end_time;
+    /* "vip_tips": 1 已开通
+         "vip_tips":  2     已过期
+         "vip_tips": 0 未开通*/
+    public int vip_tips;
 
 
     @Override
@@ -43,6 +49,7 @@ public class IdCorrelationLoginBean {
                 ", face='" + face + '\'' +
                 ", vip=" + vip +
                 ", vip_end_time=" + vip_end_time +
+                ", vip_tips=" + vip_tips +
                 '}';
     }
 }

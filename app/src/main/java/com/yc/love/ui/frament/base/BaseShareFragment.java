@@ -24,7 +24,6 @@ import com.yc.love.model.bean.LoveHealDetDetailsBean;
 import com.yc.love.model.engin.LoveEngin;
 import com.yc.love.model.single.YcSingle;
 import com.yc.love.ui.activity.BecomeVipActivity;
-import com.yc.love.ui.activity.CollectActivity;
 import com.yc.love.ui.activity.ShareActivity;
 import com.yc.love.ui.view.LoadDialog;
 

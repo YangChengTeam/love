@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:background="@drawable/tv_bg_toast_shape">
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/tv_text"
+        android:textColor="#FFFFFF"
+        android:textSize="17sp"
+        android:gravity="center"
+        android:lineSpacingMultiplier="1.0"
+        android:layout_marginLeft="5dp"
+        android:text="Toast" />
+</RelativeLayout>

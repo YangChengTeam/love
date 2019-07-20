@@ -387,7 +387,7 @@ public class IdCorrelationSlidingActivity extends BaseSlidingActivity implements
             protected void onNetNext(AResultInfo<IdCorrelationLoginBean> myIdCorrelationSmsBeanAResultInfo) {
                 String msg = myIdCorrelationSmsBeanAResultInfo.msg;
                 int code = myIdCorrelationSmsBeanAResultInfo.code;
-                //{"vip_end_time":0,"mobile":"15927678095","id":"2","vip":0}
+                //{"vip_end_time":0,"mobile":"15927678095","love_id":"2","vip":0}
                 IdCorrelationLoginBean data = myIdCorrelationSmsBeanAResultInfo.data;
 
                 loginSuccess(data);

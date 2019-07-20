@@ -1,14 +1,16 @@
 package com.yc.love.model.bean;
 
+import java.io.Serializable;
+
 /**
  * Created by mayn on 2019/5/11.
  */
 
-public class LoveHealingDetailBean {
+public class LoveHealingDetailBean implements Serializable {
     /**
      * ans_sex : 1
      * content : 别让我看见你
-     * id : 4
+     * love_id : 4
      * lovewords_id : 2
      */
 
@@ -29,7 +31,7 @@ public class LoveHealingDetailBean {
         return "LoveHealingDetailBean{" +
                 "ans_sex='" + ans_sex + '\'' +
                 ", content='" + content + '\'' +
-                ", id=" + id +
+                ", love_id=" + id +
                 ", lovewords_id=" + lovewords_id +
                 '}';
     }

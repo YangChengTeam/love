@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <declare-styleable name="MusicPlayerSeekBar">
+        <attr name="android:thumb" />
+        <attr name="progress_width" format="dimension" />
+        <attr name="progress_background" format="color" />
+        <attr name="progress_percent" format="color" />
+        <attr name="progress_front" format="color" />
+        <attr name="progress_max" format="integer" />
+        <attr name="show_progress_text" format="boolean" />
+        <attr name="progress_text_stroke_width" format="dimension" />
+        <attr name="progress_text_color" format="color" />
+        <attr name="progress_text_size" format="dimension" />
+    </declare-styleable>
+
+</resources>

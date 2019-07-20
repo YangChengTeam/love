@@ -152,7 +152,7 @@ public class CollectExampleFragment extends BaseCollectFragment {
             mCollectActivity.showToLoginDialog();
             return;
         }
-//        mLoveEngin.listsCollectLovewords(String.valueOf(id), String.valueOf(PAGE_NUM), String.valueOf(PAGE_SIZE), "Lovewords/collect_list").subscribe(new MySubscriber<AResultInfo<List<LoveHealingBean>>>(mCollectActivity) {
+//        mLoveEngin.listsCollectLovewords(String.valueOf(love_id), String.valueOf(PAGE_NUM), String.valueOf(PAGE_SIZE), "Lovewords/collect_list").subscribe(new MySubscriber<AResultInfo<List<LoveHealingBean>>>(mCollectActivity) {
         mLoveEngin.exampleCollectList(String.valueOf(YcSingle.getInstance().id), String.valueOf(++PAGE_NUM), String.valueOf(PAGE_SIZE), "Example/collect_list").subscribe(new MySubscriber<AResultInfo<List<ExampListsBean>>>(mCollectActivity) {
             @Override
             protected void onNetNext(AResultInfo<List<ExampListsBean>> listAResultInfo) {

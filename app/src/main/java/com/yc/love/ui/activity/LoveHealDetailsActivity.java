@@ -1,42 +1,26 @@
 package com.yc.love.ui.activity;
 
-import android.content.ClipData;
-import android.content.ClipboardManager;
 import android.content.Context;
 import android.content.Intent;
-import android.support.v4.widget.SwipeRefreshLayout;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.OrientationHelper;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
-import android.view.LayoutInflater;
 import android.view.View;
-import android.view.ViewGroup;
-import android.widget.Toast;
+import android.widget.ImageView;
 
+import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.yc.love.R;
-import com.yc.love.adaper.rv.LoveHealDetailsAdapter;
-import com.yc.love.adaper.rv.base.RecyclerViewItemListener;
-import com.yc.love.adaper.rv.holder.BaseViewHolder;
-import com.yc.love.adaper.rv.holder.EmptyViewHolder;
-import com.yc.love.adaper.rv.holder.LoveHealDetItemHolder;
-import com.yc.love.adaper.rv.holder.LoveHealDetVipHolder;
-import com.yc.love.adaper.rv.holder.ProgressBarViewHolder;
+import com.yc.love.adaper.rv.LoveHealDetailsAdapterNew;
 import com.yc.love.model.base.MySubscriber;
 import com.yc.love.model.bean.AResultInfo;
 import com.yc.love.model.bean.LoveHealDetBean;
-import com.yc.love.model.bean.LoveHealDetDetailsBean;
-import com.yc.love.model.bean.OpenApkPkgInfo;
 import com.yc.love.model.engin.LoveEngin;
 import com.yc.love.model.single.YcSingle;
-import com.yc.love.model.util.PackageUtils;
 import com.yc.love.ui.activity.base.BaseSameActivity;
-import com.yc.love.ui.view.OpenAkpDialog;
 
-import java.util.ArrayList;
 import java.util.List;
 
 public class LoveHealDetailsActivity extends BaseSameActivity {
@@ -44,15 +28,13 @@ public class LoveHealDetailsActivity extends BaseSameActivity {
     private String mTitle;
     private String mCategoryId;
     private LoveEngin mLoveEngin;
-    private LoveHealDetailsAdapter mAdapter;
+    private LoveHealDetailsAdapterNew mAdapter;
     private RecyclerView mRecyclerView;
     private SwipeRefreshLayout mSwipeRefresh;
     private int PAGE_SIZE = 8;
     private int PAGE_NUM = 1;
     private List<LoveHealDetBean> mLoveHealDetBeans;
-    private boolean loadMoreEnd;
-    private boolean loadDataEnd;
-    private boolean showProgressBar = false;
+
 
     @Override
     protected void initIntentData() {
@@ -75,6 +57,7 @@ public class LoveHealDetailsActivity extends BaseSameActivity {
         mLoveEngin = new LoveEngin(this);
         initViews();
         initData();
+        initListener();
     }
 
     private void initData() {
@@ -83,10 +66,66 @@ public class LoveHealDetailsActivity extends BaseSameActivity {
 
 
     private void initViews() {
+        ImageView ivToWx = findViewById(R.id.love_heal_details_iv_to_wx);
+        ivToWx.setOnClickListener(this);
         initRecyclerView();
     }
 
+    private void initListener() {
+        mSwipeRefresh.setColorSchemeResources(R.color.red_crimson);
+        mSwipeRefresh.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+            @Override
+            public void onRefresh() {
+//                obtainWalletData();
+                /*if (mLoveHealDetBeans != null) {
+                    mLoveHealDetBeans.clear();
+                    mAdapter.notifyDataSetChanged();
+                }*/
+
+                PAGE_NUM = 1;
+                netData();
+            }
+        });
+        mAdapter.setOnLoadMoreListener(new BaseQuickAdapter.RequestLoadMoreListener() {
+            @Override
+            public void onLoadMoreRequested() {
+                netData();
+            }
+        }, mRecyclerView);
+
+        mAdapter.setOnItemClickListener(new BaseQuickAdapter.OnItemClickListener() {
+            @Override
+            public void onItemClick(BaseQuickAdapter adapter, View view, int position) {
+                LoveHealDetBean loveHealDetBean = mAdapter.getItem(position);
+                if (loveHealDetBean != null && LoveHealDetBean.VIEW_VIP == loveHealDetBean.type)
+                    //TODO 购买VIP刷新数据
+                    startActivity(new Intent(LoveHealDetailsActivity.this, BecomeVipActivity.class));
+            }
+        });
+        mAdapter.setOnItemChildClickListener(new BaseQuickAdapter.OnItemChildClickListener() {
+            @Override
+            public void onItemChildClick(BaseQuickAdapter adapter, View view, int position) {
+                LoveHealDetBean loveHealDetBean = mAdapter.getItem(position);
+                if (loveHealDetBean != null && LoveHealDetBean.VIEW_VIP == loveHealDetBean.type)
+                    //TODO 购买VIP刷新数据
+                    startActivity(new Intent(LoveHealDetailsActivity.this, BecomeVipActivity.class));
+            }
+        });
+
+    }
+
+    @Override
+    public void onClick(View v) {
+        super.onClick(v);
+        switch (v.getId()) {
+            case R.id.love_heal_details_iv_to_wx:
+                showToWxServiceDialog();
+                break;
+        }
+    }
+
     private void initRecyclerView() {
+
         mSwipeRefresh = findViewById(R.id.love_heal_details_swipe_refresh);
         mRecyclerView = findViewById(R.id.love_heal_details_rl);
         LinearLayoutManager layoutManager = new LinearLayoutManager(this);
@@ -94,194 +133,78 @@ public class LoveHealDetailsActivity extends BaseSameActivity {
         layoutManager.setOrientation(OrientationHelper.VERTICAL);
         //设置增加或删除条目的动画
         mRecyclerView.setItemAnimator(new DefaultItemAnimator());
+        mAdapter = new LoveHealDetailsAdapterNew(mLoveHealDetBeans,mTitle);
+        mRecyclerView.setAdapter(mAdapter);
 
-        mSwipeRefresh.setColorSchemeResources(R.color.red_crimson);
-        mSwipeRefresh.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
-            @Override
-            public void onRefresh() {
-//                obtainWalletData();
-                if (mLoveHealDetBeans != null) {
-                    mLoveHealDetBeans.clear();
-                    mAdapter.notifyDataSetChanged();
-                }
-                loadMoreEnd = false;
-                PAGE_NUM = 1;
-                netData();
-            }
-        });
+
     }
 
     private void netData() {
         int id = YcSingle.getInstance().id;
-        mLoadingDialog.showLoadingDialog();
+        if (PAGE_NUM == 1)
+            mLoadingDialog.showLoadingDialog();
         mLoveEngin.loveListCategory(String.valueOf(id), mCategoryId, String.valueOf(PAGE_NUM), String.valueOf(PAGE_SIZE), "Dialogue/lists").subscribe(new MySubscriber<AResultInfo<List<LoveHealDetBean>>>(mLoadingDialog) {
 
 
             @Override
             protected void onNetNext(AResultInfo<List<LoveHealDetBean>> listAResultInfo) {
-                mLoveHealDetBeans = listAResultInfo.data;
-                Log.d("mylog", "onNetNext: loveHealDetBeans.size() " + mLoveHealDetBeans.size());
-                initRecyclerData();
+                if (PAGE_NUM == 1 && mLoadingDialog != null) {
+                    mLoadingDialog.dismissLoadingDialog();
+                }
+                if (mSwipeRefresh.isRefreshing())
+                    mSwipeRefresh.setRefreshing(false);
+                createNewData(listAResultInfo.data);
+//                mLoveHealDetBeans = listAResultInfo.data;
+//                Log.d("mylog", "onNetNext: loveHealDetBeans.size() " + mLoveHealDetBeans.size());
             }
 
             @Override
             protected void onNetError(Throwable e) {
-                mSwipeRefresh.setRefreshing(false);
+                if (PAGE_NUM == 1 && mLoadingDialog != null) {
+                    mLoadingDialog.dismissLoadingDialog();
+                }
+                if (mSwipeRefresh.isRefreshing())
+                    mSwipeRefresh.setRefreshing(false);
             }
 
             @Override
             protected void onNetCompleted() {
-                mSwipeRefresh.setRefreshing(false);
+                if (PAGE_NUM == 1 && mLoadingDialog != null) {
+                    mLoadingDialog.dismissLoadingDialog();
+                }
+                if (mSwipeRefresh.isRefreshing())
+                    mSwipeRefresh.setRefreshing(false);
             }
         });
     }
 
-    private void initRecyclerData() {
-        mAdapter = new LoveHealDetailsAdapter(mLoveHealDetBeans, mRecyclerView) {
-            @Override
-            public BaseViewHolder getHolder(ViewGroup parent) {
-                LoveHealDetItemHolder loveHealDetItemHolder = new LoveHealDetItemHolder(LoveHealDetailsActivity.this, null, parent);
-                loveHealDetItemHolder.setOnClickCopyListent(new LoveHealDetItemHolder.OnClickCopyListent() {
-                    @Override
-                    public void onClickCopy(LoveHealDetDetailsBean detailsBean) {
-//                        Log.d("mylog", "onClickCopy: detailsBean " + detailsBean.toString());
-//                        LoveHealDetailsActivity.this.showToastShort(detailsBean.content);
-                        toCopy(detailsBean.content);
-                    }
-                });
-                return loveHealDetItemHolder;
-            }
+    private void createNewData(List<LoveHealDetBean> loveHealDetBeans) {
 
-            @Override
-            protected RecyclerView.ViewHolder getPayVipHolder(ViewGroup parent) {
-                return new LoveHealDetVipHolder(LoveHealDetailsActivity.this, recyclerViewItemListener, parent);
-            }
+        if (loveHealDetBeans != null && loveHealDetBeans.size() > 0) {
+            for (LoveHealDetBean loveHealDetBean : loveHealDetBeans) {
+                if (loveHealDetBean.is_vip == 0) {
+                    loveHealDetBean.type = LoveHealDetBean.VIEW_ITEM;
+                } else {
+                    loveHealDetBean.type = LoveHealDetBean.VIEW_VIP;
+                }
 
-            @Override
-            protected RecyclerView.ViewHolder getBarViewHolder(ViewGroup parent) {
-                View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.recycler_view_test_item_footer, parent, false);
-                ProgressBarViewHolder progressBarViewHolder = new ProgressBarViewHolder(view);
-                return progressBarViewHolder;
             }
-
-            @Override
-            protected RecyclerView.ViewHolder getEmptyHolder(ViewGroup parent) {
-                return new EmptyViewHolder(LoveHealDetailsActivity.this, parent, "");
-            }
-        };
-        mRecyclerView.setAdapter(mAdapter);
-        if (mLoveHealDetBeans.size() < PAGE_SIZE) {
-            Log.d("ssss", "loadMoreData: data---end");
+        }
+        mLoveHealDetBeans = loveHealDetBeans;
+        if (PAGE_NUM == 1) {
+            mAdapter.setNewData(mLoveHealDetBeans);
         } else {
-            mAdapter.setOnMoreDataLoadListener(new LoveHealDetailsAdapter.OnLoadMoreDataListener() {
-                @Override
-                public void loadMoreData() {
-                    if (loadDataEnd == false) {
-                        return;
-                    }
-                    if (showProgressBar == false) {
-                        //加入null值此时adapter会判断item的type
-                        mLoveHealDetBeans.add(null);
-                        mAdapter.notifyDataSetChanged();
-                        showProgressBar = true;
-                    }
-                    if (!loadMoreEnd) {
-                        netLoadMore();
-                    } else {
-                        Log.d("mylog", "loadMoreData: loadMoreEnd end 已加载全部数据 ");
-                        mLoveHealDetBeans.remove(mLoveHealDetBeans.size() - 1);
-                        mAdapter.notifyDataSetChanged();
-                    }
-                }
-            });
+            mAdapter.addData(mLoveHealDetBeans);
         }
-        loadDataEnd = true;
-    }
-
-    private void toCopy(String content) {
-        ClipboardManager myClipboard = (ClipboardManager) getSystemService(CLIPBOARD_SERVICE);
-        ClipData myClip = ClipData.newPlainText("text", content);
-        myClipboard.setPrimaryClip(myClip);
-        showOpenAkpDialog();
-    }
-
-    private void showOpenAkpDialog() {
-        List<OpenApkPkgInfo> openApkPkgInfos = new ArrayList<>();
-        OpenApkPkgInfo qq = new OpenApkPkgInfo(1, "", "QQ", getResources().getDrawable(R.mipmap.icon_d_qq));
-        OpenApkPkgInfo wx = new OpenApkPkgInfo(2, "", "微信", getResources().getDrawable(R.mipmap.icon_d_wx));
-        OpenApkPkgInfo mm = new OpenApkPkgInfo(3, "", "陌陌", getResources().getDrawable(R.mipmap.icon_d_momo));
-//        OpenApkPkgInfo tt = new OpenApkPkgInfo(4, "", "探探", getResources().getDrawable(R.mipmap.icon_d_tt));
-
-        List<String> apkList = PackageUtils.getApkList(this);
-        for (int i = 0; i < apkList.size(); i++) {
-            String apkPkgName = apkList.get(i);
-            if ("com.tencent.mobileqq".equals(apkPkgName)) {
-                qq.pkg = apkPkgName;
-            } else if ("com.tencent.mm".equals(apkPkgName)) {
-                wx.pkg = apkPkgName;
-            } else if ("com.immomo.momo".equals(apkPkgName)) {
-                mm.pkg = apkPkgName;
-            }/* else if ("com.p1.mobile.putong".equals(apkPkgName)) {
-                tt.pkg = apkPkgName;
-            }*/
+        if (loveHealDetBeans != null && loveHealDetBeans.size() == PAGE_SIZE) {
+            mAdapter.loadMoreComplete();
+            PAGE_NUM++;
+        } else {
+            mAdapter.loadMoreEnd();
         }
 
-        openApkPkgInfos.add(qq);
-        openApkPkgInfos.add(wx);
-        openApkPkgInfos.add(mm);
-//        openApkPkgInfos.add(tt);
-        OpenAkpDialog openAkpDialog = new OpenAkpDialog(this, openApkPkgInfos);
-        openAkpDialog.show();
+
     }
-
-    private void netLoadMore() {
-        int id = YcSingle.getInstance().id;
-        mLoveEngin.loveListCategory(String.valueOf(id), mCategoryId, String.valueOf(++PAGE_NUM), String.valueOf(PAGE_SIZE), "Dialogue/lists").subscribe(new MySubscriber<AResultInfo<List<LoveHealDetBean>>>(mLoadingDialog) {
-
-
-            @Override
-            protected void onNetNext(AResultInfo<List<LoveHealDetBean>> listAResultInfo) {
-                List<LoveHealDetBean> netLoadMoreData = listAResultInfo.data;
-//                initRecyclerData();
-//                List<LoveHealDetBean> netLoadMoreData = new ArrayList<>();
-                showProgressBar = false;
-                mLoveHealDetBeans.remove(mLoveHealDetBeans.size() - 1);
-                mAdapter.notifyDataSetChanged();
-                if (netLoadMoreData.size() < PAGE_SIZE) {
-                    loadMoreEnd = true;
-                }
-                mLoveHealDetBeans.addAll(netLoadMoreData);
-                mAdapter.notifyDataSetChanged();
-                mAdapter.setLoaded();
-            }
-
-            @Override
-            protected void onNetError(Throwable e) {
-
-            }
-
-            @Override
-            protected void onNetCompleted() {
-
-            }
-        });
-    }
-
-
-    RecyclerViewItemListener recyclerViewItemListener = new RecyclerViewItemListener() {
-        @Override
-        public void onItemClick(int position) {
-
-            //TODO 购买VIP刷新数据
-            startActivity(new Intent(LoveHealDetailsActivity.this, BecomeVipActivity.class));
-        }
-
-        @Override
-        public void onItemLongClick(int position) {
-
-        }
-    };
-
 
     @Override
     protected String offerActivityTitle() {

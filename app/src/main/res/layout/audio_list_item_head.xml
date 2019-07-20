@@ -1,0 +1,116 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="@drawable/shape_btn_red_gray"
+    android:orientation="vertical">
+
+    <LinearLayout
+        android:id="@+id/type_layout"
+        android:layout_width="match_parent"
+        android:layout_height="118dp"
+        android:orientation="vertical"
+        android:paddingBottom="12dp"
+        android:paddingStart="112dp"
+        android:paddingTop="24dp">
+
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <TextView
+                android:id="@+id/tv_spa_level_one"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+
+                android:layout_marginRight="10dp"
+                android:ellipsize="end"
+                android:minHeight="25dp"
+                android:singleLine="true"
+                android:text="睡眠咩咩"
+                android:textColor="@color/black"
+                android:textSize="18sp"
+                android:textStyle="bold" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center_vertical"
+            android:minHeight="30dp">
+
+
+            <TextView
+                android:id="@+id/tv_head_sing_user"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginEnd="8dp"
+                android:drawablePadding="4dp"
+                android:drawableStart="@mipmap/audio_user_icon"
+                android:gravity="center"
+                android:text="西门"
+                android:textColor="@color/gray_898a90"
+                android:textSize="12sp" />
+
+
+            <TextView
+                android:id="@+id/tv_head_sing_time"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginEnd="8dp"
+                android:drawablePadding="4dp"
+                android:drawableStart="@mipmap/audio_time_icon"
+                android:gravity="center"
+                android:text="00:00"
+                android:textColor="@color/gray_898a90"
+                android:textSize="12sp" />
+
+
+            <TextView
+                android:id="@+id/tv_head_listen_count"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginEnd="8dp"
+                android:drawablePadding="4dp"
+                android:drawableStart="@mipmap/audio_listen_count"
+                android:gravity="center"
+                android:text="10002"
+                android:textColor="@color/gray_898a90"
+                android:textSize="12sp" />
+
+
+            <TextView
+                android:id="@+id/tv_spa_more"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:drawablePadding="4dp"
+                android:drawableStart="@mipmap/audio_more_up"
+                android:gravity="center"
+                android:text="更多"
+                android:textColor="@color/gray_898a90"
+                android:textSize="12sp" />
+        </LinearLayout>
+
+
+        <ImageView
+            android:id="@+id/iv_head_play"
+            android:layout_width="24dp"
+            android:layout_height="27dp"
+            android:layout_gravity="right"
+            android:layout_marginEnd="10dp"
+            android:src="@mipmap/audio_play" />
+
+    </LinearLayout>
+
+
+
+
+    <android.support.v7.widget.RecyclerView
+        android:id="@+id/recyclerView_list_detail"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:nestedScrollingEnabled="false"
+        android:visibility="gone" />
+
+</LinearLayout>

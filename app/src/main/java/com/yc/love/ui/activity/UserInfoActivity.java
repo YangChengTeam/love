@@ -4,7 +4,6 @@ import android.os.Bundle;
 import android.text.TextUtils;
 import android.util.Log;
 import android.view.View;
-import android.view.ViewGroup;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -15,20 +14,15 @@ import com.alibaba.fastjson.JSON;
 import com.bigkoo.pickerview.builder.TimePickerBuilder;
 import com.bigkoo.pickerview.listener.OnTimeSelectListener;
 import com.bigkoo.pickerview.view.TimePickerView;
+import com.bumptech.glide.Glide;
+import com.bumptech.glide.request.RequestOptions;
 import com.google.gson.Gson;
-import com.squareup.picasso.Picasso;
 import com.yc.love.R;
-import com.yc.love.adaper.rv.CreateAdapter;
-import com.yc.love.adaper.rv.holder.BaseViewHolder;
-import com.yc.love.adaper.rv.holder.LoveHealItemViewHolder;
-import com.yc.love.adaper.rv.holder.LoveHealTitleViewHolder;
 import com.yc.love.model.base.MySubscriber;
 import com.yc.love.model.bean.AResultInfo;
-import com.yc.love.model.bean.LoveHealBean;
-import com.yc.love.model.bean.LoveHealDateBean;
+import com.yc.love.model.bean.IdCorrelationLoginBean;
 import com.yc.love.model.bean.UploadPhotoBean;
 import com.yc.love.model.bean.event.EventLoginState;
-import com.yc.love.model.bean.IdCorrelationLoginBean;
 import com.yc.love.model.data.BackfillSingle;
 import com.yc.love.model.engin.IdCorrelationEngin;
 import com.yc.love.model.engin.UploadPhotoEngin;
@@ -37,7 +31,6 @@ import com.yc.love.model.util.SPUtils;
 import com.yc.love.model.util.TimeUtils;
 import com.yc.love.ui.activity.base.BasePushPhotoActivity;
 import com.yc.love.ui.view.CheckBoxSample;
-import com.yc.love.ui.view.CircleTransform;
 
 import org.greenrobot.eventbus.EventBus;
 
@@ -164,7 +157,8 @@ public class UserInfoActivity extends BasePushPhotoActivity {
                     isCheckedMen(mIsCheckedMen);
                 }
                 if (!TextUtils.isEmpty(face)) {
-                    Picasso.with(UserInfoActivity.this).load(face).placeholder(R.mipmap.main_icon_default_head).error(R.mipmap.main_icon_default_head).transform(new CircleTransform()).into(mIvIcon);
+                    Glide.with(UserInfoActivity.this).load(face).apply(RequestOptions.circleCropTransform()
+                            .error(R.mipmap.main_icon_default_head).placeholder(R.mipmap.main_icon_default_head)).into(mIvIcon);
                     mPhotoUrl = face;
                 }
             }
@@ -217,7 +211,8 @@ public class UserInfoActivity extends BasePushPhotoActivity {
                 }
                 break;
             case R.id.user_info_rl_tit_con:
-                showSelsctPhotoDialog(mIvIcon);
+//                showToastShort("");
+//                showSelsctPhotoDialog(mIvIcon);
                 break;
             case R.id.activity_base_same_tv_sub:
                 boolean isCanSub = checkInput();
@@ -246,7 +241,7 @@ public class UserInfoActivity extends BasePushPhotoActivity {
                 String str = JSON.toJSONString(data);// java对象转为jsonString
                 BackfillSingle.backfillLoginData(UserInfoActivity.this, str);
 
-                EventBus.getDefault().post(new EventLoginState(EventLoginState.STATE_UPDATE_INFO));
+                EventBus.getDefault().post(new EventLoginState(EventLoginState.STATE_UPDATE_INFO, data.nick_name));
                 showToastShort("完善信息成功");
                 finish();
             }
@@ -275,7 +270,7 @@ public class UserInfoActivity extends BasePushPhotoActivity {
         }
         long toDayStamp = TimeUtils.dateToStamp(new Date(System.currentTimeMillis()));
         if (mBirthdayLong > toDayStamp) {
-            showToastShort("生日应大于今天");
+            showToastShort("生日应小于今天");
             return false;
         }
         return true;
@@ -337,14 +332,21 @@ public class UserInfoActivity extends BasePushPhotoActivity {
             public void onResponse(Call call, Response response) throws IOException {
 //                Log.d("mylog", "onFailure: " + response.body().string());
                 String string = response.body().string();
-                Log.d("securityhttp", "onResponse: response body "+string);
-                Log.d("mylog", "onResponse: response body "+string);
+                Log.d("securityhttp", "common/upload: response body " + string);
+                Log.d("mylog", "onResponse: response body " + string);
                 if (!TextUtils.isEmpty(string)) {
-                    UploadPhotoBean uploadPhotoBean = new Gson().fromJson(string, UploadPhotoBean.class);
-                    List<UploadPhotoBean.DataBean> data = uploadPhotoBean.data;
-                    if (data != null && data.size() > 0) {
-                        UploadPhotoBean.DataBean dataBean = data.get(0);
-                        mPhotoUrl = dataBean.url;
+                    UploadPhotoBean uploadPhotoBean = null;
+                    try {
+                        uploadPhotoBean = new Gson().fromJson(string, UploadPhotoBean.class);
+                    } catch (IllegalStateException e) {
+
+                    }
+                    if (uploadPhotoBean != null) {
+                        List<UploadPhotoBean.DataBean> data = uploadPhotoBean.data;
+                        if (data != null && data.size() > 0) {
+                            UploadPhotoBean.DataBean dataBean = data.get(0);
+                            mPhotoUrl = dataBean.url;
+                        }
                     }
                 }
             }

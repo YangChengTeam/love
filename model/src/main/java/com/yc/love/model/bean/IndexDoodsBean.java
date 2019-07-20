@@ -1,10 +1,14 @@
 package com.yc.love.model.bean;
 
+import com.chad.library.adapter.base.entity.MultiItemEntity;
+
+import java.io.Serializable;
+
 /**
  * Created by mayn on 2019/5/14.
  */
 
-public class IndexDoodsBean {
+public class IndexDoodsBean implements Serializable {
 
     /**
      * app_id : 0
@@ -40,6 +44,7 @@ public class IndexDoodsBean {
     public int use_time_limit;
     public String vip_price;
 
+
     @Override
     public String toString() {
         return "IndexDoodsBean{" +
@@ -60,4 +65,5 @@ public class IndexDoodsBean {
                 ", vip_price='" + vip_price + '\'' +
                 '}';
     }
+
 }

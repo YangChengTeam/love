@@ -14,9 +14,9 @@ import android.text.TextUtils;
 import android.util.Log;
 import android.widget.ImageView;
 
-import com.squareup.picasso.Picasso;
+import com.bumptech.glide.Glide;
+import com.bumptech.glide.request.RequestOptions;
 import com.yc.love.R;
-import com.yc.love.ui.view.CircleTransform;
 import com.yc.love.ui.view.SelectPhotoDialog;
 import com.yc.love.ui.view.imgs.ISListConfig;
 import com.yc.love.ui.view.imgs.ISNav;
@@ -54,7 +54,7 @@ public abstract class BasePushPhotoActivity extends BaseSameActivity {
             mInstance.init(new ImageLoader() {
                 @Override
                 public void displayImage(Context context, String path, ImageView imageView) {
-                    Picasso.with(context).load("file://" + path).into(imageView);
+                    Glide.with(context).load("file://" + path).into(imageView);
                     Log.d("mylog", "displayImage: path " + path);
 //                    Glide.with(context).load(path).into(imageView);
                 }
@@ -225,7 +225,8 @@ public abstract class BasePushPhotoActivity extends BaseSameActivity {
                     @Override
                     public void onSuccess(File file) {
                         //        View 设置图片
-                        Picasso.with(BasePushPhotoActivity.this).load(file).transform(new CircleTransform()).into(putPhotoImageViewPhoto);
+                        Glide.with(BasePushPhotoActivity.this).load(file).apply(RequestOptions.circleCropTransform()).into(putPhotoImageViewPhoto);
+
                         Log.d("mylog", "onSuccess: file.getPath() " + file.getPath());
                         onLubanFileSuccess(file);
                     }

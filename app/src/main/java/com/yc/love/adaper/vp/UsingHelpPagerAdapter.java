@@ -1,20 +1,12 @@
 package com.yc.love.adaper.vp;
 
-import android.content.Context;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.app.FragmentTransaction;
-import android.support.v4.view.PagerAdapter;
-import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ImageView;
 
-import com.yc.love.factory.CollectFactory;
 import com.yc.love.factory.UsingHelpFactory;
-
-import java.util.ArrayList;
-import java.util.List;
 
 /**
  * Created by Administrator on 2017/10/19.

@@ -1,7 +1,6 @@
 package com.yc.love.ui.view;
 
 import android.app.AlertDialog;
-import android.app.Dialog;
 import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
@@ -12,19 +11,26 @@ import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.text.TextUtils;
-import android.view.Gravity;
 import android.view.View;
 import android.view.Window;
-import android.view.WindowManager;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.kk.utils.ToastUtil;
+import com.umeng.analytics.MobclickAgent;
 import com.yc.love.R;
+import com.yc.love.model.bean.LoveHealDetDetailsBean;
 import com.yc.love.model.bean.OpenApkPkgInfo;
+import com.yc.love.model.constant.ConstantKey;
+import com.yc.love.model.engin.LoveEngin;
+
+import org.greenrobot.eventbus.EventBus;
 
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+
+import rx.Subscriber;
 
 /**
  * Created by mayn on 2019/5/21.
@@ -33,11 +39,16 @@ import java.util.List;
 public class OpenAkpDialog extends AlertDialog {
     private final Context context;
     private final List<OpenApkPkgInfo> openApkPkgInfos;
+    private LoveEngin loveEngin;
+    private LoveHealDetDetailsBean loveHealDetDetailsBean;
+    private boolean mIsCollect;
 
-    public OpenAkpDialog(@NonNull Context context, List<OpenApkPkgInfo> openApkPkgInfos) {
+    public OpenAkpDialog(@NonNull Context context, List<OpenApkPkgInfo> openApkPkgInfos, LoveHealDetDetailsBean content, boolean isCollect) {
         super(context, 0);
         this.context = context;
         this.openApkPkgInfos = openApkPkgInfos;
+        this.loveHealDetDetailsBean = content;
+        this.mIsCollect = isCollect;
 
     }
 
@@ -45,6 +56,7 @@ public class OpenAkpDialog extends AlertDialog {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         instanceDialog();
+        loveEngin = new LoveEngin(context);
     }
 
     private void instanceDialog() {
@@ -58,14 +70,75 @@ public class OpenAkpDialog extends AlertDialog {
         TextView tvWx = window.findViewById(R.id.dialog_open_akp_tv_wx);
         TextView tvMm = window.findViewById(R.id.dialog_open_akp_tv_mm);
         TextView tvTt = window.findViewById(R.id.dialog_open_akp_tv_tt);
+        TextView tvCollect = window.findViewById(R.id.dialog_open_collect);
+
+        if (mIsCollect) {
+            tvCollect.setText("取消收藏");
+        } else {
+            tvCollect.setText(context.getString(R.string.collect));
+        }
 
         tvQQ.setOnClickListener(clickToOpenApk(openApkPkgInfos.get(0).pkg));
         tvWx.setOnClickListener(clickToOpenApk(openApkPkgInfos.get(1).pkg));
         tvMm.setOnClickListener(clickToOpenApk(openApkPkgInfos.get(2).pkg));
+        tvCollect.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                handleCollect();
+                MobclickAgent.onEvent(context, "collection_id", "收藏话术");
+
+            }
+        });
 //        tvTt.setOnClickListener(clickToOpenApk(openApkPkgInfos.get(3).pkg));
 
 
     }
+
+    private void handleCollect() {
+        if (mIsCollect) {
+            loveEngin.deleteCollectLoveHeals(loveHealDetDetailsBean).subscribe(new Subscriber<String>() {
+                @Override
+                public void onCompleted() {
+
+                }
+
+                @Override
+                public void onError(Throwable e) {
+
+                }
+
+                @Override
+                public void onNext(String s) {
+                    if (TextUtils.equals("success", s)) {
+                        ToastUtil.toast2(context, "已取消收藏！");
+                    }
+                    EventBus.getDefault().post("collect_cancel");
+                    dismiss();
+                }
+            });
+        } else {
+            loveEngin.collectLoveHeal(loveHealDetDetailsBean).subscribe(new Subscriber<String>() {
+                @Override
+                public void onCompleted() {
+
+                }
+
+                @Override
+                public void onError(Throwable e) {
+
+                }
+
+                @Override
+                public void onNext(String s) {
+                    if (TextUtils.equals("success", s)) {
+                        ToastUtil.toast2(context, "已经收藏成功，快去查看吧！");
+                    }
+                    dismiss();
+                }
+            });
+        }
+    }
+
 
     private View.OnClickListener clickToOpenApk(final String pkg) {
         return new View.OnClickListener() {
@@ -75,6 +148,14 @@ public class OpenAkpDialog extends AlertDialog {
                     Toast.makeText(context, "未安装该应用", Toast.LENGTH_SHORT).show();
                 } else {
                     openApk(pkg);
+
+                    if ("com.tencent.mobileqq".equals(pkg)) {
+                        MobclickAgent.onEvent(context, ConstantKey.UM_OPEN_DIALOGUE_QQ);
+                    } else if ("com.tencent.mm".equals(pkg)) {
+                        MobclickAgent.onEvent(context, ConstantKey.UM_OPEN_DIALOGUE_WX);
+                    } else if ("com.immomo.momo".equals(pkg)) {
+                        MobclickAgent.onEvent(context, ConstantKey.UM_OPEN_DIALOGUE_MOMO);
+                    }
                 }
                 if (isShowing()) {
                     dismiss();
@@ -108,9 +189,11 @@ public class OpenAkpDialog extends AlertDialog {
                 intent1.setComponent(componentName);
                 intent1.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
                 context.startActivity(intent1);
+                break;
             }
         }
     }
+
     private void openWeiXin() {
         Intent intent = new Intent();
         ComponentName cmp = new ComponentName("com.tencent.mm", "com.tencent.mm.ui.LauncherUI");
@@ -120,5 +203,6 @@ public class OpenAkpDialog extends AlertDialog {
         intent.setComponent(cmp);
         context.startActivity(intent);
     }
+
 
 }

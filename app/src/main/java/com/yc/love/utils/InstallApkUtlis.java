@@ -7,7 +7,9 @@ import android.os.Build;
 import android.support.v4.content.FileProvider;
 import android.util.Log;
 
+import com.umeng.analytics.MobclickAgent;
 import com.yc.love.BuildConfig;
+import com.yc.love.model.constant.ConstantKey;
 
 import java.io.File;
 
@@ -20,6 +22,7 @@ public class InstallApkUtlis {
         Intent install = new Intent(Intent.ACTION_VIEW);
         File apkFile = DownloadedApkUtlis.queryDownloadedApk(context, cacheDownLoadId);
         if (apkFile != null && apkFile.exists()) {
+            MobclickAgent.onEvent(context, ConstantKey.UM_INSTALL_OUT_ID);
             //判断是否是AndroidN以及更高的版本
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
                 install.setFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);

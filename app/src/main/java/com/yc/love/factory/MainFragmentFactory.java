@@ -2,9 +2,10 @@ package com.yc.love.factory;
 
 import android.support.v4.app.Fragment;
 
+import com.yc.love.ui.frament.AudioFragment;
 import com.yc.love.ui.frament.main.MainT1Fragment;
-import com.yc.love.ui.frament.main.MainT2Fragment;
-import com.yc.love.ui.frament.main.MainT3Fragment;
+import com.yc.love.ui.frament.main.MainT2NewFragment;
+import com.yc.love.ui.frament.main.MainT3CourseFragment;
 import com.yc.love.ui.frament.main.MainT4Fragment;
 import com.yc.love.ui.frament.main.MainT5Fragment;
 
@@ -38,11 +39,13 @@ public class MainFragmentFactory {
                 fragments.put(MAIN_FRAGMENT_0, fragment);
                 break;
             case MAIN_FRAGMENT_1:
-                fragment = new MainT2Fragment();
+                fragment = new AudioFragment();
+
                 fragments.put(MAIN_FRAGMENT_1, fragment);
                 break;
             case MAIN_FRAGMENT_2:
-                fragment = new MainT3Fragment();
+                fragment = new MainT3CourseFragment();
+
                 fragments.put(MAIN_FRAGMENT_2, fragment);
                 break;
             case MAIN_FRAGMENT_3:

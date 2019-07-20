@@ -9,7 +9,7 @@ public class ExampleTsCategoryList {
     /**
      * _level : 2
      * desp : 形象决定气质，改变从现在开始
-     * id : 12
+     * d : 12
      * image : http://v.bjyzbx.com/upload/image/20181129/5bff5e8745ce3.jpg
      * name : 形象提升
      * parent_id : 19

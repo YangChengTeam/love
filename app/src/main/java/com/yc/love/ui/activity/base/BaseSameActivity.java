@@ -52,9 +52,9 @@ public abstract class BaseSameActivity extends BaseSlidingActivity implements Vi
 
         LinearLayout linearLayout = findViewById(R.id.activity_base_same_linear_layout);
         View viewBar = findViewById(R.id.activity_base_same_view_bar);
+        mTvTitle = findViewById(R.id.activity_base_same_tv_title);
         RelativeLayout rlTitleCon = findViewById(R.id.activity_base_same_rl_title_con);
         ImageView ivBack = findViewById(R.id.activity_base_same_iv_back);
-        mTvTitle = findViewById(R.id.activity_base_same_tv_title);
         mBaseSameTvSub = findViewById(R.id.activity_base_same_tv_sub);
         boolean isHind = hindActivityTitle();
         if (isHind) {
@@ -117,7 +117,7 @@ public abstract class BaseSameActivity extends BaseSlidingActivity implements Vi
                 }
                 finish();
                 break;
-            /*case R.id.activity_base_same_tv_sub:
+            /*case R.love_id.activity_base_same_tv_sub:
 
                 break;*/
         }

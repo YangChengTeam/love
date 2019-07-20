@@ -3,121 +3,301 @@ package com.yc.love.ui.frament.main;
 import android.content.Intent;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
-import android.support.v7.widget.OrientationHelper;
 import android.support.v7.widget.RecyclerView;
+import android.support.v7.widget.SearchView;
+import android.text.TextUtils;
 import android.util.Log;
-import android.view.LayoutInflater;
+import android.util.TypedValue;
 import android.view.View;
-import android.view.ViewGroup;
+import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.RelativeLayout;
+import android.widget.TextView;
 
-import com.google.gson.Gson;
-import com.google.gson.reflect.TypeToken;
+import com.alibaba.fastjson.JSON;
+import com.chad.library.adapter.base.BaseQuickAdapter;
+import com.google.android.flexbox.AlignItems;
+import com.google.android.flexbox.FlexWrap;
+import com.google.android.flexbox.FlexboxLayoutManager;
+import com.kk.securityhttp.domain.ResultInfo;
+import com.kk.securityhttp.net.contains.HttpConfig;
+import com.umeng.analytics.MobclickAgent;
 import com.yc.love.R;
-import com.yc.love.adaper.rv.MainT1MoreItemAdapter;
-import com.yc.love.adaper.rv.base.RecyclerViewItemListener;
-import com.yc.love.adaper.rv.base.RecyclerViewTimeoutListener;
-import com.yc.love.adaper.rv.holder.BaseViewHolder;
-import com.yc.love.adaper.rv.holder.MainT1ItemHolder;
-import com.yc.love.adaper.rv.holder.ProgressBarViewHolder;
-import com.yc.love.adaper.rv.holder.TimeoutItemHolder;
-import com.yc.love.adaper.rv.holder.TitleT1ViewHolder;
+import com.yc.love.adaper.rv.IndexHotAdapter;
+import com.yc.love.adaper.rv.MainT1CreateAdapter;
+import com.yc.love.adaper.rv.SearchTintAdapter;
+import com.yc.love.cache.CacheWorker;
 import com.yc.love.model.base.MySubscriber;
 import com.yc.love.model.bean.AResultInfo;
-import com.yc.love.model.bean.CategoryArticleBean;
-import com.yc.love.model.bean.CategoryArticleChildrenBean;
-import com.yc.love.model.bean.ExampDataBean;
-import com.yc.love.model.bean.ExampListsBean;
+import com.yc.love.model.bean.IdCorrelationLoginBean;
+import com.yc.love.model.bean.IndexHotInfo;
+import com.yc.love.model.bean.IndexHotInfoWrapper;
+import com.yc.love.model.bean.LoveHealDateBean;
+import com.yc.love.model.bean.LoveHealDetBean;
+import com.yc.love.model.bean.SearchDialogueBean;
 import com.yc.love.model.bean.event.NetWorkChangT1Bean;
+import com.yc.love.model.data.BackfillSingle;
 import com.yc.love.model.engin.LoveEngin;
+import com.yc.love.model.engin.LoveEnginV2;
+import com.yc.love.model.single.YcSingle;
 import com.yc.love.model.util.SPUtils;
-import com.yc.love.ui.activity.ExampleDetailActivity;
-import com.yc.love.ui.activity.LoveByStagesActivity;
-import com.yc.love.ui.activity.LoveHealActivity;
-import com.yc.love.ui.activity.LoveHealingActivity;
+import com.yc.love.ui.activity.BecomeVipActivity;
 import com.yc.love.ui.activity.ShareActivity;
+import com.yc.love.ui.activity.UsingHelpHomeActivity;
 import com.yc.love.ui.frament.base.BaseMainFragment;
 import com.yc.love.ui.view.LoadDialog;
-import com.yc.love.utils.CacheUtils;
+import com.yc.love.ui.view.LoadingDialog;
 
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
 import org.greenrobot.eventbus.ThreadMode;
 
-import java.net.SocketTimeoutException;
-import java.net.UnknownHostException;
+import java.lang.reflect.Field;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
+import java.util.Random;
+
+import rx.Subscriber;
 
 /**
  * Created by mayn on 2019/4/23.
  */
 
 public class MainT1Fragment extends BaseMainFragment {
-    //    private List<StringBean> mExampListsBeans;
-    private int PAGE_SIZE = 10;
-    private int PAGE_NUM = 1;
-    private boolean loadMoreEnd;
-    private boolean loadDataEnd;
-    private boolean showProgressBar = false;
-    private MainT1MoreItemAdapter mAdapter;
-    private ProgressBarViewHolder progressBarViewHolder;
     private LoveEngin mLoveEngin;
-    private List<ExampListsBean> mExampListsBeans = new ArrayList<>();
-    ;
+
+    private CacheWorker mCacheWorker;
     private RecyclerView mRecyclerView;
     private LinearLayout mLlNotNet;
-    private boolean mIsNetData = false;
-    private boolean mIsNetTitleData = false;
-    private List<CategoryArticleBean> mCategoryArticleBeans;
-    private boolean mIsDataToCache;
+
+    private List<LoveHealDateBean> mDatas = new ArrayList<>();
+
+    private LoadDialog mLoadDialogInfo;
+
+    private MainT1CreateAdapter mAdapter;
+
+//    private TextView tvApplication, tvSence;
+
+//    private ImageView ivApplication, ivSence;
+
+    private LoadingDialog loadDialog = null;
+
+    private RecyclerView searchRecyclerView, hotRecyclerView;
+    private SearchTintAdapter tintAdapter;
+    private List<String> hotWords;
+    private IndexHotAdapter indexHotAdapter;
+
+    private int page = 1;
+    private int PAGE_SIZE = 10;
+    private RelativeLayout rlApplication;
+    private RelativeLayout rlSence;
+    private View viewApplication;
+    private View viewSence;
+
 
     @Override
     protected int setContentView() {
-        return R.layout.fragment_main_t1;
+
+        return R.layout.fragment_main_t1_new;
+    }
+
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        Log.d("mylog", "666666666666   onResume: ");
+
+        if (mRecyclerView != null) {
+            mRecyclerView.setFocusable(true);
+            mRecyclerView.setFocusableInTouchMode(true);
+            mRecyclerView.requestFocus();
+        }
+
+    }
+
+
+    /**
+     * 获取应用话术数据
+     */
+    private void geApplicationData() {
+
+        netDialogueData("");
+    }
+
+    /**
+     * 获取场景话术数据
+     */
+    private void getSceneData() {
+
+        netDialogueData("2");
     }
 
 
     @Override
     protected void initViews() {
         mLoveEngin = new LoveEngin(mMainActivity);
-
+        mCacheWorker = new CacheWorker();
         mLlNotNet = rootView.findViewById(R.id.main_t1_not_net);
 
+        mLoadDialogInfo = new LoadDialog(mMainActivity);
+//        tvApplication = rootView.findViewById(R.id.tv_application);
+//        tvSence = rootView.findViewById(R.id.tv_sence);
+//        ivApplication = rootView.findViewById(R.id.iv_application);
+//        ivSence = rootView.findViewById(R.id.iv_sence);
+        rlApplication = rootView.findViewById(R.id.rl_application);
+        rlSence = rootView.findViewById(R.id.rl_sence);
+        viewApplication = rootView.findViewById(R.id.view_application);
+        viewSence = rootView.findViewById(R.id.view_sence);
+
+
         mRecyclerView = rootView.findViewById(R.id.main_t1_rl);
-        LinearLayoutManager layoutManager = new LinearLayoutManager(mMainActivity);
-        mRecyclerView.setLayoutManager(layoutManager);
-        layoutManager.setOrientation(OrientationHelper.VERTICAL);
-        //设置增加或删除条目的动画
+        searchRecyclerView = rootView.findViewById(R.id.search_down_rv);
+        hotRecyclerView = rootView.findViewById(R.id.recyclerView_hot);
+
+        LinearLayoutManager linearLayoutManager = new LinearLayoutManager(mMainActivity);
+        mRecyclerView.setLayoutManager(linearLayoutManager);
         mRecyclerView.setItemAnimator(new DefaultItemAnimator());
+        mAdapter = new MainT1CreateAdapter(null);
+        mRecyclerView.setAdapter(mAdapter);
+
+        FlexboxLayoutManager layoutManager = new FlexboxLayoutManager(mMainActivity);
+        layoutManager.setFlexWrap(FlexWrap.WRAP);
+        layoutManager.setAlignItems(AlignItems.STRETCH);
+        hotRecyclerView.setLayoutManager(layoutManager);
+        indexHotAdapter = new IndexHotAdapter(null);
+        hotRecyclerView.setAdapter(indexHotAdapter);
+
+
+        hotWords = Arrays.asList(getResources().getStringArray(R.array.search_tint));
+
+
+        searchRecyclerView.setLayoutManager(new LinearLayoutManager(mMainActivity));
+
+        searchRecyclerView.setItemAnimator(new DefaultItemAnimator());
+        tintAdapter = new SearchTintAdapter(getRandomWords());
+        searchRecyclerView.setAdapter(tintAdapter);
+
+
+        initSearchView();
+        initListener();
+
+        initData();
     }
 
-    RecyclerViewTimeoutListener recyclerViewTimeoutListener = new RecyclerViewTimeoutListener() {
-        @Override
-        public void onItemClick(int position) {
-            lazyLoad();
+    /**
+     * 模拟服务器获取随机顺序的热词
+     *
+     * @return
+     */
+    private List<String> getRandomWords() {
+        List<String> titles = new ArrayList<>();
+
+        int size = hotWords.size();
+
+//        for (int i = 0; i < size; i++) {
+        boolean isContinue = true;
+
+        while (isContinue) {
+            int random = (int) (Math.random() * size);
+            String word = hotWords.get(random);
+            if (!titles.contains(word))
+                titles.add(word);
+            if (titles.size() == size) isContinue = false;
+
         }
-    };
 
+        return titles;
 
-    RecyclerViewItemListener recyclerViewItemListener = new RecyclerViewItemListener() {
-        @Override
-        public void onItemClick(int position) {
-//            ExampListsBean exampListsBean = mExampListsBeans.get(position);
-//            LoveByStagesDetailsActivity.startLoveByStagesDetailsActivity(mMainActivity, exampListsBean.id, exampListsBean.post_title);
-            if (position < 0) {
-                return;
+    }
+
+    private void initListener() {
+
+        rlApplication.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                resetSelect();
+                if (viewApplication.getVisibility() != View.VISIBLE)
+                    viewApplication.setVisibility(View.VISIBLE);
+                geApplicationData();
+                MobclickAgent.onEvent(mMainActivity, "applied_speech_id", "应用话术");
             }
-            ExampListsBean exampListsBean = mExampListsBeans.get(position);
-            ExampleDetailActivity.startExampleDetailActivity(mMainActivity, exampListsBean.id, exampListsBean.post_title);
+        });
+        rlSence.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                resetSelect();
+                if (viewSence.getVisibility() != View.VISIBLE)
+                    viewSence.setVisibility(View.VISIBLE);
+                getSceneData();
+                MobclickAgent.onEvent(mMainActivity, "scene_speech_id", "场景话术");
+            }
+        });
+
+        tintAdapter.setOnItemClickListener(new BaseQuickAdapter.OnItemClickListener() {
+            @Override
+            public void onItemClick(BaseQuickAdapter adapter, View view, int position) {
+                String tint = tintAdapter.getItem(position);
+                MobclickAgent.onEvent(mMainActivity, "hot_words_id", "热词点击");
+//                netIsVipData(tint);
+                searchWord(tint);
+            }
+        });
+
+        indexHotAdapter.setOnItemClickListener(new BaseQuickAdapter.OnItemClickListener() {
+            @Override
+            public void onItemClick(BaseQuickAdapter adapter, View view, int position) {
+                // TODO: 2019/7/17 热门话题点击跳转
+                IndexHotInfo indexHotInfo = indexHotAdapter.getItem(position);
+                if (indexHotInfo != null) {
+//                    netIsVipData(indexHotInfo.getSearch());
+                    searchWord(indexHotInfo.getSearch());
+                    MobclickAgent.onEvent(mMainActivity, "hot_topic_id", "热门话题");
+                }
+            }
+        });
+    }
+
+    private void resetSelect() {
+        viewApplication.setVisibility(View.GONE);
+        viewSence.setVisibility(View.GONE);
+    }
+
+
+    private void initData() {
+        netUserReg();  //用户注册登录
+        getSceneData();
+        getHotData();
+    }
+
+
+    private void getHotData() {
+        List<IndexHotInfo> indexHotInfos = (List<IndexHotInfo>) mCacheWorker.getCache(mMainActivity, "index_hot");
+        if (indexHotInfos != null) {
+            indexHotAdapter.setNewData(indexHotInfos);
         }
+        mLoveEngin.getIndexHotInfo().subscribe(new Subscriber<ResultInfo<IndexHotInfoWrapper>>() {
+            @Override
+            public void onCompleted() {
 
-        @Override
-        public void onItemLongClick(int position) {
+            }
 
-        }
+            @Override
+            public void onError(Throwable e) {
 
-    };
+            }
+
+            @Override
+            public void onNext(ResultInfo<IndexHotInfoWrapper> indexHotInfoWrapperResultInfo) {
+                if (indexHotInfoWrapperResultInfo != null && indexHotInfoWrapperResultInfo.code == HttpConfig.STATUS_OK
+                        && indexHotInfoWrapperResultInfo.data != null && indexHotInfoWrapperResultInfo.data.getList() != null) {
+                    indexHotAdapter.setNewData(indexHotInfoWrapperResultInfo.data.getList());
+                    mCacheWorker.setCache("index_hot", indexHotInfoWrapperResultInfo.data.getList());
+                }
+            }
+        });
+    }
 
     @Override
     public void onStart() {
@@ -142,9 +322,6 @@ public class MainT1Fragment extends BaseMainFragment {
             if (mLlNotNet.getVisibility() != View.GONE) {
                 mLlNotNet.setVisibility(View.GONE);
                 lazyLoad();
-              /*  if (!mIsNetData) {
-                    netData();
-                }*/
             }
         }
     }
@@ -152,57 +329,30 @@ public class MainT1Fragment extends BaseMainFragment {
 
     @Override
     protected void lazyLoad() {
-        if(mIsDataToCache){
-            mIsNetData=false;
-            mIsNetTitleData=false;
-        }
-//        mIsNetData = false;
-        if (!mIsNetData) {
-            netData();
-        }
-        if (!mIsNetTitleData) {
-            netTitleData();
-        }
+
     }
 
-    private void netData() {
+
+    private void netUserReg() {
         LoadDialog loadDialog = new LoadDialog(mMainActivity);
-        loadDialog.show();
-        mLoveEngin.indexExample(String.valueOf(PAGE_NUM), String.valueOf(PAGE_SIZE), "example/index").subscribe(new MySubscriber<AResultInfo<ExampDataBean>>(loadDialog) {
+        LoveEnginV2 loveEnginV2 = new LoveEnginV2(mMainActivity);
+        loveEnginV2.userReg("user/reg").subscribe(new MySubscriber<AResultInfo<IdCorrelationLoginBean>>(loadDialog) {
             @Override
-            protected void onNetNext(AResultInfo<ExampDataBean> exampDataBeanAResultInfo) {
-                ExampDataBean exampDataBean = exampDataBeanAResultInfo.data;
-                if (exampDataBean != null) {
-                    mExampListsBeans = exampDataBean.lists;
-                }
-//                mExampListsBeans.add(0, new ExampListsBean(3, "Article_Category"));
-                mExampListsBeans.add(0, new ExampListsBean(0, "title"));
-                CacheUtils.cacheBeanData(mMainActivity, "main_example_index", mExampListsBeans);
-                mIsNetData = true;
-                if (mIsNetData && mIsNetTitleData) {
-                    initRecyclerViewData();
-                }
+            protected void onNetNext(AResultInfo<IdCorrelationLoginBean> idCorrelationLoginBeanAResultInfo) {
+
+                final IdCorrelationLoginBean data = idCorrelationLoginBeanAResultInfo.data;
+                mRecyclerView.postDelayed(new Runnable() {
+                    @Override
+                    public void run() {
+                        loginSuccess(data);
+                    }
+                }, 500);
+
             }
 
             @Override
             protected void onNetError(Throwable e) {
-                String data = (String) SPUtils.get(mMainActivity, "main_example_index", "");
-                mExampListsBeans = new Gson().fromJson(data, new TypeToken<ArrayList<ExampListsBean>>() {
-                }.getType());
-                if (mExampListsBeans != null && mExampListsBeans.size() != 0) {
-                    mIsNetData = true;
-                    if (mIsNetData && mIsNetTitleData) {
-                        mIsDataToCache = true;
-                        initRecyclerViewData();
-                    }
-                }
-//                java.net.SocketTimeoutException: timeout
-//                java.net.UnknownHostException: Unable to resolve host "love.bshu.com": No address associated with hostname
-                if (e instanceof SocketTimeoutException || e instanceof UnknownHostException) {
-//                    mExampListsBeans.add(new ExampListsBean(-1, "title"));
-//                    initRecyclerViewData();
-                    Log.d("mylog", "onNetError: SocketTimeoutException 网络超时 " + e.toString());
-                }
+
             }
 
             @Override
@@ -212,155 +362,230 @@ public class MainT1Fragment extends BaseMainFragment {
         });
     }
 
-    private void netTitleData() {
-        LoadDialog loadDialog = new LoadDialog(mMainActivity);
-        loadDialog.show();
-        mLoveEngin.categoryArticle("Article/category").subscribe(new MySubscriber<AResultInfo<List<CategoryArticleBean>>>(loadDialog) {
+
+    private void loginSuccess(IdCorrelationLoginBean data) {
+        //持久化存储登录信息
+        String str = JSON.toJSONString(data);// java对象转为jsonString
+        BackfillSingle.backfillLoginData(mMainActivity, str);
+
+//        EventBus.getDefault().post(new EventLoginState(EventLoginState.STATE_LOGINED));
+    }
+
+
+    private void netDialogueData(final String sence) {
+
+        if (sence.equals(""))
+            mDatas = (List<LoveHealDateBean>) mCacheWorker.getCache(mMainActivity, "main1_Dialogue_category");
+        else if (sence.equals("2")) {
+            mDatas = (List<LoveHealDateBean>) mCacheWorker.getCache(mMainActivity, "main1_Dialogue_sence");
+        }
+        if (mDatas != null && mDatas.size() > 0) {
+            initRecyclerViewData();
+        } else {
+            loadDialog = new LoadingDialog(mMainActivity);
+            loadDialog.showLoading();
+        }
+        mLoveEngin.loveCategory("Dialogue/category", sence).subscribe(new Subscriber<AResultInfo<List<LoveHealDateBean>>>() {
             @Override
-            protected void onNetNext(AResultInfo<List<CategoryArticleBean>> listAResultInfo) {
-                mCategoryArticleBeans = listAResultInfo.data;
-                CacheUtils.cacheBeanData(mMainActivity, "main_Article_category", mCategoryArticleBeans);
-                mIsNetTitleData = true;
-                if (mIsNetData && mIsNetTitleData) {
-                    initRecyclerViewData();
-                }
+            public void onCompleted() {
+                if (loadDialog != null) loadDialog.dismissLoading();
             }
 
             @Override
-            protected void onNetError(Throwable e) {
-                String data = (String) SPUtils.get(mMainActivity, "main_Article_category", "");
-                mCategoryArticleBeans = new Gson().fromJson(data, new TypeToken<ArrayList<CategoryArticleBean>>() {
-                }.getType());
-                if (mCategoryArticleBeans != null && mCategoryArticleBeans.size() != 0) {
-                    mIsNetTitleData = true;
-                    if (mIsNetData && mIsNetTitleData) {
-                        initRecyclerViewData();
-                    }
-                }
+            public void onError(Throwable e) {
+                if (loadDialog != null) loadDialog.dismissLoading();
             }
 
             @Override
-            protected void onNetCompleted() {
-
+            public void onNext(AResultInfo<List<LoveHealDateBean>> listAResultInfo) {
+                List<LoveHealDateBean> loveHealDateBeans = listAResultInfo.data;
+                createNewData(loveHealDateBeans, sence);
+                if (loadDialog != null) loadDialog.dismissLoading();
             }
+
         });
+    }
+
+    private void createNewData(List<LoveHealDateBean> loveHealDateBeans, String sence) {
+        if (loveHealDateBeans == null || loveHealDateBeans.size() == 0) {
+            return;
+        }
+        mDatas = loveHealDateBeans;
+
+
+        Log.d("mylog", "onNetNext: mDatas.size() " + mDatas.size());
+
+        if (sence.equals(""))
+            mCacheWorker.setCache("main1_Dialogue_category", loveHealDateBeans);
+        else if (sence.equals("2")) {
+            mCacheWorker.setCache("main1_Dialogue_sence", loveHealDateBeans);
+        }
+        initRecyclerViewData();
+
     }
 
     private void initRecyclerViewData() {
-        Log.d("mylog", "initRecyclerViewData: ");
-        mAdapter = new MainT1MoreItemAdapter(mExampListsBeans, mRecyclerView) {
+        boolean isOpenUsingHelp = (boolean) SPUtils.get(mMainActivity, SPUtils.IS_OPEN_USING_HELP_HOME, false);
+        if (!isOpenUsingHelp) {
+            SPUtils.put(mMainActivity, SPUtils.IS_OPEN_USING_HELP_HOME, true);
+            mMainActivity.startActivity(new Intent(mMainActivity, UsingHelpHomeActivity.class));
+        }
 
+        mAdapter.setNewData(mDatas);
+
+        /*mRecyclerView.addOnScrollListener(new RecyclerView.OnScrollListener() {
             @Override
-            protected RecyclerView.ViewHolder getTimeoutHolder(ViewGroup parent) {
-                return new TimeoutItemHolder(mMainActivity, parent, "", recyclerViewTimeoutListener);
+            public void onScrollStateChanged(RecyclerView recyclerView, int newState) {
+                super.onScrollStateChanged(recyclerView, newState);
+
+                Log.d("mylog", "onScrollStateChanged: 77777777777777777");
+                mMainActivity.hindKeyboard(mRecyclerView);
             }
 
             @Override
-            public BaseViewHolder getHolder(ViewGroup parent) {
-                return new MainT1ItemHolder(mMainActivity, recyclerViewItemListener, parent);
+            public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
+                super.onScrolled(recyclerView, dx, dy);
+                Log.d("mylog", "onScrolled: 8888888888");
             }
+        });*/
 
-            @Override
-            public BaseViewHolder getTitleHolder(ViewGroup parent) {
-                TitleT1ViewHolder titleT1ViewHolder = new TitleT1ViewHolder(mMainActivity, null, parent);
-                titleT1ViewHolder.setOnClickTitleIconListener(new TitleT1ViewHolder.OnClickTitleIconListener() {
-                    @Override
-                    public void clickTitleIcon(int position) {
-                        switch (position) {
-                            case 0:
-                                startLoveByStagesActivity(0, "单身期");
-                                break;
-                            case 1:
-                                startLoveByStagesActivity(1, "追求期");
-                                break;
-                            case 2:
-                                startLoveByStagesActivity(2, "热恋期");
-                                break;
-                            case 3:
-                                startLoveByStagesActivity(3, "失恋期");
-                                break;
-                            case 4:
-                                startLoveByStagesActivity(4, "婚后期");
-                                break;
-                            case 5:
-                                startActivity(new Intent(mMainActivity, LoveHealActivity.class));
-                                break;
-                            case 6:
-                                startActivity(new Intent(mMainActivity, LoveHealingActivity.class));
-                                break;
-                            case 7:
-                                mMainActivity.startActivity(new Intent(mMainActivity, ShareActivity.class));
-                                break;
-                        }
-                    }
-                });
-                return titleT1ViewHolder;
-            }
+        mMainActivity.hindKeyboard(mRecyclerView);
+    }
 
+    private boolean isVisable = false;
+
+    private void initSearchView() {
+        final SearchView searchView = rootView.findViewById(R.id.item_t1category_share_view);
+        final ImageView ivIconShare = rootView.findViewById(R.id.item_t1category_iv_icon_share);
+
+
+        try { //--拿到字节码
+            Class<?> argClass = searchView.getClass();
+            //--指定某个私有属性,mSearchPlate是搜索框父布局的名字
+            Field ownField = argClass.getDeclaredField("mSearchPlate");
+            //--暴力反射,只有暴力反射才能拿到私有属性
+            ownField.setAccessible(true);
+            View mView = (View) ownField.get(searchView);
+            //--设置背景
+            mView.setBackgroundResource(R.drawable.search_view_bg);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        final ImageView searchIcon = searchView.findViewById(android.support.v7.appcompat.R.id.search_mag_icon);
+        searchView.post(new Runnable() {
             @Override
-            protected RecyclerView.ViewHolder getBarViewHolder(ViewGroup parent) {
-                View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.recycler_view_test_item_footer, parent, false);
-                progressBarViewHolder = new ProgressBarViewHolder(view);
-                return progressBarViewHolder;
+            public void run() {
+                searchIcon.setImageDrawable(null);
+
+                searchIcon.setVisibility(View.GONE);
             }
-        };
-        mRecyclerView.setAdapter(mAdapter);
-        if (mExampListsBeans.size() < PAGE_SIZE) {
-            Log.d("ssss", "loadMoreData: data---end");
-        } else {
-            mAdapter.setOnMoreDataLoadListener(new MainT1MoreItemAdapter.OnLoadMoreDataListener() {
+        });
+        //修改键入的文字字体大小、颜色和hint的字体颜色
+        final EditText editText = searchView.findViewById(R.id.search_src_text);
+        editText.setTextSize(TypedValue.COMPLEX_UNIT_PX, getResources()
+                .getDimension(R.dimen.size_16));
+//        editText.setTextColor(ContextCompat.getColor(this,R.color.nb_text_primary));
+
+        //监听关闭按钮点击事件
+        ImageView mCloseButton = searchView.findViewById(android.support.v7.appcompat.R.id.search_close_btn);
+        final TextView textView = searchView.findViewById(android.support.v7.appcompat.R.id.search_src_text);
+        if (mCloseButton.isClickable()) {
+            mCloseButton.setOnClickListener(new View.OnClickListener() {
                 @Override
-                public void loadMoreData() {
-                    if (loadDataEnd == false) {
-                        return;
-                    }
-                    if (showProgressBar == false) {
-                        //加入null值此时adapter会判断item的type
-                        mExampListsBeans.add(null);
-                        mAdapter.notifyDataSetChanged();
-                        showProgressBar = true;
-                    }
-                    if (!loadMoreEnd) {
-                        netLoadMore();
-                    } else {
-                        Log.d("mylog", "loadMoreData: loadMoreEnd end 已加载全部数据 ");
-                        mExampListsBeans.remove(mExampListsBeans.size() - 1);
-                        mAdapter.notifyDataSetChanged();
-                    }
+                public void onClick(View view) {
+                    //清除搜索框并加载默认数据
+//                    hindShareItemShowInfo();
+                    textView.setText(null);
                 }
             });
         }
-        loadDataEnd = true;
+
+        editText.setOnFocusChangeListener(new View.OnFocusChangeListener() {
+            @Override
+            public void onFocusChange(View v, boolean hasFocus) {
+                isVisable = !isVisable;
+
+                searchRecyclerView.setVisibility(hasFocus ? View.VISIBLE : View.GONE);
+//                if (searchRecyclerView.getVisibility() == View.VISIBLE)
+//                    tintAdapter.setNewData(getRandomWords());
+            }
+        });
+
+        editText.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                isVisable = !isVisable;
+                searchRecyclerView.setVisibility(isVisable ? View.VISIBLE : View.GONE);
+//                if (searchRecyclerView.getVisibility() == View.VISIBLE)
+//                    tintAdapter.setNewData(getRandomWords());
+            }
+        });
+        searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
+            @Override
+            public boolean onQueryTextSubmit(String query) { //搜索按钮回调
+                if (TextUtils.isEmpty(query)) {
+                    mMainActivity.showToastShort("请输入搜索关键字");
+                    return false;
+                }
+//                        netPagerOneData(keyword);
+//                netIsVipData(query);
+                searchWord(query);
+                return false;
+            }
+
+            @Override
+            public boolean onQueryTextChange(String newText) { //输入变化回调
+//                ShareActivity.this.shareTextString = newText;
+
+                return false;
+            }
+        });
+
+        ivIconShare.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                String keyWord = searchView.getQuery().toString().trim();
+                if (TextUtils.isEmpty(keyWord)) {
+                    mMainActivity.showToastShort("请输入搜索关键字");
+                    return;
+                }
+//                netIsVipData(keyWord);
+                searchWord(keyWord);
+
+            }
+        });
     }
 
-    private void startLoveByStagesActivity(int position, String title) {
-        if (mCategoryArticleBeans == null || mCategoryArticleBeans.size() < position + 1) {
+
+    private void netIsVipData(final String keyword) {
+        final int id = YcSingle.getInstance().id;
+        if (id <= 0) {
+            mMainActivity.showToLoginDialog();
             return;
         }
-        CategoryArticleBean categoryArticleBean = mCategoryArticleBeans.get(position);
-        ArrayList<CategoryArticleChildrenBean> children = categoryArticleBean.children;
-        LoveByStagesActivity.startLoveByStagesActivity(mMainActivity, title, children);
-    }
+        if (mLoadDialogInfo == null) {
+            mLoadDialogInfo = new LoadDialog(mMainActivity);
+        }
+        mLoadDialogInfo.showLoadingDialog();
+        mLoveEngin.userInfo(String.valueOf(id), "user/info").subscribe(new MySubscriber<AResultInfo<IdCorrelationLoginBean>>(mLoadDialogInfo) {
 
-
-    private void netLoadMore() {
-        mLoveEngin.indexExample(String.valueOf(++PAGE_NUM), String.valueOf(PAGE_SIZE), "example/index").subscribe(new MySubscriber<AResultInfo<ExampDataBean>>(mMainActivity) {
             @Override
-            protected void onNetNext(AResultInfo<ExampDataBean> exampDataBeanAResultInfo) {
-
-                ExampDataBean exampDataBean = exampDataBeanAResultInfo.data;
-                if (exampDataBean != null) {
-                    List<ExampListsBean> netLoadMoreData = exampDataBean.lists;
-                    changLoadMoreView(netLoadMoreData);
+            protected void onNetNext(AResultInfo<IdCorrelationLoginBean> idCorrelationLoginBeanAResultInfo) {
+                IdCorrelationLoginBean idCorrelationLoginBean = idCorrelationLoginBeanAResultInfo.data;
+//                ShareActivity.startShareActivity(mMainActivity, keyword);
+                int isVip = idCorrelationLoginBean.is_vip;
+                if (isVip < 1) { // 0弹窗 1不弹
+                    startActivity(new Intent(mMainActivity, BecomeVipActivity.class));
+                    return;
+                } else {
+                    ShareActivity.startShareActivity(mMainActivity, keyword);
                 }
             }
 
             @Override
             protected void onNetError(Throwable e) {
-                if (PAGE_NUM != 1) {
-                    PAGE_NUM--;
-                }
-                changLoadMoreView(null);
+
             }
 
             @Override
@@ -370,17 +595,60 @@ public class MainT1Fragment extends BaseMainFragment {
         });
     }
 
-    private void changLoadMoreView(List<ExampListsBean> netLoadMoreData) {
-        showProgressBar = false;
-        mExampListsBeans.remove(mExampListsBeans.size() - 1);
-        mAdapter.notifyDataSetChanged();
-        if (netLoadMoreData != null) {
-            if (netLoadMoreData.size() < PAGE_SIZE) {
-                loadMoreEnd = true;
-            }
-            mExampListsBeans.addAll(netLoadMoreData);
-            mAdapter.notifyDataSetChanged();
+
+    private void searchWord(final String keyword) {
+        final int id = YcSingle.getInstance().id;
+        if (id <= 0) {
+            mMainActivity.showToLoginDialog();
+            return;
         }
-        mAdapter.setLoaded();
+        if (mLoadDialogInfo == null) {
+            mLoadDialogInfo = new LoadDialog(mMainActivity);
+        }
+        mLoadDialogInfo.showLoadingDialog();
+        mLoveEngin.searchDialogue2(String.valueOf(id), keyword, String.valueOf(page), String.valueOf(PAGE_SIZE), "Dialogue/search")
+                .subscribe(new MySubscriber<AResultInfo<SearchDialogueBean>>(mLoadDialogInfo) {
+
+                    @Override
+                    protected void onNetNext(AResultInfo<SearchDialogueBean> searchDialogueBeanAResultInfo) {
+                        SearchDialogueBean searchDialogueBean = searchDialogueBeanAResultInfo.data;
+                        int searchBuyVip = searchDialogueBean.search_buy_vip;
+                        if (1 == searchBuyVip) { //1 弹窗 0不弹
+                            startActivity(new Intent(mMainActivity, BecomeVipActivity.class));
+                        } else {
+                            ShareActivity.startShareActivity(mMainActivity, keyword);
+                        }
+                    }
+
+                    @Override
+                    protected void onNetError(Throwable e) {
+
+                    }
+
+                    @Override
+                    protected void onNetCompleted() {
+
+                    }
+                });
+        searchCount(String.valueOf(id), keyword);
+    }
+
+    private void searchCount(String userid, String keyword) {
+        mLoveEngin.searchCount(userid, keyword).subscribe(new Subscriber<ResultInfo<String>>() {
+            @Override
+            public void onCompleted() {
+
+            }
+
+            @Override
+            public void onError(Throwable e) {
+
+            }
+
+            @Override
+            public void onNext(ResultInfo<String> stringResultInfo) {
+
+            }
+        });
     }
 }

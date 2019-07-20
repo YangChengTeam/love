@@ -63,7 +63,7 @@ public class LoveUpDownPhotoFragment extends BaseLazyFragment implements View.On
         mLoveUpDownPhotoActivity = (LoveUpDownPhotoActivity) getActivity();
         mLoadingDialog = mLoveUpDownPhotoActivity.mLoadingDialog;
         mLoveEngin = new LoveEngin(mLoveUpDownPhotoActivity);
-//        TextView tv = rootView.findViewById(R.id.fragment_love_up_down_photo_tv);
+//        TextView tv = rootView.findViewById(R.love_id.fragment_love_up_down_photo_tv);
 
         initTitle();
 

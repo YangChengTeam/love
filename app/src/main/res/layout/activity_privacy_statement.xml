@@ -14,7 +14,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="8dp"
-            android:layout_marginBottom="65dp">
+            android:orientation="vertical">
 
             <TextView
                 android:layout_width="match_parent"
@@ -23,6 +23,12 @@
                 android:text="@string/privacy_statement"
                 android:textColor="@color/black"
                 android:textSize="@dimen/size_16" />
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="65dp" />
         </LinearLayout>
+
+
     </ScrollView>
 </android.support.constraint.ConstraintLayout>

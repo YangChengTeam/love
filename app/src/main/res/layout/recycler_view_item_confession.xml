@@ -1,0 +1,136 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center"
+        android:orientation="horizontal"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
+
+        <ImageView
+            android:id="@+id/iv_zb_thumb"
+            android:layout_width="120dp"
+            android:layout_height="80dp"
+            android:layout_marginLeft="8dp"
+            android:src="@mipmap/acts_default" />
+
+
+        <RelativeLayout
+            android:layout_width="0dp"
+            android:layout_height="103dp"
+            android:layout_marginLeft="6dp"
+            android:layout_marginRight="6dp"
+            android:layout_weight="1"
+            android:orientation="vertical">
+
+            <RelativeLayout
+                android:id="@+id/layout_zb_title"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_alignParentTop="true"
+                android:layout_marginTop="9dp">
+
+                <TextView
+                    android:id="@+id/tv_zb_title"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentLeft="true"
+                    android:text="七夕扑克表白"
+                    android:textColor="@color/black1"
+                    android:textSize="14sp" />
+
+                <!--<TextView
+                    android:love_id="@+love_id/tv_zb_type"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentRight="true"
+                    android:text="表白"
+                    android:textColor="@color/line_color"
+                    android:textSize="12sp" />-->
+            </RelativeLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/layout_zb_title"
+                android:layout_marginTop="9dp">
+
+                <TextView
+                    android:id="@+id/tv_zb_des"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentLeft="true"
+                    android:ellipsize="end"
+                    android:maxLines="2"
+                    android:text="找到你的那个他，一起哈哈哈"
+                    android:textColor="@color/send_title_color"
+                    android:textSize="12sp" />
+            </LinearLayout>
+
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_alignParentBottom="true"
+                android:layout_marginBottom="9dp">
+
+                <TextView
+                    android:id="@+id/tv_use"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentLeft="true"
+                    android:layout_centerVertical="true"
+                    android:text="使用"
+                    android:textColor="@color/black1"
+                    android:textSize="14sp" />
+
+                <TextView
+                    android:id="@+id/tv_use_count"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_centerVertical="true"
+                    android:layout_marginLeft="2dp"
+                    android:layout_marginRight="2dp"
+                    android:layout_toRightOf="@+id/tv_use"
+                    android:text="999"
+                    android:textColor="@color/red"
+                    android:textSize="14sp" />
+
+                <TextView
+                    android:id="@+id/tv_count_tv"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_centerVertical="true"
+                    android:layout_toRightOf="@+id/tv_use_count"
+                    android:text="次"
+                    android:textColor="@color/black1"
+                    android:textSize="14sp" />
+
+                <TextView
+                    android:id="@+id/tv_zb_keep"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentRight="true"
+                    android:layout_centerVertical="true"
+                    android:drawableLeft="@mipmap/keep_normal"
+                    android:drawablePadding="1dp"
+                    android:gravity="center"
+                    android:text="收藏"
+                    android:textColor="@color/black1"
+                    android:textSize="12sp"
+                    android:visibility="gone" />
+            </RelativeLayout>
+
+        </RelativeLayout>
+    </LinearLayout>
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:background="@color/love_background"
+        app:layout_constraintBottom_toBottomOf="parent" />
+</android.support.constraint.ConstraintLayout>

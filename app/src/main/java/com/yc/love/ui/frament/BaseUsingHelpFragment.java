@@ -6,6 +6,7 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.yc.love.ui.activity.UsingHelpActivity;
+import com.yc.love.ui.activity.base.BaseActivity;
 import com.yc.love.ui.frament.base.BaseLazyFragment;
 
 /**
@@ -13,11 +14,11 @@ import com.yc.love.ui.frament.base.BaseLazyFragment;
  */
 
 public abstract class BaseUsingHelpFragment extends BaseLazyFragment {
-    public UsingHelpActivity mUsingHelpActivity;
+    public BaseActivity mUsingHelpActivity;
 
     @Override
     protected View onFragmentCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        mUsingHelpActivity = (UsingHelpActivity) getActivity();
+        mUsingHelpActivity = (BaseActivity) getActivity();
         return super.onFragmentCreateView(inflater, container, savedInstanceState);
     }
 

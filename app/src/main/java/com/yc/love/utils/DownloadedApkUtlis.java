@@ -22,23 +22,19 @@ public class DownloadedApkUtlis {
     //"content://downloads/my_downloads"必须这样写不可更改
     private static final Uri CONTENT_URI = Uri.parse("content://downloads/my_downloads");
 
-    public static void downLoadApk(Context context, String downloadIdKey, String apkUrl) {
-        downLoadApk(context, downloadIdKey, apkUrl, null);
-    }
-
-    public static void downLoadApk(Context context, String downloadIdKey, String apkUrl, ContentObserver contentObserver) {
+    public static void downLoadApk(Context context, String apkUrl, ContentObserver contentObserver, String apkName) {
 
         //1.得到下载对象
         DownloadManager dowanloadmanager = (DownloadManager) context.getSystemService(context.DOWNLOAD_SERVICE);
-        long spDownloadId = (long) SPUtils.get(context, downloadIdKey, (long) -1);
-        Log.d("mylog", "downLoadApk: downloadIdKey " + downloadIdKey + " spDownloadId " + spDownloadId);
+//        long spDownloadId = (long) SPUtils.get(context, downloadIdKey, (long) -1);
+//        Log.d("mylog", "downLoadApk: downloadIdKey "  + " spDownloadId " + spDownloadId);
         /*
         下载管理器中有很多下载项，怎么知道一个资源已经下载过，避免重复下载呢？
         我的项目中的需求就是apk更新下载，用户点击更新确定按钮，第一次是直接下载，
         后面如果用户连续点击更新确定按钮，就不要重复下载了。
         可以看出来查询和操作数据库查询一样的
          */
-        if (spDownloadId > 0) {
+        /*if (spDownloadId > 0) {
             DownloadManager.Query query = new DownloadManager.Query();
             query.setFilterById(spDownloadId);
             Cursor cursor = dowanloadmanager.query(query);
@@ -53,13 +49,14 @@ public class DownloadedApkUtlis {
                     return;
                 }
             }
-        }
+        }*/
         //2.创建下载请求对象，并且把下载的地址放进去
         DownloadManager.Request request = new DownloadManager.Request(Uri.parse(apkUrl));
+        Log.d("mylog", "downLoadApk: apkName " + apkName);
         //3.给下载的文件指定路径
-        request.setDestinationInExternalFilesDir(context, Environment.DIRECTORY_DOWNLOADS, "xfzs.apk");
+        request.setDestinationInExternalFilesDir(context, Environment.DIRECTORY_DOWNLOADS, apkName.concat(".apk"));
         //4.设置显示在文件下载Notification（通知栏）中显示的文字。6.0的手机Description不显示
-        request.setTitle("YC");
+        request.setTitle("apk文件");
         request.setDescription("正在下载");
         //5更改服务器返回的minetype为android包类型
         request.setMimeType("application/vnd.android.package-archive");
@@ -71,7 +68,12 @@ public class DownloadedApkUtlis {
         request.setVisibleInDownloadsUi(true);
         long lastDownloadId = dowanloadmanager.enqueue(request);
         //9.保存id到缓存
-        SPUtils.putLong(context, downloadIdKey, lastDownloadId);
+        SPUtils.putLong(context, SPUtils.DOWNLOAD_OUT_ID, lastDownloadId);
+        Log.d("mylog", "onReceive: lastDownloadId " + lastDownloadId);
+
+//        long llllll= (long) SPUtils.get(context,SPUtils.DOWNLOAD_OUT_ID,-1);
+//        Log.d("mylog", "onReceive: llllll " + llllll);
+
         //10.采用内容观察者模式实现进度
 //        downloadObserver = new DownloadChangeObserver(null);
         if (contentObserver != null) {

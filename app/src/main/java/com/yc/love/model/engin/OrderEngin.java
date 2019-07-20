@@ -10,6 +10,7 @@ import com.yc.love.model.bean.ExampleTsListBean;
 import com.yc.love.model.bean.IdCorrelationLoginBean;
 import com.yc.love.model.bean.IndexDoodsBean;
 import com.yc.love.model.bean.OrdersInitBean;
+import com.yc.love.model.bean.OthersJoinNum;
 import com.yc.love.model.domain.URLConfig;
 
 import java.util.HashMap;
@@ -33,6 +34,17 @@ public class OrderEngin extends BaseEngine {
         requestParams(params);
         HttpCoreEngin<AResultInfo<List<IndexDoodsBean>>> httpCoreEngin = HttpCoreEngin.get(mContext);
         Observable<AResultInfo<List<IndexDoodsBean>>> rxpost = httpCoreEngin.rxpost(URLConfig.getUrl(url), new TypeReference<AResultInfo<List<IndexDoodsBean>>>() {
+                }.getType(),
+                params,
+                true,
+                true, true);
+        return rxpost;
+    }
+    public Observable<AResultInfo<OthersJoinNum>> othersJoinNum(String url) {
+        Map<String, String> params = new HashMap<>();
+        requestParams(params);
+        HttpCoreEngin<AResultInfo<OthersJoinNum>> httpCoreEngin = HttpCoreEngin.get(mContext);
+        Observable<AResultInfo<OthersJoinNum>> rxpost = httpCoreEngin.rxpost(URLConfig.getUrl(url), new TypeReference<AResultInfo<OthersJoinNum>>() {
                 }.getType(),
                 params,
                 true,

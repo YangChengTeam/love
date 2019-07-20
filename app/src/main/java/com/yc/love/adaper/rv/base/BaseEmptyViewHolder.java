@@ -13,8 +13,6 @@ public abstract class BaseEmptyViewHolder extends RecyclerView.ViewHolder {
     }*/
     public BaseEmptyViewHolder(Context context, ViewGroup root, int layoutRes) {
         super(LayoutInflater.from(context).inflate(layoutRes, root, false));
-
-
     }
 
 }

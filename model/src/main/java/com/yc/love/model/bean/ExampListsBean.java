@@ -1,10 +1,12 @@
 package com.yc.love.model.bean;
 
+import java.io.Serializable;
+
 /**
  * Created by mayn on 2019/5/13.
  */
 
-public class ExampListsBean {
+public class ExampListsBean implements Serializable {
 
     public int type=1;
 

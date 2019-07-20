@@ -51,14 +51,14 @@ public class LoveByStagesDetailsActivity extends BaseSameActivity {
     @Override
     protected void initIntentData() {
         Intent intent = getIntent();
-        mId = intent.getIntExtra("id", -1);
+        mId = intent.getIntExtra("love_id", -1);
         mPostTitle = intent.getStringExtra("post_title");
     }
 
 
     public static void startLoveByStagesDetailsActivity(Context context, int id, String postTitle) {
         Intent intent = new Intent(context, LoveByStagesDetailsActivity.class);
-        intent.putExtra("id", id);
+        intent.putExtra("love_id", id);
         intent.putExtra("post_title", postTitle);
         context.startActivity(intent);
     }
@@ -338,5 +338,24 @@ public class LoveByStagesDetailsActivity extends BaseSameActivity {
     @Override
     protected String offerActivityTitle() {
         return "问答";
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        destroyWebView();
+    }
+
+    public void destroyWebView() {
+        if(mProgressBar!=null){
+            mProgressBar.clearAnimation();
+        }
+        if (webView != null) {
+            webView.clearHistory();
+            webView.clearCache(true);
+            webView.loadUrl("about:blank"); // clearView() should be changed to loadUrl("about:blank"), since clearView() is deprecated now mWebView.freeMemory(); mWebView.pauseTimers(); mWebView = null; // Note that mWebView.destroy() and mWebView = null do the exact same thing } }
+            webView.destroy();
+            webView = null;
+        }
     }
 }

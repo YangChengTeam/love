@@ -1,17 +1,19 @@
 package com.yc.love.model.bean;
 
+import com.chad.library.adapter.base.entity.MultiItemEntity;
+
+import java.io.Serializable;
 import java.util.List;
 
 /**
  * Created by mayn on 2019/4/25.
  */
 
-public class LoveHealingBean {
+public class LoveHealingBean implements MultiItemEntity, Serializable {
 
     /**
      * chat_count : 4
      * chat_name : 别让我看见你
-     * detail : [{"ans_sex":"1","content":"别让我看见你","id":4,"lovewords_id":2},{"ans_sex":"2","content":"为什么啊？","id":5,"lovewords_id":2},{"ans_sex":"1","content":"不然我见你一次，就喜欢你一次。","id":6,"lovewords_id":2},{"ans_sex":"2","content":"真棒","id":318,"lovewords_id":2}]
      * id : 2
      * quiz_sex : 1
      * search_type : 1
@@ -24,6 +26,11 @@ public class LoveHealingBean {
     public String quiz_sex;
     public String search_type;
     public List<LoveHealingDetailBean> detail;
+    public static final int VIEW_TITLE = 0;
+    public static final int VIEW_ITEM_ITEM = 1;
+    public static final int VIEW_ITEM = 2;
+    public static final int VIEW_PROG = 3;
+
     //    public String name;
     public int type;
 
@@ -55,5 +62,10 @@ public class LoveHealingBean {
                 ", quiz_sex='" + quiz_sex + '\'' +
                 ", search_type='" + search_type + '\'' +
                 '}';
+    }
+
+    @Override
+    public int getItemType() {
+        return type;
     }
 }

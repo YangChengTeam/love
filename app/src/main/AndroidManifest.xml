@@ -1,30 +1,39 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     package="com.yc.love">
 
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.CAMERA" />
     <uses-permission android:name="android.permission.READ_LOGS" />
-    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" /> <!-- <uses-permission android:name="android.permission.CALL_PHONE" /> -->
     <uses-permission android:name="android.permission.ACCESS_WIFI_STATE" />
     <uses-permission android:name="android.permission.READ_PHONE_STATE" />
     <uses-permission android:name="android.permission.CHANGE_WIFI_STATE" />
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.REQUEST_INSTALL_PACKAGES" />
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
-    <uses-permission android:name="android.permission.REQUEST_PERMISSIONS" />
+    <uses-permission android:name="android.permission.REQUEST_PERMISSIONS" /> <!-- <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" /> -->
+    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
 
-    <!-- android:theme="@style/AppTheme" -->
     <application
         android:name=".app.YcApplication"
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
+        android:networkSecurityConfig="@xml/network_security_config"
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
-        android:theme="@style/JK.SwipeBack.Transparent.Theme">
+        android:theme="@style/JK.SwipeBack.Transparent.Theme"
+        tools:targetApi="n">
+        <activity android:name=".ui.activity.PayVipActivity" />
+        <activity android:name=".ui.activity.LoveCaseActivity" />
+        <activity android:name=".ui.activity.ResultActivity" />
+        <activity android:name=".ui.activity.ImageCropActivity" />
+        <activity android:name=".ui.activity.CreateBeforeActivity" />
+        <activity android:name=".ui.activity.UsingHelpHomeActivity" />
         <activity
-            android:name=".wxapi.WXEntryActivity"
+            android:name=".wxapi.WXEntryActivity1"
             android:exported="true"
             android:launchMode="singleTop"
             android:theme="@android:style/Theme.Translucent" />
@@ -35,15 +44,14 @@
         <activity
             android:name=".ui.activity.SpecializedActivity"
             android:screenOrientation="portrait"
-            android:theme="@style/SplashTheme">
+            android:theme="@style/fullScreen">
             <intent-filter>
                 <action android:name="android.intent.action.VIEW" />
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
-        </activity>
-        <!-- android:theme="@style/AppTheme.NoActionBar" -->
+        </activity> <!-- android:theme="@style/AppTheme.NoActionBar" -->
         <activity
             android:name=".ui.activity.MainActivity"
             android:label="@string/app_name"
@@ -57,7 +65,6 @@
         <activity android:name=".ui.activity.LoveByStagesActivity" />
         <activity android:name=".ui.activity.LoveUpDownPhotoActivity" />
         <activity android:name=".ui.activity.LoveIntroductionActivity" />
-        <activity android:name=".ui.activity.BecomeVipActivity" />
         <activity android:name=".ui.activity.UserInfoActivity" />
         <!--
        //图片选择Activity
@@ -96,10 +103,12 @@
             android:name="android.support.v4.content.FileProvider"
             android:authorities="com.yc.love.fileProvider"
             android:exported="false"
-            android:grantUriPermissions="true">
+            android:grantUriPermissions="true"
+            tools:replace="android:authorities">
             <meta-data
                 android:name="android.support.FILE_PROVIDER_PATHS"
-                android:resource="@xml/file_paths" />
+                android:resource="@xml/file_paths"
+                tools:replace="android:resource" />
         </provider>
 
         <activity android:name=".ui.activity.FeedbackActivity" />
@@ -107,7 +116,6 @@
         <activity android:name=".ui.activity.CollectActivity" />
         <activity android:name=".ui.view.imgs.ISListActivity" />
         <activity android:name=".ui.view.imgs.ISCameraActivity" />
-
         <!--
         <provider
             android:name="android.support.v4.content.FileProvider"
@@ -119,8 +127,6 @@
                 android:resource="@xml/provider_paths" />
         </provider>
         -->
-
-        <activity android:name=".ui.activity.LoveHealDetailsActivity" />
         <activity android:name=".ui.activity.LoveByStagesDetailsActivity" />
         <activity android:name=".ui.activity.ExampleDetailActivity" />
         <activity android:name=".ui.activity.ShareActivity" />
@@ -130,13 +136,6 @@
                 <action android:name="android.net.conn.CONNECTIVITY_CHANGE" />
                 <action android:name="android.net.wifi.WIFI_STATE_CHANGED" />
                 <action android:name="android.net.wifi.STATE_CHANGE" />
-            </intent-filter>
-        </receiver>
-        -->
-        <!--
-        <receiver android:name=".receiver.UpdataBroadcastReceiver">
-            <intent-filter>
-                <action android:name="android.intent.action.DOWNLOAD_COMPLETE" />
             </intent-filter>
         </receiver>
         -->
@@ -157,8 +156,57 @@
         <activity android:name=".ui.activity.ProtocolActivity" />
         <activity android:name=".ui.activity.AboutUsActivity" />
         <activity android:name=".ui.activity.PrivacyStatementActivity" />
-        <activity android:name=".ui.activity.UsingHelpActivity" />
-        <activity android:name=".ui.activity.TestWebViewActivity"></activity>
+        <activity android:name=".ui.activity.UsingHelpActivity" /> <!-- android:theme="@style/ActivityV7Translucent" -->
+        <activity android:name=".ui.activity.TestWebViewActivity" />
+
+        <receiver android:name=".receiver.UpdataBroadcastReceiver">
+            <intent-filter>
+                <action android:name="android.intent.action.DOWNLOAD_COMPLETE" />
+            </intent-filter>
+        </receiver>
+
+        <activity
+            android:name="me.iwf.photopicker.PhotoPickerActivity"
+            android:theme="@style/customTheme" />
+        <activity
+            android:name="me.iwf.photopicker.PhotoPagerActivity"
+            android:theme="@style/customTheme" /> <!-- ############ QQ空间和QQ SSO授权的Activity注册 ############ -->
+        <activity
+            android:name="com.tencent.tauth.AuthActivity"
+            android:launchMode="singleTask"
+            android:noHistory="true">
+            <intent-filter>
+                <action android:name="android.intent.action.VIEW" />
+
+                <category android:name="android.intent.category.DEFAULT" />
+                <category android:name="android.intent.category.BROWSABLE" />
+
+                <data android:scheme="tencent1109275009" />
+            </intent-filter>
+        </activity>
+        <activity
+            android:name="com.tencent.connect.common.AssistActivity"
+            android:screenOrientation="portrait"
+            android:theme="@android:style/Theme.Translucent.NoTitleBar" />
+        <activity android:name=".ui.activity.LoveHealDetailsActivity" />
+        <activity android:name=".ui.activity.ExpressActivity" />
+        <activity android:name=".ui.activity.BecomeVipActivity" />
+        <activity
+            android:name=".wxapi.WXEntryActivity"
+            android:configChanges="keyboardHidden|orientation|screenSize"
+            android:exported="true"
+            android:theme="@android:style/Theme.Translucent.NoTitleBar" />
+        <activity
+            android:name=".ui.activity.PracticeTeachActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".ui.activity.PracticeLoveActivity"
+            android:screenOrientation="portrait" />
+        <activity android:name=".ui.activity.LoveAudioDetailActivity" />
+
+        <uses-library
+            android:name="org.apache.http.legacy"
+            android:required="false" />
     </application>
 
 </manifest>

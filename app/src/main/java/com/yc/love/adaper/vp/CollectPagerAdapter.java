@@ -7,7 +7,6 @@ import android.support.v4.app.FragmentTransaction;
 import android.view.ViewGroup;
 
 import com.yc.love.factory.CollectFactory;
-import com.yc.love.factory.LoveByStagesFactory;
 
 import java.util.List;
 

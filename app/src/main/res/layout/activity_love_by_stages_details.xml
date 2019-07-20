@@ -7,6 +7,7 @@
     tools:context=".ui.activity.LoveByStagesDetailsActivity">
 
     <ProgressBar
+        app:layout_constraintTop_toTopOf="parent"
         android:id="@+id/love_by_stages_details_pb_progress"
         style="?android:attr/progressBarStyleHorizontal"
         android:layout_width="match_parent"

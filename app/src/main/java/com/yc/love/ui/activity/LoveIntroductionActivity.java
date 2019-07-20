@@ -7,9 +7,13 @@ import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
+import android.view.View;
 import android.view.ViewGroup;
 
+import com.chad.library.adapter.base.BaseQuickAdapter;
+import com.kk.securityhttp.net.contains.HttpConfig;
 import com.yc.love.R;
+import com.yc.love.adaper.rv.LoveIntroduceAdapter;
 import com.yc.love.adaper.rv.NoThingAdapter;
 import com.yc.love.adaper.rv.base.RecyclerViewItemListener;
 import com.yc.love.adaper.rv.holder.BaseViewHolder;
@@ -37,18 +41,13 @@ public class LoveIntroductionActivity extends BaseSameActivity {
 
     private String mActivityTitle;
     private RecyclerView mRecyclerView;
-    private NoThingAdapter<ExampListsBean> mAdapter;
-//    private List<StringBean> mExampListsBeans;
-    //    private int PAGE_NUM = 10;
+
     private int PAGE_SIZE = 10;
     private int PAGE_NUM = 1;
-    private boolean loadMoreEnd;
-    private boolean loadDataEnd;
-    private boolean showProgressBar = false;
-    private int num = 10;
-    LoveEngin mLoveEngin;
-    private List<ExampListsBean> mExampListsBeans;
+
+    private LoveEngin mLoveEngin;
     private String mId;
+    private LoveIntroduceAdapter loveIntroduceAdapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -57,6 +56,7 @@ public class LoveIntroductionActivity extends BaseSameActivity {
         mLoveEngin = new LoveEngin(this);
         initViews();
         initDatas();
+        initListener();
     }
 
     protected void initViews() {
@@ -67,6 +67,10 @@ public class LoveIntroductionActivity extends BaseSameActivity {
         mRecyclerView = findViewById(R.id.love_introduction_rv);
         LinearLayoutManager layoutManager = new LinearLayoutManager(this);
         mRecyclerView.setLayoutManager(layoutManager);
+        loveIntroduceAdapter = new LoveIntroduceAdapter(null);
+        mRecyclerView.setAdapter(loveIntroduceAdapter);
+
+
     }
 
 
@@ -74,15 +78,34 @@ public class LoveIntroductionActivity extends BaseSameActivity {
         netData();
     }
 
+    private void initListener() {
+        loveIntroduceAdapter.setOnItemClickListener(new BaseQuickAdapter.OnItemClickListener() {
+            @Override
+            public void onItemClick(BaseQuickAdapter adapter, View view, int position) {
+                ExampListsBean exampListsBean = loveIntroduceAdapter.getItem(position);
+                if (exampListsBean != null)
+                    ExampleDetailActivity.startExampleDetailActivity(LoveIntroductionActivity.this, exampListsBean.id, exampListsBean.post_title);
+            }
+        });
+        loveIntroduceAdapter.setOnLoadMoreListener(new BaseQuickAdapter.RequestLoadMoreListener() {
+            @Override
+            public void onLoadMoreRequested() {
+                netData();
+            }
+        }, mRecyclerView);
+    }
+
     private void netData() {
-        mLoadingDialog.showLoadingDialog();
+        if (PAGE_NUM == 1)
+            mLoadingDialog.showLoadingDialog();
         mLoveEngin.exampleTsList(mId, String.valueOf(PAGE_NUM), String.valueOf(PAGE_SIZE), "example/ts_lists").subscribe(new MySubscriber<AResultInfo<ExampDataBean>>(mLoadingDialog) {
             @Override
             protected void onNetNext(AResultInfo<ExampDataBean> exampDataBeanAResultInfo) {
-                ExampDataBean exampDataBean = exampDataBeanAResultInfo.data;
-                mExampListsBeans = exampDataBean.lists;
-
-                initRecyclerViewData();
+                if (exampDataBeanAResultInfo != null && exampDataBeanAResultInfo.code == HttpConfig.STATUS_OK && exampDataBeanAResultInfo.data != null) {
+                    ExampDataBean exampDataBean = exampDataBeanAResultInfo.data;
+//                    mExampListsBeans = exampDataBean.lists;
+                    createNewData(exampDataBean.lists);
+                }
             }
 
             @Override
@@ -96,105 +119,35 @@ public class LoveIntroductionActivity extends BaseSameActivity {
             }
         });
     }
-    private void initRecyclerViewData() {
-      /*  mExampListsBeans = new ArrayList<>();
-        for (int i = 0; i < 15; i++) {
-            StringBean stringBean = new StringBean("name " + i);
-            mExampListsBeans.add(stringBean);
-        }*/
-        mAdapter = new NoThingAdapter<ExampListsBean>(mExampListsBeans, mRecyclerView) {
-            @Override
-            public BaseViewHolder getHolder(ViewGroup parent) {
-                return new LoveIntroHolder(LoveIntroductionActivity.this, recyclerViewItemListener, parent);
-            }
-        };
-        mRecyclerView.setAdapter(mAdapter);
-        if (mExampListsBeans.size() < PAGE_SIZE) {
-            Log.d("ssss", "loadMoreData: data---end");
+
+    private void createNewData(List<ExampListsBean> exampListsBeans) {
+        if (PAGE_NUM == 1) {
+            loveIntroduceAdapter.setNewData(exampListsBeans);
         } else {
-            mAdapter.setOnMoreDataLoadListener(new NoThingAdapter.OnLoadMoreDataListener() {
-                @Override
-                public void loadMoreData() {
-                    if (loadDataEnd == false) {
-                        return;
-                    }
-                    if (showProgressBar == false) {
-                        //加入null值此时adapter会判断item的type
-                        mExampListsBeans.add(null);
-                        mAdapter.notifyDataSetChanged();
-                        showProgressBar = true;
-                    }
-                    if (!loadMoreEnd) {
-                        netLoadMore();
-                    } else {
-                        Log.d("mylog", "loadMoreData: loadMoreEnd end 已加载全部数据 ");
-                        mExampListsBeans.remove(mExampListsBeans.size() - 1);
-                        mAdapter.notifyDataSetChanged();
-                    }
-                }
-            });
+            loveIntroduceAdapter.addData(exampListsBeans);
         }
-        loadDataEnd = true;
+        if (exampListsBeans.size() == PAGE_SIZE) {
+            loveIntroduceAdapter.loadMoreComplete();
+            PAGE_NUM++;
+        } else {
+            loveIntroduceAdapter.loadMoreEnd();
+        }
+
+
     }
-    private void netLoadMore() {
-//        mLoveEngin.indexExample(String.valueOf(++PAGE_NUM), String.valueOf(PAGE_SIZE), "example/index").subscribe(new MySubscriber<AResultInfo<ExampDataBean>>(mMainActivity) {
-        mLoveEngin.exampleTsList(mId, String.valueOf(++PAGE_NUM), String.valueOf(PAGE_SIZE), "example/ts_lists").subscribe(new MySubscriber<AResultInfo<ExampDataBean>>(this) {
-            @Override
-            protected void onNetNext(AResultInfo<ExampDataBean> exampDataBeanAResultInfo) {
 
-                ExampDataBean exampDataBean = exampDataBeanAResultInfo.data;
-                if (exampDataBean != null) {
-                    List<ExampListsBean> netLoadMoreData = exampDataBean.lists;
-                    showProgressBar = false;
-                    mExampListsBeans.remove(mExampListsBeans.size() - 1);
-                    mAdapter.notifyDataSetChanged();
-                    if (netLoadMoreData.size() < PAGE_SIZE) {
-                        loadMoreEnd = true;
-                    }
-                    mExampListsBeans.addAll(netLoadMoreData);
-                    mAdapter.notifyDataSetChanged();
-                    mAdapter.setLoaded();
-                }
-            }
-
-            @Override
-            protected void onNetError(Throwable e) {
-
-            }
-
-            @Override
-            protected void onNetCompleted() {
-
-            }
-        });
-    }
-    RecyclerViewItemListener recyclerViewItemListener = new RecyclerViewItemListener() {
-        @Override
-        public void onItemClick(int position) {
-//            ExampListsBean exampListsBean = mExampListsBeans.get(position);
-//            LoveByStagesDetailsActivity.startLoveByStagesDetailsActivity(mMainActivity, exampListsBean.id, exampListsBean.post_title);
-
-            ExampListsBean exampListsBean = mExampListsBeans.get(position);
-            ExampleDetailActivity.startExampleDetailActivity(LoveIntroductionActivity.this,exampListsBean.id,exampListsBean.post_title);
-        }
-
-        @Override
-        public void onItemLongClick(int position) {
-
-        }
-    };
 
     @Override
     protected void initIntentData() {
         Intent intent = getIntent();
         mActivityTitle = intent.getStringExtra("title");
-        mId = intent.getStringExtra("id");
+        mId = intent.getStringExtra("love_id");
     }
 
     public static void startLoveIntroductionActivity(Context context, String title, String tagId) {
         Intent intent = new Intent(context, LoveIntroductionActivity.class);
         intent.putExtra("title", title);
-        intent.putExtra("id", tagId);
+        intent.putExtra("love_id", tagId);
         context.startActivity(intent);
     }
 

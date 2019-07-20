@@ -1,8 +1,15 @@
 <?xml version="1.0" encoding="utf-8"?>
 <android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
-    android:background="@color/white"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    android:background="@color/white">
+
+    <include
+        android:id="@+id/top_empty_view"
+        layout="@layout/recycler_view_item_empty_view"
+        android:visibility="gone"
+        app:layout_constraintBottom_toTopOf="@id/fragment_collect_love_healing_rv" />
 
     <android.support.v7.widget.RecyclerView
         android:id="@+id/fragment_collect_love_healing_rv"

@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/white"
+    android:orientation="vertical">
+
+    <include
+        android:id="@+id/main_t2_new_view_bar"
+        layout="@layout/layout_view_bar" />
+
+    <net.lucode.hackware.magicindicator.MagicIndicator
+        android:id="@+id/main_t2_new_pager_tabs"
+        android:layout_width="match_parent"
+        android:layout_height="40dp"
+        android:background="@color/white"
+        tools:ignore="MissingConstraints" />
+
+
+    <android.support.v4.view.ViewPager
+        android:id="@+id/main_t2_new_view_pager"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" />
+
+</LinearLayout>
