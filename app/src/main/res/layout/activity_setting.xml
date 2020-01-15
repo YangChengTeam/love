@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
@@ -8,7 +8,7 @@
     tools:context=".ui.activity.SettingActivity">
 
 
-    <com.yc.love.ui.view.MainMyItemLin
+    <com.yc.verbaltalk.ui.view.MainMyItemLin
         android:id="@+id/setting_ll_item_01"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -17,7 +17,7 @@
         app:layout_constraintTop_toTopOf="parent"
         app:textNameMyItem="检查更新" />
 
-    <com.yc.love.ui.view.MainMyItemLin
+    <com.yc.verbaltalk.ui.view.MainMyItemLin
         android:id="@+id/setting_ll_item_02"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -26,25 +26,18 @@
         app:layout_constraintTop_toBottomOf="@+id/setting_ll_item_01"
         app:textNameMyItem="关于我们" />
 
-    <com.yc.love.ui.view.MainMyItemLin
-        android:id="@+id/setting_ll_item_03"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        app:imgSrc="@mipmap/seting_icon_03"
-        app:isAddIntervalBom="true"
-        app:layout_constraintTop_toBottomOf="@+id/setting_ll_item_02"
-        app:textNameMyItem="隐私政策" />
 
-    <com.yc.love.ui.view.MainMyItemLin
+
+    <com.yc.verbaltalk.ui.view.MainMyItemLin
         android:id="@+id/setting_ll_item_04"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         app:imgSrc="@mipmap/seting_icon_04"
         app:isAddIntervalBom="true"
-        app:layout_constraintTop_toBottomOf="@+id/setting_ll_item_03"
+        app:layout_constraintTop_toBottomOf="@+id/setting_ll_item_02"
         app:textNameMyItem="清除缓存" />
 
-    <com.yc.love.ui.view.MainMyItemLin
+    <com.yc.verbaltalk.ui.view.MainMyItemLin
         android:id="@+id/setting_ll_exit"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -90,4 +83,4 @@
     </FrameLayout>
 
 
-</android.support.constraint.ConstraintLayout>
+</androidx.constraintlayout.widget.ConstraintLayout>

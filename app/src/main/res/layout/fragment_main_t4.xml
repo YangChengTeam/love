@@ -14,8 +14,7 @@
         <ImageView
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:scaleType="fitXY"
-         />
+            android:scaleType="fitXY" />
 
         <TextView
             android:id="@+id/main_t4_tv_btn"
@@ -40,10 +39,14 @@
             style="?android:attr/progressBarStyleHorizontal"
             android:layout_width="match_parent"
             android:layout_height="3dp"
-            android:layout_alignParentTop="true"
             android:max="100"
             android:progress="0"
             android:progressDrawable="@drawable/process_bg" />
+
+        <!--<android.support.v4.widget.NestedScrollView-->
+        <!--android:layout_width="match_parent"-->
+        <!--android:layout_height="match_parent"-->
+        <!--android:scrollbars="vertical">-->
 
         <WebView
             android:id="@+id/main_t4_webview"
@@ -51,5 +54,6 @@
             android:layout_height="match_parent"
             android:focusable="true"
             android:focusableInTouchMode="true" />
+        <!--</android.support.v4.widget.NestedScrollView>-->
     </LinearLayout>
 </RelativeLayout>

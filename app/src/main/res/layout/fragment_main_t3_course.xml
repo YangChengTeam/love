@@ -9,13 +9,12 @@
         android:id="@+id/main_t3_course_view_bar"
         layout="@layout/layout_view_bar" />
 
-    <android.support.v7.widget.RecyclerView
+    <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/main_t3_course_rl"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:background="@color/white"
         app:layout_constraintTop_toTopOf="parent" />
-
 
 
 </LinearLayout>

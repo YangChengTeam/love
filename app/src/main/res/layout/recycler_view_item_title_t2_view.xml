@@ -1,18 +1,18 @@
 <?xml version="1.0" encoding="utf-8"?>
-<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
-    android:background="@color/white"
-    android:layout_height="wrap_content">
+    android:layout_height="wrap_content"
+    android:background="@color/white">
 
-    <com.yc.love.ui.view.RoundCornerImg
-        app:layout_constraintTop_toTopOf="parent"
-        android:paddingLeft="12dp"
-        android:paddingRight="12dp"
-        android:paddingTop="4dp"
-        android:paddingBottom="4dp"
+    <com.yc.verbaltalk.ui.view.RoundCornerImg
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:adjustViewBounds="true"
-        android:src="@mipmap/main_bg_title_t2" />
-</android.support.constraint.ConstraintLayout>
+        android:paddingLeft="12dp"
+        android:paddingTop="4dp"
+        android:paddingRight="12dp"
+        android:paddingBottom="4dp"
+        android:src="@mipmap/main_bg_title_t2"
+        app:layout_constraintTop_toTopOf="parent" />
+</androidx.constraintlayout.widget.ConstraintLayout>

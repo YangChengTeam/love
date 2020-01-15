@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
@@ -7,7 +7,6 @@
     tools:context=".ui.activity.LoveByStagesDetailsActivity">
 
     <ProgressBar
-        app:layout_constraintTop_toTopOf="parent"
         android:id="@+id/love_by_stages_details_pb_progress"
         style="?android:attr/progressBarStyleHorizontal"
         android:layout_width="match_parent"
@@ -15,9 +14,10 @@
         android:layout_alignParentTop="true"
         android:max="100"
         android:progress="0"
-        android:progressDrawable="@drawable/process_bg" />
+        android:progressDrawable="@drawable/process_bg"
+        app:layout_constraintTop_toTopOf="parent" />
 
-    <com.yc.love.ui.view.NewsScrollView
+    <com.yc.verbaltalk.ui.view.NewsScrollView
         android:id="@+id/love_by_stages_details_scroll_view"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
@@ -41,10 +41,10 @@
                 android:background="@color/white"
                 android:gravity="center_vertical"
                 android:orientation="horizontal"
+                android:paddingBottom="16dp"
                 android:paddingLeft="12dp"
-                android:paddingTop="16dp"
                 android:paddingRight="15dp"
-                android:paddingBottom="16dp">
+                android:paddingTop="16dp">
 
                 <ImageView
                     android:layout_width="5dp"
@@ -78,8 +78,8 @@
                 android:layout_marginRight="12dp"
                 android:focusable="true"
                 android:focusableInTouchMode="true"
-                android:paddingTop="18dp"
-                android:paddingBottom="14dp" />
+                android:paddingBottom="14dp"
+                android:paddingTop="18dp" />
 
             <LinearLayout
                 android:id="@+id/love_by_stages_details_cl_like_con"
@@ -88,10 +88,10 @@
                 android:layout_marginLeft="15dp"
                 android:layout_marginRight="15dp"
                 android:orientation="vertical"
-                android:paddingLeft="8dp"
-                android:paddingTop="25dp"
-                android:paddingRight="8dp"
                 android:paddingBottom="65dp"
+                android:paddingLeft="8dp"
+                android:paddingRight="8dp"
+                android:paddingTop="25dp"
                 android:visibility="invisible">
 
                 <TextView
@@ -103,6 +103,7 @@
                     android:textSize="@dimen/size_14" />
 
                 <LinearLayout
+                    android:id="@+id/ll_like"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:orientation="horizontal">
@@ -116,8 +117,8 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_gravity="center_vertical"
-                            android:drawableTop="@mipmap/icon_line_stages"
                             android:drawablePadding="8dp"
+                            android:drawableTop="@mipmap/icon_line_stages"
                             android:gravity="center_horizontal"
                             android:text="觉得有用"
                             android:textColor="@color/text_gray"
@@ -141,8 +142,8 @@
                             android:layout_alignParentRight="true"
                             android:layout_centerVertical="true"
                             android:layout_gravity="center_vertical"
-                            android:drawableTop="@mipmap/icon_line_stages"
                             android:drawablePadding="8dp"
+                            android:drawableTop="@mipmap/icon_line_stages"
                             android:gravity="center_horizontal"
                             android:text="不妨点个赞"
                             android:textColor="@color/text_gray"
@@ -153,7 +154,12 @@
 
             </LinearLayout>
 
-        </LinearLayout>
-    </com.yc.love.ui.view.NewsScrollView>
 
-</android.support.constraint.ConstraintLayout>
+        </LinearLayout>
+    </com.yc.verbaltalk.ui.view.NewsScrollView>
+
+    <include
+        android:id="@+id/rlBottom"
+        layout="@layout/layout_bottom_wechat" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>

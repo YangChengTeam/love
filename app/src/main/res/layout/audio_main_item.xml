@@ -1,0 +1,103 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="?attr/selectableItemBackground">
+
+    <LinearLayout
+        android:id="@+id/rl_audio"
+        android:layout_width="match_parent"
+        android:layout_height="80dp"
+        android:layout_marginTop="11dp"
+        android:gravity="center_vertical"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
+
+        <RelativeLayout
+            android:layout_width="80dp"
+            android:layout_height="match_parent">
+
+            <com.yc.verbaltalk.ui.view.RoundCornerImg
+                android:id="@+id/iv_audio_cover"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:scaleType="centerCrop"
+                android:src="@mipmap/audio_cover" />
+
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentBottom="true"
+                android:layout_alignParentEnd="true"
+                android:layout_marginBottom="3dp"
+                android:layout_marginEnd="3dp"
+                android:src="@mipmap/tease_play" />
+        </RelativeLayout>
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_marginBottom="3dp"
+            android:layout_marginStart="11dp"
+            android:layout_marginTop="3dp"
+            android:orientation="vertical">
+
+            <TextView
+                android:id="@+id/tv_audio_title"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+
+                android:lineSpacingExtra="3dp"
+                android:text="一路有你"
+                android:textColor="@color/black" />
+
+            <TextView
+                android:id="@+id/tv_audio_desc"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/tv_audio_title"
+                android:ellipsize="end"
+                android:maxLines="3"
+                android:text="一路找一个一直陪伴你的人"
+                android:textColor="@color/black_444444"
+                android:visibility="gone" />
+
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_alignParentBottom="true">
+
+                <TextView
+                    android:id="@+id/tv_audio_play_num"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="播放量455万"
+                    android:textColor="@color/gray_999"
+                    android:textSize="12sp" />
+
+                <TextView
+                    android:id="@+id/tv_audio_time"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentEnd="true"
+                    android:text="2019.07.20上新"
+                    android:textColor="@color/gray_999"
+                    android:textSize="12sp"
+                    android:visibility="gone" />
+
+            </RelativeLayout>
+
+        </RelativeLayout>
+
+
+    </LinearLayout>
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:layout_marginTop="11dp"
+        android:background="@color/gray_f8f8f8"
+        app:layout_constraintTop_toBottomOf="@id/rl_audio" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>

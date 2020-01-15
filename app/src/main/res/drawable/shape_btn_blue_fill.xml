@@ -8,5 +8,4 @@
         android:color="@color/red_crimson_66" />-->
     <!-- 填充  填充的颜色 -->
     <solid android:color="@color/pay_vip_blue" />
-
 </shape>

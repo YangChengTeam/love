@@ -1,7 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
-<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/rootView"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".ui.activity.ExampleDetailActivity">
@@ -16,17 +17,18 @@
         android:progress="0"
         android:progressDrawable="@drawable/process_bg" />
 
-    <com.yc.love.ui.view.NewsScrollView
+
+    <androidx.core.widget.NestedScrollView
         android:id="@+id/example_detail_scroll_view"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:descendantFocusability="blocksDescendants"
         app:layout_constraintBottom_toBottomOf="@+id/example_detail_pb_progress">
 
-        <LinearLayout
+
+        <RelativeLayout
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:orientation="vertical">
+            android:layout_height="match_parent">
 
             <WebView
                 android:id="@+id/example_detail_webview"
@@ -36,6 +38,7 @@
                 android:layout_marginRight="10dp"
                 android:focusable="true"
                 android:focusableInTouchMode="true"
+                android:nestedScrollingEnabled="false"
                 android:paddingTop="18dp"
                 android:paddingBottom="14dp" />
 
@@ -43,6 +46,7 @@
                 android:id="@+id/example_detail_cl_like_con"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:layout_below="@id/example_detail_webview"
                 android:layout_marginLeft="15dp"
                 android:layout_marginRight="15dp"
                 android:orientation="vertical"
@@ -61,6 +65,7 @@
                     android:textSize="@dimen/size_14" />
 
                 <LinearLayout
+                    android:id="@+id/ll_like"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:orientation="horizontal">
@@ -108,6 +113,12 @@
                     </RelativeLayout>
                 </LinearLayout>
             </LinearLayout>
-        </LinearLayout>
-    </com.yc.love.ui.view.NewsScrollView>
-</android.support.constraint.ConstraintLayout>
+        </RelativeLayout>
+    </androidx.core.widget.NestedScrollView>
+
+    <include
+        android:id="@+id/rlBottom"
+        layout="@layout/layout_bottom_wechat" />
+
+
+</androidx.constraintlayout.widget.ConstraintLayout>

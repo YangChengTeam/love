@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/rootView"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_marginBottom="15dp"
+    android:background="@drawable/community_tag_selector"
+    android:orientation="vertical"
+    app:cardCornerRadius="8dp"
+    app:cardElevation="4dp"
+    app:contentPaddingBottom="8dp"
+    app:contentPaddingLeft="10dp"
+    app:contentPaddingRight="10dp"
+    app:contentPaddingTop="8dp">
+
+    <TextView
+        android:id="@+id/tv_content"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:ellipsize="end"
+        android:singleLine="true"
+        android:text="#导师心得#"
+        android:textColor="@color/community_tag_color_selector" />
+
+
+</androidx.cardview.widget.CardView>

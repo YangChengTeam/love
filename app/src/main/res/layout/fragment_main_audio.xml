@@ -11,31 +11,95 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:background="@color/white"
+        android:paddingTop="@dimen/statusbar_view_height"
         android:paddingBottom="10dp"
-        android:paddingTop="@dimen/statusbar_view_height">
+        android:visibility="gone">
 
         <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="@dimen/dp_10"
             android:gravity="center_horizontal"
-            android:text="实战对话"
+            android:text="撩爱音频"
             android:textColor="@color/black"
-            android:textSize="16sp" />
+            android:textSize="18sp" />
     </LinearLayout>
 
-
-    <LinearLayout
+    <View
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:background="@color/gray_f2f4f6">
+        android:layout_height="1dp"
+        android:background="@color/gray_f6f6f6" />
 
-        <android.support.v7.widget.RecyclerView
-            android:id="@+id/recyclerView_sleep"
+    <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
+        android:id="@+id/swipeRefreshLayout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:paddingLeft="10dp"
-            android:paddingRight="10dp"
-            android:paddingTop="15dp" />
-    </LinearLayout>
+            android:background="@color/white"
+            android:orientation="vertical"
+            android:paddingLeft="15dp"
+            android:paddingTop="15dp"
+            android:paddingRight="15dp">
+
+            <RelativeLayout
+                android:id="@+id/rl_select_container"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+
+                <TextView
+                    android:id="@+id/tv_select_time"
+                    android:layout_width="wrap_content"
+                    android:layout_height="30dp"
+                    android:layout_marginEnd="8dp"
+                    android:background="@drawable/audio_tag_selector"
+                    android:clickable="true"
+                    android:focusable="true"
+                    android:gravity="center"
+                    android:paddingLeft="15dp"
+                    android:paddingRight="15dp"
+                    android:text="时间"
+                    android:textColor="@color/audio_tag_color_selector" />
+
+                <TextView
+                    android:id="@+id/tv_select_hot"
+                    android:layout_width="wrap_content"
+                    android:layout_height="30dp"
+                    android:layout_marginStart="8dp"
+                    android:layout_toEndOf="@id/tv_select_time"
+                    android:background="@drawable/audio_tag_selector"
+                    android:clickable="true"
+                    android:focusable="true"
+                    android:gravity="center"
+                    android:paddingLeft="15dp"
+                    android:paddingRight="15dp"
+                    android:text="热度"
+                    android:textColor="@color/audio_tag_color_selector" />
+
+
+                <TextView
+                    android:id="@+id/tv_select_filter"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentRight="true"
+                    android:layout_centerVertical="true"
+                    android:drawableLeft="@mipmap/icon_filter"
+                    android:drawablePadding="5dp"
+                    android:gravity="center"
+                    android:text="筛选"
+                    android:textColor="@color/black"
+                    android:visibility="gone" />
+
+
+            </RelativeLayout>
+
+
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/recyclerView_sleep"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent" />
+        </LinearLayout>
+    </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
 </LinearLayout>

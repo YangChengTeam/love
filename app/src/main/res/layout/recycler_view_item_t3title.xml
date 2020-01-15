@@ -1,9 +1,19 @@
 <?xml version="1.0" encoding="utf-8"?>
-<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:background="@color/white">
+
+    <com.youth.banner.Banner
+        android:id="@+id/banner"
+        android:layout_width="match_parent"
+        android:layout_height="150dp"
+        android:paddingBottom="18dp"
+        android:paddingLeft="12dp"
+        android:paddingRight="12dp"
+        android:paddingTop="4dp"
+        app:layout_constraintTop_toTopOf="parent" />
 
     <ImageView
         android:id="@+id/item_t3title_iv_title"
@@ -15,6 +25,7 @@
         android:paddingTop="4dp"
         android:scaleType="fitXY"
         android:src="@mipmap/main_bg_t3_title"
+        android:visibility="gone"
         app:layout_constraintTop_toTopOf="parent" />
 
     <View
@@ -22,7 +33,7 @@
         android:layout_width="match_parent"
         android:layout_height="10dp"
         android:background="@color/love_background"
-        app:layout_constraintTop_toBottomOf="@+id/item_t3title_iv_title" />
+        app:layout_constraintTop_toBottomOf="@+id/banner" />
 
     <LinearLayout
         android:id="@+id/item_t3title_ll_category"
@@ -104,6 +115,7 @@
         android:layout_marginRight="8dp"
         android:layout_marginTop="4dp"
         android:paddingBottom="12dp"
+        android:visibility="gone"
         app:layout_constraintTop_toBottomOf="@id/item_t3title_ll_category">
 
         <ImageView
@@ -122,4 +134,4 @@
     </LinearLayout>
 
 
-</android.support.constraint.ConstraintLayout>
+</androidx.constraintlayout.widget.ConstraintLayout>

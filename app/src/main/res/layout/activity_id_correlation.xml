@@ -112,14 +112,14 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="22dp"
-                android:src="@mipmap/icon_app_logo_name" />
+                android:src="@mipmap/icon_login" />
 
             <View
                 android:layout_width="1dp"
                 android:layout_height="0dp"
                 android:layout_weight="1.5" />
 
-            <com.yc.love.ui.view.LoginEditTextLin
+            <com.yc.verbaltalk.ui.view.LoginEditTextLin
                 android:id="@+id/id_correlation_let_phont"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -129,7 +129,7 @@
                 app:maxLengthLoginEt="11"
                 app:textHintLoginEt="请输入手机号码" />
 
-            <com.yc.love.ui.view.LoginEditTextLin
+            <com.yc.verbaltalk.ui.view.LoginEditTextLin
                 android:id="@+id/id_correlation_let_code"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -141,7 +141,7 @@
                 app:maxLengthLoginEt="6"
                 app:textHintLoginEt="请输入验证码" />
 
-            <com.yc.love.ui.view.LoginEditTextLin
+            <com.yc.verbaltalk.ui.view.LoginEditTextLin
                 android:id="@+id/id_correlation_let_pwd"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"

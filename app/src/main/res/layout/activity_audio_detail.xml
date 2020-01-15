@@ -1,28 +1,81 @@
 <?xml version="1.0" encoding="utf-8"?>
-
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:id="@+id/ll_container"
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:background="@drawable/ic_details_bg"
-    android:orientation="vertical">
+    android:layout_height="match_parent">
 
-    <View
+    <LinearLayout
+        android:id="@+id/ll_container"
         android:layout_width="match_parent"
-        android:layout_height="@dimen/statusbar_view_height" />
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        app:layout_constraintTop_toBottomOf="parent">
 
-    <com.music.player.lib.view.MusicPlayerController
-        android:id="@+id/music_player_controller"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content" />
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="0.5dp"
+            android:background="@color/gray_ddd" />
 
-    <View
-        android:layout_width="match_parent"
-        android:layout_height="2dp"
-        android:background="#E7E7E7" />
+        <LinearLayout
+            android:id="@+id/top_container"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
 
-    <android.support.v7.widget.RecyclerView
-        android:id="@+id/recycler_view"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent" />
-</LinearLayout>
+            <com.music.player.lib.view.MusicPlayerController
+                android:id="@+id/music_player_controller"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@color/white" />
+
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="10dp"
+                android:background="#F5F5F5" />
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@color/white"
+                android:orientation="vertical"
+                android:paddingLeft="15dp"
+                android:paddingRight="15dp"
+                android:paddingTop="15dp">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="内容简介"
+                    android:textColor="@color/black"
+                    android:textSize="16sp"
+                    android:textStyle="bold" />
+
+            </LinearLayout>
+        </LinearLayout>
+
+
+        <com.yc.verbaltalk.ui.view.MyScrollView
+            android:id="@+id/nestedScrollView"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_marginBottom="50dp"
+            android:scrollbars="vertical">
+
+            <WebView
+                android:id="@+id/tv_desc"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="8dp"
+                android:layout_marginRight="8dp"
+                android:layout_marginTop="5dp"
+                android:nestedScrollingEnabled="false" />
+        </com.yc.verbaltalk.ui.view.MyScrollView>
+    </LinearLayout>
+
+    <include
+        android:id="@+id/rlBottom"
+        app:layout_constraintTop_toBottomOf="@id/ll_container"
+        layout="@layout/layout_bottom_wechat" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>

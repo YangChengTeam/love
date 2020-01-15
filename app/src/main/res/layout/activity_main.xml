@@ -1,7 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/love_background">
@@ -11,13 +10,12 @@
         android:layout_height="match_parent"
         android:orientation="vertical">
 
-        <com.yc.love.ui.view.ControlScrollViewPager
+        <com.yc.verbaltalk.ui.view.ControlScrollViewPager
             android:id="@+id/comp_main_vp_fragment"
             android:layout_width="match_parent"
             android:layout_height="0dp"
             android:layout_weight="100"
             app:layout_constraintBottom_toTopOf="@+id/comp_main_ll_con" />
-
 
         <View
             android:layout_width="match_parent"
@@ -37,7 +35,7 @@
                 android:id="@+id/comp_main_tv_tab_1"
                 style="@style/tv_main_icon_bottom"
                 android:background="?attr/selectableItemBackgroundBorderless"
-                android:drawableTop="@mipmap/main_icon_tab_01_s"
+                android:drawableTop="@mipmap/home_sel"
                 android:text="首页"
                 android:textColor="@color/black" />
 
@@ -45,31 +43,31 @@
                 android:id="@+id/comp_main_tv_tab_2"
                 style="@style/tv_main_icon_bottom"
                 android:background="?attr/selectableItemBackgroundBorderless"
-                android:drawableTop="@mipmap/main_icon_tab_02"
-                android:text="音频"
+                android:drawableTop="@mipmap/home_love_default"
+                android:text="秘技"
                 android:textColor="@color/text_gray" />
 
             <TextView
                 android:id="@+id/comp_main_tv_tab_3"
                 style="@style/tv_main_icon_bottom"
                 android:background="?attr/selectableItemBackgroundBorderless"
-                android:drawableTop="@mipmap/main_icon_tab_03"
-                android:text="秘籍"
+                android:drawableTop="@mipmap/home_community_default"
+                android:text="社区"
                 android:textColor="@color/text_gray" />
 
             <TextView
                 android:id="@+id/comp_main_tv_tab_4"
                 style="@style/tv_main_icon_bottom"
                 android:background="?attr/selectableItemBackgroundBorderless"
-                android:drawableTop="@mipmap/main_icon_tab_04"
-                android:text="福利"
+                android:drawableTop="@mipmap/home_tease_default"
+                android:text="撩吧"
                 android:textColor="@color/text_gray" />
 
             <TextView
                 android:id="@+id/comp_main_tv_tab_5"
                 style="@style/tv_main_icon_bottom"
                 android:background="?attr/selectableItemBackgroundBorderless"
-                android:drawableTop="@mipmap/main_icon_tab_05"
+                android:drawableTop="@mipmap/home_personal_default"
                 android:text="我的"
                 android:textColor="@color/text_gray" />
 
@@ -79,13 +77,12 @@
 
     <ImageView
         android:id="@+id/comp_main_iv_to_wx"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_width="71dp"
+        android:layout_height="71dp"
         android:layout_gravity="bottom|end"
-        android:layout_marginBottom="62dp"
+        android:layout_marginBottom="120dp"
         android:layout_marginRight="15dp"
-        android:src="@mipmap/icon_floating_weixin"
-        android:visibility="gone" />
+        android:src="@mipmap/icon_floating_weixin" />
 
     <!--<android.support.design.widget.FloatingActionButton
         android:visibility="gone"

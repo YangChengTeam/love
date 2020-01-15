@@ -1,0 +1,44 @@
+apply plugin: 'com.android.library'
+
+
+android {
+
+    compileSdkVersion 28
+//    buildToolsVersion rootProject.ext.android.buildToolsVersion
+
+    defaultConfig {
+        minSdkVersion 19
+        targetSdkVersion 28
+        versionCode 1
+        versionName '1.0'
+        testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
+    }
+
+    //编译发布至Bintray时报错处理
+    lintOptions {
+        abortOnError false
+    }
+}
+
+
+
+//uploadArchives{
+//    repositories.mavenDeployer{
+//        // 配置本地仓库路径，这里是项目的根目录下的maven目录中
+//        repository(url: uri('../maven'))
+//        // 唯一标识 一般为模块包名 也可其他
+//        pom.groupId = "com.android.player.lib"
+//        // 项目名称（一般为模块名称 也可其他
+//        pom.artifactId = rootProject.ext.videoModule
+//        // 发布的版本号
+//        pom.version = rootProject.ext.videoVersion
+//    }
+//}
+
+dependencies {
+    implementation fileTree(dir: 'libs', include: ['*.jar'])
+    testImplementation 'junit:junit:4.12'
+    androidTestImplementation 'com.android.support.test:runner:1.0.2'
+    androidTestImplementation 'com.android.support.test.espresso:espresso-core:3.0.2'
+    implementation 'com.android.support:appcompat-v7:28.0.0'
+}

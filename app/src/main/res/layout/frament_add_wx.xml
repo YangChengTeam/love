@@ -1,0 +1,92 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:gravity="center_horizontal"
+    android:orientation="vertical">
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@drawable/community_tag_normal"
+        android:paddingBottom="20dp"
+        android:paddingLeft="15dp"
+        android:paddingRight="15dp"
+        android:paddingTop="20dp">
+
+        <TextView
+            android:id="@+id/tv_tint"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/contact_teacher"
+            android:textColor="@color/black"
+            android:textSize="@dimen/sp_18"
+            android:textStyle="bold"
+            app:layout_constraintLeft_toRightOf="parent"
+            app:layout_constraintRight_toLeftOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <TextView
+            android:id="@+id/tv_content"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
+            android:lineSpacingExtra="8dp"
+            android:text="添加美女导师，即获得一次情感问题分析+一份针对性聊天秘籍"
+            android:textColor="@color/black_333333"
+            app:layout_constraintTop_toBottomOf="@id/tv_tint" />
+
+        <LinearLayout
+            android:id="@+id/ll_wx"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            app:layout_constraintTop_toBottomOf="@id/tv_content">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="导师微信号："
+                android:textColor="@color/black_333333" />
+
+            <TextView
+                android:id="@+id/tv_wx"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="pai201807"
+                android:textColor="@color/black_333333" />
+        </LinearLayout>
+
+        <TextView
+            android:id="@+id/tv_time"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            android:text="在线时间：10：00-23：00"
+            android:textColor="@color/black_333333"
+            app:layout_constraintTop_toBottomOf="@id/ll_wx" />
+
+        <TextView
+            android:id="@+id/tv_copy_wx"
+            android:layout_width="match_parent"
+            android:layout_height="40dp"
+            android:layout_marginTop="15dp"
+            android:background="@drawable/wx_btn_selector"
+            android:gravity="center"
+            android:text="复制并打开微信"
+            android:textColor="@color/white"
+
+            app:layout_constraintTop_toBottomOf="@id/tv_time" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+    <ImageView
+        android:id="@+id/iv_close"
+        android:layout_width="30dp"
+        android:layout_height="30dp"
+        android:layout_marginTop="15dp"
+        android:src="@mipmap/wx_close" />
+</LinearLayout>

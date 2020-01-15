@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
-    package="com.yc.love">
+    package="com.yc.verbaltalk">
 
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.CAMERA" />
@@ -22,7 +22,7 @@
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
         android:networkSecurityConfig="@xml/network_security_config"
-        android:roundIcon="@mipmap/ic_launcher_round"
+        android:roundIcon="@mipmap/ic_launcher"
         android:supportsRtl="true"
         android:theme="@style/JK.SwipeBack.Transparent.Theme"
         tools:targetApi="n">
@@ -32,11 +32,6 @@
         <activity android:name=".ui.activity.ImageCropActivity" />
         <activity android:name=".ui.activity.CreateBeforeActivity" />
         <activity android:name=".ui.activity.UsingHelpHomeActivity" />
-        <activity
-            android:name=".wxapi.WXEntryActivity1"
-            android:exported="true"
-            android:launchMode="singleTop"
-            android:theme="@android:style/Theme.Translucent" />
         <activity
             android:name=".wxapi.WXPayEntryActivity"
             android:exported="true"
@@ -55,13 +50,10 @@
         <activity
             android:name=".ui.activity.MainActivity"
             android:label="@string/app_name"
+            android:launchMode="singleTask"
             android:theme="@style/AppTheme" />
-        <activity android:name=".ui.activity.RecyclerViewSlidingActivity" />
-        <activity android:name=".ui.activity.Main4Activity" />
         <activity android:name=".ui.activity.IdCorrelationSlidingActivity" />
-        <activity android:name=".ui.activity.LoveHealActivity" />
         <activity android:name=".ui.activity.LoveDialogueActivity" />
-        <activity android:name=".ui.activity.LoveHealingActivity" />
         <activity android:name=".ui.activity.LoveByStagesActivity" />
         <activity android:name=".ui.activity.LoveUpDownPhotoActivity" />
         <activity android:name=".ui.activity.LoveIntroductionActivity" />
@@ -100,8 +92,8 @@
         </provider>
         -->
         <provider
-            android:name="android.support.v4.content.FileProvider"
-            android:authorities="com.yc.love.fileProvider"
+            android:name="androidx.core.content.FileProvider"
+            android:authorities="com.yc.verbaltalk.fileProvider"
             android:exported="false"
             android:grantUriPermissions="true"
             tools:replace="android:authorities">
@@ -129,7 +121,7 @@
         -->
         <activity android:name=".ui.activity.LoveByStagesDetailsActivity" />
         <activity android:name=".ui.activity.ExampleDetailActivity" />
-        <activity android:name=".ui.activity.ShareActivity" />
+        <activity android:name=".ui.activity.SearchActivity" />
         <!--
         <receiver android:name=".receiver.NetWorkChangReceiver">
             <intent-filter>
@@ -157,7 +149,6 @@
         <activity android:name=".ui.activity.AboutUsActivity" />
         <activity android:name=".ui.activity.PrivacyStatementActivity" />
         <activity android:name=".ui.activity.UsingHelpActivity" /> <!-- android:theme="@style/ActivityV7Translucent" -->
-        <activity android:name=".ui.activity.TestWebViewActivity" />
 
         <receiver android:name=".receiver.UpdataBroadcastReceiver">
             <intent-filter>
@@ -186,24 +177,37 @@
         </activity>
         <activity
             android:name="com.tencent.connect.common.AssistActivity"
-            android:screenOrientation="portrait"
+
             android:theme="@android:style/Theme.Translucent.NoTitleBar" />
         <activity android:name=".ui.activity.LoveHealDetailsActivity" />
-        <activity android:name=".ui.activity.ExpressActivity" />
+
         <activity android:name=".ui.activity.BecomeVipActivity" />
         <activity
             android:name=".wxapi.WXEntryActivity"
             android:configChanges="keyboardHidden|orientation|screenSize"
             android:exported="true"
             android:theme="@android:style/Theme.Translucent.NoTitleBar" />
+        <activity android:name=".ui.activity.PracticeTeachActivity" />
+        <activity android:name=".ui.activity.PracticeLoveActivity" />
         <activity
-            android:name=".ui.activity.PracticeTeachActivity"
-            android:screenOrientation="portrait" />
-        <activity
-            android:name=".ui.activity.PracticeLoveActivity"
-            android:screenOrientation="portrait" />
-        <activity android:name=".ui.activity.LoveAudioDetailActivity" />
+            android:name=".ui.activity.LoveAudioDetailActivity"
+            android:launchMode="singleTask">
+            <intent-filter>
+                <action android:name="com.music.player.love.action" />
+                <action android:name="android.intent.action.VIEW" />
 
+                <category android:name="android.intent.category.DEFAULT" />
+            </intent-filter>
+        </activity>
+        <activity android:name=".ui.activity.CommunityNoticeDetailActivity" />
+        <activity android:name=".ui.activity.CommunityDetailActivity" />
+        <activity android:name=".ui.activity.CommunityPublishActivity" />
+        <activity android:name=".ui.activity.CommunityTagListActivity" />
+        <activity android:name=".ui.frament.main.AudioActivity" />
+        <activity android:name=".ui.activity.ChatRecommendDetailActivity" />
+        <activity android:name=".ui.activity.ChatCourseDetailActivity" />
+
+        <!--android:windowSoftInputMode="adjustPan|stateHidden"-->
         <uses-library
             android:name="org.apache.http.legacy"
             android:required="false" />

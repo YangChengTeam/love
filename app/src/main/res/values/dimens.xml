@@ -7,4 +7,5 @@
     <dimen name="size_20">20sp</dimen>
     <dimen name="size_22">22sp</dimen>
     <dimen name="size_26">26sp</dimen>
+    <dimen name="sp_18">18sp</dimen>
 </resources>

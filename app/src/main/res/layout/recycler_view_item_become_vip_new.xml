@@ -1,17 +1,16 @@
 <?xml version="1.0" encoding="utf-8"?>
-<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="wrap_content">
-
 
     <LinearLayout
         android:id="@+id/item_become_vip_new_ll_con"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginLeft="8dp"
-        android:layout_marginTop="18dp"
         android:layout_marginRight="8dp"
+        android:layout_marginTop="18dp"
         android:orientation="horizontal"
         app:layout_constraintTop_toTopOf="parent">
 
@@ -55,15 +54,29 @@
             android:drawableTop="@mipmap/become_vip_icon_03"
             android:gravity="center"
             android:paddingLeft="2dp"
-            android:text="app遇问题\n随时咨询客服"
+            android:text="贴心服务\n诚信经营"
             android:textColor="@color/text_gray_dark"
             android:textSize="@dimen/size_12" />
 
     </LinearLayout>
 
+    <TextView
+        android:id="@+id/tv_tint"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_marginTop="10dp"
+        android:gravity="center_horizontal"
+        android:lineSpacingExtra="5dp"
+        android:text="成本价出售，没有中间商赚差价\n添加美女老师进微信群，分享资源，提高爱商!\n"
+        android:textColor="@color/red_crimson"
+        android:textSize="16sp"
+        android:visibility="gone"
+        app:layout_constraintTop_toBottomOf="@id/item_become_vip_new_ll_con" />
+
     <View
         android:layout_width="match_parent"
         android:layout_height="75dp"
-        app:layout_constraintTop_toBottomOf="@+id/item_become_vip_new_ll_con" />
+        app:layout_constraintTop_toBottomOf="@+id/tv_tint" />
 
-</android.support.constraint.ConstraintLayout>
+</androidx.constraintlayout.widget.ConstraintLayout>

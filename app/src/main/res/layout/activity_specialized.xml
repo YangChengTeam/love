@@ -1,12 +1,38 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+
+
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical">
 
-    <!--android:background="@mipmap/lightning_bg"-->
+
+    <!--android:src="@mipmap/lightning_bg"-->
     <ImageView
         android:id="@+id/specialized_iv_lightning"
         android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:scaleType="fitXY"
+        android:visibility="gone" />
+
+    <FrameLayout
+        android:id="@+id/splash_container"
+        android:layout_width="match_parent"
         android:layout_height="match_parent" />
-</LinearLayout>
+
+    <TextView
+        android:id="@+id/skip_view"
+        android:layout_width="96dp"
+        android:layout_height="wrap_content"
+        android:layout_alignParentTop="true"
+        android:layout_alignParentRight="true"
+        android:layout_marginTop="30dp"
+        android:layout_marginRight="16dp"
+        android:background="@drawable/background_circle"
+        android:gravity="center"
+        android:text="@string/click_to_skip"
+        android:textColor="@android:color/white"
+        android:textSize="14sp"
+        android:visibility="gone" />
+
+</RelativeLayout>

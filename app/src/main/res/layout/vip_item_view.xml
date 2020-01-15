@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:id="@+id/item_become_vip_tail_cl_con_01"
     android:layout_width="match_parent"
@@ -68,8 +68,8 @@
         android:layout_marginRight="4dp"
         android:background="@drawable/vip_item_desc_selector"
         android:paddingBottom="3dp"
-        android:paddingLeft="22dp"
-        android:paddingRight="22dp"
+        android:paddingLeft="15dp"
+        android:paddingRight="15dp"
         android:paddingTop="3dp"
         android:text="最低1.2元/天"
         android:textColor="@color/white"
@@ -87,4 +87,4 @@
         android:visibility="gone"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintRight_toRightOf="parent" />
-</android.support.constraint.ConstraintLayout>
+</androidx.constraintlayout.widget.ConstraintLayout>

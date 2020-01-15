@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="utf-8"?>
+<merge xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <RelativeLayout
+        android:id="@+id/activity_base_same_rl_title_con"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/white"
+        android:paddingBottom="6dp">
+
+        <ImageView
+            android:id="@+id/activity_base_same_iv_back"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerVertical="true"
+            android:layout_marginLeft="12dp"
+            android:background="?attr/selectableItemBackgroundBorderless"
+            android:padding="8dp"
+            android:src="@mipmap/icon_arr_lift_black" />
+
+        <TextView
+            android:id="@+id/activity_base_same_tv_title"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerHorizontal="true"
+            android:layout_centerVertical="true"
+            android:ellipsize="end"
+            android:maxLines="1"
+            android:paddingLeft="58dp"
+            android:paddingRight="58dp"
+            android:text="中文中文中文中文中文中文中文中文"
+            android:textColor="@color/black"
+            android:textSize="@dimen/size_20" />
+
+        <TextView
+            android:id="@+id/activity_base_same_tv_sub"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentRight="true"
+            android:layout_centerVertical="true"
+            android:layout_marginRight="18dp"
+            android:background="?attr/selectableItemBackgroundBorderless"
+            android:padding="2dp"
+            android:text=""
+            android:textColor="@color/black"
+            android:textSize="@dimen/size_16" />
+
+
+    </RelativeLayout>
+
+</merge>

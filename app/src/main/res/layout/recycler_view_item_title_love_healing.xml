@@ -5,7 +5,7 @@
     android:layout_height="wrap_content"
     android:background="@color/white">
 
-    <com.yc.love.ui.view.RoundCornerImg
+    <com.yc.verbaltalk.ui.view.RoundCornerImg
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:adjustViewBounds="true"

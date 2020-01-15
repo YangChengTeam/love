@@ -10,7 +10,7 @@
     android:paddingTop="12dp"
     android:paddingBottom="12dp">
 
-    <android.support.v7.widget.RecyclerView
+    <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/item_love_heal_rv"
         android:layout_width="match_parent"
         android:layout_height="wrap_content" />

@@ -1,0 +1,131 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <!-- android:layout_marginBottom="45dp"-->
+    <LinearLayout
+        android:id="@+id/ll_top_container"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical">
+
+        <!--顶部播放器-->
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <com.video.player.lib.view.VideoPlayerTrackView
+                android:id="@+id/videoPlayer"
+                android:layout_width="match_parent"
+                android:layout_height="200dp"
+                app:video_autoSetCoverController="true"
+                app:video_autoSetVideoController="true" />
+
+            <ImageView
+                android:id="@+id/iv_tutor_back"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="15dp"
+                android:layout_marginTop="40dp"
+                android:src="@mipmap/icon_back_one" />
+
+
+            <ImageView
+                android:id="@+id/iv_course_collect"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentEnd="true"
+                android:layout_marginTop="35dp"
+                android:layout_marginEnd="15dp"
+                android:padding="5dp"
+                android:src="@mipmap/icon_collection" />
+
+        </RelativeLayout>
+
+
+        <androidx.core.widget.NestedScrollView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_marginLeft="15dp"
+                android:layout_marginTop="15dp"
+                android:layout_marginRight="15dp"
+                android:layout_marginBottom="45dp"
+                android:orientation="vertical">
+
+                <TextView
+                    android:id="@+id/tv_recommend_title"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:lineSpacingExtra="2dp"
+                    android:text="告别暧昧，强势进阶两个人的关系，怎么办？"
+                    android:textColor="@color/gray_222222"
+                    android:textSize="16sp"
+                    android:textStyle="bold" />
+
+                <RelativeLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="10dp">
+
+                    <TextView
+                        android:id="@+id/tv_recommend_tutor_name"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="导师：静静"
+                        android:textColor="@color/gray_999999"
+                        android:textSize="12sp" />
+
+                    <TextView
+                        android:id="@+id/tv_recommend_play_count"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_alignParentRight="true"
+                        android:text="484次播放"
+                        android:textColor="@color/gray_999999"
+                        android:textSize="12sp" />
+
+
+                </RelativeLayout>
+
+                <com.yc.verbaltalk.ui.view.CommonWebView
+                    android:id="@+id/webView"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="15dp"
+
+                    android:nestedScrollingEnabled="false"
+                    android:scrollbars="none" />
+
+
+            </LinearLayout>
+
+        </androidx.core.widget.NestedScrollView>
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/ll_tutor_buy"
+        android:layout_width="match_parent"
+        android:layout_height="44dp"
+        android:layout_alignParentBottom="true"
+        android:background="@drawable/common_btn_bg"
+        android:clickable="true"
+        android:focusable="true"
+        android:gravity="center">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="点击添加微信，获取更多资源"
+            android:textColor="@color/white"
+            android:textStyle="bold" />
+
+    </LinearLayout>
+
+
+</RelativeLayout>

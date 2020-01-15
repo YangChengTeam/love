@@ -18,7 +18,7 @@
         android:layout_marginBottom="65dp"
         android:background="@drawable/shape_white_circular">
 
-        <android.support.v4.view.ViewPager
+        <androidx.viewpager.widget.ViewPager
             android:id="@+id/using_help_home_viewpager"
             android:layout_width="match_parent"
             android:layout_height="match_parent" />
@@ -32,7 +32,6 @@
             android:layout_marginBottom="15dp" />
 
         <TextView
-            android:visibility="gone"
             android:id="@+id/using_help_home_tv_next"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -47,6 +46,7 @@
             android:paddingBottom="18dp"
             android:text="进入首页"
             android:textColor="@color/white"
+            android:visibility="gone"
             app:layout_constraintBottom_toBottomOf="parent" />
 
     </RelativeLayout>

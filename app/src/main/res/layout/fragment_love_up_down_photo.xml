@@ -18,7 +18,7 @@
 
     <include layout="@layout/layout_activity_title" />
 
-    <android.support.v7.widget.RecyclerView
+    <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/fragment_love_up_down_photo_rv"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"

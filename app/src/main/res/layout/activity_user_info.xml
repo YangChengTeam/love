@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
@@ -14,7 +14,6 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="35dp"
         android:layout_marginBottom="35dp"
-        android:visibility="gone"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
         app:layout_constraintTop_toTopOf="parent">
@@ -129,7 +128,7 @@
             android:textSize="@dimen/size_14" />
 
 
-        <com.yc.love.ui.view.CheckBoxSample
+        <com.yc.verbaltalk.ui.view.CheckBoxSample
             android:id="@+id/user_info_check_women"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -148,7 +147,7 @@
             android:textSize="@dimen/size_14"
             android:textStyle="bold" />
 
-        <com.yc.love.ui.view.CheckBoxSample
+        <com.yc.verbaltalk.ui.view.CheckBoxSample
             android:id="@+id/user_info_check_men"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -170,4 +169,4 @@
 
     </LinearLayout>
 
-</android.support.constraint.ConstraintLayout>
+</androidx.constraintlayout.widget.ConstraintLayout>

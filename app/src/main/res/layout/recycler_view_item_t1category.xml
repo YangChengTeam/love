@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/relativeLayout"
@@ -8,12 +8,20 @@
     android:focusable="true"
     android:focusableInTouchMode="true">
 
+
+    <com.youth.banner.Banner
+        android:id="@+id/banner"
+        android:layout_width="match_parent"
+        android:layout_height="180dp" />
+
+
     <ImageView
         android:id="@+id/item_t1category_iv_title"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:adjustViewBounds="true"
         android:src="@mipmap/main_bg_title"
+        android:visibility="gone"
         tools:ignore="MissingConstraints" />
 
 
@@ -22,18 +30,18 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:src="@mipmap/main_bg_share"
-        app:layout_constraintBottom_toBottomOf="@id/item_t1category_iv_title"
-        app:layout_constraintLeft_toLeftOf="@id/item_t1category_iv_title"
-        app:layout_constraintRight_toRightOf="@id/item_t1category_iv_title"
-        app:layout_constraintTop_toBottomOf="@id/item_t1category_iv_title" />
+        app:layout_constraintBottom_toBottomOf="@id/banner"
+        app:layout_constraintLeft_toLeftOf="@id/banner"
+        app:layout_constraintRight_toRightOf="@id/banner"
+        app:layout_constraintTop_toBottomOf="@id/banner" />
 
 
-    <android.support.v7.widget.SearchView
+    <androidx.appcompat.widget.SearchView
         android:id="@+id/item_t1category_share_view"
         android:layout_width="285dp"
         android:layout_height="36dp"
-        android:layout_marginBottom="6dp"
         android:layout_marginLeft="16dp"
+        android:layout_marginBottom="6dp"
         android:background="@color/white"
         app:iconifiedByDefault="false"
         app:layout_constraintBottom_toBottomOf="@id/item_t1category_iv_share"
@@ -50,15 +58,13 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginRight="12dp"
-        android:paddingBottom="6dp"
         android:paddingLeft="12dp"
         android:paddingRight="12dp"
+        android:paddingBottom="6dp"
         android:src="@mipmap/main_icon_share"
         app:layout_constraintBottom_toBottomOf="@id/item_t1category_iv_share"
         app:layout_constraintRight_toRightOf="@id/item_t1category_iv_share"
         app:layout_constraintTop_toTopOf="@id/item_t1category_iv_share" />
 
 
-
-
-</android.support.constraint.ConstraintLayout>
+</androidx.constraintlayout.widget.ConstraintLayout>

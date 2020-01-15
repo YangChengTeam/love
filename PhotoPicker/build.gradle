@@ -1,0 +1,37 @@
+apply plugin: 'com.android.library'
+
+android {
+  compileSdkVersion 28
+  buildToolsVersion '28.0.3'
+  resourcePrefix "__picker_"
+
+  dexOptions {
+    javaMaxHeapSize "4g"
+  }
+  defaultConfig {
+    minSdkVersion 14
+    targetSdkVersion 28
+  }
+  lintOptions {
+    abortOnError false
+  }
+}
+
+dependencies {
+  implementation 'com.android.support:support-v4:28.0.0'
+  implementation 'com.android.support:appcompat-v7:28.0.0'
+  implementation 'com.android.support:design:28.0.0'
+  implementation 'com.android.support:recyclerview-v7:28.0.0'
+  implementation 'com.android.support:support-annotations:28.0.0'
+  implementation project(':music-player-lib')
+}
+
+//apply plugin: 'com.novoda.bintray-release'
+//publish {
+//  userOrg = 'donglua'
+//  groupId = 'me.iwf.photopicker'
+//  artifactId = 'PhotoPicker'
+//  publishVersion = '0.9.12'
+//  desc = 'Photo Picker'
+//  website = 'https://github.com/donglua/PhotoPicker'
+//}

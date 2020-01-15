@@ -1,26 +1,29 @@
 <resources>
     <!--<string name="app_name">YcApplication</string>-->
-    <string name="app_name">西门恋爱话术库</string>
+    <!--恋爱话术宝-->
+    <!--西门恋爱话术库-->
+    <!--恋爱秘籍-->
+    <string name="app_name" translatable="false">恋爱秘籍</string>
 
 
-    <string name="confirm_format">%1$s(%2$d/%3$d)</string>
-    <string name="maxnum">最多选择%1$d张图片</string>
-    <string name="minnum">最少选择一张图片</string>
-    <string name="open_camera_failure">打开相机失败</string>
-    <string name="permission_camera_denied">请打开相关权限</string>
-    <string name="permission_storage_denied">请打开存储空间权限</string>
-    <string name="sd_disable">SD卡不可用</string>
-    <string name="takephoto">拍照</string>
+    <string name="confirm_format" translatable="false">%1$s(%2$d/%3$d)</string>
+    <string name="maxnum" translatable="false">最多选择%1$d张图片</string>
+    <string name="minnum" translatable="false">最少选择一张图片</string>
+    <string name="open_camera_failure" translatable="false">打开相机失败</string>
+    <string name="permission_camera_denied" translatable="false">请打开相关权限</string>
+    <string name="permission_storage_denied" translatable="false">请打开存储空间权限</string>
+    <string name="sd_disable" translatable="false">SD卡不可用</string>
+    <string name="takephoto" translatable="false">拍照</string>
 
-    <string name="share_des">请输入聊天关键字，搜索常用话术</string>
-    <string name="share_des_short">请输入聊天关键字</string>
-    <string name="web_liability_exemption">注：本文仅作网络分享，不涉及任何商业利益，不用于任何违法用途。相关文章均来源于其他微信公众号或网络媒体，如涉及版权问题，敬请联系我们，我们会在24小时之内回复并将文章撤除。</string>
+    <string name="share_des" translatable="false">请输入聊天关键字，搜索常用话术</string>
+    <string name="share_des_short" translatable="false">请输入聊天关键字</string>
+    <string name="web_liability_exemption" translatable="false">注：本文仅作网络分享，不涉及任何商业利益，不用于任何违法用途。相关文章均来源于其他微信公众号或网络媒体，如涉及版权问题，敬请联系我们，我们会在24小时之内回复并将文章撤除。</string>
 
 
-    <string name="share_des_explain">输入妹子说的话，点击搜索即可获得与之匹配的回复，一键复制到对应聊天软件打开即可粘贴；</string>
-    <string name="share_des_help"><u>使用帮助</u></string>
+    <string name="share_des_explain" translatable="false">输入妹子说的话，点击搜索即可获得与之匹配的回复，一键复制到对应聊天软件打开即可粘贴；</string>
+    <string name="share_des_help" translatable="false"><u>使用帮助</u></string>
 
-    <string name="privacy_statement">一、介绍\n
+    <string name="privacy_statement" translatable="false">一、介绍\n
 1.1我们深知个人信息对您的重要性，并会尽全力保护您的个人信息安全可靠。我们致力于维持您对我们的信任，恪守以下原则，保护您的个人信息：权责一致原则、目的明确原则、选择同意原则、最少够用原则、确保安全原则、主体参与原则、公开透明原则等。同时，我们承诺，我们将按业界成熟的安全标准，采取相应的安全保护措施来保护您的个人信息。\n
 1.2我们制定了本隐私政策，向您提供您需要了解的有关我们如何收集和处理信息，并概述您的责任，以帮助您保护自己使用我们的产品的安全。请注意，当我们谈论“服务”时，指的是我们的所有网站，产品和服务。\n
 \n二、我们收集的信息以及如何使用它\n
@@ -39,7 +42,7 @@
 APP目前已集成腾讯Bugly软件崩溃日志统计SDK、友盟统计SDK。\n
 \n六、第三方链接\n
 当用户访问或使用APP程序及其网站时，我们可能提供到其它第三方网站的链接。恋爱话术宝不对这些网站的隐私准则或内容负责。恋爱话术宝建议您浏览张贴在这些第三方网站上的隐私条款。</string>
-    <string name="login_protocol">一、使用协议的接受与修改\n
+    <string name="login_protocol" translatable="false">一、使用协议的接受与修改\n
 此协议是用户与本App之间的协议，本App依据此协议为用户提供服务。\n
 此协议服务条款构成用户（无论是个人或者单位）使用本App所提供服务之先决条件。如用户不同意此协议服务条款或其随时对其的修改，用户应不使用或主动取消本App提供的服务。用户的使用行为将视为其对此协议服务条款及其随时修改版本的完全接受；\n
 这些条款可由本App随时更新，且无需另行通知。修改后的服务条款一旦在本App上公布即取代原来的服务条款，并构成本条款整体之一部分。用户可随时登录本App查阅最新的服务条款。\n
@@ -110,17 +113,32 @@ APP目前已集成腾讯Bugly软件崩溃日志统计SDK、友盟统计SDK。\n
 1. 此协议的生效、履行、解释及争议的解决均适用中华人民共和国法律。\n
 2. 如就此协议内容或其执行发生任何争议，应尽量友好协商解决；协商不成时，则争议各方均可向本APP注册所在地具有管辖权的人民法院提起诉讼。\n
 3. 本《协议》的一切解释权与修改权归本App所有。\n</string>
-    <string name="collect">收藏</string>
-    <string name="wx">微信</string>
-    <string name="wx_circle">朋友圈</string>
-    <string name="share_cancel">取消</string>
-    <string name="downLoad">下载</string>
-    <string name="share">分享</string>
+    <string name="collect" translatable="false">收藏</string>
+    <string name="wx" translatable="false">微信</string>
+    <string name="wx_circle" translatable="false">朋友圈</string>
+    <string name="mini_program" translatable="false">小程序</string>
+    <string name="share_cancel" translatable="false">取消</string>
+    <string name="audio" translatable="false">音频</string>
+    <string name="search" translatable="false">搜索</string>
+    <string name="get_wechat" translatable="false">获取微信</string>
+    <string name="community_detail" translatable="false">话题详情</string>
+    <string name="send" translatable="false">发送</string>
+    <string name="community_tag" translatable="false">社区标签</string>
+    <string name="publish" translatable="false">发布</string>
+    <string name="tint" translatable="false">提示</string>
+    <string name="confirm" translatable="false">确定</string>
+    <string name="cancel" translatable="false">取消</string>
+    <string name="notice" translatable="false">公告</string>
+    <string name="contact_teacher" translatable="false">联系导师</string>
+    <string name="more_comment" translatable="false">更多评论</string>
+
+    <string name="test" translatable="false" />
 
     <string-array name="love_practice">
-        <item>实战学习</item>
-        <item>实战情话</item>
+        <item>聊天秘籍</item>
+        <item>表白神器</item>
     </string-array>
+
 
     <string-array name="vip_item_sub_name">
         <item>花样幽默风趣语句，提高妹子好感度</item>
@@ -140,13 +158,11 @@ APP目前已集成腾讯Bugly软件崩溃日志统计SDK、友盟统计SDK。\n
         <item>多样表白话术免费查看</item>
     </string-array>
 
-    <string-array name="search_tint">
-        <item>吃了么</item>
-        <item>你好</item>
-        <item>嘻嘻</item>
-        <item>不想搭理你</item>
-        <item>我没事</item>
-        <item>没回消息</item>
+    <string-array name="community_array">
+        <item>最新</item>
+        <item>热门</item>
+        <item>我的</item>
     </string-array>
+
 
 </resources>
