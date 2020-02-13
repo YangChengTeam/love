@@ -1,4 +1,4 @@
-package com.yc.love.model.bean;
+package com.yc.verbaltalk.model.bean;
 
 import com.chad.library.adapter.base.entity.MultiItemEntity;
 
@@ -24,6 +24,8 @@ public class BecomeVipBean  implements MultiItemEntity, Serializable {
     public static final int VIEW_TAIL = 3;
     public static final int VIEW_VIP_TAG = 4;
 
+    public BecomeVipBean() {
+    }
 
     public BecomeVipBean(int type, String name) {
         this.type = type;

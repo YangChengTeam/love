@@ -1,20 +1,18 @@
-package com.yc.english.speak.utils;
+package com.music.player.lib.util;
 
 import android.app.Notification;
 import android.app.NotificationChannel;
-import android.app.NotificationChannelGroup;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
-import android.graphics.BitmapFactory;
 import android.os.Build;
-import android.support.v4.app.NotificationCompat;
 import android.widget.RemoteViews;
 
-import com.yc.english.R;
-import com.yc.english.main.model.domain.Constant;
-import com.yc.english.speak.view.activity.ListenEnglishActivity;
+import com.music.player.lib.R;
+import com.music.player.lib.bean.MusicInfo;
+
+import androidx.core.app.NotificationCompat;
 
 
 /**
@@ -23,7 +21,7 @@ import com.yc.english.speak.view.activity.ListenEnglishActivity;
  */
 public class NotificationUtil {
 
-    public static void showNotify(Context context, String title, boolean isPlay, int flags) {
+    public static void showNotify(Context context, MusicInfo musicInfo, boolean isPlay, int flags) {
         NotificationManager nm = (NotificationManager) context.getSystemService(Context.NOTIFICATION_SERVICE);
 
         NotificationCompat.Builder builder;
@@ -56,14 +54,17 @@ public class NotificationUtil {
             builder = new NotificationCompat.Builder(context);
 
         }
-        RemoteViews remoteViews = new RemoteViews(context.getPackageName(), R.layout.notifacation_player_view);
+        final RemoteViews remoteViews = new RemoteViews(context.getPackageName(), R.layout.view_music_small_player_controller);
 
         if (isPlay) {
-            remoteViews.setImageViewResource(R.id.notify_play, R.drawable.btn_pause_selector);
+            remoteViews.setImageViewResource(R.id.iv_play_pause, R.drawable.ic_player_pause);
         } else {
-            remoteViews.setImageViewResource(R.id.notify_play, R.drawable.btn_play_selector);
+            remoteViews.setImageViewResource(R.id.iv_play_pause, R.drawable.ic_player_play);
         }
-        remoteViews.setTextViewText(R.id.notify_title, title);
+        remoteViews.setTextViewText(R.id.tv_music_title, musicInfo.getTitle());
+
+        remoteViews.setImageViewBitmap(R.id.iv_covor_thumb, musicInfo.getBitmap());
+
 
         //设置播放或暂停意图
         Intent play = new Intent();
@@ -72,15 +73,6 @@ public class NotificationUtil {
 
         PendingIntent playPendingIntent = PendingIntent.getBroadcast(context, 0, play, PendingIntent.FLAG_UPDATE_CURRENT);
 
-        //设置上一首意图
-        Intent pre = new Intent();
-        pre.setAction(Constant.NOTIFY_PRE);
-        PendingIntent prePendingIntent = PendingIntent.getBroadcast(context, 1, pre, PendingIntent.FLAG_UPDATE_CURRENT);
-
-        //设置下一首意图
-        Intent next = new Intent();
-        next.setAction(Constant.NOTIFY_NEXT);
-        PendingIntent nextPendingIntent = PendingIntent.getBroadcast(context, 2, next, PendingIntent.FLAG_UPDATE_CURRENT);
 
         //设置取消意图
         Intent cancel = new Intent();
@@ -89,13 +81,12 @@ public class NotificationUtil {
         PendingIntent closePendingIntent = PendingIntent.getBroadcast(context, 5, cancel, PendingIntent.FLAG_UPDATE_CURRENT);
 
 
-        remoteViews.setOnClickPendingIntent(R.id.notify_play, playPendingIntent);
-        remoteViews.setOnClickPendingIntent(R.id.notify_prev, prePendingIntent);
-        remoteViews.setOnClickPendingIntent(R.id.notify_next, nextPendingIntent);
+        remoteViews.setOnClickPendingIntent(R.id.iv_play_pause, playPendingIntent);
 
-        remoteViews.setOnClickPendingIntent(R.id.notify_close, closePendingIntent);
 
-        Intent intent = new Intent(context, ListenEnglishActivity.class);
+        remoteViews.setOnClickPendingIntent(R.id.iv_player_close, closePendingIntent);
+
+        Intent intent = new Intent("com.music.player.love.action");
 
 
         PendingIntent notificationPendingIntent = PendingIntent.getActivity(context, 6, intent, PendingIntent.FLAG_UPDATE_CURRENT);
@@ -105,7 +96,7 @@ public class NotificationUtil {
                 .setContentIntent(notificationPendingIntent);
         Notification notification = builder.build();
         notification.tickerText = "播放通知";
-        notification.icon = R.mipmap.lanucher;
+        notification.icon = R.drawable.ic_launcher;
         notification.flags |= flags;
 
 

@@ -17,8 +17,9 @@
 
             <ImageView
                 android:id="@+id/iv_player_covor"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
+                android:layout_width="100dp"
+                android:layout_height="134dp"
+                android:scaleType="centerCrop"
                 android:src="@drawable/audio_cover" />
 
             <ImageView
@@ -97,11 +98,13 @@
             style="@style/seekbar_style"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
+            android:layout_margin="0dp"
             android:layout_weight="1"
             android:maxHeight="3dp"
             android:minHeight="3dp"
             android:paddingLeft="0dp"
-            android:paddingRight="0dp" />
+            android:paddingRight="0dp"
+            android:progress="0" />
 
         <TextView
             android:id="@+id/tv_play_duration"

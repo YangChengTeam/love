@@ -1,4 +1,4 @@
-package com.yc.love.model;
+package com.yc.verbaltalk.model;
 
 import org.junit.Test;
 

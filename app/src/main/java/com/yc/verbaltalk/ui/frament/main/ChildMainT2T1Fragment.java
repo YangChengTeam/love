@@ -7,6 +7,7 @@ import android.widget.FrameLayout;
 
 import com.alibaba.fastjson.TypeReference;
 import com.bytedance.sdk.openadsdk.TTNativeExpressAd;
+import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.umeng.analytics.MobclickAgent;
 import com.yc.verbaltalk.R;
 import com.yc.verbaltalk.adaper.rv.MainT2MoreItemAdapter;
@@ -18,6 +19,7 @@ import com.yc.verbaltalk.model.bean.MainT2Bean;
 import com.yc.verbaltalk.model.engin.LoveEngine;
 import com.yc.verbaltalk.model.single.YcSingle;
 import com.yc.verbaltalk.ui.activity.BecomeVipActivity;
+import com.yc.verbaltalk.ui.activity.ConsultDetailActivity;
 import com.yc.verbaltalk.ui.activity.ExampleDetailActivity;
 import com.yc.verbaltalk.ui.frament.base.BaseMainT2ChildFragment;
 import com.yc.verbaltalk.ui.view.LoadDialog;
@@ -58,6 +60,7 @@ public class ChildMainT2T1Fragment extends BaseMainT2ChildFragment implements On
     private LoadDialog mLoadingDialog;
 
     private FrameLayout bottomContainer;
+
     @Override
     protected int setContentView() {
         return R.layout.activity_practice_teach;
@@ -106,6 +109,16 @@ public class ChildMainT2T1Fragment extends BaseMainT2ChildFragment implements On
                     MobclickAgent.onEvent(mMainActivity, "practice_id", "实战学习");
                 }
             }
+        });
+
+        mAdapter.setOnItemChildClickListener((adapter, view, position) -> {
+            MainT2Bean item = mAdapter.getItem(position);
+            if (item != null) {
+                if (item.type == MainT2Bean.VIEW_TITLE && view.getId() == R.id.roundCornerImg_banner) {
+                    startActivity(new Intent(mMainActivity, ConsultDetailActivity.class));
+                }
+            }
+
         });
     }
 
@@ -174,7 +187,11 @@ public class ChildMainT2T1Fragment extends BaseMainT2ChildFragment implements On
 
 
         mMainT2Beans = new ArrayList<>();
-        if (PAGE_NUM == 1) mMainT2Beans.add(new MainT2Bean("tit", MainT2Bean.VIEW_TITLE));
+        if (PAGE_NUM == 1){
+            MainT2Bean mainT2Bean = new MainT2Bean("tit", MainT2Bean.VIEW_TITLE);
+            mainT2Bean.imgId= R.mipmap.consult_banner;
+            mMainT2Beans.add(mainT2Bean);
+        }
         if (exampListsBeans != null && exampListsBeans.size() > 0) {
 
             for (int i = 0; i < exampListsBeans.size(); i++) {

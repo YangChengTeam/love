@@ -1,4 +1,4 @@
-package com.yc.love.model.util;
+package com.yc.verbaltalk.model.util;
 
 import android.app.Activity;
 import android.content.Context;

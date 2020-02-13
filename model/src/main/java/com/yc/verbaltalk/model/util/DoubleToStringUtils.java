@@ -1,4 +1,4 @@
-package com.yc.love.model.util;
+package com.yc.verbaltalk.model.util;
 
 /**
  * Created by mayn on 2019/5/17.

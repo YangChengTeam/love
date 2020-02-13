@@ -1,4 +1,4 @@
-package com.yc.love.model.bean;
+package com.yc.verbaltalk.model.bean;
 
 import android.graphics.drawable.Drawable;
 
@@ -41,6 +41,9 @@ public class MainT3Bean implements MultiItemEntity, Serializable {
     public int imageResourceld;
     public String name;
     public int parent_id;
+
+    public MainT3Bean() {
+    }
 
     public MainT3Bean(int type) {
         this.type = type;

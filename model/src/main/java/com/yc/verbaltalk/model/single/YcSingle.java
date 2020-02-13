@@ -1,4 +1,4 @@
-package com.yc.love.model.single;
+package com.yc.verbaltalk.model.single;
 
 import java.util.List;
 

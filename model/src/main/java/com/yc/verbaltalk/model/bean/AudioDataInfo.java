@@ -1,7 +1,7 @@
-package com.yc.love.model.bean;
+package com.yc.verbaltalk.model.bean;
 
 import com.alibaba.fastjson.annotation.JSONField;
-import com.yc.love.model.AudioItemInfo;
+import com.yc.verbaltalk.model.AudioItemInfo;
 
 import java.util.List;
 

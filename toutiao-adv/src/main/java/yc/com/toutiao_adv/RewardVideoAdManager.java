@@ -30,7 +30,7 @@ public class RewardVideoAdManager implements OnAdvManagerListener, WeakHandler.I
 
     private final int LOAD_SUCCESS = 100;
 
-    public RewardVideoAdManager(Activity activity, String adId, String rewardName, int rewardCount, String userId, int orientation, OnAdvStateListener listener) {
+    RewardVideoAdManager(Activity activity, String adId, String rewardName, int rewardCount, String userId, int orientation, OnAdvStateListener listener) {
 
         this.mActivity = activity;
         this.mAdId = adId;

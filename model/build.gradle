@@ -10,10 +10,10 @@ android {
             storePassword '123456'
         }
     }
-    compileSdkVersion 27
+    compileSdkVersion 28
     defaultConfig {
         minSdkVersion 17
-        targetSdkVersion 27
+        targetSdkVersion 28
         versionCode 1
         versionName "1.0"
 
@@ -32,7 +32,7 @@ android {
 }
 greendao {
     schemaVersion 2
-    daoPackage 'com.yc.love.model.dao'
+    daoPackage 'com.yc.verbaltalk.model.dao'
     targetGenDir 'src/main/java'
 }
 

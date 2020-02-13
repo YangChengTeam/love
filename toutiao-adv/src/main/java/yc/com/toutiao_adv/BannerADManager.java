@@ -30,7 +30,7 @@ public class BannerADManager implements OnAdvManagerListener {
     private TTNativeExpressAd mTTAd;
     private long startTime;
 
-    public BannerADManager(Activity activity, ViewGroup container, String bannerId, OnAdvStateListener stateListener) {
+    BannerADManager(Activity activity, ViewGroup container, String bannerId, OnAdvStateListener stateListener) {
         this.mActivity = activity;
         this.mBannerId = bannerId;
         this.mContainer = container;

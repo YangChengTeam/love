@@ -22,11 +22,11 @@
 
     <TextView
         android:id="@+id/skip_view"
-        android:layout_width="96dp"
-        android:layout_height="wrap_content"
+        android:layout_width="40dp"
+        android:layout_height="@dimen/dp_40"
         android:layout_alignParentTop="true"
         android:layout_alignParentRight="true"
-        android:layout_marginTop="30dp"
+        android:layout_marginTop="20dp"
         android:layout_marginRight="16dp"
         android:background="@drawable/background_circle"
         android:gravity="center"

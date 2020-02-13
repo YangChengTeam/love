@@ -3,6 +3,8 @@ package com.yc.verbaltalk.ui.activity;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Message;
 import android.util.Log;
 import android.view.KeyEvent;
 import android.view.View;
@@ -29,6 +31,7 @@ import yc.com.tencent_adv.AdvType;
 import yc.com.tencent_adv.OnAdvStateListener;
 import yc.com.toutiao_adv.TTAdDispatchManager;
 import yc.com.toutiao_adv.TTAdType;
+import yc.com.toutiao_adv.WeakHandler;
 
 public class SpecializedActivity extends BaseActivity implements OnAdvStateListener, yc.com.toutiao_adv.OnAdvStateListener {
 
@@ -36,10 +39,14 @@ public class SpecializedActivity extends BaseActivity implements OnAdvStateListe
     private FrameLayout splashContainer;
     private TextView tvSipView;
 
+
+    private int seconds = 3;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_specialized);
+
 
         invadeStatusBar();
         // 后台返回时可能启动这个页面 http://blog.csdn.net/jianiuqi/article/details/54091181
@@ -52,10 +59,17 @@ public class SpecializedActivity extends BaseActivity implements OnAdvStateListe
         splashContainer = findViewById(R.id.splash_container);
         tvSipView = findViewById(R.id.skip_view);
 
-
+//        mHandler.post(runnable);
 //        AdvDispatchManager.getManager().init(this, AdvType.SPLASH, splashContainer, tvSipView, Constant.TENCENT_ADV_ID, Constant.SPLASH_ADV_ID, this);
 
         TTAdDispatchManager.getManager().init(this, TTAdType.SPLASH, splashContainer, Constant.TOUTIAO_SPLASH_ID, 0, null, 0, null, 0, this);
+
+//        ivLighting.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//                showToWxServiceDialog(null);
+//            }
+//        });
     }
 
 
@@ -170,4 +184,27 @@ public class SpecializedActivity extends BaseActivity implements OnAdvStateListe
     public void onTTNativeExpressed(List<TTNativeExpressAd> ads) {
 
     }
+
+
+//    private Runnable runnable = new Runnable() {
+//        @Override
+//        public void run() {
+//            tvSipView.setVisibility(View.VISIBLE);
+//            tvSipView.setText(seconds + "s");
+//            seconds--;
+//            if (seconds > 0) {
+//                weakHandler.postDelayed(this, 1000);
+//            } else {
+//                switchMain(0);
+//            }
+//        }
+//    };
+//
+//    @Override
+//    protected void onDestroy() {
+//        super.onDestroy();
+//        weakHandler.removeCallbacks(runnable);
+//    }
+
+
 }

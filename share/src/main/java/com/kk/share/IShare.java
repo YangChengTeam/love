@@ -31,4 +31,6 @@ public abstract class IShare {
 
     public abstract void shareUrl(String title, String url, String desc, Bitmap bitmap, SHARE_MEDIA shareMedia);
 
+    public abstract void shareMiniParam(String title,String desc, int bitmap, String appid);
+
 }

@@ -37,6 +37,8 @@ public class MainT2MoreItemAdapter extends BaseMultiItemQuickAdapter<MainT2Bean,
                     helper.setText(R.id.item_main_t2_tv_name, item.post_title);
                     break;
                 case MainT2Bean.VIEW_TITLE:
+                    helper.setImageResource(R.id.roundCornerImg_banner, item.imgId);
+                    helper.addOnClickListener(R.id.roundCornerImg_banner);
 //                    helper.setText()
                     break;
                 case MainT2Bean.VIEW_TO_PAY_VIP:

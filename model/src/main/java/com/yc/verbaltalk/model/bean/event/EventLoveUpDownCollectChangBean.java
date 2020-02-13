@@ -1,4 +1,4 @@
-package com.yc.love.model.bean.event;
+package com.yc.verbaltalk.model.bean.event;
 
 /**
  * Created by mayn on 2019/5/13.

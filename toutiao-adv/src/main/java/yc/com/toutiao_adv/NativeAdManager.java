@@ -23,11 +23,10 @@ public class NativeAdManager implements OnAdvManagerListener {
     private Activity mActivity;
     private TTAdNative mTTAdNative;
 
-    private TTNativeExpressAd mTTAd;
     private long startTime;
     private List<TTNativeExpressAd> mDatas;
 
-    public NativeAdManager(Activity activity, String nativeAd, int nativeCount, OnAdvStateListener listener) {
+    NativeAdManager(Activity activity, String nativeAd, int nativeCount, OnAdvStateListener listener) {
         this.mActivity = activity;
 
         this.mNativeAd = nativeAd;
@@ -48,7 +47,7 @@ public class NativeAdManager implements OnAdvManagerListener {
     private void loadExpressAd(String codeId, int nativeCount) {
 
         float expressViewWidth = 350;
-        float expressViewHeight = 350;
+        float expressViewHeight = 0;
 
         //step4:创建广告请求参数AdSlot,具体参数含义参考文档
         AdSlot adSlot = new AdSlot.Builder()

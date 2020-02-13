@@ -29,17 +29,22 @@ ext {
 
 
 dependencies {
-    compile fileTree(include: ['*.jar'], dir: 'libs')
+    api fileTree(include: ['*.jar'], dir: 'libs')
     androidTestCompile('com.android.support.test.espresso:espresso-core:2.2.2', {
         exclude group: 'com.android.support', module: 'support-annotations'
     })
-    compile 'com.android.support:appcompat-v7:28.0.0'
-    testCompile 'junit:junit:4.12'
-    compile files('libs/SocialSDK_QQ_Simplify.jar')
-    compile files('libs/SocialSDK_WeChat_Simplify.jar')
-    compile files('libs/umeng_social_api.jar')
-    compile files('libs/umeng_social_net.jar')
-    compile files('libs/umeng_social_tool.jar')
-    compile files('libs/SocialSDK_Sina_Simplify.jar')
-    compile files('libs/umeng_social_shareview.jar')
+    api 'com.android.support:appcompat-v7:28.0.0'
+    testImplementation 'junit:junit:4.12'
+    api files('libs/SocialSDK_QQ_Simplify.jar')
+    api files('libs/SocialSDK_WeChat_Simplify.jar')
+    api files('libs/umeng_social_api.jar')
+    api files('libs/umeng_social_net.jar')
+    api files('libs/umeng_social_tool.jar')
+    api files('libs/SocialSDK_Sina_Simplify.jar')
+    api files('libs/umeng_social_shareview.jar')
+//    compile 'com.umeng.sdk:share-wechat:6.9.2'
+//    //compile 'com.umeng.sdk:common:1.5.3'
+//    compile 'com.umeng.sdk:common:1.5.1'
+//    compile 'com.umeng.sdk:share-core:6.9.2'
+//    compile 'com.umeng.sdk:debug:1.0.0'
 }

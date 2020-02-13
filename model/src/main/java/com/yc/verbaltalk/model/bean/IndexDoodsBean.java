@@ -1,6 +1,4 @@
-package com.yc.love.model.bean;
-
-import com.chad.library.adapter.base.entity.MultiItemEntity;
+package com.yc.verbaltalk.model.bean;
 
 import java.io.Serializable;
 

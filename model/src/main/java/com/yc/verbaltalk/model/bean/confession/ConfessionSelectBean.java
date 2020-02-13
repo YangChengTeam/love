@@ -1,4 +1,4 @@
-package com.yc.love.model.bean.confession;
+package com.yc.verbaltalk.model.bean.confession;
 
 import java.io.Serializable;
 

@@ -1,4 +1,4 @@
-package com.yc.love.model.bean;
+package com.yc.verbaltalk.model.bean;
 
 import java.io.Serializable;
 import java.util.List;
@@ -67,7 +67,7 @@ public class LoveHealDateBean implements Serializable {
         public String toString() {
             return "ChildrenBean{" +
                     "_level='" + _level + '\'' +
-                    ", love_id=" + id +
+                    ", id=" + id +
                     ", name='" + name + '\'' +
                     ", parent_id=" + parent_id +
                     '}';
@@ -78,7 +78,7 @@ public class LoveHealDateBean implements Serializable {
     public String toString() {
         return "LoveHealDateBean{" +
                 "_level='" + _level + '\'' +
-                ", love_id=" + id +
+                ", id=" + id +
                 ", name='" + name + '\'' +
                 ", parent_id=" + parent_id +
                 ", children=" + children +

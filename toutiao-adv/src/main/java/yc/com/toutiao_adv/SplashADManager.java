@@ -38,7 +38,7 @@ public class SplashADManager implements WeakHandler.IHandler, OnAdvManagerListen
     private TTAdNative mTTAdNative;
     private ViewGroup mContainer;
 
-    public SplashADManager(Activity activity, ViewGroup container, String splashId, OnAdvStateListener stateListener) {
+    SplashADManager(Activity activity, ViewGroup container, String splashId, OnAdvStateListener stateListener) {
         this.mContainer = container;
         this.mActivity = activity;
         this.mStateListener = stateListener;
@@ -183,7 +183,7 @@ public class SplashADManager implements WeakHandler.IHandler, OnAdvManagerListen
 
     }
 
-
+    @Override
     public void onResume() {
         //判断是否该跳转到主页面
         if (mForceGoMain) {
@@ -192,6 +192,7 @@ public class SplashADManager implements WeakHandler.IHandler, OnAdvManagerListen
         }
     }
 
+    @Override
     public void onStop() {
 
         mForceGoMain = true;

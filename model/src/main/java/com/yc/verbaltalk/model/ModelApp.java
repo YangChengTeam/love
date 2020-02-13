@@ -1,11 +1,11 @@
-package com.yc.love.model;
+package com.yc.verbaltalk.model;
 
 import android.app.Application;
 import android.content.Context;
 import android.database.sqlite.SQLiteDatabase;
 
-import com.yc.love.model.dao.DaoMaster;
-import com.yc.love.model.dao.DaoSession;
+import com.yc.verbaltalk.model.dao.DaoMaster;
+import com.yc.verbaltalk.model.dao.DaoSession;
 
 import org.greenrobot.greendao.query.QueryBuilder;
 

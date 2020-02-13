@@ -87,4 +87,6 @@ public class LightStatusBarUtils   {
             // you have set other flags before, such as translucent or full screen.
             decor.setSystemUiVisibility(0);
         }
-    }
+    }
+
+}

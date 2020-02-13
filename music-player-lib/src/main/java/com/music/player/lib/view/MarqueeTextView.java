@@ -1,15 +1,17 @@
 package com.music.player.lib.view;
 
 import android.content.Context;
-import android.support.annotation.Nullable;
 import android.util.AttributeSet;
+
+import androidx.annotation.Nullable;
+import androidx.appcompat.widget.AppCompatTextView;
 
 /**
  * TinyHung@Outlook.com
  * 2017/11/27.
  */
 
-public class MarqueeTextView extends android.support.v7.widget.AppCompatTextView {
+public class MarqueeTextView extends AppCompatTextView {
 
 
     public MarqueeTextView(Context context) {

@@ -206,6 +206,7 @@
         <activity android:name=".ui.frament.main.AudioActivity" />
         <activity android:name=".ui.activity.ChatRecommendDetailActivity" />
         <activity android:name=".ui.activity.ChatCourseDetailActivity" />
+        <activity android:name=".ui.activity.ConsultDetailActivity" />
 
         <!--android:windowSoftInputMode="adjustPan|stateHidden"-->
         <uses-library

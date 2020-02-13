@@ -6,11 +6,8 @@ import android.content.Intent;
 import android.content.ServiceConnection;
 import android.media.MediaPlayer;
 import android.os.IBinder;
+import android.util.Log;
 
-import com.google.android.exoplayer2.ExoPlayer;
-import com.ksyun.media.player.IMediaPlayer;
-
-import com.ksyun.media.player.KSYMediaPlayer;
 import com.music.player.lib.bean.MusicInfo;
 import com.music.player.lib.bean.MusicPlayerConfig;
 import com.music.player.lib.constants.Constants;
@@ -19,7 +16,8 @@ import com.music.player.lib.listener.OnPlayerEventListener;
 import com.music.player.lib.listener.OnUserPlayerEventListener;
 import com.music.player.lib.mode.PlayerAlarmModel;
 import com.music.player.lib.mode.PlayerModel;
-import com.music.player.lib.service.MusicPlayerServiceNew;
+//import com.music.player.lib.service.MusicPlayerService;
+import com.music.player.lib.service.MusicPlayerService;
 import com.music.player.lib.util.Logger;
 import com.music.player.lib.util.PreferencesUtil;
 
@@ -33,28 +31,28 @@ import java.util.Observer;
  * 统一注册和调度中心
  */
 
-public class MusicPlayerManagerNew implements OnPlayerEventListener {
+public class MusicPlayerManager implements OnPlayerEventListener {
 
-    private static final String TAG = MusicPlayerManagerNew.class.getSimpleName();
-    private static MusicPlayerManagerNew mInstance = null;
+    private static final String TAG = MusicPlayerManager.class.getSimpleName();
+    private static MusicPlayerManager mInstance = null;
     private static Context mContext = null;
     private MusicPlayerServiceConnectionCallback mConnectionCallback = null;
     private List<OnUserPlayerEventListener> mUserCallBackListenerList = null;//方便多界面注册进来
     private static MusicPlayerServiceConnection mMusicPlayerServiceConnection = null;
     private static SubjectObservable mSubjectObservable = null;
-    private static MusicPlayerServiceNew.MusicPlayerServiceBunder mMusicPlayerServiceBunder = null;
+    private static MusicPlayerService.MusicPlayerServiceBunder mMusicPlayerServiceBunder = null;
 
-    public static synchronized MusicPlayerManagerNew getInstance() {
-        synchronized (MusicPlayerManagerNew.class) {
+    public static synchronized MusicPlayerManager getInstance() {
+        synchronized (MusicPlayerManager.class) {
             if (null == mInstance) {
-                mInstance = new MusicPlayerManagerNew();
+                mInstance = new MusicPlayerManager();
             }
         }
         return mInstance;
     }
 
     //标注一个方法过期,方法上面：@Deprecated
-    public MusicPlayerManagerNew() {
+    private MusicPlayerManager() {
         mMusicPlayerServiceConnection = new MusicPlayerServiceConnection();
         mSubjectObservable = new SubjectObservable();
     }
@@ -65,7 +63,7 @@ public class MusicPlayerManagerNew implements OnPlayerEventListener {
      * @param context
      */
     public void init(Context context) {
-        this.mContext = context.getApplicationContext();
+        mContext = context.getApplicationContext();
         PreferencesUtil.init(context, context.getPackageName() + "music_play_config", Context.MODE_MULTI_PROCESS);
         if (1 != PreferencesUtil.getInstance().getInt(Constants.SP_FIRST_START, 0)) {
             PreferencesUtil.getInstance().putInt(Constants.SP_MUSIC_PLAY_ALARM, PlayerAlarmModel.PLAYER_ALARM_30);
@@ -188,7 +186,7 @@ public class MusicPlayerManagerNew implements OnPlayerEventListener {
      *
      * @param musicInfo * 此方法已被playPauseMusic()替代，新增暂停、播放特性
      */
-
+    @Deprecated
     public void playMusic(MusicInfo musicInfo) {
         if (null == mContext) {
             throw new IllegalStateException("MusicPlayerManager：必须先调用init()方法");
@@ -292,6 +290,12 @@ public class MusicPlayerManagerNew implements OnPlayerEventListener {
     public void clearNotifycation() {
         if (serviceIsNoEmpty()) {
             mMusicPlayerServiceBunder.cancelNotification();
+        }
+    }
+
+    public void showNotification(MusicInfo musicInfo, boolean isPlay) {
+        if (serviceIsNoEmpty()) {
+            mMusicPlayerServiceBunder.showNotification(musicInfo, isPlay);
         }
     }
 
@@ -496,11 +500,15 @@ public class MusicPlayerManagerNew implements OnPlayerEventListener {
      * bindService()必需
      */
     private class MusicPlayerServiceConnection implements ServiceConnection {
+
+
         @Override
         public void onServiceConnected(ComponentName name, IBinder service) {
+            Log.e(TAG, "onServiceConnected: " + service);
+
             if (null != service) {
-                mMusicPlayerServiceBunder = (MusicPlayerServiceNew.MusicPlayerServiceBunder) service;
-                mMusicPlayerServiceBunder.setOnPlayerEventListener(MusicPlayerManagerNew.this);//注册播放状态Event状态监听
+                mMusicPlayerServiceBunder = (MusicPlayerService.MusicPlayerServiceBunder) service;
+                mMusicPlayerServiceBunder.setOnPlayerEventListener(MusicPlayerManager.this);//注册播放状态Event状态监听
                 mMusicPlayerServiceBunder.setPlayMode(PreferencesUtil.getInstance().getInt(Constants.SP_MUSIC_PLAY_MODEL, PlayerModel.PLAY_MODEL_SEQUENCE_FOR));
                 mMusicPlayerServiceBunder.setPlayAlarmMode(PreferencesUtil.getInstance().getInt(Constants.SP_MUSIC_PLAY_ALARM, PlayerAlarmModel.PLAYER_ALARM_NORMAL));
                 if (null != mConnectionCallback) {
@@ -535,10 +543,13 @@ public class MusicPlayerManagerNew implements OnPlayerEventListener {
         if (null == mContext) {
             throw new IllegalStateException("请先在Application中调用init()方法");
         }
+
+
         if (null != mMusicPlayerServiceConnection) {
             Logger.d(TAG, "binService");
+//            Logger.e(TAG, "mMusicPlayerServiceBunder  " + mMusicPlayerServiceBunder);
             this.mConnectionCallback = serviceConnectionCallBack;
-            Intent intent = new Intent(context, MusicPlayerServiceNew.class);
+            Intent intent = new Intent(context, MusicPlayerService.class);
             context.startService(intent);
             context.bindService(intent, mMusicPlayerServiceConnection, Context.BIND_AUTO_CREATE);
         }
@@ -555,9 +566,13 @@ public class MusicPlayerManagerNew implements OnPlayerEventListener {
      */
     public void unBindService(Context context) {
         if (serviceIsNoEmpty() && null != context) {
-            if (null != mMusicPlayerServiceConnection)
+            if (null != mMusicPlayerServiceConnection) {
                 context.unbindService(mMusicPlayerServiceConnection);
-            context.stopService(new Intent(context, MusicPlayerServiceNew.class));
+                mMusicPlayerServiceBunder.destory();
+
+            }
+            context.stopService(new Intent(context, MusicPlayerService.class));
+
         }
         mConnectionCallback = null;
     }
@@ -582,29 +597,15 @@ public class MusicPlayerManagerNew implements OnPlayerEventListener {
         }
     }
 
+
     @Override
-    public void onPrepared(IMediaPlayer mediaPlayer) {
+    public void onPrepared(MediaPlayer mediaPlayer) {
         if (null != mUserCallBackListenerList && mUserCallBackListenerList.size() > 0) {
             for (OnUserPlayerEventListener onPlayerEventListener : mUserCallBackListenerList) {
 
                 onPlayerEventListener.onPrepared(mediaPlayer);
             }
         }
-    }
-
-    @Override
-    public void onPrepared(MediaPlayer mediaPlayer) {
-
-    }
-
-    @Override
-    public void onPrepared(ExoPlayer mediaPlayer) {
-//        if (null != mUserCallBackListenerList && mUserCallBackListenerList.size() > 0) {
-//            for (OnUserPlayerEventListener onPlayerEventListener : mUserCallBackListenerList) {
-//
-//                onPlayerEventListener.onPrepared(mediaPlayer);
-//            }
-//        }
     }
 
     @Override
@@ -627,18 +628,9 @@ public class MusicPlayerManagerNew implements OnPlayerEventListener {
     }
 
 
-    @Override
-    public void checkedPlayTaskResult(MusicInfo musicInfo, KSYMediaPlayer mediaPlayer) {
-
-    }
 
     @Override
     public void checkedPlayTaskResult(MusicInfo musicInfo, MediaPlayer mediaPlayer) {
-
-    }
-
-    @Override
-    public void checkedPlayTaskResult(MusicInfo musicInfo, ExoPlayer mediaPlayer) {
         if (null != mSubjectObservable) {
             mSubjectObservable.updataSubjectObserivce(musicInfo);
         }

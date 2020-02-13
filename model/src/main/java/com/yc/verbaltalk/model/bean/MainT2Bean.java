@@ -1,4 +1,4 @@
-package com.yc.love.model.bean;
+package com.yc.verbaltalk.model.bean;
 
 import com.chad.library.adapter.base.entity.MultiItemEntity;
 
@@ -24,6 +24,7 @@ public class MainT2Bean implements Serializable, MultiItemEntity {
     public int id;
     public String image;
     public String post_title;
+    public int imgId;
 
     public static final int VIEW_TITLE = 0;
     public static final int VIEW_ITEM = 1;

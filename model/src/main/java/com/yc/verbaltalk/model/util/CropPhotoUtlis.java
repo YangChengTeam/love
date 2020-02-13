@@ -25,4 +25,5 @@ public class CropPhotoUtlis {
         intent.putExtra("scale", true);
         intent.putExtra(MediaStore.EXTRA_OUTPUT, Uri.fromFile(outFile));
         activity.startActivityForResult(intent, REQUEST_CROP);
-    
+    }
+}

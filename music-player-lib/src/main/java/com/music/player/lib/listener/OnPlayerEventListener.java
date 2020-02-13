@@ -2,8 +2,6 @@ package com.music.player.lib.listener;
 
 import android.media.MediaPlayer;
 
-import com.ksyun.media.player.IMediaPlayer;
-import com.ksyun.media.player.KSYMediaPlayer;
 import com.music.player.lib.bean.MusicInfo;
 
 /**
@@ -25,7 +23,6 @@ public interface OnPlayerEventListener {
     /**
      * 播放器准备好了
      */
-    void onPrepared(IMediaPlayer mediaPlayer);
 
     void onPrepared(MediaPlayer mediaPlayer);
 
@@ -52,7 +49,6 @@ public interface OnPlayerEventListener {
      *
      * @param musicInfo
      */
-    void checkedPlayTaskResult(MusicInfo musicInfo, KSYMediaPlayer mediaPlayer);
 
     void checkedPlayTaskResult(MusicInfo musicInfo, MediaPlayer mediaPlayer);
 

@@ -3,7 +3,7 @@
     <!--恋爱话术宝-->
     <!--西门恋爱话术库-->
     <!--恋爱秘籍-->
-    <string name="app_name" translatable="false">恋爱秘籍</string>
+    <string name="app_name" translatable="false">恋爱话术宝</string>
 
 
     <string name="confirm_format" translatable="false">%1$s(%2$d/%3$d)</string>

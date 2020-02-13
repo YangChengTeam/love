@@ -1,4 +1,4 @@
-package com.yc.love.model.bean;
+package com.yc.verbaltalk.model.bean;
 
 /**
  * Created by mayn on 2019/5/14.
@@ -36,7 +36,7 @@ public class OrdersInitBean {
         public String return_code;
         public String return_msg;
         public String sign;
-        public int timestamp;
+        public String timestamp;
         public String trade_type;
 
 

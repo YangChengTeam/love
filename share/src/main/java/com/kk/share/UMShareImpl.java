@@ -13,6 +13,7 @@ import com.umeng.socialize.UMShareAPI;
 import com.umeng.socialize.UMShareListener;
 import com.umeng.socialize.bean.SHARE_MEDIA;
 import com.umeng.socialize.media.UMImage;
+import com.umeng.socialize.media.UMMin;
 import com.umeng.socialize.media.UMWeb;
 
 /**
@@ -142,6 +143,30 @@ public class UMShareImpl extends IShare {
     public void shareUrl(String title, String url, String desc, Bitmap bitmap, SHARE_MEDIA shareMedia) {
         UMImage image = createImage(bitmap);
         shareUrl(title, url, desc, image, shareMedia);
+    }
+
+    @Override
+    public void shareMiniParam(String title, String desc, int bitmap, String appid) {
+
+
+        UMImage image = createImage(bitmap);
+        //兼容低版本的网页链接
+        UMMin umMin = new UMMin("https://sj.qq.com/myapp/detail.htm?apkName=com.yc.verbaltalk");
+// 小程序消息封面图片
+        umMin.setThumb(image);
+// 小程序消息title
+        umMin.setTitle(title);
+// 小程序消息描述
+        umMin.setDescription(desc);
+//小程序页面路径
+        umMin.setPath("pages/index/index");
+// 小程序原始id,在微信平台查询
+        umMin.setUserName(appid);
+
+        new ShareAction(mActivity)
+                .withMedia(umMin)
+                .setPlatform(SHARE_MEDIA.WEIXIN)
+                .setCallback(umShareListener).share();
     }
 
     private void shareUrl(String title, String url, String desc, UMImage image, SHARE_MEDIA shareMedia) {

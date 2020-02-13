@@ -1,4 +1,4 @@
-package com.yc.love.model.bean.event;
+package com.yc.verbaltalk.model.bean.event;
 
 /**
  * Created by Administrator on 2018/6/28.
@@ -7,8 +7,10 @@ package com.yc.love.model.bean.event;
 public class EventBusWxPayResult {
 
     public int code;
+    public String mess;
 
-    public EventBusWxPayResult(int code) {
+    public EventBusWxPayResult(int code, String mess) {
         this.code = code;
+        this.mess = mess;
     }
 }

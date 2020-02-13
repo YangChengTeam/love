@@ -18,7 +18,7 @@
     <TextView
         android:id="@+id/play_text_progress"
         android:layout_width="wrap_content"
-        android:layout_height="match_parent"
+        android:layout_height="wrap_content"
         android:background="@drawable/seekbar_text_bg"
         android:focusable="true"
         android:gravity="center"

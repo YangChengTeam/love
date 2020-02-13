@@ -1,4 +1,4 @@
-package com.yc.love.model.bean;
+package com.yc.verbaltalk.model.bean;
 
 /**
  * Created by mayn on 2019/5/10.
@@ -21,6 +21,7 @@ public class LoveByStagesDetailsBean {
         public int is_top;
         public String morepic;
         public String post_content;
+        public int collect_num;
 
         @Override
         public String toString() {

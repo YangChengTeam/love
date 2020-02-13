@@ -2,20 +2,21 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:orientation="vertical">
+    android:orientation="vertical"
+    android:paddingStart="10dp"
+    android:paddingTop="10dp">
 
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:paddingBottom="5dp"
-        android:paddingLeft="10dp"
-        android:paddingRight="10dp"
-        android:paddingTop="5dp">
+        android:paddingRight="10dp">
 
         <ImageView
             android:id="@+id/iv_covor_thumb"
-            android:layout_width="50dp"
+            android:layout_width="35dp"
             android:layout_height="50dp"
+            android:scaleType="centerCrop"
             android:src="@drawable/ic_launcher" />
 
         <LinearLayout
@@ -27,7 +28,7 @@
             android:gravity="center_vertical"
             android:orientation="vertical">
 
-            <com.music.player.lib.view.MarqueeTextView
+            <TextView
                 android:id="@+id/tv_music_title"
                 android:layout_width="200dp"
                 android:layout_height="wrap_content"
@@ -35,7 +36,7 @@
                 android:gravity="left"
                 android:singleLine="true"
                 android:text="@string/music_title"
-                android:textColor="@color/white"
+                android:textColor="@color/gray_767676"
                 android:textSize="16sp" />
 
             <TextView
@@ -45,25 +46,26 @@
                 android:layout_marginTop="5dp"
                 android:text="夏雨嫣"
                 android:textColor="@color/white"
-                android:textSize="12sp" />
+                android:textSize="12sp"
+                android:visibility="gone" />
         </LinearLayout>
 
         <ImageView
-            android:id="@+id/iv_next_player"
+            android:id="@+id/iv_player_close"
             android:layout_width="15dp"
             android:layout_height="15dp"
             android:layout_alignParentRight="true"
             android:layout_centerVertical="true"
-            android:background="?attr/selectableItemBackground"
-            android:src="@drawable/btn_next_selector" />
+            android:src="@drawable/btn_next_selector"
+            android:tint="@color/black" />
 
         <ImageView
             android:id="@+id/iv_play_pause"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_width="25dp"
+            android:layout_height="25dp"
             android:layout_centerVertical="true"
             android:layout_marginRight="10dp"
-            android:layout_toLeftOf="@id/iv_next_player"
+            android:layout_toLeftOf="@id/iv_player_close"
             android:src="@drawable/thumb" />
     </RelativeLayout>
 </LinearLayout>

@@ -1,4 +1,4 @@
-package com.yc.love.model.bean;
+package com.yc.verbaltalk.model.bean;
 
 import android.graphics.drawable.Drawable;
 import android.graphics.drawable.DrawableContainer;

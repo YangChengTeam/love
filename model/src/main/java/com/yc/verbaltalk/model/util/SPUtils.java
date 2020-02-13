@@ -1,4 +1,4 @@
-package com.yc.love.model.util;
+package com.yc.verbaltalk.model.util;
 
 import android.content.Context;
 import android.content.SharedPreferences;
@@ -29,6 +29,8 @@ public class SPUtils {
     public static final String IS_OPEN_USING_HELP_HOME = "IS_OPEN_USING_HELP_HOME";
 
     public static final String FILTER_POS = "filter_pos";
+
+    public static final String INDEX_DIALOG = "index_dialog";
 
 //    public static final String LOGIN_ = "LOGIN_BEAN";
 

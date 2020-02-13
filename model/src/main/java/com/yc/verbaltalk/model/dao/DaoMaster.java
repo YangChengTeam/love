@@ -1,4 +1,4 @@
-package com.yc.love.model.dao;
+package com.yc.verbaltalk.model.dao;
 
 import android.content.Context;
 import android.database.sqlite.SQLiteDatabase;

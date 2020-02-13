@@ -1,4 +1,4 @@
-package com.yc.love.model.bean;
+package com.yc.verbaltalk.model.bean;
 
 import java.io.Serializable;
 import java.util.List;
@@ -150,7 +150,7 @@ public class FrontpageBean implements Serializable {
              */
 
             private int error_code;
-            private List<BannerItemBean> result;
+            private List<BannerInfo> result;
 
             public int getError_code() {
                 return error_code;
@@ -160,11 +160,11 @@ public class FrontpageBean implements Serializable {
                 this.error_code = error_code;
             }
 
-            public List<BannerItemBean> getResult() {
+            public List<BannerInfo> getResult() {
                 return result;
             }
 
-            public void setResult(List<BannerItemBean> result) {
+            public void setResult(List<BannerInfo> result) {
                 this.result = result;
             }
 

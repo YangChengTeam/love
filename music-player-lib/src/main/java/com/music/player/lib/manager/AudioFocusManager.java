@@ -1,9 +1,10 @@
 package com.music.player.lib.manager;
 
 import android.media.AudioManager;
-import android.support.annotation.NonNull;
 
 import com.music.player.lib.service.BaseService;
+
+import androidx.annotation.NonNull;
 
 import static android.content.Context.AUDIO_SERVICE;
 

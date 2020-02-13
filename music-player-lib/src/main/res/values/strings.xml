@@ -1,4 +1,5 @@
 <resources>
     <string name="app_name">Music</string>
     <string name="music_title">孔子说：中午不睡，下午崩溃。不如来一首轻音乐放空一下吧~</string>
+    <string name="play_progress">%1$s/%2$s</string>
 </resources>

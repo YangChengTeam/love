@@ -1,7 +1,10 @@
 package com.music.player.lib.bean;
 
+import android.graphics.Bitmap;
+
 import com.alibaba.fastjson.annotation.JSONField;
 
+import java.io.Serializable;
 import java.util.List;
 
 /**
@@ -10,7 +13,7 @@ import java.util.List;
  */
 
 
-public class MusicInfo {
+public class MusicInfo implements Serializable {
 
 
     private String id;// 音乐ID
@@ -46,6 +49,10 @@ public class MusicInfo {
     private List<MusicInfo> lists;
 
     private int type;//1.音乐 2.spa
+
+    private String content;
+
+    private Bitmap bitmap;
 
 
     public int getPlauStatus() {
@@ -191,5 +198,21 @@ public class MusicInfo {
 
     public void setType(int type) {
         this.type = type;
+    }
+
+    public void setContent(String content) {
+        this.content = content;
+    }
+
+    public String getContent() {
+        return content;
+    }
+
+    public Bitmap getBitmap() {
+        return bitmap;
+    }
+
+    public void setBitmap(Bitmap bitmap) {
+        this.bitmap = bitmap;
     }
 }

@@ -13,9 +13,8 @@ import android.media.MediaPlayer;
 import android.os.Binder;
 import android.os.Handler;
 import android.os.IBinder;
-import android.support.annotation.Nullable;
-import android.support.v4.app.NotificationManagerCompat;
 import android.text.TextUtils;
+import android.util.Log;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.target.SimpleTarget;
@@ -42,20 +41,23 @@ import java.util.List;
 import java.util.Timer;
 import java.util.TimerTask;
 
+import androidx.annotation.Nullable;
+import androidx.core.app.NotificationManagerCompat;
+
 /**
  * TinyHung@Outlook.com
  * 2018/1/18.
  * 音乐播放服务
  */
 
-public class MusicPlayerServiceNew extends BaseService implements MediaPlayer.OnPreparedListener,
+public class MusicPlayerService extends BaseService implements MediaPlayer.OnPreparedListener,
         MediaPlayer.OnCompletionListener, MediaPlayer.OnBufferingUpdateListener,
         MediaPlayer.OnSeekCompleteListener, MediaPlayer.OnErrorListener, MediaPlayer.OnInfoListener {
 
-    private static final String TAG = MusicPlayerServiceNew.class.getSimpleName();
+    private static final String TAG = MusicPlayerService.class.getSimpleName();
     private static MediaPlayer mMediaPlayer;
     private static List<MusicInfo> mMusicInfos = null;//播放任务集合
-    //    private MusicActionReceiver mMusicActionReceiver;
+
     private static AudioFocusManager mAudioFocusManager;
     private static OnPlayerEventListener mOnPlayerEventListener;//播放的状态回调
     private static int mPlayModel = PlayerModel.PLAY_MODEL_SEQUENCE_FOR;//默认播放播放模式(列表顺序播放)
@@ -336,6 +338,7 @@ public class MusicPlayerServiceNew extends BaseService implements MediaPlayer.On
             if (null != mMusicInfos && mMusicInfos.size() > 0) {
                 MusicInfo musicInfo = mMusicInfos.get(mPlayPosition);
                 musicInfo.setPlauStatus(2);
+
                 mOnPlayerEventListener.onMusicPlayerState(musicInfo, PlayerStatus.PLAYER_STATUS_PLAYING);
             }
         }
@@ -343,8 +346,7 @@ public class MusicPlayerServiceNew extends BaseService implements MediaPlayer.On
         if (isOpenNotificationPermissions()) {
             //创建自定义控制器通知栏
             if (null != mManager && null != mMusicInfos && mMusicInfos.size() > 0) {
-//                mManager.notify(NOTIFACTION_ID, getNotification(mMusicInfos.get(mPlayPosition)));
-//                NotificationUtil.showNotify(this, mMusicInfos.get(mPlayPosition).getTitle(), true, Notification.FLAG_AUTO_CANCEL);
+
                 showNotification(mMusicInfos.get(mPlayPosition), true);
 
             }
@@ -697,6 +699,7 @@ public class MusicPlayerServiceNew extends BaseService implements MediaPlayer.On
             }
         } catch (IOException e) {
             e.printStackTrace();
+            Log.e(TAG, "startPlay: " + e.getMessage());
         }
     }
 
@@ -905,14 +908,12 @@ public class MusicPlayerServiceNew extends BaseService implements MediaPlayer.On
             if (mMediaPlayer.isPlaying()) {
                 mMediaPlayer.stop();
             }
-            mMediaPlayer.release();
             mMediaPlayer.reset();
-//            mMediaPlayer.resetListeners();
+
             mMediaPlayer = null;
         }
         stopTimer();
         if (null != mManager) {
-//            mManager.cancel(NOTIFACTION_ID);
             mManager.cancelAll();
         }
     }
@@ -925,14 +926,13 @@ public class MusicPlayerServiceNew extends BaseService implements MediaPlayer.On
             if (mMediaPlayer.isPlaying()) {
                 mMediaPlayer.stop();
             }
-            mMediaPlayer.release();
+
             mMediaPlayer.reset();
 //            mMediaPlayer.resetListeners();
             mMediaPlayer = null;
         }
         stopTimer();
         if (null != mManager) {
-//            mManager.cancel(NOTIFACTION_ID);
             mManager.cancelAll();
         }
         //停止播放通知所有观察者
@@ -969,8 +969,6 @@ public class MusicPlayerServiceNew extends BaseService implements MediaPlayer.On
         }
         return null;
     }
-
-
 
 
     private boolean isOpenNotificationPermissions() {
@@ -1020,155 +1018,155 @@ public class MusicPlayerServiceNew extends BaseService implements MediaPlayer.On
      */
     public class MusicPlayerServiceBunder extends Binder {
         //返回MusicPlayerService实例
-        public MusicPlayerServiceNew getService() {
-            return MusicPlayerServiceNew.this;
+        public MusicPlayerService getService() {
+            return MusicPlayerService.this;
         }
 
         //注册播放监听
         public void setOnPlayerEventListener(OnPlayerEventListener onPlayerEventListener) {
-            MusicPlayerServiceNew.this.setOnPlayerEventListener(onPlayerEventListener);
+            MusicPlayerService.this.setOnPlayerEventListener(onPlayerEventListener);
         }
 
         //移除播放监听
         public void removePlayerEventListener() {
-            MusicPlayerServiceNew.this.removeEventListener();
+            MusicPlayerService.this.removeEventListener();
         }
 
         //播放新的歌曲
         public void playMusic(MusicInfo musicInfo) {
-            MusicPlayerServiceNew.this.playMusic(musicInfo);
+            MusicPlayerService.this.playMusic(musicInfo);
         }
 
         //播放指定位置的音乐
         public void playMusic(int position) {
-            MusicPlayerServiceNew.this.playMusic(position);
+            MusicPlayerService.this.playMusic(position);
         }
 
         //播放全新的列表
         public void playMusic(List<MusicInfo> musicInfos, int position) {
-            MusicPlayerServiceNew.this.playMusic(musicInfos, position);
+            MusicPlayerService.this.playMusic(musicInfos, position);
         }
 
         //播放/或者暂停播放
         public void playPauseMusic(List<MusicInfo> data, int position) {
-            MusicPlayerServiceNew.this.playPauseMusic(data, position);
+            MusicPlayerService.this.playPauseMusic(data, position);
         }
 
 
         //开始播放
         public void start() {
-            MusicPlayerServiceNew.this.start();
+            MusicPlayerService.this.start();
         }
 
         //暂停播放
         public void pause() {
-            MusicPlayerServiceNew.this.pause();
+            MusicPlayerService.this.pause();
         }
 
         //停止播放
         public void stop() {
-            MusicPlayerServiceNew.this.stop();
+            MusicPlayerService.this.stop();
         }
 
         //释放资源
         public void destory() {
-            MusicPlayerServiceNew.this.release();
+            MusicPlayerService.this.release();
         }
 
         //返回当前正在播放的位置
         public long getPlayerCurrentPosition() {
-            return MusicPlayerServiceNew.this.getPlayerCurrentPosition();
+            return MusicPlayerService.this.getPlayerCurrentPosition();
         }
 
         //返回列表模式下面正在播放的角标
         public int getPlayingPosition() {
-            return MusicPlayerServiceNew.this.getPlayPosition();
+            return MusicPlayerService.this.getPlayPosition();
         }
 
         //设置循环模式
         public void setLoop(boolean flag) {
-            MusicPlayerServiceNew.this.setLoop(flag);
+            MusicPlayerService.this.setLoop(flag);
         }
 
         //改变播放模式
         public void changePlayModel() {
-            MusicPlayerServiceNew.this.changePlayModel();
+            MusicPlayerService.this.changePlayModel();
         }
 
         //设置播放器播放模式
         public void setPlayMode(int playMode) {
-            MusicPlayerServiceNew.this.setPlayMode(playMode);
+            MusicPlayerService.this.setPlayMode(playMode);
         }
 
         //返回播放模式
         public int getPlayModel() {
-            return MusicPlayerServiceNew.this.getPlayMode();
+            return MusicPlayerService.this.getPlayMode();
         }
 
         //改变定时模式
         public void changeAlarmModel() {
-            MusicPlayerServiceNew.this.changeAlarmModel();
+            MusicPlayerService.this.changeAlarmModel();
         }
 
         //设置播放器定时关闭模式
         public void setPlayAlarmMode(int mode) {
-            MusicPlayerServiceNew.this.setPlayAlarmMode(mode);
+            MusicPlayerService.this.setPlayAlarmMode(mode);
         }
 
         //设置定时关闭时长
         public void setPlayerDurtion(long durtion) {
-            MusicPlayerServiceNew.this.setPlayerDurtion(durtion);
+            MusicPlayerService.this.setPlayerDurtion(durtion);
         }
 
         //设置闹钟档次，需要回调结果
         public void setAralmFiexdTimer(int fiexdTimerAlarmModel) {
-            MusicPlayerServiceNew.this.setAralmFiexdTimer(fiexdTimerAlarmModel);
+            MusicPlayerService.this.setAralmFiexdTimer(fiexdTimerAlarmModel);
         }
 
         //返回用户设置的闹钟定时时长
         public long getPlayerAlarmDurtion() {
-            return MusicPlayerServiceNew.this.getPlayerAlarmDurtion();
+            return MusicPlayerService.this.getPlayerAlarmDurtion();
         }
 
         //返回定时关闭模式
         public int getPlayAlarmModel() {
-            return MusicPlayerServiceNew.this.getPlayAlarmModel();
+            return MusicPlayerService.this.getPlayAlarmModel();
         }
 
         //检查当前正在播放的任务
         public void checkedPlayTask() {
-            MusicPlayerServiceNew.this.checkedPlayTask();
+            MusicPlayerService.this.checkedPlayTask();
         }
 
         //开始、暂停播放
         public boolean onPlayPause() {
-            return MusicPlayerServiceNew.this.playPause();
+            return MusicPlayerService.this.playPause();
         }
 
         //播放上一首
         public void playLast() {
-            MusicPlayerServiceNew.this.last();
+            MusicPlayerService.this.last();
         }
 
         //播放下一首
         public void playNext() {
-            MusicPlayerServiceNew.this.next();
+            MusicPlayerService.this.next();
         }
 
         public void cancelNotification() {
-            MusicPlayerServiceNew.this.cancelNotification();
+            MusicPlayerService.this.cancelNotification();
         }
 
         public void showNotification(MusicInfo musicInfo, boolean isPlay) {
-            MusicPlayerServiceNew.this.showNotification(musicInfo, isPlay);
+            MusicPlayerService.this.showNotification(musicInfo, isPlay);
         }
 
         public MusicInfo getCurrentMusic() {
-            return MusicPlayerServiceNew.this.getCurrentMusicInfo();
+            return MusicPlayerService.this.getCurrentMusicInfo();
         }
 
         public void seekTo(int progress) {
-            MusicPlayerServiceNew.this.seekTo(progress);
+            MusicPlayerService.this.seekTo(progress);
         }
 
 
@@ -1176,7 +1174,7 @@ public class MusicPlayerServiceNew extends BaseService implements MediaPlayer.On
 
 
     private void cancelNotification() {
-//        mManager.cancel(NOTIFACTION_ID);
+
         NotificationUtil.clear(this);
 
     }
@@ -1187,7 +1185,7 @@ public class MusicPlayerServiceNew extends BaseService implements MediaPlayer.On
             @Override
             public void onResourceReady(Bitmap bitmap, Transition<? super Bitmap> transition) {
                 musicInfo.setBitmap(bitmap);
-                NotificationUtil.showNotify(MusicPlayerServiceNew.this, musicInfo, isPlay, Notification.FLAG_AUTO_CANCEL);
+                NotificationUtil.showNotify(MusicPlayerService.this, musicInfo, isPlay, Notification.FLAG_AUTO_CANCEL);
 
             }
         });

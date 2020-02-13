@@ -1,4 +1,4 @@
-package com.yc.love.model.bean.event;
+package com.yc.verbaltalk.model.bean.event;
 
 import java.util.List;
 
