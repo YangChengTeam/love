@@ -2,9 +2,11 @@ package com.yc.verbaltalk.ui.activity;
 
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
+import android.text.TextUtils;
 import android.util.Log;
 import android.view.KeyEvent;
 import android.view.View;
@@ -62,8 +64,13 @@ public class SpecializedActivity extends BaseActivity implements OnAdvStateListe
 //        mHandler.post(runnable);
 //        AdvDispatchManager.getManager().init(this, AdvType.SPLASH, splashContainer, tvSipView, Constant.TENCENT_ADV_ID, Constant.SPLASH_ADV_ID, this);
 
-        TTAdDispatchManager.getManager().init(this, TTAdType.SPLASH, splashContainer, Constant.TOUTIAO_SPLASH_ID, 0, null, 0, null, 0, this);
-
+        String brand = Build.BRAND;
+        if (TextUtils.equals(brand, "huawei") || TextUtils.equals(brand, "Huawei")) {
+            ivLighting.setVisibility(View.VISIBLE);
+            tvSipView.setVisibility(View.GONE);
+        } else {
+            TTAdDispatchManager.getManager().init(this, TTAdType.SPLASH, splashContainer, Constant.TOUTIAO_SPLASH_ID, 0, null, 0, null, 0, this);
+        }
 //        ivLighting.setOnClickListener(new View.OnClickListener() {
 //            @Override
 //            public void onClick(View v) {

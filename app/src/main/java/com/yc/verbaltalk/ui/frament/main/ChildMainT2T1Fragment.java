@@ -2,6 +2,8 @@ package com.yc.verbaltalk.ui.frament.main;
 
 import android.content.Intent;
 import android.media.midi.MidiManager;
+import android.os.Build;
+import android.text.TextUtils;
 import android.view.View;
 import android.widget.FrameLayout;
 
@@ -78,7 +80,13 @@ public class ChildMainT2T1Fragment extends BaseMainT2ChildFragment implements On
         bottomContainer = rootView.findViewById(R.id.bottom_container);
 
 
-        TTAdDispatchManager.getManager().init(mMainActivity, TTAdType.BANNER, bottomContainer, Constant.TOUTIAO_BANNER_ID, 0, null, 0, null, 0, this);
+        String brand = Build.BRAND;
+        if (TextUtils.equals(brand, "huawei") || TextUtils.equals(brand, "Huawei")) {
+            bottomContainer.setVisibility(View.GONE);
+        } else {
+            bottomContainer.setVisibility(View.VISIBLE);
+            TTAdDispatchManager.getManager().init(mMainActivity, TTAdType.BANNER, bottomContainer, Constant.TOUTIAO_BANNER_ID, 0, null, 0, null, 0, this);
+        }
         LinearLayoutManager layoutManager = new LinearLayoutManager(mMainActivity);
 //        RecyclerViewNoBugLinearLayoutManager layoutManager = new RecyclerViewNoBugLinearLayoutManager(this);
         mRecyclerView.setLayoutManager(layoutManager);
@@ -187,9 +195,9 @@ public class ChildMainT2T1Fragment extends BaseMainT2ChildFragment implements On
 
 
         mMainT2Beans = new ArrayList<>();
-        if (PAGE_NUM == 1){
+        if (PAGE_NUM == 1) {
             MainT2Bean mainT2Bean = new MainT2Bean("tit", MainT2Bean.VIEW_TITLE);
-            mainT2Bean.imgId= R.mipmap.consult_banner;
+            mainT2Bean.imgId = R.mipmap.consult_banner;
             mMainT2Beans.add(mainT2Bean);
         }
         if (exampListsBeans != null && exampListsBeans.size() > 0) {

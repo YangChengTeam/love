@@ -23,6 +23,7 @@
         android:layout_height="wrap_content"
         app:imgSrc="@mipmap/seting_icon_02"
         app:isAddIntervalBom="true"
+        android:visibility="gone"
         app:layout_constraintTop_toBottomOf="@+id/setting_ll_item_01"
         app:textNameMyItem="关于我们" />
 
