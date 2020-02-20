@@ -93,7 +93,7 @@
 
                 </RelativeLayout>
 
-                <com.yc.verbaltalk.ui.view.CommonWebView
+                <com.yc.verbaltalk.base.view.CommonWebView
                     android:id="@+id/webView"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"

@@ -41,7 +41,7 @@
 
     </RelativeLayout>
 
-    <com.yc.verbaltalk.ui.view.imgs.CustomViewPager
+    <com.yc.verbaltalk.base.view.imgs.CustomViewPager
         android:id="@+id/viewPager"
         android:layout_width="match_parent"
         android:layout_height="match_parent"

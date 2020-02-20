@@ -1,0 +1,157 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/love_background"
+    android:orientation="vertical">
+
+    <include
+        android:id="@+id/main_t5_view_bar"
+        layout="@layout/layout_view_bar" />
+
+    <LinearLayout
+        android:id="@+id/main_t5_ll_title"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_vertical"
+        android:background="@color/white"
+        android:orientation="horizontal"
+        android:padding="12dp">
+
+        <ImageView
+            android:id="@+id/main_t5_iv_icon"
+            android:layout_width="75dp"
+            android:layout_height="75dp"
+            android:src="@mipmap/main_icon_default_head" />
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_vertical"
+            android:layout_marginLeft="14dp"
+            android:orientation="vertical">
+
+            <TextView
+                android:id="@+id/main_t5_tv_name"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="普通用户"
+                android:textColor="@color/black"
+                android:textSize="@dimen/size_22"
+                android:textStyle="bold" />
+
+            <View
+                android:layout_width="1dp"
+                android:layout_height="6dp" />
+
+            <TextView
+                android:id="@+id/main_t5_tv_btn_info"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:background="@drawable/selectot_btn_red_crimson"
+                android:gravity="center"
+                android:paddingLeft="24dp"
+                android:paddingTop="4dp"
+                android:paddingRight="24dp"
+                android:paddingBottom="4dp"
+                android:text="信息未完善"
+                android:textColor="@color/select_color_red_crimson"
+                android:textSize="@dimen/size_14" />
+        </LinearLayout>
+    </LinearLayout>
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_centerHorizontal="true"
+        android:background="@color/white"
+        android:paddingTop="12dp"
+        android:paddingBottom="6dp">
+
+        <ImageView
+            android:id="@+id/main_t5_ll_iv_vip"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerHorizontal="true"
+            android:background="@color/white"
+            android:src="@mipmap/main_item_open_vip" />
+
+        <TextView
+            android:id="@+id/main_t5_tv_vip_state"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignRight="@+id/main_t5_ll_iv_vip"
+            android:layout_centerVertical="true"
+            android:layout_marginRight="14dp"
+            android:background="@drawable/shape_btn_vip_static_yellow"
+            android:paddingLeft="22dp"
+            android:paddingTop="4dp"
+            android:paddingRight="22dp"
+            android:paddingBottom="4dp"
+            android:text="去开通"
+            android:textColor="@color/white"
+            android:textSize="@dimen/size_14" />
+    </RelativeLayout>
+
+    <com.yc.verbaltalk.base.view.MainMyItemLin
+        android:id="@+id/main_t5_ll_item_01"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:imgSrc="@mipmap/main_icon_my_01"
+        app:isAddIntervalBom="true"
+        app:isAddIntervalTop="true"
+        app:textNameMyItem="我的收藏" />
+
+    <com.yc.verbaltalk.base.view.MainMyItemLin
+        android:id="@+id/main_t5_ll_item_share"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:imgSrc="@mipmap/main_item_share_icon"
+        app:isAddIntervalBom="true"
+        app:textNameMyItem="分享" />
+
+    <com.yc.verbaltalk.base.view.MainMyItemLin
+        android:id="@+id/main_t5_ll_item_02"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:imgSrc="@mipmap/main_icon_my_02"
+        app:isAddIntervalBom="true"
+        app:isAddIntervalTop="true"
+        app:textNameMyItem="使用帮助" />
+
+    <com.yc.verbaltalk.base.view.MainMyItemLin
+        android:id="@+id/main_t5_ll_item_03"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:visibility="gone"
+        app:imgSrc="@mipmap/main_icon_my_03"
+        app:isAddIntervalBom="true"
+        app:textNameMyItem="意见反馈" />
+
+    <com.yc.verbaltalk.base.view.MainMyItemLin
+        android:id="@+id/setting_ll_item_03"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:imgSrc="@mipmap/seting_icon_03"
+        app:isAddIntervalBom="true"
+        app:layout_constraintTop_toBottomOf="@+id/setting_ll_item_02"
+        app:textNameMyItem="隐私政策" />
+
+    <!-- app:textSubMyItem="13164125027"-->
+    <com.yc.verbaltalk.base.view.MainMyItemLin
+        android:id="@+id/main_t5_ll_item_05"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+
+        app:imgSrc="@mipmap/main_icon_my_05"
+        app:textNameMyItem="联系客服" />
+
+    <com.yc.verbaltalk.base.view.MainMyItemLin
+        android:id="@+id/main_t5_ll_item_04"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:imgSrc="@mipmap/main_icon_my_04"
+        app:isAddIntervalTop="true"
+        app:textNameMyItem="设置" />
+</LinearLayout>

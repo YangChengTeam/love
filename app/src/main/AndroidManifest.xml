@@ -17,7 +17,7 @@
     <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
 
     <application
-        android:name=".app.YcApplication"
+        android:name=".base.YcApplication"
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
@@ -26,18 +26,18 @@
         android:supportsRtl="true"
         android:theme="@style/JK.SwipeBack.Transparent.Theme"
         tools:targetApi="n">
-        <activity android:name=".ui.activity.PayVipActivity" />
-        <activity android:name=".ui.activity.LoveCaseActivity" />
-        <activity android:name=".ui.activity.ResultActivity" />
-        <activity android:name=".ui.activity.ImageCropActivity" />
-        <activity android:name=".ui.activity.CreateBeforeActivity" />
-        <activity android:name=".ui.activity.UsingHelpHomeActivity" />
+        <activity android:name=".pay.ui.activity.PayVipActivity" />
+        <activity android:name=".chat.ui.activity.LoveCaseActivity" />
+        <activity android:name=".skill.ui.activity.ResultActivity" />
+        <activity android:name=".skill.ui.activity.ImageCropActivity" />
+        <activity android:name=".skill.ui.activity.CreateBeforeActivity" />
+        <activity android:name=".mine.ui.activity.UsingHelpHomeActivity" />
         <activity
             android:name=".wxapi.WXPayEntryActivity"
             android:exported="true"
             android:launchMode="singleTop" />
         <activity
-            android:name=".ui.activity.SpecializedActivity"
+            android:name=".base.activity.SpecializedActivity"
             android:screenOrientation="portrait"
             android:theme="@style/fullScreen">
             <intent-filter>
@@ -48,16 +48,16 @@
             </intent-filter>
         </activity> <!-- android:theme="@style/AppTheme.NoActionBar" -->
         <activity
-            android:name=".ui.activity.MainActivity"
+            android:name=".base.activity.MainActivity"
             android:label="@string/app_name"
             android:launchMode="singleTask"
             android:theme="@style/AppTheme" />
-        <activity android:name=".ui.activity.IdCorrelationSlidingActivity" />
-        <activity android:name=".ui.activity.LoveDialogueActivity" />
-        <activity android:name=".ui.activity.LoveByStagesActivity" />
-        <activity android:name=".ui.activity.LoveUpDownPhotoActivity" />
-        <activity android:name=".ui.activity.LoveIntroductionActivity" />
-        <activity android:name=".ui.activity.UserInfoActivity" />
+        <activity android:name=".mine.ui.activity.IdCorrelationSlidingActivity" />
+        <activity android:name=".skill.ui.activity.LoveDialogueActivity" />
+        <activity android:name=".chat.ui.activity.LoveByStagesActivity" />
+        <activity android:name=".skill.ui.activity.LoveUpDownPhotoActivity" />
+        <activity android:name=".chat.ui.activity.LoveIntroductionActivity" />
+        <activity android:name=".mine.ui.activity.UserInfoActivity" />
         <!--
        //图片选择Activity
        //去掉Activity的ActionBar。
@@ -103,11 +103,11 @@
                 tools:replace="android:resource" />
         </provider>
 
-        <activity android:name=".ui.activity.FeedbackActivity" />
-        <activity android:name=".ui.activity.SettingActivity" />
-        <activity android:name=".ui.activity.CollectActivity" />
-        <activity android:name=".ui.view.imgs.ISListActivity" />
-        <activity android:name=".ui.view.imgs.ISCameraActivity" />
+        <activity android:name=".mine.ui.activity.FeedbackActivity" />
+        <activity android:name=".mine.ui.activity.SettingActivity" />
+        <activity android:name=".mine.ui.activity.CollectActivity" />
+        <activity android:name=".base.view.imgs.ISListActivity" />
+        <activity android:name=".base.view.imgs.ISCameraActivity" />
         <!--
         <provider
             android:name="android.support.v4.content.FileProvider"
@@ -119,9 +119,9 @@
                 android:resource="@xml/provider_paths" />
         </provider>
         -->
-        <activity android:name=".ui.activity.LoveByStagesDetailsActivity" />
-        <activity android:name=".ui.activity.ExampleDetailActivity" />
-        <activity android:name=".ui.activity.SearchActivity" />
+        <activity android:name=".chat.ui.activity.LoveByStagesDetailsActivity" />
+        <activity android:name=".skill.ui.activity.ExampleDetailActivity" />
+        <activity android:name=".index.ui.activity.SearchActivity" />
         <!--
         <receiver android:name=".receiver.NetWorkChangReceiver">
             <intent-filter>
@@ -131,7 +131,7 @@
             </intent-filter>
         </receiver>
         -->
-        <receiver android:name=".receiver.InitApkBroadCastReceiver">
+        <receiver android:name=".base.receiver.InitApkBroadCastReceiver">
             <intent-filter>
                 <action android:name="android.intent.action.PACKAGE_ADDED" />
                 <action android:name="android.intent.action.PACKAGE_REPLACED" />
@@ -145,12 +145,12 @@
             android:name="com.tencent.bugly.beta.ui.BetaActivity"
             android:configChanges="keyboardHidden|orientation|screenSize|locale"
             android:theme="@android:style/Theme.Translucent" />
-        <activity android:name=".ui.activity.ProtocolActivity" />
-        <activity android:name=".ui.activity.AboutUsActivity" />
-        <activity android:name=".ui.activity.PrivacyStatementActivity" />
-        <activity android:name=".ui.activity.UsingHelpActivity" /> <!-- android:theme="@style/ActivityV7Translucent" -->
+        <activity android:name=".mine.ui.activity.ProtocolActivity" />
+        <activity android:name=".mine.ui.activity.AboutUsActivity" />
+        <activity android:name=".mine.ui.activity.PrivacyStatementActivity" />
+        <activity android:name=".mine.ui.activity.UsingHelpActivity" /> <!-- android:theme="@style/ActivityV7Translucent" -->
 
-        <receiver android:name=".receiver.UpdataBroadcastReceiver">
+        <receiver android:name=".base.receiver.UpdataBroadcastReceiver">
             <intent-filter>
                 <action android:name="android.intent.action.DOWNLOAD_COMPLETE" />
             </intent-filter>
@@ -179,18 +179,18 @@
             android:name="com.tencent.connect.common.AssistActivity"
 
             android:theme="@android:style/Theme.Translucent.NoTitleBar" />
-        <activity android:name=".ui.activity.LoveHealDetailsActivity" />
+        <activity android:name=".index.ui.activity.LoveHealDetailsActivity" />
 
-        <activity android:name=".ui.activity.BecomeVipActivity" />
+        <activity android:name=".mine.ui.activity.BecomeVipActivity" />
         <activity
             android:name=".wxapi.WXEntryActivity"
             android:configChanges="keyboardHidden|orientation|screenSize"
             android:exported="true"
             android:theme="@android:style/Theme.Translucent.NoTitleBar" />
-        <activity android:name=".ui.activity.PracticeTeachActivity" />
-        <activity android:name=".ui.activity.PracticeLoveActivity" />
+        <activity android:name=".chat.ui.activity.PracticeTeachActivity" />
+        <activity android:name=".chat.ui.activity.PracticeLoveActivity" />
         <activity
-            android:name=".ui.activity.LoveAudioDetailActivity"
+            android:name=".chat.ui.activity.LoveAudioDetailActivity"
             android:launchMode="singleTask">
             <intent-filter>
                 <action android:name="com.music.player.love.action" />
@@ -199,14 +199,14 @@
                 <category android:name="android.intent.category.DEFAULT" />
             </intent-filter>
         </activity>
-        <activity android:name=".ui.activity.CommunityNoticeDetailActivity" />
-        <activity android:name=".ui.activity.CommunityDetailActivity" />
-        <activity android:name=".ui.activity.CommunityPublishActivity" />
-        <activity android:name=".ui.activity.CommunityTagListActivity" />
-        <activity android:name=".ui.frament.main.AudioActivity" />
-        <activity android:name=".ui.activity.ChatRecommendDetailActivity" />
-        <activity android:name=".ui.activity.ChatCourseDetailActivity" />
-        <activity android:name=".ui.activity.ConsultDetailActivity" />
+        <activity android:name=".community.ui.activity.CommunityNoticeDetailActivity" />
+        <activity android:name=".community.ui.activity.CommunityDetailActivity" />
+        <activity android:name=".community.ui.activity.CommunityPublishActivity" />
+        <activity android:name=".community.ui.activity.CommunityTagListActivity" />
+        <activity android:name=".chat.ui.activity.AudioActivity" />
+        <activity android:name=".chat.ui.activity.ChatRecommendDetailActivity" />
+        <activity android:name=".chat.ui.activity.ChatCourseDetailActivity" />
+        <activity android:name=".skill.ui.activity.ConsultDetailActivity" />
 
         <!--android:windowSoftInputMode="adjustPan|stateHidden"-->
         <uses-library

@@ -6,7 +6,7 @@ import android.content.pm.PackageManager;
 import android.graphics.drawable.Drawable;
 import android.util.Log;
 
-import com.yc.verbaltalk.model.bean.MyAppInfo;
+import com.yc.verbaltalk.chat.bean.MyAppInfo;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;

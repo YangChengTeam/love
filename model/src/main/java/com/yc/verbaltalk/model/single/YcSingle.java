@@ -15,7 +15,11 @@ public class YcSingle {
 
     public static YcSingle getInstance() {
         if (instanceLonginAccount == null) {
-            instanceLonginAccount = new YcSingle();
+            synchronized (YcSingle.class) {
+                if (instanceLonginAccount == null) {
+                    instanceLonginAccount = new YcSingle();
+                }
+            }
         }
         return instanceLonginAccount;
     }

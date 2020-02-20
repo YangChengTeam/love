@@ -9,8 +9,17 @@ buildscript {
         google()
         jcenter()
         maven { url 'https://dl.bintray.com/umsdk/release' } //友盟
-        mavenCentral()
+//        maven { url 'https://maven.aliyun.com/repository/google' }
+//        maven { url 'https://maven.aliyun.com/repository/jcenter' }
+        maven { url 'http://maven.aliyun.com/nexus/content/groups/public/' }
+        maven { url 'http://maven.aliyun.com/nexus/content/repositories/jcenter' }
+        maven { url 'http://maven.aliyun.com/nexus/content/repositories/google' }
+        maven { url 'http://maven.aliyun.com/nexus/content/repositories/gradle-plugin' }
+
+//        maven{url 'http://maven.aliyun.com/nexus/content/groups/public/'}
+        maven { url 'https://jitpack.io' }
         maven { url 'https://maven.google.com' }
+        mavenCentral()
     }
     dependencies {
         classpath 'com.android.tools.build:gradle:3.5.3'
@@ -27,6 +36,14 @@ allprojects {
     repositories {
         google()
         jcenter()
+//        maven{url 'http://maven.aliyun.com/nexus/content/groups/public/'}
+//        maven { url 'https://maven.aliyun.com/repository/google' }
+//        maven { url 'https://maven.aliyun.com/repository/jcenter' }
+        maven { url 'http://maven.aliyun.com/nexus/content/groups/public/' }
+        maven { url 'http://maven.aliyun.com/nexus/content/repositories/jcenter' }
+        maven { url 'http://maven.aliyun.com/nexus/content/repositories/google' }
+        maven { url 'http://maven.aliyun.com/nexus/content/repositories/gradle-plugin' }
+
         maven { url "https://jitpack.io" }
         maven { url 'https://dl.bintray.com/umsdk/release' } //友盟
         flatDir {

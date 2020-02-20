@@ -9,7 +9,7 @@
     android:paddingLeft="12dp"
     android:paddingTop="12dp"
     android:paddingRight="12dp"
-    tools:context=".ui.activity.SearchActivity">
+    tools:context=".index.ui.activity.SearchActivity">
 
     <LinearLayout
         android:id="@+id/share_ll_sear_title"
@@ -151,7 +151,7 @@
                 android:textSize="@dimen/size_14" />
         </RelativeLayout>
 
-        <com.yc.verbaltalk.ui.view.FluidLayout
+        <com.yc.verbaltalk.base.view.FluidLayout
             android:id="@+id/share_fluid_layout"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"

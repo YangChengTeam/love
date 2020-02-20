@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".ui.activity.LoveByStagesDetailsActivity">
+    >
 
     <ProgressBar
         android:id="@+id/love_by_stages_details_pb_progress"
@@ -17,7 +17,7 @@
         android:progressDrawable="@drawable/process_bg"
         app:layout_constraintTop_toTopOf="parent" />
 
-    <com.yc.verbaltalk.ui.view.NewsScrollView
+    <com.yc.verbaltalk.base.view.NewsScrollView
         android:id="@+id/love_by_stages_details_scroll_view"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
@@ -156,7 +156,7 @@
 
 
         </LinearLayout>
-    </com.yc.verbaltalk.ui.view.NewsScrollView>
+    </com.yc.verbaltalk.base.view.NewsScrollView>
 
     <include
         android:id="@+id/rlBottom"

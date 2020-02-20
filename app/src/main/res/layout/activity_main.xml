@@ -10,7 +10,7 @@
         android:layout_height="match_parent"
         android:orientation="vertical">
 
-        <com.yc.verbaltalk.ui.view.ControlScrollViewPager
+        <com.yc.verbaltalk.base.view.ControlScrollViewPager
             android:id="@+id/comp_main_vp_fragment"
             android:layout_width="match_parent"
             android:layout_height="0dp"

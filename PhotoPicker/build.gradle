@@ -9,7 +9,7 @@ android {
     javaMaxHeapSize "4g"
   }
   defaultConfig {
-    minSdkVersion 14
+    minSdkVersion 17
     targetSdkVersion 28
   }
   lintOptions {

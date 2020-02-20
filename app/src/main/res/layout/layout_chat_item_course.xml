@@ -19,7 +19,7 @@
         android:textStyle="bold" />
 
 
-    <com.yc.verbaltalk.ui.view.RoundCornerImg
+    <com.yc.verbaltalk.base.view.RoundCornerImg
         android:id="@+id/iv_course_pic"
         android:layout_width="wrap_content"
         android:layout_height="158dp"

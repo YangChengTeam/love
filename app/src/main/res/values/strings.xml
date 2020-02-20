@@ -3,7 +3,7 @@
     <!--恋爱话术宝-->
     <!--西门恋爱话术库-->
     <!--恋爱秘籍-->
-    <string name="app_name" translatable="false">恋爱话术宝</string>
+    <string name="app_name" translatable="false">恋爱秘籍</string>
 
 
     <string name="confirm_format" translatable="false">%1$s(%2$d/%3$d)</string>
@@ -131,8 +131,6 @@ APP目前已集成腾讯Bugly软件崩溃日志统计SDK、友盟统计SDK。\n
     <string name="notice" translatable="false">公告</string>
     <string name="contact_teacher" translatable="false">联系导师</string>
     <string name="more_comment" translatable="false">更多评论</string>
-
-    <string name="test" translatable="false" />
 
     <string-array name="love_practice">
         <item>聊天秘籍</item>
