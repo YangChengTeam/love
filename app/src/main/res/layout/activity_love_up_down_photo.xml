@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".ui.activity.LoveUpDownPhotoActivity">
+    tools:context=".skill.ui.activity.LoveUpDownPhotoActivity">
 
     <cn.youngkaaa.yviewpager.YViewPager
         android:id="@+id/love_up_down_photo_viewpager"

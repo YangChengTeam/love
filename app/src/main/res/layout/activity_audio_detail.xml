@@ -55,7 +55,7 @@
         </LinearLayout>
 
 
-        <com.yc.verbaltalk.ui.view.MyScrollView
+        <com.yc.verbaltalk.base.view.MyScrollView
             android:id="@+id/nestedScrollView"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
@@ -70,7 +70,7 @@
                 android:layout_marginRight="8dp"
                 android:layout_marginTop="5dp"
                 android:nestedScrollingEnabled="false" />
-        </com.yc.verbaltalk.ui.view.MyScrollView>
+        </com.yc.verbaltalk.base.view.MyScrollView>
     </LinearLayout>
 
     <include

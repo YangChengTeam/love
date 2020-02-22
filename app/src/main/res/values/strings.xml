@@ -132,8 +132,6 @@ APP目前已集成腾讯Bugly软件崩溃日志统计SDK、友盟统计SDK。\n
     <string name="contact_teacher" translatable="false">联系导师</string>
     <string name="more_comment" translatable="false">更多评论</string>
 
-    <string name="test" translatable="false" />
-
     <string-array name="love_practice">
         <item>聊天秘籍</item>
         <item>表白神器</item>

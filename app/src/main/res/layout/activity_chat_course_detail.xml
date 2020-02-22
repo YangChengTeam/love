@@ -79,7 +79,7 @@
                         android:text="无极神撩术2.0"
                         android:textColor="@color/gray_666666" />
 
-                    <com.yc.verbaltalk.ui.view.CommonWebView
+                    <com.yc.verbaltalk.base.view.CommonWebView
                         android:id="@+id/course_webView"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"

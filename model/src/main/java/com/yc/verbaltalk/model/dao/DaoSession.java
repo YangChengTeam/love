@@ -8,7 +8,7 @@ import org.greenrobot.greendao.database.Database;
 import org.greenrobot.greendao.identityscope.IdentityScopeType;
 import org.greenrobot.greendao.internal.DaoConfig;
 
-import com.yc.verbaltalk.model.bean.LoveHealDetDetailsBean;
+import com.yc.verbaltalk.chat.bean.LoveHealDetDetailsBean;
 
 import com.yc.verbaltalk.model.dao.LoveHealDetDetailsBeanDao;
 

@@ -11,7 +11,7 @@ import com.tencent.mm.opensdk.openapi.IWXAPI;
 import com.tencent.mm.opensdk.openapi.IWXAPIEventHandler;
 import com.tencent.mm.opensdk.openapi.WXAPIFactory;
 import com.yc.verbaltalk.R;
-import com.yc.verbaltalk.model.bean.event.EventBusWxPayResult;
+import com.yc.verbaltalk.chat.bean.event.EventBusWxPayResult;
 import com.yc.verbaltalk.model.constant.ConstantKey;
 
 import org.greenrobot.eventbus.EventBus;

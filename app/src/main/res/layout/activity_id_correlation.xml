@@ -7,7 +7,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:background="@drawable/shape_bg_login_red_crimson"
     android:orientation="vertical"
-    tools:context=".ui.activity.IdCorrelationSlidingActivity">
+    tools:context=".mine.ui.activity.IdCorrelationSlidingActivity">
 
     <View
         android:id="@+id/id_correlation_view_bar"
@@ -119,7 +119,7 @@
                 android:layout_height="0dp"
                 android:layout_weight="1.5" />
 
-            <com.yc.verbaltalk.ui.view.LoginEditTextLin
+            <com.yc.verbaltalk.base.view.LoginEditTextLin
                 android:id="@+id/id_correlation_let_phont"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -129,7 +129,7 @@
                 app:maxLengthLoginEt="11"
                 app:textHintLoginEt="请输入手机号码" />
 
-            <com.yc.verbaltalk.ui.view.LoginEditTextLin
+            <com.yc.verbaltalk.base.view.LoginEditTextLin
                 android:id="@+id/id_correlation_let_code"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -141,7 +141,7 @@
                 app:maxLengthLoginEt="6"
                 app:textHintLoginEt="请输入验证码" />
 
-            <com.yc.verbaltalk.ui.view.LoginEditTextLin
+            <com.yc.verbaltalk.base.view.LoginEditTextLin
                 android:id="@+id/id_correlation_let_pwd"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"

@@ -5,7 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/love_background"
-    tools:context=".ui.activity.UserInfoActivity">
+    tools:context=".mine.ui.activity.UserInfoActivity">
 
 
     <RelativeLayout
@@ -128,7 +128,7 @@
             android:textSize="@dimen/size_14" />
 
 
-        <com.yc.verbaltalk.ui.view.CheckBoxSample
+        <com.yc.verbaltalk.base.view.CheckBoxSample
             android:id="@+id/user_info_check_women"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -147,7 +147,7 @@
             android:textSize="@dimen/size_14"
             android:textStyle="bold" />
 
-        <com.yc.verbaltalk.ui.view.CheckBoxSample
+        <com.yc.verbaltalk.base.view.CheckBoxSample
             android:id="@+id/user_info_check_men"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"

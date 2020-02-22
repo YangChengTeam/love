@@ -5,7 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/love_background"
-    tools:context=".ui.activity.LoveByStagesActivity">
+    tools:context=".chat.ui.activity.LoveByStagesActivity">
 
     <net.lucode.hackware.magicindicator.MagicIndicator
         android:id="@+id/love_by_stages_pager_tabs"

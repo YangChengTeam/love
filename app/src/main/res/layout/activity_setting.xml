@@ -5,10 +5,10 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/love_background"
-    tools:context=".ui.activity.SettingActivity">
+    tools:context=".mine.ui.activity.SettingActivity">
 
 
-    <com.yc.verbaltalk.ui.view.MainMyItemLin
+    <com.yc.verbaltalk.base.view.MainMyItemLin
         android:id="@+id/setting_ll_item_01"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -17,7 +17,7 @@
         app:layout_constraintTop_toTopOf="parent"
         app:textNameMyItem="检查更新" />
 
-    <com.yc.verbaltalk.ui.view.MainMyItemLin
+    <com.yc.verbaltalk.base.view.MainMyItemLin
         android:id="@+id/setting_ll_item_02"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -29,7 +29,7 @@
 
 
 
-    <com.yc.verbaltalk.ui.view.MainMyItemLin
+    <com.yc.verbaltalk.base.view.MainMyItemLin
         android:id="@+id/setting_ll_item_04"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -38,7 +38,7 @@
         app:layout_constraintTop_toBottomOf="@+id/setting_ll_item_02"
         app:textNameMyItem="清除缓存" />
 
-    <com.yc.verbaltalk.ui.view.MainMyItemLin
+    <com.yc.verbaltalk.base.view.MainMyItemLin
         android:id="@+id/setting_ll_exit"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"

@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<com.yc.verbaltalk.ui.view.imgs.SquareRelativeLayout
+<com.yc.verbaltalk.base.view.imgs.SquareRelativeLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
@@ -20,4 +20,4 @@
         android:layout_below="@+id/ivTakePhoto"
         android:text="@string/takephoto"/>
 
-</com.yc.verbaltalk.ui.view.imgs.SquareRelativeLayout>
+</com.yc.verbaltalk.base.view.imgs.SquareRelativeLayout>

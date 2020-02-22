@@ -44,7 +44,7 @@
         </LinearLayout>
 
 
-        <com.yc.verbaltalk.ui.view.RoundCornerImg
+        <com.yc.verbaltalk.base.view.RoundCornerImg
             android:id="@+id/item_collect_example_iv_icon"
             android:layout_width="108dp"
             android:layout_height="70dp"
