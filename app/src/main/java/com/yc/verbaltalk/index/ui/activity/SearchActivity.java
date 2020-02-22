@@ -82,7 +82,9 @@ public class SearchActivity extends BaseSameActivity {
     @Override
     protected void initIntentData() {
         Intent intent = getIntent();
-        mKeyword = intent.getStringExtra("keyword");
+        if (intent != null && intent.hasExtra("keyword")) {
+            mKeyword = intent.getStringExtra("keyword");
+        }
     }
 
     @Override

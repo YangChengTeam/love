@@ -2,13 +2,13 @@ package com.yc.verbaltalk.index.factory;
 
 import android.util.SparseArray;
 
+import androidx.fragment.app.Fragment;
+
+import com.yc.verbaltalk.chat.ui.fragment.TipsCourseFragment;
 import com.yc.verbaltalk.community.ui.fragment.CommunityMainFragment;
 import com.yc.verbaltalk.index.ui.fragment.IndexFragment;
+import com.yc.verbaltalk.mine.ui.fragment.MineFragment;
 import com.yc.verbaltalk.skill.ui.fragment.SkillFragment;
-import com.yc.verbaltalk.ui.frament.main.MineFragment;
-import com.yc.verbaltalk.chat.ui.fragment.TipsCourseFragment;
-
-import androidx.fragment.app.Fragment;
 
 /**
  * Created by mayn on 2019/4/23.

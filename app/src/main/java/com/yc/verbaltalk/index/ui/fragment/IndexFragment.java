@@ -669,27 +669,30 @@ public class IndexFragment extends BaseMainFragment {
         }
         mLoadDialogInfo.showLoadingDialog();
         mLoveEngin.searchDialogue2(String.valueOf(id), keyword, String.valueOf(page), String.valueOf(PAGE_SIZE), "Dialogue/search")
-                .subscribe(new MySubscriber<AResultInfo<SearchDialogueBean>>(mLoadDialogInfo) {
+                .subscribe(new Subscriber<AResultInfo<SearchDialogueBean>>() {
+
 
                     @Override
-                    protected void onNetNext(AResultInfo<SearchDialogueBean> searchDialogueBeanAResultInfo) {
-                        SearchDialogueBean searchDialogueBean = searchDialogueBeanAResultInfo.data;
-                        int searchBuyVip = searchDialogueBean.search_buy_vip;
-                        if (1 == searchBuyVip) { //1 弹窗 0不弹
-                            startActivity(new Intent(mMainActivity, BecomeVipActivity.class));
-                        } else {
-                            SearchActivity.startSearchActivity(mMainActivity, keyword);
+                    public void onCompleted() {
+                        mLoadDialogInfo.dismissLoadingDialog();
+                    }
+
+                    @Override
+                    public void onError(Throwable e) {
+                        mLoadDialogInfo.dismissLoadingDialog();
+                    }
+
+                    @Override
+                    public void onNext(AResultInfo<SearchDialogueBean> searchDialogueBeanAResultInfo) {
+                        if (searchDialogueBeanAResultInfo != null && searchDialogueBeanAResultInfo.code == HttpConfig.STATUS_OK && searchDialogueBeanAResultInfo.data != null) {
+                            SearchDialogueBean searchDialogueBean = searchDialogueBeanAResultInfo.data;
+                            int searchBuyVip = searchDialogueBean.search_buy_vip;
+                            if (1 == searchBuyVip) { //1 弹窗 0不弹
+                                startActivity(new Intent(mMainActivity, BecomeVipActivity.class));
+                            } else {
+                                SearchActivity.startSearchActivity(mMainActivity, keyword);
+                            }
                         }
-                    }
-
-                    @Override
-                    protected void onNetError(Throwable e) {
-
-                    }
-
-                    @Override
-                    protected void onNetCompleted() {
-
                     }
                 });
         searchCount(String.valueOf(id), keyword);

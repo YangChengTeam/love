@@ -8,11 +8,13 @@ import android.util.Log;
 import android.view.animation.AccelerateInterpolator;
 import android.view.animation.DecelerateInterpolator;
 
+import androidx.viewpager.widget.ViewPager;
+
 import com.yc.verbaltalk.R;
-import com.yc.verbaltalk.adaper.vp.LoveByStagesPagerAdapter;
-import com.yc.verbaltalk.chat.bean.CategoryArticleChildrenBean;
 import com.yc.verbaltalk.base.activity.BaseSameActivity;
 import com.yc.verbaltalk.base.view.ColorFlipPagerTitleView;
+import com.yc.verbaltalk.chat.adapter.LoveByStagesPagerAdapter;
+import com.yc.verbaltalk.chat.bean.CategoryArticleChildrenBean;
 
 import net.lucode.hackware.magicindicator.MagicIndicator;
 import net.lucode.hackware.magicindicator.ViewPagerHelper;
@@ -26,8 +28,6 @@ import net.lucode.hackware.magicindicator.buildins.commonnavigator.titles.Simple
 
 import java.util.ArrayList;
 import java.util.List;
-
-import androidx.viewpager.widget.ViewPager;
 
 /**
  * 首页提升--》不同恋爱阶段
