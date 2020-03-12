@@ -7,6 +7,7 @@ import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.graphics.drawable.Drawable;
+import android.os.Build;
 import android.os.Bundle;
 import android.telephony.TelephonyManager;
 import android.text.InputFilter;
@@ -349,8 +350,12 @@ public class CreateBeforeActivity extends BaseSameActivity implements INormalUiV
                 new CheckRequestPermissionListener() {
                     @Override
                     public void onPermissionOk(Permission permission) {
-                        showAdDialog();
-
+                        String brand = Build.BRAND.toLowerCase();
+                        if (TextUtils.equals("huawei", brand) || TextUtils.equals("honor", brand)) {
+                            createImage();
+                        } else {
+                            showAdDialog();
+                        }
 
                     }
 
