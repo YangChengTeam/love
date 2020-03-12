@@ -10,6 +10,7 @@ import com.yc.verbaltalk.index.ui.fragment.IndexFragment;
 import com.yc.verbaltalk.mine.ui.fragment.MineFragment;
 import com.yc.verbaltalk.skill.ui.fragment.SkillFragment;
 
+
 /**
  * Created by mayn on 2019/4/23.
  */

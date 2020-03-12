@@ -1,26 +1,30 @@
 package com.yc.verbaltalk.skill.ui.fragment;
 
 import android.content.Intent;
+import android.os.Build;
+import android.text.TextUtils;
+import android.view.View;
 import android.widget.FrameLayout;
 
 import com.alibaba.fastjson.TypeReference;
 import com.bytedance.sdk.openadsdk.TTNativeExpressAd;
 import com.umeng.analytics.MobclickAgent;
 import com.yc.verbaltalk.R;
-import com.yc.verbaltalk.skill.adapter.ChatSkillItemAdapter;
+import com.yc.verbaltalk.base.engine.LoveEngine;
 import com.yc.verbaltalk.base.engine.MySubscriber;
+import com.yc.verbaltalk.base.utils.CommonInfoHelper;
+import com.yc.verbaltalk.base.utils.UserInfoHelper;
+import com.yc.verbaltalk.base.view.LoadDialog;
+import com.yc.verbaltalk.base.view.imgs.Constant;
 import com.yc.verbaltalk.chat.bean.AResultInfo;
 import com.yc.verbaltalk.chat.bean.ExampDataBean;
 import com.yc.verbaltalk.chat.bean.ExampListsBean;
 import com.yc.verbaltalk.chat.bean.MainT2Bean;
-import com.yc.verbaltalk.base.engine.LoveEngine;
-import com.yc.verbaltalk.model.single.YcSingle;
 import com.yc.verbaltalk.mine.ui.activity.BecomeVipActivity;
+import com.yc.verbaltalk.model.single.YcSingle;
+import com.yc.verbaltalk.skill.adapter.ChatSkillItemAdapter;
 import com.yc.verbaltalk.skill.ui.activity.ConsultDetailActivity;
 import com.yc.verbaltalk.skill.ui.activity.ExampleDetailActivity;
-import com.yc.verbaltalk.base.view.LoadDialog;
-import com.yc.verbaltalk.base.view.imgs.Constant;
-import com.yc.verbaltalk.base.utils.CommonInfoHelper;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -29,10 +33,11 @@ import androidx.recyclerview.widget.DefaultItemAnimator;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
-
 import yc.com.toutiao_adv.OnAdvStateListener;
 import yc.com.toutiao_adv.TTAdDispatchManager;
 import yc.com.toutiao_adv.TTAdType;
+
+
 
 /**
  * Created by mayn on 2019/6/18.
@@ -76,7 +81,13 @@ public class ChatSkillFragment extends BaseMainT2ChildFragment implements OnAdvS
         bottomContainer = rootView.findViewById(R.id.bottom_container);
 
 
-        TTAdDispatchManager.getManager().init(mMainActivity, TTAdType.BANNER, bottomContainer, Constant.TOUTIAO_BANNER_ID, 0, null, 0, null, 0, this);
+        String brand = Build.BRAND.toLowerCase();
+        if (TextUtils.equals(brand, "huawei") || TextUtils.equals(brand, "honor")|| UserInfoHelper.isVip()) {
+            bottomContainer.setVisibility(View.GONE);
+        } else {
+            bottomContainer.setVisibility(View.VISIBLE);
+            TTAdDispatchManager.getManager().init(mMainActivity, TTAdType.BANNER, bottomContainer, Constant.TOUTIAO_BANNER_ID, 0, null, 0, null, 0, this);
+        }
         LinearLayoutManager layoutManager = new LinearLayoutManager(mMainActivity);
 //        RecyclerViewNoBugLinearLayoutManager layoutManager = new RecyclerViewNoBugLinearLayoutManager(this);
         mRecyclerView.setLayoutManager(layoutManager);

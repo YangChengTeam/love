@@ -5,6 +5,7 @@ import android.content.pm.ApplicationInfo;
 import android.os.Build;
 import android.text.TextUtils;
 
+import com.alibaba.fastjson.JSON;
 import com.kk.securityhttp.domain.GoagalInfo;
 import com.kk.securityhttp.net.contains.HttpConfig;
 import com.kk.share.UMShareImpl;
@@ -15,6 +16,13 @@ import com.tencent.bugly.Bugly;
 import com.umeng.commonsdk.UMConfigure;
 import com.umeng.socialize.UMShareAPI;
 import com.yc.verbaltalk.R;
+import com.yc.verbaltalk.base.engine.LoveEnginV2;
+import com.yc.verbaltalk.base.engine.MySubscriber;
+import com.yc.verbaltalk.base.utils.BackfillSingle;
+import com.yc.verbaltalk.base.utils.UserInfoHelper;
+import com.yc.verbaltalk.base.view.LoadDialog;
+import com.yc.verbaltalk.chat.bean.AResultInfo;
+import com.yc.verbaltalk.chat.bean.IdCorrelationLoginBean;
 import com.yc.verbaltalk.model.ModelApp;
 import com.yc.verbaltalk.base.view.imgs.Constant;
 import com.yc.verbaltalk.base.utils.ShareInfoHelper;
@@ -32,6 +40,7 @@ import java.util.zip.ZipFile;
 
 import androidx.multidex.MultiDexApplication;
 import rx.Observable;
+import rx.Subscriber;
 import rx.schedulers.Schedulers;
 import yc.com.toutiao_adv.TTAdManagerHolder;
 
@@ -123,6 +132,7 @@ public class YcApplication extends MultiDexApplication {
         activityIdCorList = new ArrayList<>();
 
         ShareInfoHelper.getNetShareInfo(this);
+        netUserReg();
     }
 
 
@@ -170,6 +180,39 @@ public class YcApplication extends MultiDexApplication {
         }
         HttpConfig.setDefaultParams(params);
 
+    }
+
+    private void netUserReg() {
+
+        LoveEnginV2 loveEnginV2 = new LoveEnginV2(this);
+        loveEnginV2.userReg("user/reg").subscribe(new Subscriber<AResultInfo<IdCorrelationLoginBean>>() {
+            @Override
+            public void onCompleted() {
+
+            }
+
+            @Override
+            public void onError(Throwable e) {
+
+            }
+
+            @Override
+            public void onNext(AResultInfo<IdCorrelationLoginBean> idCorrelationLoginBeanAResultInfo) {
+                final IdCorrelationLoginBean data = idCorrelationLoginBeanAResultInfo.data;
+                 loginSuccess(data);
+            }
+
+
+        });
+    }
+
+
+    private void loginSuccess(IdCorrelationLoginBean data) {
+        //持久化存储登录信息
+        String str = JSON.toJSONString(data);// java对象转为jsonString
+        BackfillSingle.backfillLoginData(this, str);
+        UserInfoHelper.saveUserInfo(data);
+//        EventBus.getDefault().post(new EventLoginState(EventLoginState.STATE_LOGINED));
     }
 
 

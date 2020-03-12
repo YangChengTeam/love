@@ -21,6 +21,7 @@ import com.kk.securityhttp.domain.ResultInfo;
 import com.kk.securityhttp.net.contains.HttpConfig;
 import com.umeng.analytics.MobclickAgent;
 import com.yc.verbaltalk.R;
+import com.yc.verbaltalk.base.utils.UserInfoHelper;
 import com.yc.verbaltalk.index.adapter.IndexHotAdapter;
 import com.yc.verbaltalk.index.adapter.IndexVerbalAdapter;
 import com.yc.verbaltalk.index.adapter.SearchTintAdapter;
@@ -336,7 +337,7 @@ public class IndexFragment extends BaseMainFragment {
 
 
     private void initData() {
-        netUserReg();  //用户注册登录
+//        netUserReg();  //用户注册登录
         geApplicationData();
         getHotData();
         mMainActivity.showToWxServiceDialog("homewx", this::showService);
@@ -426,38 +427,38 @@ public class IndexFragment extends BaseMainFragment {
     }
 
 
-    private void netUserReg() {
-        LoadDialog loadDialog = new LoadDialog(mMainActivity);
-        LoveEnginV2 loveEnginV2 = new LoveEnginV2(mMainActivity);
-        loveEnginV2.userReg("user/reg").subscribe(new MySubscriber<AResultInfo<IdCorrelationLoginBean>>(loadDialog) {
-            @Override
-            protected void onNetNext(AResultInfo<IdCorrelationLoginBean> idCorrelationLoginBeanAResultInfo) {
-
-                final IdCorrelationLoginBean data = idCorrelationLoginBeanAResultInfo.data;
-                mRecyclerView.postDelayed(() -> loginSuccess(data), 500);
-
-            }
-
-            @Override
-            protected void onNetError(Throwable e) {
-
-            }
-
-            @Override
-            protected void onNetCompleted() {
-
-            }
-        });
-    }
-
-
-    private void loginSuccess(IdCorrelationLoginBean data) {
-        //持久化存储登录信息
-        String str = JSON.toJSONString(data);// java对象转为jsonString
-        BackfillSingle.backfillLoginData(mMainActivity, str);
-
-//        EventBus.getDefault().post(new EventLoginState(EventLoginState.STATE_LOGINED));
-    }
+//    private void netUserReg() {
+//        LoadDialog loadDialog = new LoadDialog(mMainActivity);
+//        LoveEnginV2 loveEnginV2 = new LoveEnginV2(mMainActivity);
+//        loveEnginV2.userReg("user/reg").subscribe(new MySubscriber<AResultInfo<IdCorrelationLoginBean>>(loadDialog) {
+//            @Override
+//            protected void onNetNext(AResultInfo<IdCorrelationLoginBean> idCorrelationLoginBeanAResultInfo) {
+//
+//                final IdCorrelationLoginBean data = idCorrelationLoginBeanAResultInfo.data;
+//                mRecyclerView.postDelayed(() -> loginSuccess(data), 500);
+//
+//            }
+//
+//            @Override
+//            protected void onNetError(Throwable e) {
+//
+//            }
+//
+//            @Override
+//            protected void onNetCompleted() {
+//
+//            }
+//        });
+//    }
+//
+//
+//    private void loginSuccess(IdCorrelationLoginBean data) {
+//        //持久化存储登录信息
+//        String str = JSON.toJSONString(data);// java对象转为jsonString
+//        BackfillSingle.backfillLoginData(mMainActivity, str);
+//        UserInfoHelper.saveUserInfo(data);
+////        EventBus.getDefault().post(new EventLoginState(EventLoginState.STATE_LOGINED));
+//    }
 
 
     private void netDialogueData(final String sence) {
@@ -694,6 +695,8 @@ public class IndexFragment extends BaseMainFragment {
                             }
                         }
                     }
+
+
                 });
         searchCount(String.valueOf(id), keyword);
     }

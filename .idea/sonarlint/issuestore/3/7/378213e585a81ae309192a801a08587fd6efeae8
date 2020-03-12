@@ -1,0 +1,16 @@
+
+n	java:S116"YRename this field "category_title" to match the regular expression '^[a-z][a-zA-Z0-9]*$'.(‚İ
+q
+java:S1104"[Make isShowCateTitle a static final constant or non-public and provide accessors if needed.(šü¨À
+p
+java:S1104"UMake musicInfo a static final constant or non-public and provide accessors if needed.(ßëë¢úÿÿÿÿ
+f
+java:S1104"PMake type a static final constant or non-public and provide accessors if needed.(ûöå©
+l
+java:S1104"VMake courseInfo a static final constant or non-public and provide accessors if needed.(¢áË
+p
+java:S1104"ZMake category_title a static final constant or non-public and provide accessors if needed.(‚İ
+v
+java:S1104"`Make isShowCourseCategory a static final constant or non-public and provide accessors if needed.(ÔĞÎà
+o
+java:S1104"YMake isShowDivider a static final constant or non-public and provide accessors if needed.(¸ºÇ¬

@@ -32,6 +32,8 @@ public class SPUtils {
 
     public static final String INDEX_DIALOG = "index_dialog";
 
+    public static final String USER_INFO = "user_info";
+
 //    public static final String LOGIN_ = "LOGIN_BEAN";
 
 

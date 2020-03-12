@@ -2,7 +2,9 @@ package com.yc.verbaltalk.base.activity;
 
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.os.Build;
 import android.os.Bundle;
+import android.text.TextUtils;
 import android.util.Log;
 import android.view.KeyEvent;
 import android.view.View;
@@ -14,19 +16,23 @@ import com.bytedance.sdk.openadsdk.TTNativeExpressAd;
 import com.qq.e.ads.nativ.NativeExpressADView;
 import com.yc.verbaltalk.R;
 import com.yc.verbaltalk.base.utils.BackfillSingle;
-import com.yc.verbaltalk.model.util.CheckNetwork;
-import com.yc.verbaltalk.base.view.imgs.Constant;
 import com.yc.verbaltalk.base.utils.UIUtils;
+import com.yc.verbaltalk.base.utils.UserInfoHelper;
+import com.yc.verbaltalk.base.view.imgs.Constant;
+import com.yc.verbaltalk.model.single.YcSingle;
+import com.yc.verbaltalk.model.util.CheckNetwork;
 
 import java.util.List;
 import java.util.Map;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AlertDialog;
+
 import yc.com.tencent_adv.AdvDispatchManager;
 import yc.com.tencent_adv.OnAdvStateListener;
 import yc.com.toutiao_adv.TTAdDispatchManager;
 import yc.com.toutiao_adv.TTAdType;
+
 
 public class SpecializedActivity extends BaseActivity implements OnAdvStateListener, yc.com.toutiao_adv.OnAdvStateListener {
 
@@ -57,8 +63,15 @@ public class SpecializedActivity extends BaseActivity implements OnAdvStateListe
 //        mHandler.post(runnable);
 //        AdvDispatchManager.getManager().init(this, AdvType.SPLASH, splashContainer, tvSipView, Constant.TENCENT_ADV_ID, Constant.SPLASH_ADV_ID, this);
 
-        TTAdDispatchManager.getManager().init(this, TTAdType.SPLASH, splashContainer, Constant.TOUTIAO_SPLASH_ID, 0, null, 0, null, 0, this);
+        String brand = Build.BRAND.toLowerCase();
 
+        if (TextUtils.equals(brand, "huawei") || TextUtils.equals(brand, "honor")||UserInfoHelper.isVip()) {
+            ivLighting.setVisibility(View.VISIBLE);
+            tvSipView.setVisibility(View.GONE);
+            switchMain(1000);
+        } else {
+            TTAdDispatchManager.getManager().init(this, TTAdType.SPLASH, splashContainer, Constant.TOUTIAO_SPLASH_ID, 0, null, 0, null, 0, this);
+        }
 //        ivLighting.setOnClickListener(new View.OnClickListener() {
 //            @Override
 //            public void onClick(View v) {
@@ -146,7 +159,7 @@ public class SpecializedActivity extends BaseActivity implements OnAdvStateListe
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults);
 
-        AdvDispatchManager.getManager().onRequestPermissionsResult(requestCode, permissions, grantResults);
+//        AdvDispatchManager.getManager().onRequestPermissionsResult(requestCode, permissions, grantResults);
 
     }
 

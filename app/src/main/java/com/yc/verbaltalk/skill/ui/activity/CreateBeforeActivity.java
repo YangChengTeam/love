@@ -42,6 +42,7 @@ import com.qw.soul.permission.callbcak.CheckRequestPermissionListener;
 import com.umeng.analytics.MobclickAgent;
 import com.umeng.commonsdk.statistics.common.DeviceConfig;
 import com.yc.verbaltalk.R;
+import com.yc.verbaltalk.base.utils.UserInfoHelper;
 import com.yc.verbaltalk.chat.bean.confession.ConfessionDataBean;
 import com.yc.verbaltalk.chat.bean.confession.ConfessionFieldBean;
 import com.yc.verbaltalk.chat.bean.confession.ImageCreateBean;
@@ -349,8 +350,11 @@ public class CreateBeforeActivity extends BaseSameActivity implements INormalUiV
                 new CheckRequestPermissionListener() {
                     @Override
                     public void onPermissionOk(Permission permission) {
-                        showAdDialog();
+                        if (UserInfoHelper.isVip()){
 
+                        }else {
+                            showAdDialog();
+                        }
 
                     }
 

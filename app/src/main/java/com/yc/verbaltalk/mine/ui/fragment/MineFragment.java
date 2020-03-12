@@ -26,6 +26,7 @@ import com.qw.soul.permission.callbcak.CheckRequestPermissionListener;
 import com.umeng.analytics.MobclickAgent;
 import com.yc.verbaltalk.R;
 import com.yc.verbaltalk.base.engine.MySubscriber;
+import com.yc.verbaltalk.base.utils.UserInfoHelper;
 import com.yc.verbaltalk.chat.bean.AResultInfo;
 import com.yc.verbaltalk.chat.bean.IdCorrelationLoginBean;
 import com.yc.verbaltalk.chat.bean.event.EventLoginState;
@@ -155,6 +156,7 @@ public class MineFragment extends BaseMainFragment implements View.OnClickListen
                     return;
                 }
                 fillData(idCorrelationLoginBean);
+                UserInfoHelper.saveUserInfo(idCorrelationLoginBean);
 //                cacheWorker.setCache("main_t5_user_info", idCorrelationLoginBean);
                 CommonInfoHelper.setO(mMainActivity, idCorrelationLoginBean, "main_t5_user_info");
             }
