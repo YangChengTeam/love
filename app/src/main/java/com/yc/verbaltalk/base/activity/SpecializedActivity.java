@@ -30,6 +30,7 @@ import androidx.appcompat.app.AlertDialog;
 
 import yc.com.tencent_adv.AdvDispatchManager;
 import yc.com.tencent_adv.OnAdvStateListener;
+import yc.com.toutiao_adv.OnHideAdvListener;
 import yc.com.toutiao_adv.TTAdDispatchManager;
 import yc.com.toutiao_adv.TTAdType;
 

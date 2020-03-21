@@ -38,7 +38,7 @@ public class SplashADManager implements WeakHandler.IHandler, OnAdvManagerListen
     private TTAdNative mTTAdNative;
     private ViewGroup mContainer;
 
-    SplashADManager(Activity activity, ViewGroup container, String splashId, OnAdvStateListener stateListener) {
+   public SplashADManager(Activity activity, ViewGroup container, String splashId, OnAdvStateListener stateListener) {
         this.mContainer = container;
         this.mActivity = activity;
         this.mStateListener = stateListener;

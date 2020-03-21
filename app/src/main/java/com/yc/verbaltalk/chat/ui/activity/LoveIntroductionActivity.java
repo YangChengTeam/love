@@ -2,12 +2,15 @@ package com.yc.verbaltalk.chat.ui.activity;
 
 import android.content.Context;
 import android.content.Intent;
+import android.os.Build;
 import android.os.Bundle;
+import android.text.TextUtils;
 
 import com.bytedance.sdk.openadsdk.TTAdConstant;
 import com.bytedance.sdk.openadsdk.TTNativeExpressAd;
 import com.kk.securityhttp.net.contains.HttpConfig;
 import com.yc.verbaltalk.R;
+import com.yc.verbaltalk.base.utils.UserInfoHelper;
 import com.yc.verbaltalk.chat.adapter.LoveIntroduceAdapter;
 import com.yc.verbaltalk.base.engine.MySubscriber;
 import com.yc.verbaltalk.chat.bean.AResultInfo;
@@ -81,11 +84,16 @@ public class LoveIntroductionActivity extends BaseSameActivity implements OnAdvS
         loveIntroduceAdapter.setOnItemClickListener((adapter, view, position) -> {
             exampListsBean = loveIntroduceAdapter.getItem(position);
 
-            AlertDialog.Builder builder = new AlertDialog.Builder(LoveIntroductionActivity.this);
-            builder.setMessage("观看视频即可学习撩妹技能！！");
-            builder.setPositiveButton("确定", (dialog, which) ->
-                    TTAdDispatchManager.getManager().init(LoveIntroductionActivity.this, TTAdType.REWARD_VIDEO, null, Constant.TOUTIAO_REWARD2_ID, 0, "学习聊天技能", 1, YcSingle.getInstance().id + "", TTAdConstant.VERTICAL, LoveIntroductionActivity.this)).show();
+            String brand = Build.BRAND.toLowerCase();
+            if (TextUtils.equals("huawei", brand) || TextUtils.equals("honor", brand)|| UserInfoHelper.isVip()) {
+                toExampleDetail();
+            } else {
 
+                AlertDialog.Builder builder = new AlertDialog.Builder(LoveIntroductionActivity.this);
+                builder.setMessage("观看视频即可学习撩妹技能！！");
+                builder.setPositiveButton("确定", (dialog, which) ->
+                        TTAdDispatchManager.getManager().init(LoveIntroductionActivity.this, TTAdType.REWARD_VIDEO, null, Constant.TOUTIAO_REWARD2_ID, 0, "学习聊天技能", 1, YcSingle.getInstance().id + "", TTAdConstant.VERTICAL, LoveIntroductionActivity.this)).show();
+            }
 
         });
         loveIntroduceAdapter.setOnLoadMoreListener(this::netData, mRecyclerView);
@@ -170,12 +178,16 @@ public class LoveIntroductionActivity extends BaseSameActivity implements OnAdvS
 
     @Override
     public void clickAD() {
-        if (exampListsBean != null)
-            ExampleDetailActivity.startExampleDetailActivity(LoveIntroductionActivity.this, exampListsBean.id, exampListsBean.post_title);
+        toExampleDetail();
     }
 
     @Override
     public void onTTNativeExpressed(List<TTNativeExpressAd> ads) {
 
+    }
+
+    private void toExampleDetail() {
+        if (exampListsBean != null)
+            ExampleDetailActivity.startExampleDetailActivity(LoveIntroductionActivity.this, exampListsBean.id, exampListsBean.post_title);
     }
 }

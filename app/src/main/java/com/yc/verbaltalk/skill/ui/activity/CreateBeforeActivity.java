@@ -7,6 +7,7 @@ import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.graphics.drawable.Drawable;
+import android.os.Build;
 import android.os.Bundle;
 import android.telephony.TelephonyManager;
 import android.text.InputFilter;
@@ -74,6 +75,7 @@ import androidx.annotation.Nullable;
 import androidx.appcompat.app.AlertDialog;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
+
 import me.iwf.photopicker.PhotoPicker;
 import okhttp3.Call;
 import okhttp3.Request;
@@ -350,11 +352,16 @@ public class CreateBeforeActivity extends BaseSameActivity implements INormalUiV
                 new CheckRequestPermissionListener() {
                     @Override
                     public void onPermissionOk(Permission permission) {
-                        if (UserInfoHelper.isVip()){
 
-                        }else {
+
+                        String brand = Build.BRAND.toLowerCase();
+                        if (TextUtils.equals("huawei", brand) || TextUtils.equals("honor", brand) || UserInfoHelper.isVip()) {
+                            createImage();
+                        } else {
+
                             showAdDialog();
                         }
+
 
                     }
 
@@ -380,6 +387,7 @@ public class CreateBeforeActivity extends BaseSameActivity implements INormalUiV
                                     }).create().show();
                         }
                     }
+
                 });
     }
 

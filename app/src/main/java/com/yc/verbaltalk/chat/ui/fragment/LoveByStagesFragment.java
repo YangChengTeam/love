@@ -1,6 +1,8 @@
 package com.yc.verbaltalk.chat.ui.fragment;
 
+import android.os.Build;
 import android.os.Bundle;
+import android.text.TextUtils;
 
 import com.bytedance.sdk.openadsdk.TTAdConstant;
 import com.bytedance.sdk.openadsdk.TTNativeExpressAd;
@@ -8,16 +10,19 @@ import com.kk.securityhttp.net.contains.HttpConfig;
 import com.yc.verbaltalk.R;
 
 import com.yc.verbaltalk.base.engine.MySubscriber;
+import com.yc.verbaltalk.base.utils.UserInfoHelper;
 import com.yc.verbaltalk.chat.adapter.LoveByStagesAdapter;
 import com.yc.verbaltalk.chat.bean.AResultInfo;
 import com.yc.verbaltalk.chat.bean.LoveByStagesBean;
 import com.yc.verbaltalk.base.engine.LoveEngine;
 import com.yc.verbaltalk.chat.ui.activity.LoveByStagesDetailsActivity;
+import com.yc.verbaltalk.chat.ui.activity.LoveIntroductionActivity;
 import com.yc.verbaltalk.model.single.YcSingle;
 
 import com.yc.verbaltalk.chat.ui.fragment.BaseLoveByStagesFragment;
 import com.yc.verbaltalk.base.view.LoadDialog;
 import com.yc.verbaltalk.base.view.imgs.Constant;
+import com.yc.verbaltalk.skill.ui.activity.ExampleDetailActivity;
 
 import java.util.List;
 
@@ -153,12 +158,16 @@ public class LoveByStagesFragment extends BaseLoveByStagesFragment implements On
 //                mLoveByStagesActivity.startActivity(new Intent(mLoveByStagesActivity, TestWebViewActivity.class));
             loveByStagesBean = mAdapter.getItem(position);
 
-            AlertDialog.Builder builder = new AlertDialog.Builder(mLoveByStagesActivity);
-            builder.setMessage("观看视频即可学习撩妹技能！！");
-            builder.setPositiveButton("确定", (dialog, which) ->
-                    TTAdDispatchManager.getManager().init(mLoveByStagesActivity, TTAdType.REWARD_VIDEO, null, Constant.TOUTIAO_REWARD2_ID, 0, "学习聊天技能", 1, YcSingle.getInstance().id + "", TTAdConstant.VERTICAL, LoveByStagesFragment.this)).show();
+            String brand = Build.BRAND.toLowerCase();
+            if (TextUtils.equals("huawei", brand) || TextUtils.equals("honor", brand)|| UserInfoHelper.isVip()) {
+                toLoveDetail();
+            } else {
+                AlertDialog.Builder builder = new AlertDialog.Builder(mLoveByStagesActivity);
+                builder.setMessage("观看视频即可学习撩妹技能！！");
+                builder.setPositiveButton("确定", (dialog, which) ->
+                        TTAdDispatchManager.getManager().init(mLoveByStagesActivity, TTAdType.REWARD_VIDEO, null, Constant.TOUTIAO_REWARD2_ID, 0, "学习聊天技能", 1, YcSingle.getInstance().id + "", TTAdConstant.VERTICAL, LoveByStagesFragment.this)).show();
 
-
+            }
         });
         mAdapter.setOnLoadMoreListener(this::netData, mRecyclerView);
     }
@@ -175,13 +184,19 @@ public class LoveByStagesFragment extends BaseLoveByStagesFragment implements On
 
     @Override
     public void clickAD() {
-        if (loveByStagesBean != null) {
-            LoveByStagesDetailsActivity.startLoveByStagesDetailsActivity(mLoveByStagesActivity, loveByStagesBean.id, loveByStagesBean.post_title);
-        }
+        toLoveDetail();
     }
 
     @Override
     public void onTTNativeExpressed(List<TTNativeExpressAd> ads) {
 
+    }
+
+
+
+    private void toLoveDetail(){
+        if (loveByStagesBean != null) {
+            LoveByStagesDetailsActivity.startLoveByStagesDetailsActivity(mLoveByStagesActivity, loveByStagesBean.id, loveByStagesBean.post_title);
+        }
     }
 }

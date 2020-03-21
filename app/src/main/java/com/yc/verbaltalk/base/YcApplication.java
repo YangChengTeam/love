@@ -39,9 +39,12 @@ import java.util.zip.ZipEntry;
 import java.util.zip.ZipFile;
 
 import androidx.multidex.MultiDexApplication;
+
 import rx.Observable;
 import rx.Subscriber;
 import rx.schedulers.Schedulers;
+import yc.com.toutiao_adv.BrandType;
+import yc.com.toutiao_adv.TTAdDispatchManager;
 import yc.com.toutiao_adv.TTAdManagerHolder;
 
 /**
@@ -78,6 +81,9 @@ public class YcApplication extends MultiDexApplication {
     private void init() {
         //        Bugly.init(getApplicationContext(), "注册时申请的APPID", false);  //腾迅自动更新
         Bugly.init(getApplicationContext(), "dc88d75f55", false);  //腾迅自动更新
+
+        TTAdDispatchManager.getManager().init(BrandType.HUAWEI, BrandType.HONOR);
+
 
         UMConfigure.init(getApplicationContext(), "5cec86d84ca35779b00010b8", "Umeng", UMConfigure.DEVICE_TYPE_PHONE, null);
 
@@ -199,7 +205,7 @@ public class YcApplication extends MultiDexApplication {
             @Override
             public void onNext(AResultInfo<IdCorrelationLoginBean> idCorrelationLoginBeanAResultInfo) {
                 final IdCorrelationLoginBean data = idCorrelationLoginBeanAResultInfo.data;
-                 loginSuccess(data);
+                loginSuccess(data);
             }
 
 
