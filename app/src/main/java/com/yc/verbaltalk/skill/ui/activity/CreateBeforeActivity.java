@@ -35,32 +35,33 @@ import com.bumptech.glide.request.RequestOptions;
 import com.bumptech.glide.request.target.BitmapImageViewTarget;
 import com.bumptech.glide.request.transition.Transition;
 import com.bytedance.sdk.openadsdk.TTAdConstant;
+import com.bytedance.sdk.openadsdk.TTFeedAd;
 import com.bytedance.sdk.openadsdk.TTNativeExpressAd;
-import com.google.gson.Gson;
+import com.music.player.lib.util.ToastUtils;
 import com.qw.soul.permission.SoulPermission;
 import com.qw.soul.permission.bean.Permission;
 import com.qw.soul.permission.callbcak.CheckRequestPermissionListener;
 import com.umeng.analytics.MobclickAgent;
 import com.umeng.commonsdk.statistics.common.DeviceConfig;
 import com.yc.verbaltalk.R;
+import com.yc.verbaltalk.base.activity.BaseSameActivity;
+import com.yc.verbaltalk.base.config.URLConfig;
+import com.yc.verbaltalk.base.okhttp.presenter.NormalPresenter;
+import com.yc.verbaltalk.base.okhttp.view.INormalUiView;
+import com.yc.verbaltalk.base.okhttp.view.IUpFileUiView;
+import com.yc.verbaltalk.base.utils.HeadImageUtils;
+import com.yc.verbaltalk.base.utils.PhoneIMEIUtil;
+import com.yc.verbaltalk.base.utils.UserInfoHelper;
+import com.yc.verbaltalk.base.view.LoadDialog;
+import com.yc.verbaltalk.base.view.imgs.Constant;
 import com.yc.verbaltalk.chat.bean.confession.ConfessionDataBean;
 import com.yc.verbaltalk.chat.bean.confession.ConfessionFieldBean;
 import com.yc.verbaltalk.chat.bean.confession.ImageCreateBean;
 import com.yc.verbaltalk.model.constant.ConstantKey;
-import com.yc.verbaltalk.base.config.URLConfig;
-import com.yc.verbaltalk.model.single.YcSingle;
 import com.yc.verbaltalk.model.util.InputLenLimit;
 import com.yc.verbaltalk.model.util.SPUtils;
 import com.yc.verbaltalk.model.util.ScreenUtils;
 import com.yc.verbaltalk.model.util.SizeUtils;
-import com.yc.verbaltalk.base.okhttp.presenter.NormalPresenter;
-import com.yc.verbaltalk.base.okhttp.view.INormalUiView;
-import com.yc.verbaltalk.base.okhttp.view.IUpFileUiView;
-import com.yc.verbaltalk.base.activity.BaseSameActivity;
-import com.yc.verbaltalk.base.view.LoadDialog;
-import com.yc.verbaltalk.base.view.imgs.Constant;
-import com.yc.verbaltalk.base.utils.HeadImageUtils;
-import com.yc.verbaltalk.base.utils.PhoneIMEIUtil;
 
 import java.io.File;
 import java.io.FileOutputStream;
@@ -75,7 +76,6 @@ import androidx.appcompat.app.AlertDialog;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 import me.iwf.photopicker.PhotoPicker;
-import okhttp3.Call;
 import okhttp3.Request;
 import yc.com.toutiao_adv.OnAdvStateListener;
 import yc.com.toutiao_adv.TTAdDispatchManager;
@@ -90,15 +90,13 @@ public class CreateBeforeActivity extends BaseSameActivity implements INormalUiV
     private int cHeight;
 
     private ImageView createSelectImageView;
-    //    private CustomProgress dialog;
+
     private int timeNum = 0;
     private boolean isChooseImage;
     private List<String> mSelectedImages;
 
     private NormalPresenter mNormalPresenter;
     private Map<String, String> netCompoundRequestData;
-//    private Map<String, String> mRequestMap;
-//    private String mDataUrl;
 
 
     public static void startCreateBeforeActivity(Context context, ConfessionDataBean confessionDataBean) {
@@ -110,7 +108,8 @@ public class CreateBeforeActivity extends BaseSameActivity implements INormalUiV
     @Override
     protected void initIntentData() {
         Bundle bundle = getIntent().getExtras();
-        mConfessionDataBean = (ConfessionDataBean) bundle.getSerializable("zb_data_info");
+        if (null != bundle)
+            mConfessionDataBean = (ConfessionDataBean) bundle.getSerializable("zb_data_info");
     }
 
     @Override
@@ -118,9 +117,7 @@ public class CreateBeforeActivity extends BaseSameActivity implements INormalUiV
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_create_before);
 
-        mNormalPresenter = new NormalPresenter(this);
-//        mRequestMap = new HashMap<>();
-//        mDataUrl = URLConfig.CATEGORY_LIST_URL;
+        mNormalPresenter = new NormalPresenter(this, this);
         initViews();
     }
 
@@ -350,12 +347,17 @@ public class CreateBeforeActivity extends BaseSameActivity implements INormalUiV
                 new CheckRequestPermissionListener() {
                     @Override
                     public void onPermissionOk(Permission permission) {
+
+
                         String brand = Build.BRAND.toLowerCase();
-                        if (TextUtils.equals("huawei", brand) || TextUtils.equals("honor", brand)) {
+//                        TextUtils.equals("huawei", brand) || TextUtils.equals("honor", brand)
+                        if (UserInfoHelper.isVip()) {
                             createImage();
                         } else {
+
                             showAdDialog();
                         }
+
 
                     }
 
@@ -368,7 +370,7 @@ public class CreateBeforeActivity extends BaseSameActivity implements INormalUiV
                         //绿色框中的流程
                         //用户第一次拒绝了权限、并且没有勾选"不再提示"这个值为true，此时告诉用户为什么需要这个权限。
                         if (permission.shouldRationale()) {
-                            showToastShort("未获取到相机权限");
+                            ToastUtils.showCenterToast("未获取到相机权限");
                         } else {
                             //此时请求权限会直接报未授予，需要用户手动去权限设置页，所以弹框引导用户跳转去设置页
                             String permissionDesc = permission.getPermissionNameDesc();
@@ -381,14 +383,14 @@ public class CreateBeforeActivity extends BaseSameActivity implements INormalUiV
                                     }).create().show();
                         }
                     }
+
                 });
     }
 
 
     private void showAdDialog() {
-        AlertDialog.Builder builder = new AlertDialog.Builder(this);
-        builder.setMessage("观看视频即可使用神器功能！！");
-        builder.setPositiveButton("确定", (dialog, which) -> TTAdDispatchManager.getManager().init(CreateBeforeActivity.this, TTAdType.REWARD_VIDEO, null, Constant.TOUTIAO_REWARD_ID, 0, "一键生成免费使用", 1, YcSingle.getInstance().id + "", TTAdConstant.VERTICAL, CreateBeforeActivity.this)).create().show();
+        TTAdDispatchManager.getManager().init(CreateBeforeActivity.this, TTAdType.REWARD_VIDEO, null, Constant.TOUTIAO_REWARD_ID, 0, "一键生成免费使用", 1, UserInfoHelper.getUid(), TTAdConstant.VERTICAL, CreateBeforeActivity.this);
+
 
     }
 
@@ -416,7 +418,7 @@ public class CreateBeforeActivity extends BaseSameActivity implements INormalUiV
                         //绿色框中的流程
                         //用户第一次拒绝了权限、并且没有勾选"不再提示"这个值为true，此时告诉用户为什么需要这个权限。
                         if (permission.shouldRationale()) {
-                            showToastShort("未获取到相机权限");
+                            ToastUtils.showCenterToast("未获取到相机权限");
                         } else {
                             //此时请求权限会直接报未授予，需要用户手动去权限设置页，所以弹框引导用户跳转去设置页
                             String permissionDesc = permission.getPermissionNameDesc();
@@ -510,7 +512,7 @@ public class CreateBeforeActivity extends BaseSameActivity implements INormalUiV
                 if (mCreateTypeLayout.getChildAt(i) instanceof EditText) {
                     EditText iEditText = (EditText) mCreateTypeLayout.getChildAt(i);
                     if (TextUtils.isEmpty(iEditText.getText()) && iEditText.getVisibility() == View.VISIBLE) {
-                        showToastShort("请输入值");
+                        ToastUtils.showCenterToast("请输入值");
                         isValidate = false;
                         break;
                     } else {
@@ -525,7 +527,7 @@ public class CreateBeforeActivity extends BaseSameActivity implements INormalUiV
                         if (tempLinearLayout.getChildAt(m) instanceof EditText) {
                             EditText iEditText = (EditText) tempLinearLayout.getChildAt(m);
                             if (TextUtils.isEmpty(iEditText.getText()) && iEditText.getVisibility() == View.VISIBLE) {
-                                showToastShort("请输入值");
+                                ToastUtils.showCenterToast("请输入值");
                                 isValidate = false;
                                 break;
                             } else {
@@ -539,7 +541,7 @@ public class CreateBeforeActivity extends BaseSameActivity implements INormalUiV
                         if (tempLinearLayout.getChildAt(m) instanceof Spinner) {
                             Spinner iSpinner = (Spinner) tempLinearLayout.getChildAt(m);
                             if (TextUtils.isEmpty(iSpinner.getContentDescription())) {
-                                showToastShort("请选择值");
+                                ToastUtils.showCenterToast("请选择值");
                                 isValidate = false;
                                 break;
                             } else {
@@ -589,6 +591,7 @@ public class CreateBeforeActivity extends BaseSameActivity implements INormalUiV
             phoneIMEI = "99000854223779";
         }
 
+
         String deviceIdForGeneral = DeviceConfig.getDeviceIdForGeneral(CreateBeforeActivity.this);
 
 //        phoneIMEI  ="99000854223779";
@@ -601,11 +604,11 @@ public class CreateBeforeActivity extends BaseSameActivity implements INormalUiV
             params.put("requestData", JSON.toJSONString(netCompoundRequestData));
         }
         if (isChooseImage) {
-            mNormalPresenter.netUpFileNet(params, new File(HeadImageUtils.imgResultPath), URLConfig.URL_IMAGE_CREATE);
+            mNormalPresenter.netUpFileNet(params, new File(HeadImageUtils.imgResultPath));
 
 
         } else {
-            mNormalPresenter.netNormalData(params, URLConfig.URL_IMAGE_CREATE);
+            mNormalPresenter.netNormalData(params);
         }
     }
 
@@ -637,7 +640,9 @@ public class CreateBeforeActivity extends BaseSameActivity implements INormalUiV
 
     @Override
     protected String offerActivityTitle() {
-        String title = mConfessionDataBean.title;
+        String title = "";
+        if (null != mConfessionDataBean)
+            title = mConfessionDataBean.title;
         if (TextUtils.isEmpty(title)) {
             title = "合成图片";
         }
@@ -681,7 +686,7 @@ public class CreateBeforeActivity extends BaseSameActivity implements INormalUiV
         if (response != null) {
 //            Logger.e("create result --- >" + response);
             try {
-                ImageCreateBean res = new Gson().fromJson(response, ImageCreateBean.class);
+                ImageCreateBean res = JSON.parseObject(response, ImageCreateBean.class);
                 String data = res.data;
                 /*ImageCreateBean res = Contants.gson.fromJson(response, new TypeToken<ImageCreateBean>() {
                 }.getType());
@@ -703,7 +708,7 @@ public class CreateBeforeActivity extends BaseSameActivity implements INormalUiV
     }
 
     @Override
-    public void onFailed(Call call, Exception e, int id) {
+    public void onFailed(String msg) {
         if (mLoadingDialog != null && mLoadingDialog.isShowing()) {
             mLoadingDialog.dismissLoadingDialog();
         }
@@ -728,11 +733,37 @@ public class CreateBeforeActivity extends BaseSameActivity implements INormalUiV
 
     @Override
     public void clickAD() {
+//        if (!rewardComplete) {
+//            AlertDialog.Builder builder = new AlertDialog.Builder(this);
+//            builder.setMessage("关闭广告可能无法使用神器功能！！");
+//            builder.setPositiveButton("确定", (dialog, which) -> createImage()).create().show();
+//        } else {
+//
+//        }
+//
         createImage();
     }
 
     @Override
     public void onTTNativeExpressed(List<TTNativeExpressAd> ads) {
 
+    }
+
+
+    @Override
+    public void onDrawFeedAd(List<TTFeedAd> feedAdList) {
+
+    }
+
+    @Override
+    public void removeNativeAd(TTNativeExpressAd ad, int position) {
+
+    }
+
+    boolean rewardComplete = false;
+
+    @Override
+    public void rewardComplete() {
+        rewardComplete = true;
     }
 }

@@ -19,7 +19,7 @@ import java.io.ObjectOutputStream;
 import androidx.core.content.ContextCompat;
 
 /**
- * Created by mayn on 2019/5/30.
+ * Created by sunshey on 2019/5/30.
  */
 
 public abstract class BaseFileStrategy implements CacheStrategy {

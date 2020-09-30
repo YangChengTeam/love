@@ -6,30 +6,30 @@ import com.yc.verbaltalk.mine.factory.CollectFactory;
 
 import java.util.List;
 
+import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentPagerAdapter;
 import androidx.fragment.app.FragmentTransaction;
 
 /**
- * Created by mayn on 2019/5/5.
+ * Created by sunshey on 2019/5/5.
  */
 
 public class CollectPagerAdapter extends FragmentPagerAdapter {
     private List<String> titleList;
-//    private List<String> titleJobTypeList;
+    //    private List<String> titleJobTypeList;
     private final FragmentManager fm;
 
-    public CollectPagerAdapter(FragmentManager fm, List<String> titleList) {
-        super(fm);
+    public CollectPagerAdapter(FragmentManager fm, int behavior, List<String> titleList) {
+        super(fm, behavior);
         this.fm = fm;
         this.titleList = titleList;
     }
 
     @Override
     public Fragment getItem(int position) {
-        Fragment fragment = CollectFactory.createFragment(position);
-        return fragment;
+        return CollectFactory.createFragment(position);
     }
 
     @Override
@@ -44,7 +44,7 @@ public class CollectPagerAdapter extends FragmentPagerAdapter {
     }
 
     @Override
-    public Fragment instantiateItem(ViewGroup container, int position) {
+    public Fragment instantiateItem(@NonNull ViewGroup container, int position) {
         Fragment fragment = (Fragment) super.instantiateItem(container,
                 position);
         //java.lang.IllegalStateException: Can not perform this action after onSaveInstanceState
@@ -54,7 +54,7 @@ public class CollectPagerAdapter extends FragmentPagerAdapter {
     }
 
     @Override
-    public void destroyItem(ViewGroup container, int position, Object object) {
+    public void destroyItem(@NonNull ViewGroup container, int position, @NonNull Object object) {
         Fragment fragment = CollectFactory.fragments.get(position);
         FragmentTransaction fragmentTransaction = fm.beginTransaction();
         if (fragment != null) {

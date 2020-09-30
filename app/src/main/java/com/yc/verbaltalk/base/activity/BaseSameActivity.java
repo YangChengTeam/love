@@ -14,7 +14,7 @@ import com.yc.verbaltalk.R;
 import androidx.constraintlayout.widget.ConstraintLayout;
 
 /**
- * Created by mayn on 2019/4/30.
+ * Created by sunshey on 2019/4/30.
  */
 
 public abstract class BaseSameActivity extends BaseSlidingActivity implements View.OnClickListener {

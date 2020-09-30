@@ -9,17 +9,17 @@ import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentPagerAdapter;
 
 /**
- * Created by mayn on 2019/5/5.
+ * Created by sunshey on 2019/5/5.
  */
 
 public class LoveByStagesPagerAdapter extends FragmentPagerAdapter {
     private final List<Integer> mIdLists;
     private List<String> titleList;
-//    private List<String> titleJobTypeList;
+    //    private List<String> titleJobTypeList;
     private final FragmentManager fm;
 
-    public LoveByStagesPagerAdapter(FragmentManager fm, List<String> titleList,List<Integer> idLists) {
-        super(fm);
+    public LoveByStagesPagerAdapter(FragmentManager fm, int behavior, List<String> titleList, List<Integer> idLists) {
+        super(fm, behavior);
         this.fm = fm;
         this.titleList = titleList;
         this.mIdLists = idLists;
@@ -28,8 +28,7 @@ public class LoveByStagesPagerAdapter extends FragmentPagerAdapter {
 
     @Override
     public Fragment getItem(int position) {
-        Fragment fragment = LoveByStagesFactory.createFragment(position, mIdLists.get(position));
-        return fragment;
+        return LoveByStagesFactory.createFragment(position, mIdLists.get(position));
     }
 
     @Override

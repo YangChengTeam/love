@@ -9,7 +9,7 @@ import com.yc.verbaltalk.base.fragment.BaseLazyFragment;
 import com.yc.verbaltalk.mine.ui.activity.CollectActivity;
 
 /**
- * Created by mayn on 2019/5/5.
+ * Created by sunshey on 2019/5/5.
  */
 
 public  abstract class BaseCollectFragment extends BaseLazyFragment {

@@ -4,9 +4,7 @@ import com.chad.library.adapter.base.entity.MultiItemEntity;
 
 import java.util.List;
 
-/**
- * Created by mayn on 2019/5/9.
- */
+
 
 public class LoveHealDetBean implements MultiItemEntity {
 

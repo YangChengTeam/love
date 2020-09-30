@@ -11,11 +11,12 @@ import android.view.Window;
 import android.view.WindowManager;
 import android.widget.TextView;
 
-import com.kk.utils.ScreenUtil;
 import com.yc.verbaltalk.R;
 
+import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.DialogFragment;
+import yc.com.rthttplibrary.util.ScreenUtil;
 
 /**
  * Created by suns  on 2019/8/31 10:58.
@@ -27,7 +28,7 @@ public class ExitPublishFragment extends DialogFragment {
 
     @Nullable
     @Override
-    public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
+    public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
 
         window = getDialog().getWindow();
 

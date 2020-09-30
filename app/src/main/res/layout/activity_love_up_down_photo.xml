@@ -14,8 +14,8 @@
 
     <ImageView
         android:id="@+id/comp_main_iv_to_wx"
-        android:layout_width="71dp"
-        android:layout_height="71dp"
+        android:layout_width="53dp"
+        android:layout_height="53dp"
         android:layout_marginBottom="40dp"
         android:layout_marginEnd="15dp"
         android:src="@mipmap/icon_floating_weixin"

@@ -12,7 +12,7 @@ import android.widget.TextView;
 import com.yc.verbaltalk.R;
 
 /**
- * Created by mayn on 2019/4/27.
+ * Created by sunshey on 2019/4/27.
  */
 
 public class MainNavigationLin extends LinearLayout {

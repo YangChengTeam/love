@@ -5,14 +5,23 @@
     android:layout_height="wrap_content"
     android:background="@drawable/tv_bg_toast_shape">
 
+    <ImageView
+        android:id="@+id/iv_ok"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerHorizontal="true"
+        android:src="@drawable/ok_tick"
+        android:visibility="gone"/>
+
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:id="@+id/tv_text"
         android:textColor="#FFFFFF"
-        android:textSize="17sp"
+        android:textSize="15sp"
         android:gravity="center"
+        android:layout_below="@id/iv_ok"
         android:lineSpacingMultiplier="1.0"
-        android:layout_marginLeft="5dp"
+        android:layout_marginStart="5dp"
         android:text="Toast" />
 </RelativeLayout>

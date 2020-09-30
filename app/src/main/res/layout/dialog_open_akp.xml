@@ -26,24 +26,25 @@
 
 
         <TextView
-            android:background="?attr/selectableItemBackgroundBorderless"
             android:id="@+id/dialog_open_collect"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
+            android:background="?attr/selectableItemBackgroundBorderless"
             android:drawableTop="@mipmap/star_collect_icon"
             android:drawablePadding="8dp"
             android:gravity="center_horizontal"
             android:text="@string/collect"
             android:textColor="@color/text_gray_dark"
-            android:textSize="@dimen/size_14" />
+            android:textSize="@dimen/size_14"
+            android:visibility="gone" />
 
         <TextView
-            android:background="?attr/selectableItemBackgroundBorderless"
             android:id="@+id/dialog_open_akp_tv_qq"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
+            android:background="?attr/selectableItemBackgroundBorderless"
             android:drawableTop="@mipmap/icon_d_qq"
             android:drawablePadding="8dp"
             android:gravity="center_horizontal"
@@ -52,11 +53,11 @@
             android:textSize="@dimen/size_14" />
 
         <TextView
-            android:background="?attr/selectableItemBackgroundBorderless"
             android:id="@+id/dialog_open_akp_tv_wx"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
+            android:background="?attr/selectableItemBackgroundBorderless"
             android:drawableTop="@mipmap/icon_d_wx"
             android:drawablePadding="8dp"
             android:gravity="center_horizontal"
@@ -65,11 +66,11 @@
             android:textSize="@dimen/size_14" />
 
         <TextView
-            android:background="?attr/selectableItemBackgroundBorderless"
             android:id="@+id/dialog_open_akp_tv_mm"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
+            android:background="?attr/selectableItemBackgroundBorderless"
             android:drawableTop="@mipmap/icon_d_momo"
             android:drawablePadding="8dp"
             android:gravity="center_horizontal"
@@ -78,18 +79,18 @@
             android:textSize="@dimen/size_14" />
 
         <TextView
-            android:visibility="gone"
-            android:background="?attr/selectableItemBackgroundBorderless"
             android:id="@+id/dialog_open_akp_tv_tt"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
+            android:background="?attr/selectableItemBackgroundBorderless"
             android:drawableTop="@mipmap/icon_d_tt"
             android:drawablePadding="8dp"
             android:gravity="center_horizontal"
             android:text="探探"
             android:textColor="@color/text_gray_dark"
-            android:textSize="@dimen/size_14" />
+            android:textSize="@dimen/size_14"
+            android:visibility="gone" />
     </LinearLayout>
 
 </LinearLayout>

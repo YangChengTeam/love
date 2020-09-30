@@ -1,0 +1,23 @@
+
+
+java:S1186–"€Add a nested comment explaining why this method is empty, throw an UnsupportedOperationException or complete the implementation.(Û˜ÁÉûÿÿÿÿ
+V	java:S125g"<This block of commented-out lines of code should be removed.(µáˆÿÿÿÿÿ
+W	java:S125Ã"<This block of commented-out lines of code should be removed.(áíüÈùÿÿÿÿ
+—
+java:S1186’"€Add a nested comment explaining why this method is empty, throw an UnsupportedOperationException or complete the implementation.(İ¦’q
+V	java:S125p"<This block of commented-out lines of code should be removed.(†Öíéûÿÿÿÿ
+
+java:S1186¼"€Add a nested comment explaining why this method is empty, throw an UnsupportedOperationException or complete the implementation.(õí±Öÿÿÿÿÿ
+D
+java:S1185›"(Remove this method to simply inherit it.(Ó»×¶şÿÿÿÿ
+Q	java:S125Á"<This block of commented-out lines of code should be removed.(‚•‰{
+Q	java:S125I"<This block of commented-out lines of code should be removed.(®ƒ÷
+Y	java:S110""=This class has 10 parents which is greater than 5 authorized.(¹¼êŠ8¡ÆõëŠ.
+W	java:S125"<This block of commented-out lines of code should be removed.(”„ÖÌùÿÿÿÿ
+A
+java:S1068)"+Remove this unused "seconds" private field.(ùŸ
+W	java:S125Ğ"<This block of commented-out lines of code should be removed.(ÄÜÍğÿÿÿÿÿ
+V	java:S125G"<This block of commented-out lines of code should be removed.(îÂ÷éÿÿÿÿÿ
+y
+java:S1450%"^Remove the "splashContainer" field and declare it as a local variable in the relevant methods.(­Îıúÿÿÿÿ
+P	java:S125<"<This block of commented-out lines of code should be removed.(İ¶£W

@@ -6,7 +6,7 @@ import android.content.Intent;
 import android.util.Log;
 
 /**
- * Created by mayn on 2019/5/23.
+ * Created by sunshey on 2019/5/23.
  */
 
 public class InitApkBroadCastReceiver extends BroadcastReceiver {

@@ -1,0 +1,11 @@
+
+Y
+java:S1155I">Use isEmpty() to check whether the collection is empty or not.(ÿ¤À¿ýÿÿÿÿ
+V	java:S125e"<This block of commented-out lines of code should be removed.(’Âëžýÿÿÿÿ
+
+java:S1319"sThe type of the "children" object should be an interface such as "List" rather than the implementation "ArrayList".(Ìæ¾ÿÿÿÿÿ
+X	java:S110$"=This class has 12 parents which is greater than 5 authorized.(—ÿÉ8‘ÂõëŠ.
+M
+java:S1874]"0Remove this use of "getColor"; it is deprecated.(€¶½È8‘ÂõëŠ.
+M
+java:S1874l"0Remove this use of "getColor"; it is deprecated.(¤Í˜8‘ÂõëŠ.

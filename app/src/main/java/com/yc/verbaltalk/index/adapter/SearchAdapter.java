@@ -6,25 +6,32 @@ import com.yc.verbaltalk.index.factory.SearchFactory;
 
 import java.util.List;
 
+import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentPagerAdapter;
 import androidx.fragment.app.FragmentTransaction;
 
 /**
- * Created by mayn on 2019/5/5.
+ * Created by sunshey on 2019/5/5.
  */
 
 public class SearchAdapter extends FragmentPagerAdapter {
     private List<String> titleList;
-//    private List<String> titleJobTypeList;
+    //    private List<String> titleJobTypeList;
     private final FragmentManager fm;
 
-    public SearchAdapter(FragmentManager fm, List<String> titleList) {
-        super(fm);
+    public SearchAdapter(@NonNull FragmentManager fm, int behavior,List<String> titleList) {
+        super(fm, behavior);
         this.fm = fm;
         this.titleList = titleList;
     }
+
+//    public SearchAdapter(FragmentManager fm, List<String> titleList) {
+//        super(fm);
+//        this.fm = fm;
+//        this.titleList = titleList;
+//    }
 
     @Override
     public Fragment getItem(int position) {

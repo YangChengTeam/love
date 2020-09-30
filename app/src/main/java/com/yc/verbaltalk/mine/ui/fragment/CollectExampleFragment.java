@@ -3,25 +3,25 @@ package com.yc.verbaltalk.mine.ui.fragment;
 import android.os.Bundle;
 import android.view.View;
 
-import com.kk.securityhttp.net.contains.HttpConfig;
 import com.yc.verbaltalk.R;
-import com.yc.verbaltalk.mine.adapter.CollectExampleItemAdapter;
-import com.yc.verbaltalk.chat.bean.AResultInfo;
-import com.yc.verbaltalk.chat.bean.ExampListsBean;
 import com.yc.verbaltalk.base.engine.LoveEngine;
-import com.yc.verbaltalk.model.single.YcSingle;
-import com.yc.verbaltalk.skill.ui.activity.ExampleDetailActivity;
+import com.yc.verbaltalk.base.utils.UserInfoHelper;
 import com.yc.verbaltalk.base.view.LoadDialog;
+import com.yc.verbaltalk.chat.bean.ExampListsBean;
+import com.yc.verbaltalk.mine.adapter.CollectExampleItemAdapter;
+import com.yc.verbaltalk.skill.ui.activity.ExampleDetailActivity;
 
 import java.util.List;
 
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
-import rx.Subscriber;
+import io.reactivex.observers.DisposableObserver;
+import yc.com.rthttplibrary.bean.ResultInfo;
+import yc.com.rthttplibrary.config.HttpConfig;
 
 /**
  * 收藏 实例（文章）
- * Created by mayn on 2019/5/5.
+ * Created by sunshey on 2019/5/5.
  */
 
 public class CollectExampleFragment extends BaseCollectFragment {
@@ -86,19 +86,15 @@ public class CollectExampleFragment extends BaseCollectFragment {
 
 
     private void netData() {
-        int id = YcSingle.getInstance().id;
-        if (id <= 0) {
-            mCollectActivity.showToLoginDialog();
-            return;
-        }
+
         if (PAGE_NUM == 1)
             mLoadingDialog.showLoadingDialog();
-        mLoveEngin.exampleCollectList(String.valueOf(YcSingle.getInstance().id), String.valueOf(PAGE_NUM), String.valueOf(PAGE_SIZE), "Example/collect_list")
-                .subscribe(new Subscriber<AResultInfo<List<ExampListsBean>>>() {
+        mLoveEngin.exampleCollectList(UserInfoHelper.getUid(), String.valueOf(PAGE_NUM), String.valueOf(PAGE_SIZE))
+                .subscribe(new DisposableObserver<ResultInfo<List<ExampListsBean>>>() {
 
 
                     @Override
-                    public void onCompleted() {
+                    public void onComplete() {
 
                     }
 
@@ -109,7 +105,7 @@ public class CollectExampleFragment extends BaseCollectFragment {
                     }
 
                     @Override
-                    public void onNext(AResultInfo<List<ExampListsBean>> listAResultInfo) {
+                    public void onNext(ResultInfo<List<ExampListsBean>> listAResultInfo) {
                         if (PAGE_NUM == 1) mLoadingDialog.dismissLoadingDialog();
 
                         if (listAResultInfo != null && listAResultInfo.code == HttpConfig.STATUS_OK) {

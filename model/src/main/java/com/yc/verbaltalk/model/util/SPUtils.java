@@ -32,8 +32,13 @@ public class SPUtils {
 
     public static final String INDEX_DIALOG = "index_dialog";
 
+    public static final String USER_INFO = "user_info";
+
 //    public static final String LOGIN_ = "LOGIN_BEAN";
 
+    public static final String USER_PHONE = "user_phone";
+
+    public static final String FIRST_OPEN = "first_open";
 
     /**
      * 保存数据的方法，我们需要拿到保存数据的具体类型，然后根据类型调用不同的保存方法
@@ -42,7 +47,7 @@ public class SPUtils {
      * @param key
      * @param object
      */
-    public static void put(Context context, String key, Object object) {
+    public static <T> void put(Context context, String key, T object) {
 
         SharedPreferences sp = context.getSharedPreferences(FILE_NAME,
                 Context.MODE_PRIVATE);
@@ -85,7 +90,9 @@ public class SPUtils {
         SharedPreferences sp = context.getSharedPreferences(FILE_NAME,
                 Context.MODE_PRIVATE);
 
+
         if (defaultObject instanceof String) {
+
             return sp.getString(key, (String) defaultObject);
         } else if (defaultObject instanceof Integer) {
             return sp.getInt(key, (Integer) defaultObject);
@@ -198,5 +205,5 @@ public class SPUtils {
     /**
      * 保存在手机里面的文件名
      */
-    private static final String FILE_NAME = "share_data";
+    private static final String FILE_NAME = "verbaltalk_info";
 }

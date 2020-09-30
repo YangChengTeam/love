@@ -13,7 +13,7 @@ import java.util.Date;
 
 /**
  * Log工具类，可控制Log输出开关、保存Log到文件、过滤输出等级
- * Created by mayn on 2019/5/7.
+ * Created by sunshey on 2019/5/7.
  */
 
 public class LogUtils {

@@ -14,7 +14,7 @@ import android.widget.TextView;
 import com.yc.verbaltalk.R;
 
 /**
- * Created by mayn on 2019/4/28.
+ * Created by sunshey on 2019/4/28.
  */
 
 public class MainMyItemLin extends LinearLayout {

@@ -1,18 +1,22 @@
 package com.yc.verbaltalk.index.adapter;
 
+import android.content.Intent;
+
 import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.chad.library.adapter.base.BaseViewHolder;
+import com.umeng.analytics.MobclickAgent;
 import com.yc.verbaltalk.R;
 import com.yc.verbaltalk.chat.bean.LoveHealDateBean;
 import com.yc.verbaltalk.index.ui.activity.LoveHealDetailsActivity;
 
 import java.util.List;
 
+import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 /**
- * Created by mayn on 2019/6/12.
+ * Created by sunshey on 2019/6/12.
  * 首页话术适配器
  */
 
@@ -31,7 +35,7 @@ public class IndexVerbalAdapter extends BaseQuickAdapter<LoveHealDateBean, BaseV
 
 
     @Override
-    protected void convert(BaseViewHolder helper, LoveHealDateBean item) {
+    protected void convert(@NonNull BaseViewHolder helper, LoveHealDateBean item) {
         if (item != null) {
             helper.setText(R.id.item_love_heal_title_tv_name, item.name);
             RecyclerView recyclerView = helper.getView(R.id.item_recyclerView);
@@ -41,7 +45,9 @@ public class IndexVerbalAdapter extends BaseQuickAdapter<LoveHealDateBean, BaseV
             loveIndexItemAdapter.setOnItemClickListener((adapter, view, position) -> {
                 LoveHealDateBean.ChildrenBean item1 = loveIndexItemAdapter.getItem(position);
                 if (item1 != null) {
+                    MobclickAgent.onEvent(mContext, "index_verbal_click", "首页话术点击");
                     LoveHealDetailsActivity.startLoveHealDetailsActivity(mContext, item1.name, String.valueOf(item1.id));
+
                 }
             });
 //            int position = helper.getAdapterPosition();

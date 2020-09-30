@@ -1,1 +1,2 @@
+include ':rthttplibrary'
 include ':app', ':model', ':share', ':music-player-lib', ':video-player-lib', ':PhotoPicker', ':toutiao-adv'

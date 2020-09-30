@@ -14,21 +14,22 @@ import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.RequestOptions;
-import com.kk.securityhttp.domain.ResultInfo;
-import com.kk.securityhttp.net.contains.HttpConfig;
 import com.music.player.lib.bean.MusicInfo;
 import com.music.player.lib.bean.MusicInfoWrapper;
 import com.video.player.lib.manager.VideoPlayerManager;
 import com.video.player.lib.manager.VideoWindowManager;
 import com.video.player.lib.view.VideoPlayerTrackView;
 import com.yc.verbaltalk.R;
-import com.yc.verbaltalk.model.single.YcSingle;
-import com.yc.verbaltalk.model.util.SizeUtils;
 import com.yc.verbaltalk.base.activity.BaseSameActivity;
-import com.yc.verbaltalk.base.view.CommonWebView;
 import com.yc.verbaltalk.base.utils.StatusBarUtil;
+import com.yc.verbaltalk.base.utils.UserInfoHelper;
+import com.yc.verbaltalk.base.view.CommonWebView;
+import com.yc.verbaltalk.model.util.SizeUtils;
 
-import rx.Subscriber;
+import io.reactivex.observers.DisposableObserver;
+import yc.com.rthttplibrary.bean.ResultInfo;
+import yc.com.rthttplibrary.config.HttpConfig;
+
 
 /**
  * Created by suns  on 2019/11/18 11:45.
@@ -115,7 +116,8 @@ public class ChatRecommendDetailActivity extends BaseSameActivity implements Vie
                 break;
             case R.id.iv_course_collect:
                 // TODO: 2019/11/18 收藏
-                collectAudio(mMusicInfo);
+                if (UserInfoHelper.isLogin(this))
+                    collectAudio(mMusicInfo);
                 break;
         }
     }
@@ -131,15 +133,11 @@ public class ChatRecommendDetailActivity extends BaseSameActivity implements Vie
 
 
     public void getData() {
-        int id = YcSingle.getInstance().id;
-        if (id <= 0) {
-            showToLoginDialog();
-            return;
-        }
 
-        mLoveEngine.getMusicDetailInfo(id + "", typeId).subscribe(new Subscriber<ResultInfo<MusicInfoWrapper>>() {
+
+        mLoveEngine.getMusicDetailInfo(UserInfoHelper.getUid() + "", typeId).subscribe(new DisposableObserver<ResultInfo<MusicInfoWrapper>>() {
             @Override
-            public void onCompleted() {
+            public void onComplete() {
 
             }
 
@@ -243,14 +241,10 @@ public class ChatRecommendDetailActivity extends BaseSameActivity implements Vie
 
     private void collectAudio(final MusicInfo musicInfo) {
         if (musicInfo == null) return;
-        int id = YcSingle.getInstance().id;
-        if (id <= 0) {
-            showToLoginDialog();
-            return;
-        }
-        mLoveEngine.collectAudio(id + "", musicInfo.getId()).subscribe(new Subscriber<ResultInfo<String>>() {
+
+        mLoveEngine.collectAudio(UserInfoHelper.getUid(), musicInfo.getId()).subscribe(new DisposableObserver<yc.com.rthttplibrary.bean.ResultInfo<String>>() {
             @Override
-            public void onCompleted() {
+            public void onComplete() {
 
             }
 

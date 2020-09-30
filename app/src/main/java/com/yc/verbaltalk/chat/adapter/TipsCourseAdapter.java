@@ -26,7 +26,7 @@ import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 /**
- * Created by mayn on 2019/4/30.
+ * Created by sunshey on 2019/4/30.
  */
 
 public class TipsCourseAdapter extends BaseMultiItemQuickAdapter<MainT3Bean, BaseViewHolder> {
@@ -50,7 +50,7 @@ public class TipsCourseAdapter extends BaseMultiItemQuickAdapter<MainT3Bean, Bas
     }
 
     @Override
-    protected void convert(BaseViewHolder helper, MainT3Bean item) {
+    protected void convert(@NonNull BaseViewHolder helper, MainT3Bean item) {
         if (item != null) {
             switch (item.type) {
                 case MainT3Bean.LOVE_HEAL_TYPE_TITLE:
@@ -149,8 +149,6 @@ public class TipsCourseAdapter extends BaseMultiItemQuickAdapter<MainT3Bean, Bas
                 int spansize = 1;
                 switch (mainT3Bean.type) {
                     case MainT3Bean.LOVE_HEAL_TYPE_TITLE:
-                        spansize = 2;  //占据2列
-                        break;
                     case MainT3Bean.LOVE_HEAL_TYPE_ITEM_TITLE:
                         spansize = 2;  //占据2列
                         break;

@@ -23,11 +23,11 @@
 
     <ImageView
         android:id="@+id/become_vip_iv_to_wx"
-        android:layout_width="71dp"
-        android:layout_height="71dp"
-        android:layout_alignParentRight="true"
+        android:layout_width="53dp"
+        android:layout_height="53dp"
+        android:layout_alignParentEnd="true"
         android:layout_alignParentBottom="true"
-        android:layout_marginRight="15dp"
+        android:layout_marginEnd="15dp"
         android:layout_marginBottom="62dp"
         android:src="@mipmap/icon_floating_weixin" />
 

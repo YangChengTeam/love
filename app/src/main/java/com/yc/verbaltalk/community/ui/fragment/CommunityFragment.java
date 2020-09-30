@@ -1,22 +1,21 @@
 package com.yc.verbaltalk.community.ui.fragment;
 
+import android.util.Log;
 import android.view.View;
 
 import com.alibaba.fastjson.TypeReference;
-import com.kk.securityhttp.domain.ResultInfo;
-import com.kk.securityhttp.net.contains.HttpConfig;
 import com.umeng.analytics.MobclickAgent;
 import com.yc.verbaltalk.R;
-import com.yc.verbaltalk.community.adapter.CommunityAdapter;
-import com.yc.verbaltalk.chat.bean.CommunityInfo;
-import com.yc.verbaltalk.chat.bean.CommunityInfoWrapper;
 import com.yc.verbaltalk.base.engine.LoveEngine;
-import com.yc.verbaltalk.model.single.YcSingle;
-import com.yc.verbaltalk.community.ui.activity.CommunityDetailActivity;
 import com.yc.verbaltalk.base.fragment.BaseMainFragment;
-import com.yc.verbaltalk.base.view.LoadDialog;
 import com.yc.verbaltalk.base.utils.CommonInfoHelper;
 import com.yc.verbaltalk.base.utils.ItemDecorationHelper;
+import com.yc.verbaltalk.base.utils.UserInfoHelper;
+import com.yc.verbaltalk.base.view.LoadDialog;
+import com.yc.verbaltalk.chat.bean.CommunityInfo;
+import com.yc.verbaltalk.chat.bean.CommunityInfoWrapper;
+import com.yc.verbaltalk.community.adapter.CommunityAdapter;
+import com.yc.verbaltalk.community.ui.activity.CommunityDetailActivity;
 
 import java.util.List;
 
@@ -24,7 +23,9 @@ import androidx.core.content.ContextCompat;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
-import rx.Subscriber;
+import io.reactivex.observers.DisposableObserver;
+import yc.com.rthttplibrary.bean.ResultInfo;
+import yc.com.rthttplibrary.config.HttpConfig;
 
 /**
  * Created by suns  on 2019/8/28 09:17.
@@ -67,6 +68,7 @@ public class CommunityFragment extends BaseMainFragment implements View.OnClickL
 
     }
 
+
     private void initListener() {
         swipeRefreshLayout.setColorSchemeColors(ContextCompat.getColor(mMainActivity, R.color.red_crimson));
         swipeRefreshLayout.setOnRefreshListener(() -> {
@@ -77,11 +79,12 @@ public class CommunityFragment extends BaseMainFragment implements View.OnClickL
 
         communityAdapter.setOnItemClickListener((adapter, view, position) -> {
             CommunityInfo communityInfo = communityAdapter.getItem(position);
-            if (null != communityInfo) {
+            if (UserInfoHelper.isLogin(mMainActivity))
+                if (null != communityInfo) {
 
-                CommunityDetailActivity.StartActivity(mMainActivity, getString(R.string.community_detail), communityInfo.topicId);
-                MobclickAgent.onEvent(mMainActivity, "look_community", "查看发帖详情");
-            }
+                    CommunityDetailActivity.StartActivity(mMainActivity, getString(R.string.community_detail), communityInfo.topicId);
+                    MobclickAgent.onEvent(mMainActivity, "look_community", "查看发帖详情");
+                }
         });
 
 
@@ -95,11 +98,11 @@ public class CommunityFragment extends BaseMainFragment implements View.OnClickL
                     case R.id.iv_like:
                     case R.id.ll_like:
 //                        ImageView iv = view.findViewById(R.id.iv_like);
-
-                        if (communityInfo.is_dig == 0) {//未点赞
+                        if (UserInfoHelper.isLogin(getActivity()))
+                            if (communityInfo.is_dig == 0) {//未点赞
 //                            TextView textView = communityAdapter.getView(position);
-                            like(communityInfo, position);
-                        }
+                                like(communityInfo, position);
+                            }
 
                         break;
                 }
@@ -119,6 +122,7 @@ public class CommunityFragment extends BaseMainFragment implements View.OnClickL
         getData();
     }
 
+
     @Override
     protected void lazyLoad() {
         initData();
@@ -126,26 +130,29 @@ public class CommunityFragment extends BaseMainFragment implements View.OnClickL
     }
 
     public void getData() {
-        int userId = YcSingle.getInstance().id;
+
         if (page == 1) {
             loadingDialog = new LoadDialog(mMainActivity);
             loadingDialog.showLoadingDialog();
         }
 
-        loveEngin.getCommunityNewstInfos(String.valueOf(userId), page, PAGE_SIZE).subscribe(new Subscriber<ResultInfo<CommunityInfoWrapper>>() {
+        loveEngin.getCommunityNewstInfos(UserInfoHelper.getUid(), page, PAGE_SIZE).subscribe(new DisposableObserver<ResultInfo<CommunityInfoWrapper>>() {
             @Override
-            public void onCompleted() {
+            public void onComplete() {
                 if (loadingDialog != null) loadingDialog.dismissLoadingDialog();
                 if (swipeRefreshLayout.isRefreshing()) swipeRefreshLayout.setRefreshing(false);
             }
 
             @Override
             public void onError(Throwable e) {
-
+                if (loadingDialog != null) loadingDialog.dismissLoadingDialog();
+                if (swipeRefreshLayout.isRefreshing()) swipeRefreshLayout.setRefreshing(false);
             }
 
             @Override
             public void onNext(ResultInfo<CommunityInfoWrapper> communityInfoWrapperResultInfo) {
+                if (loadingDialog != null) loadingDialog.dismissLoadingDialog();
+                if (swipeRefreshLayout.isRefreshing()) swipeRefreshLayout.setRefreshing(false);
                 if (communityInfoWrapperResultInfo != null && communityInfoWrapperResultInfo.code == HttpConfig.STATUS_OK
                         && communityInfoWrapperResultInfo.data != null) {
                     List<CommunityInfo> list = communityInfoWrapperResultInfo.data.list;
@@ -179,10 +186,10 @@ public class CommunityFragment extends BaseMainFragment implements View.OnClickL
 
     private void like(CommunityInfo communityInfo, int position) {
 
-        int userId = YcSingle.getInstance().id;
-        loveEngin.likeTopic(String.valueOf(userId), communityInfo.topicId).subscribe(new Subscriber<ResultInfo<String>>() {
+
+        loveEngin.likeTopic(UserInfoHelper.getUid(), communityInfo.topicId).subscribe(new DisposableObserver<ResultInfo<String>>() {
             @Override
-            public void onCompleted() {
+            public void onComplete() {
 
             }
 

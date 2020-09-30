@@ -12,26 +12,25 @@ import android.view.animation.AccelerateInterpolator;
 import android.view.animation.DecelerateInterpolator;
 import android.widget.EditText;
 import android.widget.ImageView;
-
 import android.widget.TextView;
 
-import com.kk.securityhttp.domain.ResultInfo;
 import com.umeng.analytics.MobclickAgent;
 import com.yc.verbaltalk.R;
-import com.yc.verbaltalk.index.adapter.SearchAdapter;
-import com.yc.verbaltalk.model.constant.ConstantKey;
-import com.yc.verbaltalk.base.engine.LoveEngine;
-import com.yc.verbaltalk.model.single.YcSingle;
-import com.yc.verbaltalk.model.util.SPUtils;
-import com.yc.verbaltalk.model.util.TimeUtils;
 import com.yc.verbaltalk.base.activity.BaseSameActivity;
-import com.yc.verbaltalk.mine.ui.activity.BecomeVipActivity;
-import com.yc.verbaltalk.mine.ui.activity.UsingHelpActivity;
+import com.yc.verbaltalk.base.engine.LoveEngine;
+import com.yc.verbaltalk.base.utils.UserInfoHelper;
+import com.yc.verbaltalk.base.view.ColorFlipPagerTitleView;
+import com.yc.verbaltalk.base.view.FluidLayout;
+import com.yc.verbaltalk.chat.bean.UserInfo;
+import com.yc.verbaltalk.index.adapter.SearchAdapter;
 import com.yc.verbaltalk.index.ui.fragment.SearchFragment;
 import com.yc.verbaltalk.index.ui.fragment.ShareT1Fragment;
 import com.yc.verbaltalk.index.ui.fragment.ShareT2Fragment;
-import com.yc.verbaltalk.base.view.ColorFlipPagerTitleView;
-import com.yc.verbaltalk.base.view.FluidLayout;
+import com.yc.verbaltalk.mine.ui.activity.BecomeVipActivity;
+import com.yc.verbaltalk.mine.ui.activity.UsingHelpActivity;
+import com.yc.verbaltalk.model.constant.ConstantKey;
+import com.yc.verbaltalk.model.util.SPUtils;
+import com.yc.verbaltalk.model.util.TimeUtils;
 
 import net.lucode.hackware.magicindicator.MagicIndicator;
 import net.lucode.hackware.magicindicator.ViewPagerHelper;
@@ -44,15 +43,18 @@ import net.lucode.hackware.magicindicator.buildins.commonnavigator.indicators.Li
 import net.lucode.hackware.magicindicator.buildins.commonnavigator.titles.SimplePagerTitleView;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
 
 import androidx.appcompat.widget.SearchView;
 import androidx.fragment.app.FragmentManager;
+import androidx.fragment.app.FragmentPagerAdapter;
 import androidx.fragment.app.FragmentTransaction;
+import androidx.lifecycle.Lifecycle;
 import androidx.viewpager.widget.ViewPager;
-
-import rx.Subscriber;
+import io.reactivex.observers.DisposableObserver;
+import yc.com.rthttplibrary.bean.ResultInfo;
 
 /**
  * 搜索话术类
@@ -70,7 +72,7 @@ public class SearchActivity extends BaseSameActivity {
     private FluidLayout mFluidLayout;
     private SearchView mSearchView;
     private SearchFragment mSearchFragment;
-    private LoveEngine mLoveEngin;
+    private LoveEngine mLoveEngine;
     private String mKeyword;
 
     public static void startSearchActivity(Context context, String keyword) {
@@ -92,7 +94,7 @@ public class SearchActivity extends BaseSameActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_search);
 
-        mLoveEngin = new LoveEngine(this);
+        mLoveEngine = new LoveEngine(this);
         initViews();
 
     }
@@ -102,7 +104,9 @@ public class SearchActivity extends BaseSameActivity {
     protected void onResume() {
         super.onResume();
         MobclickAgent.onEvent(this, ConstantKey.UM_SEARCH_ID);
+
     }
+
 
     @Override
     protected void onDestroy() {
@@ -170,15 +174,18 @@ public class SearchActivity extends BaseSameActivity {
         });
         replaceFragment(mKeyword);
 
+        UserInfo userInfo = UserInfoHelper.getUserInfo();
 
-        YcSingle instance = YcSingle.getInstance();
-        int vip = instance.vip;
-        if (vip > 0) {
-            Log.d("mylog", "initViews:  已经购买了vip");
-            ivToVip.setVisibility(View.GONE);
-        } else {
-            Log.d("mylog", "initViews:  未购买了vip");
+        if (null != userInfo) {
+            int vip = userInfo.vip;
+            if (vip > 0) {
+                Log.d("mylog", "initViews:  已经购买了vip");
+                ivToVip.setVisibility(View.GONE);
+            } else {
+                Log.d("mylog", "initViews:  未购买了vip");
+            }
         }
+
 
         hindKeyboard(mSearchView);
 
@@ -190,11 +197,7 @@ public class SearchActivity extends BaseSameActivity {
 
 
     private void replaceFragment(String keyword) {
-        int id = YcSingle.getInstance().id;
-        if (id <= 0) {
-            showToLoginDialog();
-            return;
-        }
+
         //获取管理者
         FragmentManager supportFragmentManager = getSupportFragmentManager();//开启事务
         FragmentTransaction fragmentTransaction = supportFragmentManager.beginTransaction();//碎片
@@ -203,10 +206,12 @@ public class SearchActivity extends BaseSameActivity {
         Bundle bundle = new Bundle();
         bundle.putString("keyword", keyword);
         mSearchFragment.setArguments(bundle);
-        fragmentTransaction.replace(R.id.share_frame_layout, mSearchFragment).commit();
+        fragmentTransaction.replace(R.id.share_frame_layout, mSearchFragment);
+        fragmentTransaction.setMaxLifecycle(mSearchFragment, Lifecycle.State.RESUMED);
+        fragmentTransaction.commit();
 
 
-        searchCount(String.valueOf(id), keyword);
+        searchCount(UserInfoHelper.getUid(), keyword);
     }
 
 
@@ -214,16 +219,11 @@ public class SearchActivity extends BaseSameActivity {
         if (TextUtils.isEmpty(query)) {
             return;
         }
-        int id = YcSingle.getInstance().id;
-        if (id <= 0) {
-            showToLoginDialog();
-            return;
-        }
+//
         query = query.trim();
         if (TextUtils.isEmpty(query) || mViewPager == null || mFragmentT1 == null || mFragmentT2 == null) {
             return;
         }
-
 
         changHistoryFluidLayout(query);
 
@@ -236,19 +236,6 @@ public class SearchActivity extends BaseSameActivity {
 
 //        mSearchFragment.netData(query);
 //        showShareItemHindInfo();
-
-        if (3 > 0) {
-            return;
-        }
-        int currentItem = mViewPager.getCurrentItem();
-        switch (currentItem) {
-            case 0:
-                mSearchFragment.netData(query);
-                break;
-            case 1:
-                mFragmentT2.netShareT2Data(query);
-                break;
-        }
     }
 
 
@@ -263,9 +250,7 @@ public class SearchActivity extends BaseSameActivity {
         StringBuffer stringBuffer = new StringBuffer();
         if (!TextUtils.isEmpty(shareHistory)) {
             String[] split = shareHistory.split("__");
-            for (String s : split) {
-                historyList.add(s);
-            }
+            historyList.addAll(Arrays.asList(split));
             if (historyList.contains(query)) {
                 historyList.remove(query);
             }
@@ -305,7 +290,8 @@ public class SearchActivity extends BaseSameActivity {
                 break;
             case R.id.share_iv_to_vip:
                 //TODO 购买VIP刷新数据
-                startActivity(new Intent(SearchActivity.this, BecomeVipActivity.class));
+                if (UserInfoHelper.isLogin(this))
+                    startActivity(new Intent(SearchActivity.this, BecomeVipActivity.class));
                 break;
             case R.id.share_tv_to_help:
                 startActivity(new Intent(this, UsingHelpActivity.class));
@@ -320,7 +306,7 @@ public class SearchActivity extends BaseSameActivity {
 
         initNavigator(titleLists);
 
-        SearchAdapter sharePagerAdapter = new SearchAdapter(getSupportFragmentManager(), titleLists);
+        SearchAdapter sharePagerAdapter = new SearchAdapter(getSupportFragmentManager(), FragmentPagerAdapter.BEHAVIOR_RESUME_ONLY_CURRENT_FRAGMENT, titleLists);
         mViewPager.setAdapter(sharePagerAdapter);
 
         mFragmentT1 = (ShareT1Fragment) sharePagerAdapter.getItem(0);
@@ -373,9 +359,9 @@ public class SearchActivity extends BaseSameActivity {
     }
 
     private void searchCount(String userid, String keyword) {
-        mLoveEngin.searchCount(userid, keyword).subscribe(new Subscriber<ResultInfo<String>>() {
+        mLoveEngine.searchCount(userid, keyword).subscribe(new DisposableObserver<ResultInfo<String>>() {
             @Override
-            public void onCompleted() {
+            public void onComplete() {
 
             }
 

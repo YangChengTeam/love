@@ -8,30 +8,32 @@ import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
+import com.music.player.lib.util.ToastUtils;
 import com.yc.verbaltalk.R;
-import com.yc.verbaltalk.skill.adapter.LoveUpDownPhotoAdapter;
+import com.yc.verbaltalk.base.engine.LoveEngine;
+import com.yc.verbaltalk.base.fragment.BaseLazyFragment;
 import com.yc.verbaltalk.base.holder.BaseViewHolder;
 import com.yc.verbaltalk.base.holder.UpDownMenHolder;
 import com.yc.verbaltalk.base.holder.UpDownTitleHolder;
 import com.yc.verbaltalk.base.holder.UpDownWomenHolder;
-import com.yc.verbaltalk.base.engine.MySubscriber;
-import com.yc.verbaltalk.chat.bean.AResultInfo;
+import com.yc.verbaltalk.base.utils.UserInfoHelper;
+import com.yc.verbaltalk.base.view.LoadDialog;
 import com.yc.verbaltalk.chat.bean.LoveHealingBean;
 import com.yc.verbaltalk.chat.bean.LoveHealingDetailBean;
-import com.yc.verbaltalk.base.engine.LoveEngine;
-import com.yc.verbaltalk.model.single.YcSingle;
+import com.yc.verbaltalk.skill.adapter.LoveUpDownPhotoAdapter;
 import com.yc.verbaltalk.skill.ui.activity.LoveUpDownPhotoActivity;
-import com.yc.verbaltalk.base.fragment.BaseLazyFragment;
-import com.yc.verbaltalk.base.view.LoadDialog;
 
 import java.util.List;
 import java.util.Random;
 
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
+import io.reactivex.observers.DisposableObserver;
+import yc.com.rthttplibrary.bean.ResultInfo;
+import yc.com.rthttplibrary.config.HttpConfig;
 
 /**
- * Created by mayn on 2019/5/5.
+ * Created by sunshey on 2019/5/5.
  */
 
 public class LoveUpDownPhotoFragment extends BaseLazyFragment implements View.OnClickListener {
@@ -121,40 +123,51 @@ public class LoveUpDownPhotoFragment extends BaseLazyFragment implements View.On
         if (mIsVisibleFragment) {
             mLoadingDialog.showLoadingDialog();
         }
-        mLoveEngin.recommendLovewords(String.valueOf(YcSingle.getInstance().id), String.valueOf(mPosition + 1), String.valueOf(1), mChildUrl)
-                .subscribe(new MySubscriber<AResultInfo<List<LoveHealingBean>>>(mLoadingDialog) {
+        mLoveEngin.recommendLovewords(UserInfoHelper.getUid(), String.valueOf(mPosition + 1), String.valueOf(1), mChildUrl)
+                .subscribe(new DisposableObserver<ResultInfo<List<LoveHealingBean>>>() {
                     @Override
-                    protected void onNetNext(AResultInfo<List<LoveHealingBean>> listAResultInfo) {
-                        List<LoveHealingBean> loveHealingBeanList = listAResultInfo.data;
-                        if (loveHealingBeanList == null || loveHealingBeanList.size() <= 0) {
-                            Log.d("mylog", "onNetNext: loveHealingBeanList==null ");
-                            return;
+                    public void onComplete() {
+                        if (mIsVisibleFragment) {
+                            mLoadingDialog.dismissLoadingDialog();
                         }
-                        LoveHealingBean loveHealingBean = loveHealingBeanList.get(0);
-                        List<LoveHealingDetailBean> detail = loveHealingBean.detail;
-                        if (detail != null && detail.size() >= 1) {
-                            LoveHealingDetailBean loveHealingDetailBean = detail.get(0);
-                            mLovewordsId = loveHealingDetailBean.lovewords_id;
-                        }
-
-                        int isCollect = loveHealingBean.is_collect;
-                        if (isCollect > 0) { //是否收藏
-                            mIsCollectLovewords = true;
-                        }
-                        changSubImg();
-
-                        initRecyclerData(detail);
                     }
 
                     @Override
-                    protected void onNetError(Throwable e) {
-
+                    public void onError(Throwable e) {
+                        if (mIsVisibleFragment) {
+                            mLoadingDialog.dismissLoadingDialog();
+                        }
                     }
 
                     @Override
-                    protected void onNetCompleted() {
+                    public void onNext(ResultInfo<List<LoveHealingBean>> listAResultInfo) {
+                        if (mIsVisibleFragment) {
+                            mLoadingDialog.dismissLoadingDialog();
+                        }
+                        if (listAResultInfo != null && listAResultInfo.code == HttpConfig.STATUS_OK && listAResultInfo.data != null) {
+                            List<LoveHealingBean> loveHealingBeanList = listAResultInfo.data;
+                            if (loveHealingBeanList.size() <= 0) {
+                                Log.d("mylog", "onNetNext: loveHealingBeanList==null ");
+                                return;
+                            }
+                            LoveHealingBean loveHealingBean = loveHealingBeanList.get(0);
+                            List<LoveHealingDetailBean> detail = loveHealingBean.detail;
+                            if (detail != null && detail.size() >= 1) {
+                                LoveHealingDetailBean loveHealingDetailBean = detail.get(0);
+                                mLovewordsId = loveHealingDetailBean.lovewords_id;
+                            }
 
+                            int isCollect = loveHealingBean.is_collect;
+                            if (isCollect > 0) { //是否收藏
+                                mIsCollectLovewords = true;
+                            }
+                            changSubImg();
+
+                            initRecyclerData(detail);
+                        }
                     }
+
+
                 });
     }
 
@@ -189,17 +202,13 @@ public class LoveUpDownPhotoFragment extends BaseLazyFragment implements View.On
                 mLoveUpDownPhotoActivity.finish();
                 break;
             case R.id.activity_base_same_tv_sub:
-                int id = YcSingle.getInstance().id;
-                if (id <= 0) {
-                    mLoveUpDownPhotoActivity.showToLoginDialog();
-                    return;
-                }
-                netCollect(mIsCollectLovewords, id);
+                if (UserInfoHelper.isLogin(getActivity()))
+                    netCollect(mIsCollectLovewords, UserInfoHelper.getUid());
                 break;
         }
     }
 
-    private void netCollect(boolean isCollect, int userId) {
+    private void netCollect(boolean isCollect, String userId) {
         mLoadingDialog.showLoadingDialog();
         String url = "";
         if (isCollect) {
@@ -207,25 +216,30 @@ public class LoveUpDownPhotoFragment extends BaseLazyFragment implements View.On
         } else {
             url = "Lovewords/collect";
         }
-        mLoveEngin.collectLovewords(String.valueOf(userId), String.valueOf(mLovewordsId), url)
-                .subscribe(new MySubscriber<AResultInfo<String>>(mLoadingDialog) {
+        mLoveEngin.collectLovewords(userId, String.valueOf(mLovewordsId), url)
+                .subscribe(new DisposableObserver<ResultInfo<String>>() {
                     @Override
-                    protected void onNetNext(AResultInfo<String> listAResultInfo) {
-                        String msg = listAResultInfo.msg;
-                        mLoveUpDownPhotoActivity.showToastShort(msg);
-                        mIsCollectLovewords = !mIsCollectLovewords;
-                        changSubImg();
+                    public void onComplete() {
+                        mLoadingDialog.dismissLoadingDialog();
                     }
 
                     @Override
-                    protected void onNetError(Throwable e) {
-
+                    public void onError(Throwable e) {
+                        mLoadingDialog.dismissLoadingDialog();
                     }
 
                     @Override
-                    protected void onNetCompleted() {
-
+                    public void onNext(ResultInfo<String> stringAResultInfo) {
+                        mLoadingDialog.dismissLoadingDialog();
+                        if (stringAResultInfo != null && stringAResultInfo.code == HttpConfig.STATUS_OK && stringAResultInfo.data != null) {
+                            String msg = stringAResultInfo.message;
+                            ToastUtils.showCenterToast(msg);
+                            mIsCollectLovewords = !mIsCollectLovewords;
+                            changSubImg();
+                        }
                     }
+
+
                 });
     }
 

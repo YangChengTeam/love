@@ -4,9 +4,8 @@ import android.content.Context;
 import android.graphics.Rect;
 import android.view.View;
 
-import com.kk.utils.ScreenUtil;
-
 import androidx.recyclerview.widget.RecyclerView;
+import yc.com.rthttplibrary.util.ScreenUtil;
 
 /**
  * Created by wanglin  on 2018/10/25 13:45.

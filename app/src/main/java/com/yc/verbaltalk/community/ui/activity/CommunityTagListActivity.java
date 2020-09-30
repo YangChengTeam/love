@@ -5,16 +5,14 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 
-import com.kk.securityhttp.domain.ResultInfo;
-import com.kk.securityhttp.net.contains.HttpConfig;
 import com.yc.verbaltalk.R;
-import com.yc.verbaltalk.community.adapter.CommunityAdapter;
+import com.yc.verbaltalk.base.activity.BaseSameActivity;
+import com.yc.verbaltalk.base.utils.ItemDecorationHelper;
+import com.yc.verbaltalk.base.utils.UserInfoHelper;
+import com.yc.verbaltalk.base.view.LoadDialog;
 import com.yc.verbaltalk.chat.bean.CommunityInfo;
 import com.yc.verbaltalk.chat.bean.CommunityInfoWrapper;
-import com.yc.verbaltalk.model.single.YcSingle;
-import com.yc.verbaltalk.base.activity.BaseSameActivity;
-import com.yc.verbaltalk.base.view.LoadDialog;
-import com.yc.verbaltalk.base.utils.ItemDecorationHelper;
+import com.yc.verbaltalk.community.adapter.CommunityAdapter;
 
 import java.util.List;
 
@@ -22,7 +20,9 @@ import androidx.core.content.ContextCompat;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
-import rx.Subscriber;
+import io.reactivex.observers.DisposableObserver;
+import yc.com.rthttplibrary.bean.ResultInfo;
+import yc.com.rthttplibrary.config.HttpConfig;
 
 /**
  * Created by suns  on 2019/8/28 09:17.
@@ -94,8 +94,9 @@ public class CommunityTagListActivity extends BaseSameActivity {
 
         communityAdapter.setOnItemClickListener((adapter, view, position) -> {
             CommunityInfo communityInfo = communityAdapter.getItem(position);
-            if (null != communityInfo)
-                CommunityDetailActivity.StartActivity(this, getString(R.string.community_detail), communityInfo.topicId);
+            if (UserInfoHelper.isLogin(this))
+                if (null != communityInfo)
+                    CommunityDetailActivity.StartActivity(this, getString(R.string.community_detail), communityInfo.topicId);
         });
 
 
@@ -109,10 +110,11 @@ public class CommunityTagListActivity extends BaseSameActivity {
                     case R.id.iv_like:
                     case R.id.ll_like:
 
-                        if (communityInfo.is_dig == 0) {//未点赞
+                        if (UserInfoHelper.isLogin(this))
+                            if (communityInfo.is_dig == 0) {//未点赞
 
-                            like(communityInfo, position);
-                        }
+                                like(communityInfo, position);
+                            }
 
                         break;
                 }
@@ -123,25 +125,28 @@ public class CommunityTagListActivity extends BaseSameActivity {
     }
 
     public void getData() {
-        int userId = YcSingle.getInstance().id;
+
         if (page == 1) {
             loadingDialog = new LoadDialog(this);
             loadingDialog.showLoadingDialog();
         }
-        mLoveEngine.getCommunityTagListInfo(String.valueOf(userId), catId, page, PAGE_SIZE).subscribe(new Subscriber<ResultInfo<CommunityInfoWrapper>>() {
+        mLoveEngine.getCommunityTagListInfo(UserInfoHelper.getUid(), catId, page, PAGE_SIZE).subscribe(new DisposableObserver<ResultInfo<CommunityInfoWrapper>>() {
             @Override
-            public void onCompleted() {
+            public void onComplete() {
                 if (loadingDialog != null) loadingDialog.dismissLoadingDialog();
                 if (swipeRefreshLayout.isRefreshing()) swipeRefreshLayout.setRefreshing(false);
             }
 
             @Override
             public void onError(Throwable e) {
-
+                if (loadingDialog != null) loadingDialog.dismissLoadingDialog();
+                if (swipeRefreshLayout.isRefreshing()) swipeRefreshLayout.setRefreshing(false);
             }
 
             @Override
             public void onNext(ResultInfo<CommunityInfoWrapper> communityInfoWrapperResultInfo) {
+                if (loadingDialog != null) loadingDialog.dismissLoadingDialog();
+                if (swipeRefreshLayout.isRefreshing()) swipeRefreshLayout.setRefreshing(false);
                 if (communityInfoWrapperResultInfo != null && communityInfoWrapperResultInfo.code == HttpConfig.STATUS_OK) {
                     if (communityInfoWrapperResultInfo.data != null && communityInfoWrapperResultInfo.data.list != null &&
                             communityInfoWrapperResultInfo.data.list.size() > 0) {
@@ -179,10 +184,10 @@ public class CommunityTagListActivity extends BaseSameActivity {
 
 
     private void like(CommunityInfo communityInfo, int position) {
-        int userId = YcSingle.getInstance().id;
-        mLoveEngine.likeTopic(String.valueOf(userId), communityInfo.topicId).subscribe(new Subscriber<ResultInfo<String>>() {
+
+        mLoveEngine.likeTopic(UserInfoHelper.getUid(), communityInfo.topicId).subscribe(new DisposableObserver<ResultInfo<String>>() {
             @Override
-            public void onCompleted() {
+            public void onComplete() {
 
             }
 

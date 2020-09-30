@@ -1,6 +1,7 @@
 package com.yc.verbaltalk.base.activity;
 
 import android.Manifest;
+import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.Color;
@@ -15,6 +16,7 @@ import android.widget.ImageView;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.RequestOptions;
+import com.music.player.lib.util.ToastUtils;
 import com.yc.verbaltalk.R;
 import com.yc.verbaltalk.base.view.SelectPhotoDialog;
 import com.yc.verbaltalk.base.view.imgs.ISListConfig;
@@ -27,9 +29,6 @@ import java.util.ArrayList;
 import top.zibin.luban.Luban;
 import top.zibin.luban.OnCompressListener;
 
-/**
- * Created by mayn on 2019/5/7.
- */
 
 public abstract class BasePushPhotoActivity extends BaseSameActivity {
 
@@ -123,7 +122,8 @@ public abstract class BasePushPhotoActivity extends BaseSameActivity {
 
 
         Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
-        Uri imageUri = Uri.fromFile(new File(Environment.getExternalStorageDirectory(), PICTURE_FILE));
+
+        Uri imageUri = Uri.fromFile(new File(getExternalFilesDir(Environment.DIRECTORY_PICTURES), PICTURE_FILE));
         intent.putExtra(MediaStore.EXTRA_OUTPUT, imageUri);
         startActivityForResult(intent, TAKE_PICTURE_CAMERA);
 
@@ -145,7 +145,7 @@ public abstract class BasePushPhotoActivity extends BaseSameActivity {
                 if (storageAccepted) {
                     openCamera();
                 } else {
-                    showToastShort("没有获取到拍照的权限");
+                    ToastUtils.showCenterToast("没有获取到拍照的权限");
                     Log.d("ssss", "没有权限操作这个请求");
                     selectPhotoDialog.dialogDismiss();
                 }
@@ -189,7 +189,7 @@ public abstract class BasePushPhotoActivity extends BaseSameActivity {
                 }
                 file = new File(path);*/
 
-                file = new File(Environment.getExternalStorageDirectory()
+                file = new File(getExternalFilesDir(Environment.DIRECTORY_PICTURES)
                         + "/" + PICTURE_FILE);
 
                 break;
@@ -204,7 +204,7 @@ public abstract class BasePushPhotoActivity extends BaseSameActivity {
                 break;
         }
         if (file == null) {
-            showToastShort("获取图片失败--file");
+            ToastUtils.showCenterToast("获取图片失败--file");
             return;
         }
         Luban.with(this)

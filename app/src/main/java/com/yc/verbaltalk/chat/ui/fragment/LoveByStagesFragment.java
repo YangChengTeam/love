@@ -5,37 +5,33 @@ import android.os.Bundle;
 import android.text.TextUtils;
 
 import com.bytedance.sdk.openadsdk.TTAdConstant;
+import com.bytedance.sdk.openadsdk.TTFeedAd;
 import com.bytedance.sdk.openadsdk.TTNativeExpressAd;
-import com.kk.securityhttp.net.contains.HttpConfig;
 import com.yc.verbaltalk.R;
-
-import com.yc.verbaltalk.base.engine.MySubscriber;
-import com.yc.verbaltalk.chat.adapter.LoveByStagesAdapter;
-import com.yc.verbaltalk.chat.bean.AResultInfo;
-import com.yc.verbaltalk.chat.bean.LoveByStagesBean;
 import com.yc.verbaltalk.base.engine.LoveEngine;
-import com.yc.verbaltalk.chat.ui.activity.LoveByStagesDetailsActivity;
-import com.yc.verbaltalk.chat.ui.activity.LoveIntroductionActivity;
-import com.yc.verbaltalk.model.single.YcSingle;
-
-import com.yc.verbaltalk.chat.ui.fragment.BaseLoveByStagesFragment;
+import com.yc.verbaltalk.base.utils.UserInfoHelper;
 import com.yc.verbaltalk.base.view.LoadDialog;
 import com.yc.verbaltalk.base.view.imgs.Constant;
-import com.yc.verbaltalk.skill.ui.activity.ExampleDetailActivity;
+import com.yc.verbaltalk.chat.adapter.LoveByStagesAdapter;
+import com.yc.verbaltalk.chat.bean.LoveByStagesBean;
+import com.yc.verbaltalk.chat.ui.activity.LoveByStagesDetailsActivity;
 
 import java.util.List;
+import java.util.Map;
 
 import androidx.appcompat.app.AlertDialog;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
-
+import io.reactivex.observers.DisposableObserver;
+import yc.com.rthttplibrary.bean.ResultInfo;
+import yc.com.rthttplibrary.config.HttpConfig;
 import yc.com.toutiao_adv.OnAdvStateListener;
 import yc.com.toutiao_adv.TTAdDispatchManager;
 import yc.com.toutiao_adv.TTAdType;
 
 /**
- * Created by mayn on 2019/5/5.
+ * Created by sunshey on 2019/5/5.
  */
 
 public class LoveByStagesFragment extends BaseLoveByStagesFragment implements OnAdvStateListener {
@@ -103,37 +99,35 @@ public class LoveByStagesFragment extends BaseLoveByStagesFragment implements On
         if (PAGE_NUM == 1) {
             mLoadingDialog.showLoadingDialog();
         }
-        mLoveEngin.listsArticle(String.valueOf(mCategoryId), String.valueOf(PAGE_NUM), String.valueOf(PAGE_SIZE), "Article/lists").subscribe(new MySubscriber<AResultInfo<List<LoveByStagesBean>>>(mLoadingDialog) {
+        mLoveEngin.listsArticle(String.valueOf(mCategoryId), String.valueOf(PAGE_NUM), String.valueOf(PAGE_SIZE))
+                .subscribe(new DisposableObserver<ResultInfo<List<LoveByStagesBean>>>() {
 
-            @Override
-            protected void onNetNext(AResultInfo<List<LoveByStagesBean>> listAResultInfo) {
-//                mLoveByStagesBeans = listAResultInfo.data;
+                    @Override
+                    public void onComplete() {
+                        if (PAGE_NUM == 1 && mLoadingDialog != null) {
+                            mLoadingDialog.dismissLoadingDialog();
 
-                if (PAGE_NUM == 1 && mLoadingDialog != null) {
-                    mLoadingDialog.dismissLoadingDialog();
-                }
-                if (listAResultInfo != null && listAResultInfo.code == HttpConfig.STATUS_OK && listAResultInfo.data != null)
-                    createNewData(listAResultInfo.data);
-            }
+                        }
+                        if (mSwipeRefresh.isRefreshing()) mSwipeRefresh.setRefreshing(false);
+                    }
 
-            @Override
-            protected void onNetError(Throwable e) {
-                if (mSwipeRefresh.isRefreshing()) mSwipeRefresh.setRefreshing(false);
-                if (PAGE_NUM == 1 && mLoadingDialog != null) {
-                    mLoadingDialog.dismissLoadingDialog();
+                    @Override
+                    public void onError(Throwable e) {
 
-                }
-            }
+                    }
 
-            @Override
-            protected void onNetCompleted() {
-                if (PAGE_NUM == 1 && mLoadingDialog != null) {
-                    mLoadingDialog.dismissLoadingDialog();
+                    @Override
+                    public void onNext(ResultInfo<List<LoveByStagesBean>> listAResultInfo) {
+                        if (PAGE_NUM == 1 && mLoadingDialog != null) {
+                            mLoadingDialog.dismissLoadingDialog();
+                        }
+                        if (listAResultInfo != null && listAResultInfo.code == HttpConfig.STATUS_OK && listAResultInfo.data != null) {
+                            createNewData(listAResultInfo.data);
+                        }
+                    }
 
-                }
-                if (mSwipeRefresh.isRefreshing()) mSwipeRefresh.setRefreshing(false);
-            }
-        });
+
+                });
     }
 
     private void createNewData(List<LoveByStagesBean> loveByStagesBeans) {
@@ -158,13 +152,12 @@ public class LoveByStagesFragment extends BaseLoveByStagesFragment implements On
             loveByStagesBean = mAdapter.getItem(position);
 
             String brand = Build.BRAND.toLowerCase();
-            if (TextUtils.equals("huawei", brand) || TextUtils.equals("honor", brand)) {
+//            TextUtils.equals("huawei", brand) || TextUtils.equals("honor", brand) ||
+            if (UserInfoHelper.isVip()) {
                 toLoveDetail();
             } else {
-                AlertDialog.Builder builder = new AlertDialog.Builder(mLoveByStagesActivity);
-                builder.setMessage("观看视频即可学习撩妹技能！！");
-                builder.setPositiveButton("确定", (dialog, which) ->
-                        TTAdDispatchManager.getManager().init(mLoveByStagesActivity, TTAdType.REWARD_VIDEO, null, Constant.TOUTIAO_REWARD2_ID, 0, "学习聊天技能", 1, YcSingle.getInstance().id + "", TTAdConstant.VERTICAL, LoveByStagesFragment.this)).show();
+                TTAdDispatchManager.getManager().init(mLoveByStagesActivity, TTAdType.REWARD_VIDEO, null, Constant.TOUTIAO_REWARD2_ID, 0, "学习聊天技能", 1, UserInfoHelper.getUid(), TTAdConstant.VERTICAL, LoveByStagesFragment.this);
+
 
             }
         });
@@ -183,6 +176,14 @@ public class LoveByStagesFragment extends BaseLoveByStagesFragment implements On
 
     @Override
     public void clickAD() {
+//        if (!rewardComplete) {
+//            AlertDialog.Builder builder = new AlertDialog.Builder(mLoveByStagesActivity);
+//            builder.setMessage("关闭广告可能无法学习撩妹技能！！");
+//            builder.setPositiveButton("确定", (dialog, which) ->
+//                    toLoveDetail()).show();
+//        } else {
+//
+//        }
         toLoveDetail();
     }
 
@@ -192,8 +193,25 @@ public class LoveByStagesFragment extends BaseLoveByStagesFragment implements On
     }
 
 
+    @Override
+    public void onDrawFeedAd(List<TTFeedAd> feedAdList) {
 
-    private void toLoveDetail(){
+    }
+
+    @Override
+    public void removeNativeAd(TTNativeExpressAd ad, int position) {
+
+    }
+
+    boolean rewardComplete = false;
+
+    @Override
+    public void rewardComplete() {
+        rewardComplete = true;
+    }
+
+
+    private void toLoveDetail() {
         if (loveByStagesBean != null) {
             LoveByStagesDetailsActivity.startLoveByStagesDetailsActivity(mLoveByStagesActivity, loveByStagesBean.id, loveByStagesBean.post_title);
         }

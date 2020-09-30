@@ -1,40 +1,41 @@
 package com.yc.verbaltalk.chat.ui.fragment;
 
 import android.content.Intent;
+import android.util.Log;
 import android.view.View;
 
 import com.alibaba.fastjson.TypeReference;
-import com.kk.securityhttp.net.contains.HttpConfig;
 import com.umeng.analytics.MobclickAgent;
 import com.yc.verbaltalk.R;
+import com.yc.verbaltalk.base.engine.LoveEngine;
+import com.yc.verbaltalk.base.fragment.BaseMainFragment;
+import com.yc.verbaltalk.base.utils.CommonInfoHelper;
+import com.yc.verbaltalk.base.view.LoadDialog;
 import com.yc.verbaltalk.chat.adapter.TipsCourseAdapter;
-import com.yc.verbaltalk.base.engine.MySubscriber;
-import com.yc.verbaltalk.chat.bean.AResultInfo;
 import com.yc.verbaltalk.chat.bean.CategoryArticleBean;
 import com.yc.verbaltalk.chat.bean.CategoryArticleChildrenBean;
 import com.yc.verbaltalk.chat.bean.ExampleTsCategory;
 import com.yc.verbaltalk.chat.bean.ExampleTsCategoryList;
 import com.yc.verbaltalk.chat.bean.MainT3Bean;
-import com.yc.verbaltalk.model.constant.ConstantKey;
-import com.yc.verbaltalk.base.engine.LoveEngine;
-import com.yc.verbaltalk.skill.ui.fragment.ExpressFragment;
 import com.yc.verbaltalk.chat.ui.activity.LoveByStagesActivity;
 import com.yc.verbaltalk.chat.ui.activity.LoveCaseActivity;
 import com.yc.verbaltalk.chat.ui.activity.LoveIntroductionActivity;
 import com.yc.verbaltalk.chat.ui.activity.PracticeLoveActivity;
 import com.yc.verbaltalk.chat.ui.activity.PracticeTeachActivity;
-import com.yc.verbaltalk.base.fragment.BaseMainFragment;
-import com.yc.verbaltalk.base.view.LoadDialog;
-import com.yc.verbaltalk.base.utils.CommonInfoHelper;
+import com.yc.verbaltalk.model.constant.ConstantKey;
+import com.yc.verbaltalk.skill.ui.fragment.ExpressFragment;
 
 import java.util.ArrayList;
 import java.util.List;
 
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
+import io.reactivex.observers.DisposableObserver;
+import yc.com.rthttplibrary.bean.ResultInfo;
+import yc.com.rthttplibrary.config.HttpConfig;
 
 /**
- * Created by mayn on 2019/6/17.
+ * Created by sunshey on 2019/6/17.
  * 秘籍
  */
 
@@ -65,6 +66,7 @@ public class TipsCourseFragment extends BaseMainFragment {
 
     @Override
     protected void lazyLoad() {
+
         MobclickAgent.onEvent(mMainActivity, ConstantKey.UM_LOVE_SECRET_ID);
         initView();
         netData();
@@ -97,27 +99,31 @@ public class TipsCourseFragment extends BaseMainFragment {
         }.getType(), (CommonInfoHelper.onParseListener<List<CategoryArticleBean>>) o -> mCategoryArticleBeans = o);
 
 
-        mLoveEngin.categoryArticle("Article/category").subscribe(new MySubscriber<AResultInfo<List<CategoryArticleBean>>>(mMainActivity) {
+        mLoveEngin.categoryArticle().subscribe(new DisposableObserver<ResultInfo<List<CategoryArticleBean>>>() {
             @Override
-            protected void onNetNext(AResultInfo<List<CategoryArticleBean>> listAResultInfo) {
-                List<CategoryArticleBean> data = listAResultInfo.data;
-                if (data == null || data.size() == 0) {
-                    return;
-                }
-                mCategoryArticleBeans = data;
+            public void onComplete() {
+
+            }
+
+            @Override
+            public void onError(Throwable e) {
+
+            }
+
+            @Override
+            public void onNext(ResultInfo<List<CategoryArticleBean>> listAResultInfo) {
+                if (listAResultInfo != null && listAResultInfo.code == HttpConfig.STATUS_OK) {
+                    List<CategoryArticleBean> data = listAResultInfo.data;
+                    if (data == null || data.size() == 0) {
+                        return;
+                    }
+                    mCategoryArticleBeans = data;
 //                mCacheWorker.setCache("main1_Article_category", mCategoryArticleBeans);
-                CommonInfoHelper.setO(mMainActivity, mCategoryArticleBeans, "main1_Article_category");
+                    CommonInfoHelper.setO(mMainActivity, mCategoryArticleBeans, "main1_Article_category");
+                }
             }
 
-            @Override
-            protected void onNetError(Throwable e) {
 
-            }
-
-            @Override
-            protected void onNetCompleted() {
-
-            }
         });
     }
 
@@ -137,25 +143,26 @@ public class TipsCourseFragment extends BaseMainFragment {
         mLoadDialog.showLoadingDialog();
 
 
-        mLoveEngin.exampleTsCategory("example/ts_category").subscribe(new MySubscriber<AResultInfo<ExampleTsCategory>>(mLoadDialog) {
+        mLoveEngin.exampleTsCategory().subscribe(new DisposableObserver<ResultInfo<ExampleTsCategory>>() {
             @Override
-            protected void onNetNext(AResultInfo<ExampleTsCategory> exampleTsCategoryAResultInfo) {
+            public void onComplete() {
+                mLoadDialog.dismissLoadingDialog();
+            }
 
-//                Log.e("TAG", "onNetNext: " + "mLoveEngine");
+            @Override
+            public void onError(Throwable e) {
+                mLoadDialog.dismissLoadingDialog();
+            }
+
+            @Override
+            public void onNext(ResultInfo<ExampleTsCategory> exampleTsCategoryAResultInfo) {
+                mLoadDialog.dismissLoadingDialog();
                 if (exampleTsCategoryAResultInfo != null && exampleTsCategoryAResultInfo.code == HttpConfig.STATUS_OK && exampleTsCategoryAResultInfo.data != null) {
                     ExampleTsCategory exampleTsCategory = exampleTsCategoryAResultInfo.data;
                     createNewData(exampleTsCategory);
                 }
             }
 
-            @Override
-            protected void onNetError(Throwable e) {
-            }
-
-            @Override
-            protected void onNetCompleted() {
-
-            }
         });
     }
 

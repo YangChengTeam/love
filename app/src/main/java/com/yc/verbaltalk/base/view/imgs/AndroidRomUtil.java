@@ -13,9 +13,7 @@ import java.util.Map;
 import java.util.Properties;
 import java.util.Set;
 
-/**
- * Created by mayn on 2019/5/7.
- */
+
 
 public class AndroidRomUtil {
 

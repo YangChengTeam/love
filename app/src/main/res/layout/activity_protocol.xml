@@ -20,7 +20,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:padding="8dp"
-                android:text="@string/login_protocol"
+                android:text="@string/user_policy"
                 android:textColor="@color/black"
                 android:textSize="@dimen/size_16" />
         </LinearLayout>

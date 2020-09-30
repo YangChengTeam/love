@@ -6,9 +6,7 @@ import android.os.Environment;
 import java.io.File;
 import java.math.BigDecimal;
 
-/**
- * Created by mayn on 2019/5/7.
- */
+
 
 public class DataCleanManagerUtils  {
     public static String getTotalCacheSize(Context context) throws Exception {

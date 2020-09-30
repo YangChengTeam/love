@@ -5,11 +5,15 @@ import android.content.Context;
 import android.content.pm.PackageManager;
 import android.os.Build;
 import android.telephony.TelephonyManager;
+import android.text.TextUtils;
+
+import com.yc.verbaltalk.base.YcApplication;
 
 import androidx.core.app.ActivityCompat;
+import yc.com.rthttplibrary.config.GoagalInfo;
 
 /**
- * Created by mayn on 2019/6/11.
+ * Created by sunshey on 2019/6/11.
  */
 
 public class PhoneIMEIUtil {
@@ -31,7 +35,8 @@ public class PhoneIMEIUtil {
             // for ActivityCompat#requestPermissions for more details.
 //            imeiString = "";
         } else {
-            imeiString = tm.getDeviceId();
+            imeiString = GoagalInfo.get().uuid;
+//            if (TextUtils.isEmpty(imeiString)) imeiString = YcApplication.getPesudoUniqueID();
         }
         if (imeiString == null || "".equals(imeiString) || imeiString.length() == 0) {
             imeiString = "35" + Build.BOARD.length() % 10 + Build.BRAND.length() % 10 + Build.CPU_ABI.length() % 10

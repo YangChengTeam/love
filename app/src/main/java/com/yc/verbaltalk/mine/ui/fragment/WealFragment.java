@@ -15,23 +15,24 @@ import android.webkit.WebView;
 import android.widget.ProgressBar;
 
 import com.alibaba.fastjson.TypeReference;
-import com.kk.securityhttp.net.contains.HttpConfig;
+import com.music.player.lib.util.ToastUtils;
 import com.umeng.analytics.MobclickAgent;
 import com.yc.verbaltalk.R;
-import com.yc.verbaltalk.chat.bean.AResultInfo;
+import com.yc.verbaltalk.base.activity.MainActivity;
+import com.yc.verbaltalk.base.engine.LoveEngine;
+import com.yc.verbaltalk.base.fragment.BaseMainFragment;
+import com.yc.verbaltalk.base.utils.CommonInfoHelper;
+import com.yc.verbaltalk.base.view.LoadDialog;
 import com.yc.verbaltalk.chat.bean.MenuadvInfoBean;
 import com.yc.verbaltalk.model.constant.ConstantKey;
-import com.yc.verbaltalk.base.engine.LoveEngine;
-import com.yc.verbaltalk.base.activity.MainActivity;
-import com.yc.verbaltalk.base.fragment.BaseMainFragment;
-import com.yc.verbaltalk.base.view.LoadDialog;
-import com.yc.verbaltalk.base.utils.CommonInfoHelper;
 
 import androidx.appcompat.app.AlertDialog;
-import rx.Subscriber;
+import io.reactivex.observers.DisposableObserver;
+import yc.com.rthttplibrary.bean.ResultInfo;
+import yc.com.rthttplibrary.config.HttpConfig;
 
 /**
- * Created by mayn on 2019/5/22.
+ * Created by sunshey on 2019/5/22.
  * 福利
  */
 
@@ -169,9 +170,9 @@ public class WealFragment extends BaseMainFragment {
         mLoadDialog = new LoadDialog(mMainActivity);
         mLoadDialog.showLoadingDialog();
 
-        mLoveEngin.menuadvInfo("menuadv/info").subscribe(new Subscriber<AResultInfo<MenuadvInfoBean>>() {
+        mLoveEngin.menuadvInfo().subscribe(new DisposableObserver<ResultInfo<MenuadvInfoBean>>() {
             @Override
-            public void onCompleted() {
+            public void onComplete() {
 
             }
 
@@ -182,7 +183,7 @@ public class WealFragment extends BaseMainFragment {
             }
 
             @Override
-            public void onNext(AResultInfo<MenuadvInfoBean> menuadvInfoBeanAResultInfo) {
+            public void onNext(ResultInfo<MenuadvInfoBean> menuadvInfoBeanAResultInfo) {
                 if (mLoadDialog != null) mLoadDialog.dismissLoadingDialog();
                 if (menuadvInfoBeanAResultInfo != null && menuadvInfoBeanAResultInfo.code == HttpConfig.STATUS_OK && menuadvInfoBeanAResultInfo.data != null) {
                     MenuadvInfoBean menuadvInfoBean = menuadvInfoBeanAResultInfo.data;
@@ -263,7 +264,7 @@ public class WealFragment extends BaseMainFragment {
                 intent.setComponent(cmp);
                 mMainActivity.startActivity(intent);
             } catch (Exception e) {
-                mMainActivity.showToastShort("未安装微信");
+                ToastUtils.showCenterToast("未安装微信");
             }
 
 

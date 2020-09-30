@@ -8,9 +8,7 @@ import android.widget.BaseAdapter;
 
 import java.util.List;
 
-/**
- * Created by mayn on 2019/5/7.
- */
+
 
 public abstract class EasyLVAdapter<T> extends BaseAdapter implements DataHelper<T> {
 

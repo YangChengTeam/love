@@ -9,15 +9,15 @@ import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentPagerAdapter;
 
 /**
- * Created by mayn on 2019/5/5.
+ * Created by sunshey on 2019/5/5.
  */
 
 public class SkillPagerAdapter extends FragmentPagerAdapter {
     private List<String> titleList;
 
 
-    public SkillPagerAdapter(FragmentManager fm, List<String> titleList) {
-        super(fm);
+    public SkillPagerAdapter(FragmentManager fm, int behavior, List<String> titleList) {
+        super(fm, behavior);
         this.titleList = titleList;
     }
 

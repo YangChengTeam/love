@@ -15,8 +15,9 @@ import androidx.fragment.app.FragmentPagerAdapter;
 public class CommunityMainPagerAdapter extends FragmentPagerAdapter {
     private List<String> mTitleList;
 
-    public CommunityMainPagerAdapter(FragmentManager fm, List<String> titleList) {
-        super(fm);
+    public CommunityMainPagerAdapter(FragmentManager fm, int behavior, List<String> titleList) {
+        super(fm, behavior);
+
         this.mTitleList = titleList;
     }
 

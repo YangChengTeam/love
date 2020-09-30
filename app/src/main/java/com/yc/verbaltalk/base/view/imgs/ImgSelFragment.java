@@ -42,9 +42,7 @@ import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.viewpager.widget.ViewPager;
 
-/**
- * Created by mayn on 2019/5/7.
- */
+
 
 public class ImgSelFragment extends Fragment implements View.OnClickListener, ViewPager.OnPageChangeListener {
 

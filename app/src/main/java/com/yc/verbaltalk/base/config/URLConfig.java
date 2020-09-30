@@ -3,7 +3,7 @@ package com.yc.verbaltalk.base.config;
 import java.io.File;
 
 /**
- * Created by mayn on 2019/5/8.
+ * Created by sunshey on 2019/5/8.
  */
 
 public class URLConfig {
@@ -13,7 +13,7 @@ public class URLConfig {
 
     //    private static String baseUrl = "http://en.wk2.com/api/";
     private static final String baseUrl = "http://love.bshu.com/";
-    private static final String baseUrlV1 = baseUrl.concat("v1/");
+    public static final String baseUrlV1 = baseUrl.concat("v1/");
     private static String baseUrlV2 = baseUrl.concat("v2/");
     private static String debugBaseUrl = "http://en.qqtn.com/api/";
 
@@ -45,17 +45,6 @@ public class URLConfig {
     //分享得会员
     public static final String SHARE_REWARD_URL = baseUrlV1.concat("share/reward");
 
-    /**
-     * spa随便听听
-     */
-    public static final String SPA_RANDOM_URL = baseUrlV1.concat("spa/random");
-
-    //音频播放次数
-    public static final String AUDIO_PLAY_URL = baseUrlV1.concat("music/play");
-
-
-    //搜索次数统计
-    public static final String SEARCH_COUNT_URL = baseUrlV1.concat("dialogue/searchlog");
 
 
     //默认值
@@ -68,7 +57,7 @@ public class URLConfig {
     public static String uploadPhotoUrl = baseUrlV1.concat("common/upload");
 
 
-    public static final String ID_INFO_SMS = getBaseUrl() + "user/code";
+    public static final String ID_INFO_SMS = baseUrlV1.concat("user/code");
 
 
     public static String getBaseUrl() {
@@ -124,10 +113,56 @@ public class URLConfig {
     public static final String INDEX_BANNER_URL = baseUrlV1.concat("banner/index");
 
     //撩吧课程数据
-    public static final String CHAT_LESSONS_URL= baseUrlV1.concat("Lesson/lists");
+    public static final String CHAT_LESSONS_URL = baseUrlV1.concat("Lesson/lists");
 
     //撩吧课程详情数据
-    public static final String CHAT_LESSON_DETAIL_URL= baseUrlV1.concat("Lesson/detail");
+    public static final String CHAT_LESSON_DETAIL_URL = baseUrlV1.concat("Lesson/detail");
 //    public static String download_apk_url = "http://toppic-mszs.oss-cn-hangzhou.aliyuncs.com/";
+
+
+    /**
+     * 手机号密码登录
+     */
+
+    public static final String PHONE_LOGIN_URL = baseUrlV1.concat("user/login");
+    /**
+     * 发送验证码
+     */
+
+    public static final String SEND_CODE_URL = baseUrlV1.concat("user/send_code");
+    /**
+     * 手机号注册
+     */
+
+    public static final String PHONE_REGISTER_URL = getBaseUrl().concat("v3/user/reg");
+    /**
+     * 修改密码
+     */
+
+    public static final String MODIFY_PWD_URL = getBaseUrl().concat("v3/user/edit_pwd");
+    /**
+     * 订单列表
+     */
+
+    public static final String ORDER_LIST_URL = baseUrlV1.concat("orders/lists");
+
+    /**
+     * 验证码登录
+     */
+    public static final String CODE_LOGIN_URL = baseUrlV1.concat("user/code_login");
+
+    /**
+     * 设置密码
+     */
+    public static final String SET_PWD_URL = getBaseUrl().concat("v3/user/set_pwd");
+    /**
+     * 用户激活接口
+     */
+    public static final String USER_ACTIVATE_URL = getBaseUrl().concat("v3/index/activation");
+
+
+    //第三方登录
+    public static final String THRID_LOGIN_URL = baseUrlV1.concat("user/sns");
+
 
 }

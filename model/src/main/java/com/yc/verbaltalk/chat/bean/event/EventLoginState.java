@@ -1,8 +1,7 @@
 package com.yc.verbaltalk.chat.bean.event;
 
-/**
- * Created by mayn on 2019/5/9.
- */
+
+import com.yc.verbaltalk.chat.bean.UserInfo;
 
 public class EventLoginState {
 
@@ -13,6 +12,7 @@ public class EventLoginState {
     public String nick_name;
 
     public int state;
+    public UserInfo userInfo;
 
     public EventLoginState(int state) {
         this.state = state;

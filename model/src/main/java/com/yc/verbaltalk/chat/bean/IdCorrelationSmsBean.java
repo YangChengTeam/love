@@ -1,8 +1,6 @@
 package com.yc.verbaltalk.chat.bean;
 
-/**
- * Created by mayn on 2019/5/7.
- */
+
 
 public class IdCorrelationSmsBean {
 

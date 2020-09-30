@@ -250,7 +250,7 @@ public class FileUtils {
             }
 
             if (appCacheDir == null){// 有些手机需要通过自定义目录
-                appCacheDir = new File(Environment.getExternalStorageDirectory(),"Android/data/"+context.getPackageName()+"/cache/"+type);
+                appCacheDir = new File(context.getExternalCacheDir(),"Android/data/"+context.getPackageName()+"/cache/"+type);
             }
 
             if (appCacheDir == null){

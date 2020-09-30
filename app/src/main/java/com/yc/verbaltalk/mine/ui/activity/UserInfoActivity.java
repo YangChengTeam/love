@@ -1,5 +1,6 @@
 package com.yc.verbaltalk.mine.ui.activity;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.text.TextUtils;
 import android.util.Log;
@@ -10,29 +11,27 @@ import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
-import com.alibaba.fastjson.JSON;
 import com.bigkoo.pickerview.builder.TimePickerBuilder;
 import com.bigkoo.pickerview.view.TimePickerView;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.RequestOptions;
 import com.google.gson.Gson;
+import com.music.player.lib.util.ToastUtils;
 import com.yc.verbaltalk.R;
-import com.yc.verbaltalk.base.engine.MySubscriber;
-import com.yc.verbaltalk.chat.bean.AResultInfo;
-import com.yc.verbaltalk.chat.bean.IdCorrelationLoginBean;
-import com.yc.verbaltalk.chat.bean.UploadPhotoBean;
-import com.yc.verbaltalk.chat.bean.event.EventLoginState;
-import com.yc.verbaltalk.base.utils.BackfillSingle;
-import com.yc.verbaltalk.base.engine.IdCorrelationEngin;
-import com.yc.verbaltalk.base.engine.UploadPhotoEngin;
-import com.yc.verbaltalk.model.single.YcSingle;
-import com.yc.verbaltalk.model.util.SPUtils;
-import com.yc.verbaltalk.model.util.TimeUtils;
 import com.yc.verbaltalk.base.activity.BasePushPhotoActivity;
+import com.yc.verbaltalk.base.engine.UploadPhotoEngin;
+import com.yc.verbaltalk.base.engine.UserInfoEngine;
+import com.yc.verbaltalk.base.utils.UserInfoHelper;
 import com.yc.verbaltalk.base.view.CheckBoxSample;
-import com.yc.verbaltalk.base.utils.SnackBarUtils;
+import com.yc.verbaltalk.base.view.LoadDialog;
+import com.yc.verbaltalk.chat.bean.UploadPhotoBean;
+import com.yc.verbaltalk.chat.bean.UserInfo;
+import com.yc.verbaltalk.chat.bean.event.EventLoginState;
+import com.yc.verbaltalk.model.util.TimeUtils;
 
 import org.greenrobot.eventbus.EventBus;
+import org.greenrobot.eventbus.Subscribe;
+import org.greenrobot.eventbus.ThreadMode;
 
 import java.io.File;
 import java.io.IOException;
@@ -40,9 +39,10 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 
-import okhttp3.Call;
-import okhttp3.Callback;
-import okhttp3.Response;
+import io.reactivex.observers.DisposableObserver;
+import okhttp3.ResponseBody;
+import yc.com.rthttplibrary.bean.ResultInfo;
+import yc.com.rthttplibrary.config.HttpConfig;
 
 public class UserInfoActivity extends BasePushPhotoActivity {
 
@@ -53,25 +53,27 @@ public class UserInfoActivity extends BasePushPhotoActivity {
     private EditText mEtName;
     private String mBirthdayString;
     private long mBirthdayLong;
-    private TextView mTvDate;
+    private TextView mTvBirthday;
     private String mStringEtName;
     private ImageView mIvIcon;
-    private IdCorrelationEngin mIdCorrelationEngin;
+    private UserInfoEngine userInfoEngine;
     private int mYearDefault, mMonthDefault, mDayDefault;
     private String mPhotoUrl;
+    private boolean isSetPwd;
+    private TextView tvPwd;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_user_info);
-        mIdCorrelationEngin = new IdCorrelationEngin(this);
+        userInfoEngine = new UserInfoEngine(this);
         initViews();
         initData();
     }
 
 
     private void initViews() {
-        LinearLayout llItem02 = findViewById(R.id.user_info_ll_item_02);
+        LinearLayout llBirthday = findViewById(R.id.user_info_ll_birthday);
         RelativeLayout rlTitCon = findViewById(R.id.user_info_rl_tit_con);
         mIvIcon = findViewById(R.id.user_info_iv_icon);
 
@@ -81,17 +83,34 @@ public class UserInfoActivity extends BasePushPhotoActivity {
         mCheckWoMen = findViewById(R.id.user_info_check_women);
         TextView tvWomen = findViewById(R.id.user_info_tv_women);
         TextView tvMen = findViewById(R.id.user_info_tv_men);
-        mTvDate = findViewById(R.id.user_info_tv_date);
+        mTvBirthday = findViewById(R.id.user_info_tv_birthday);
+        RelativeLayout rlInfoPwd = findViewById(R.id.rl_info_pwd);
+        tvPwd = findViewById(R.id.tv_pwd);
+        TextView tvPhone = findViewById(R.id.tv_phone);
+        UserInfo userInfo = UserInfoHelper.getUserInfo();
+        if (null != userInfo) {
+            if (!TextUtils.isEmpty(userInfo.pwd)) {
+                isSetPwd = true;
+            }
+            String mobile = userInfo.mobile;
+            if (!TextUtils.isEmpty(mobile)) {
+                tvPhone.setText(mobile.replace(mobile.substring(3, 7), "****"));
+            }
+        }
 
-        llItem02.setOnClickListener(this);
+        tvPwd.setText(isSetPwd ? "修改密码" : "设置密码");
+
+
+        llBirthday.setOnClickListener(this);
         mCheckMen.setOnClickListener(this);
         mCheckWoMen.setOnClickListener(this);
         tvWomen.setOnClickListener(this);
         tvMen.setOnClickListener(this);
-        mIsCheckedMen = false;
-        isCheckedMen(mIsCheckedMen);
+        rlInfoPwd.setOnClickListener(this);
 
-        mTvDate.setText(TimeUtils.dateToYyMmDdDivide(new Date(System.currentTimeMillis())));
+//        isCheckedMen(mIsCheckedMen);
+
+        mTvBirthday.setText(TimeUtils.dateToYyMmDdDivide(new Date(System.currentTimeMillis())));
 
         TextView tvSub = offerActivitySubTitleView();
         tvSub.setTextColor(getResources().getColor(R.color.red_crimson));
@@ -112,77 +131,59 @@ public class UserInfoActivity extends BasePushPhotoActivity {
     }
 
     private void netData() {
-        int id = YcSingle.getInstance().id;
-        if (id <= 0) {
-            return;
-        }
-        mIdCorrelationEngin.userInfo(String.valueOf(id), "user/info").subscribe(new MySubscriber<AResultInfo<IdCorrelationLoginBean>>(mLoadingDialog) {
+
+        if (null == mLoadingDialog) mLoadingDialog = new LoadDialog(this);
+        mLoadingDialog.showLoadingDialog("加载中...");
+        userInfoEngine.userInfo(UserInfoHelper.getUid()).subscribe(new DisposableObserver<ResultInfo<UserInfo>>() {
 
             @Override
-            protected void onNetNext(AResultInfo<IdCorrelationLoginBean> idCorrelationLoginBeanAResultInfo) {
-                IdCorrelationLoginBean idCorrelationLoginBean = idCorrelationLoginBeanAResultInfo.data;
-                String nickName = idCorrelationLoginBean.nick_name;
-                String birthday = idCorrelationLoginBean.birthday;
-                String face = idCorrelationLoginBean.face;
-                int sex = idCorrelationLoginBean.sex;
+            public void onComplete() {
+                mLoadingDialog.dismissLoadingDialog();
+            }
 
-                if (!TextUtils.isEmpty(nickName)) {
-                    mEtName.setText(nickName);
-                    mEtName.setSelection(nickName.length());
-                }
-                if (!TextUtils.isEmpty(birthday)) {
-                    int[] ints = TimeUtils.formattingAddDivide(birthday);
-                    if (ints != null && ints.length >= 3) {
-                        StringBuffer stringBuffer = new StringBuffer();
-                        mYearDefault = ints[0];
-                        mMonthDefault = ints[1];
-                        mDayDefault = ints[2];
-                        stringBuffer.append(mYearDefault).append("-");
-                        if (mMonthDefault < 10) {
-                            stringBuffer.append("0").append(mMonthDefault).append("-");
-                        } else {
-                            stringBuffer.append(mMonthDefault).append("-");
-                        }
-                        if (mDayDefault < 10) {
-                            stringBuffer.append("0").append(mDayDefault);
-                        } else {
-                            stringBuffer.append(mDayDefault);
-                        }
-                        mTvDate.setText(stringBuffer.toString());
+            @Override
+            public void onError(Throwable e) {
+                mLoadingDialog.dismissLoadingDialog();
+            }
+
+            @Override
+            public void onNext(ResultInfo<UserInfo> userInfoResultInfo) {
+                mLoadingDialog.dismissLoadingDialog();
+                if (userInfoResultInfo != null && userInfoResultInfo.code == HttpConfig.STATUS_OK && userInfoResultInfo.data != null) {
+                    UserInfo idCorrelationLoginBean = userInfoResultInfo.data;
+                    String nickName = idCorrelationLoginBean.nick_name;
+                    String birthday = idCorrelationLoginBean.birthday;
+                    String face = idCorrelationLoginBean.face;
+                    int sex = idCorrelationLoginBean.sex;
+
+                    if (!TextUtils.isEmpty(nickName)) {
+                        mEtName.setText(nickName);
+                        mEtName.setSelection(nickName.length());
+                    }
+                    if (!TextUtils.isEmpty(birthday)) {
+
+                        mTvBirthday.setText(TimeUtils.formattingDate(birthday));
                         mBirthdayString = birthday;
+
+                    }
+                    mIsCheckedMen = sex != 0;
+                    isCheckedMen(mIsCheckedMen);
+                    if (!TextUtils.isEmpty(face)) {
+                        Glide.with(UserInfoActivity.this).load(face).apply(RequestOptions.circleCropTransform()
+                                .error(R.mipmap.main_icon_default_head).placeholder(R.mipmap.main_icon_default_head)).into(mIvIcon);
+                        mPhotoUrl = face;
                     }
                 }
-                if (sex != 0) {
-                    mIsCheckedMen = true;
-                    isCheckedMen(mIsCheckedMen);
-                }
-                if (!TextUtils.isEmpty(face)) {
-                    Glide.with(UserInfoActivity.this).load(face).apply(RequestOptions.circleCropTransform()
-                            .error(R.mipmap.main_icon_default_head).placeholder(R.mipmap.main_icon_default_head)).into(mIvIcon);
-                    mPhotoUrl = face;
-                }
             }
 
-            @Override
-            protected void onNetError(Throwable e) {
 
-            }
-
-            @Override
-            protected void onNetCompleted() {
-
-            }
         });
     }
 
     private void isCheckedMen(boolean isCheckedMen) {
-        if (isCheckedMen) {
-            mCheckMen.setChecked(true);
-            mCheckWoMen.setChecked(false);
-        } else {
-            mCheckMen.setChecked(false);
-            mCheckWoMen.setChecked(true);
-        }
+
+        mCheckMen.setChecked(isCheckedMen);
+        mCheckWoMen.setChecked(!isCheckedMen);
     }
 
     @Override
@@ -192,18 +193,18 @@ public class UserInfoActivity extends BasePushPhotoActivity {
             case R.id.user_info_check_men:
             case R.id.user_info_tv_men:
                 if (!mIsCheckedMen) {
-                    mIsCheckedMen = !mIsCheckedMen;
-                    isCheckedMen(mIsCheckedMen);
+                    mIsCheckedMen = true;
+                    isCheckedMen(true);
                 }
                 break;
             case R.id.user_info_check_women:
             case R.id.user_info_tv_women:
                 if (mIsCheckedMen) {
-                    mIsCheckedMen = !mIsCheckedMen;
-                    isCheckedMen(mIsCheckedMen);
+                    mIsCheckedMen = false;
+                    isCheckedMen(false);
                 }
                 break;
-            case R.id.user_info_ll_item_02:
+            case R.id.user_info_ll_birthday:
                 if (mYearDefault > 0) {
                     showDateTimePickerView(mYearDefault, mMonthDefault, mDayDefault);
                 } else {
@@ -219,62 +220,84 @@ public class UserInfoActivity extends BasePushPhotoActivity {
                 if (!isCanSub) {
                     return;
                 }
-                if (TextUtils.isEmpty(mPhotoUrl)) {
-                    SnackBarUtils.tips(this, "请修改头像");
-                    return;
-                }
+//                if (TextUtils.isEmpty(mPhotoUrl)) {
+//                    SnackBarUtils.tips(this, "请修改头像");
+//                    return;
+//                }
                 netUpdateInfo();
+                break;
+            case R.id.rl_info_pwd:
+
+                Intent intent = new Intent(this, PwdInfoActivity.class);
+                intent.putExtra("isSetPwd", isSetPwd);
+                startActivity(intent);
                 break;
         }
     }
 
-    private void netUpdateInfo() {
-        String pwd = (String) SPUtils.get(this, SPUtils.LOGIN_PWD, "");
-        int id = YcSingle.getInstance().id;
-        if (id <= 0) {
-            showToLoginDialog();
-            return;
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    public void setPwdSuccess(String success) {
+        if (TextUtils.equals("set_pwd_success", success)) {
+            isSetPwd = true;
+            tvPwd.setText("修改密码");
         }
+    }
+
+    private void netUpdateInfo() {
+
+
         mLoadingDialog.showLoadingDialog();
-        mIdCorrelationEngin.updateInfo(String.valueOf(id), mStringEtName, mBirthdayString, mIsCheckedMen ? "1" : "0", mPhotoUrl, pwd, "user/update").subscribe(new MySubscriber<AResultInfo<IdCorrelationLoginBean>>(mLoadingDialog) {
-            @Override
-            protected void onNetNext(AResultInfo<IdCorrelationLoginBean> idCorrelationLoginBeanAResultInfo) {
+        userInfoEngine.updateInfo(UserInfoHelper.getUid(), mStringEtName, mBirthdayString, mIsCheckedMen ? "1" : "0", mPhotoUrl, "")
+                .subscribe(new DisposableObserver<ResultInfo<UserInfo>>() {
+                    @Override
+                    public void onComplete() {
+                        mLoadingDialog.dismissLoadingDialog();
+                    }
 
-                IdCorrelationLoginBean data = idCorrelationLoginBeanAResultInfo.data;
-                //持久化存储登录信息
-                String str = JSON.toJSONString(data);// java对象转为jsonString
-                BackfillSingle.backfillLoginData(UserInfoActivity.this, str);
+                    @Override
+                    public void onError(Throwable e) {
+                        mLoadingDialog.dismissLoadingDialog();
+                    }
 
-                EventBus.getDefault().post(new EventLoginState(EventLoginState.STATE_UPDATE_INFO, data.nick_name));
-                showToastShort("完善信息成功");
-                finish();
-            }
+                    @Override
+                    public void onNext(ResultInfo<UserInfo> userInfoResultInfo) {
+                        mLoadingDialog.dismissLoadingDialog();
+                        if (userInfoResultInfo != null) {
+                            if (userInfoResultInfo.code == HttpConfig.STATUS_OK && userInfoResultInfo.data != null) {
+                                UserInfo userInfo = UserInfoHelper.getUserInfo();
+                                UserInfo data = userInfoResultInfo.data;
+                                if (null != userInfo && TextUtils.isEmpty(userInfo.pwd)) {
+                                    data.pwd = userInfo.pwd;
+                                }
+                                UserInfoHelper.saveUserInfo(data);
 
-            @Override
-            protected void onNetError(Throwable e) {
 
-            }
+                                EventBus.getDefault().post(new EventLoginState(EventLoginState.STATE_UPDATE_INFO, data.nick_name));
+                                ToastUtils.showCenterToast("完善信息成功");
+                                finish();
+                            } else {
+                                ToastUtils.showCenterToast(userInfoResultInfo.message);
+                            }
+                        }
+                    }
 
-            @Override
-            protected void onNetCompleted() {
 
-            }
-        });
+                });
     }
 
     private boolean checkInput() {
         mStringEtName = mEtName.getText().toString().trim();
         if (TextUtils.isEmpty(mStringEtName)) {
-            showToastShort("请输入昵称");
+            ToastUtils.showCenterToast("请输入昵称");
             return false;
         }
         if (TextUtils.isEmpty(mBirthdayString)) {
-            showToastShort("请选择生日");
+            ToastUtils.showCenterToast("请选择生日");
             return false;
         }
         long toDayStamp = TimeUtils.dateToStamp(new Date(System.currentTimeMillis()));
         if (mBirthdayLong > toDayStamp) {
-            showToastShort("生日应小于今天");
+            ToastUtils.showCenterToast("生日应小于今天");
             return false;
         }
         return true;
@@ -290,7 +313,7 @@ public class UserInfoActivity extends BasePushPhotoActivity {
             mPvTime = new TimePickerBuilder(this, (date, v) -> {
                 mBirthdayString = TimeUtils.dateToYyMmDd(date);
                 mBirthdayLong = TimeUtils.dateToStamp(date);
-                mTvDate.setText(TimeUtils.dateToYyMmDdDivide(date));
+                mTvBirthday.setText(TimeUtils.dateToYyMmDdDivide(date));
             })
                     .setOutSideCancelable(false)//点击屏幕，点在控件外部范围时，是否取消显示
                     .setCancelText("取消")//取消按钮文字
@@ -323,16 +346,15 @@ public class UserInfoActivity extends BasePushPhotoActivity {
     @Override
     protected void onLubanFileSuccess(File file) {
 
-        new UploadPhotoEngin(file, new Callback() {
+        new UploadPhotoEngin(this, file) {
             @Override
-            public void onFailure(Call call, IOException e) {
-
-            }
-
-            @Override
-            public void onResponse(Call call, Response response) throws IOException {
-//                Log.d("mylog", "onFailure: " + response.body().string());
-                String string = response.body().string();
+            public void onSuccess(ResponseBody body) {
+                String string = null;
+                try {
+                    string = body.string();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
                 Log.d("securityhttp", "common/upload: response body " + string);
                 Log.d("mylog", "onResponse: response body " + string);
                 if (!TextUtils.isEmpty(string)) {
@@ -351,7 +373,12 @@ public class UserInfoActivity extends BasePushPhotoActivity {
                     }
                 }
             }
-        });
+
+            @Override
+            public void onFailure(Throwable e) {
+
+            }
+        };
 
 //        netSSSSData(s);
     }

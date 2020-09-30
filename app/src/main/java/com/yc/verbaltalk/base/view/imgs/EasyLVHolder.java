@@ -15,9 +15,7 @@ import android.widget.Checkable;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-/**
- * Created by mayn on 2019/5/7.
- */
+
 
 public class EasyLVHolder  implements ViewHelper.AbsListView<EasyLVHolder> {
 

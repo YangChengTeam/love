@@ -1,7 +1,7 @@
 package com.yc.verbaltalk.chat.bean;
 
 /**
- * Created by mayn on 2019/5/5.
+ * Created by sunshey on 2019/5/5.
  */
 
 public class BecomeVipPayBean {

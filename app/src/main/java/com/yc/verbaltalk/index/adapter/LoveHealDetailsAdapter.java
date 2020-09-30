@@ -18,6 +18,7 @@ import com.yc.verbaltalk.base.view.OpenAkpDialog;
 import java.util.ArrayList;
 import java.util.List;
 
+import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -46,7 +47,7 @@ public class LoveHealDetailsAdapter extends BaseMultiItemQuickAdapter<LoveHealDe
 
 
     @Override
-    protected void convert(BaseViewHolder helper, final LoveHealDetBean item) {
+    protected void convert(@NonNull BaseViewHolder helper, final LoveHealDetBean item) {
         if (null != item) {
             List<LoveHealDetDetailsBean> details = item.details;
             switch (item.type) {
@@ -61,7 +62,7 @@ public class LoveHealDetailsAdapter extends BaseMultiItemQuickAdapter<LoveHealDe
                         details = item.detail;
                     }
 
-                    final LoveHealDetAdapter loveHealDetAdapterNew = new LoveHealDetAdapter(details);
+                    final IndexVerbalDetAdapter loveHealDetAdapterNew = new IndexVerbalDetAdapter(details);
 
                     recyclerView.setAdapter(loveHealDetAdapterNew);
                     loveHealDetAdapterNew.setOnItemChildClickListener((adapter, view, position) -> {

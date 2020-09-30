@@ -5,16 +5,14 @@ import android.os.Bundle;
 import com.alibaba.fastjson.TypeReference;
 import com.umeng.analytics.MobclickAgent;
 import com.yc.verbaltalk.R;
+import com.yc.verbaltalk.base.activity.BaseSameActivity;
+import com.yc.verbaltalk.base.utils.CommonInfoHelper;
+import com.yc.verbaltalk.base.utils.UserInfoHelper;
+import com.yc.verbaltalk.base.view.LoadDialog;
 import com.yc.verbaltalk.chat.adapter.LoveHealingAdapter;
-import com.yc.verbaltalk.base.engine.MySubscriber;
-import com.yc.verbaltalk.chat.bean.AResultInfo;
 import com.yc.verbaltalk.chat.bean.LoveHealingBean;
 import com.yc.verbaltalk.model.constant.ConstantKey;
-import com.yc.verbaltalk.model.single.YcSingle;
-import com.yc.verbaltalk.base.activity.BaseSameActivity;
 import com.yc.verbaltalk.skill.ui.activity.LoveUpDownPhotoActivity;
-import com.yc.verbaltalk.base.view.LoadDialog;
-import com.yc.verbaltalk.base.utils.CommonInfoHelper;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -23,9 +21,12 @@ import androidx.recyclerview.widget.DefaultItemAnimator;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
+import io.reactivex.observers.DisposableObserver;
+import yc.com.rthttplibrary.bean.ResultInfo;
+import yc.com.rthttplibrary.config.HttpConfig;
 
 /**
- * Created by mayn on 2019/6/18.
+ * Created by sunshey on 2019/6/18.
  */
 
 //LoveHealingActivity
@@ -120,23 +121,10 @@ public class PracticeLoveActivity extends BaseSameActivity {
             mLoadingDialog = new LoadDialog(this);
             mLoadingDialog.showLoadingDialog();
         }
-        mLoveEngine.recommendLovewords(String.valueOf(YcSingle.getInstance().id), String.valueOf(PAGE_NUM), String.valueOf(PAGE_SIZE), "lovewords/recommend")
-                .subscribe(new MySubscriber<AResultInfo<List<LoveHealingBean>>>(mLoadingDialog) {
+        mLoveEngine.recommendLovewords(UserInfoHelper.getUid(), String.valueOf(PAGE_NUM), String.valueOf(PAGE_SIZE), "lovewords/recommend")
+                .subscribe(new DisposableObserver<ResultInfo<List<LoveHealingBean>>>() {
                     @Override
-                    protected void onNetNext(AResultInfo<List<LoveHealingBean>> listAResultInfo) {
-                        if (PAGE_NUM == 1 && !isRefesh) {
-                            mLoadingDialog.dismissLoadingDialog();
-                        }
-                        if (mSwipe.isRefreshing()) {
-                            mSwipe.setRefreshing(false);
-                        }
-
-                        List<LoveHealingBean> loveHealingBeanList = listAResultInfo.data;
-                        createNewData(loveHealingBeanList);
-                    }
-
-                    @Override
-                    protected void onNetError(Throwable e) {
+                    public void onComplete() {
                         if (PAGE_NUM == 1 && !isRefesh) {
                             mLoadingDialog.dismissLoadingDialog();
                         }
@@ -146,7 +134,7 @@ public class PracticeLoveActivity extends BaseSameActivity {
                     }
 
                     @Override
-                    protected void onNetCompleted() {
+                    public void onError(Throwable e) {
                         if (PAGE_NUM == 1 && !isRefesh) {
                             mLoadingDialog.dismissLoadingDialog();
                         }
@@ -154,6 +142,23 @@ public class PracticeLoveActivity extends BaseSameActivity {
                             mSwipe.setRefreshing(false);
                         }
                     }
+
+                    @Override
+                    public void onNext(ResultInfo<List<LoveHealingBean>> listAResultInfo) {
+                        if (PAGE_NUM == 1 && !isRefesh) {
+                            mLoadingDialog.dismissLoadingDialog();
+                        }
+                        if (mSwipe.isRefreshing()) {
+                            mSwipe.setRefreshing(false);
+                        }
+                        if (listAResultInfo!=null&&listAResultInfo.code== HttpConfig.STATUS_OK&&listAResultInfo.data!=null){
+                            List<LoveHealingBean> loveHealingBeanList = listAResultInfo.data;
+                            createNewData(loveHealingBeanList);
+                        }
+
+
+                    }
+
                 });
     }
 
@@ -173,7 +178,7 @@ public class PracticeLoveActivity extends BaseSameActivity {
 //            mCacheWorker.setCache("maint2_t2_lovewords_recommend", loveHealingBeans);
         if (PAGE_NUM == 1) {
             mAdapter.setNewData(loveHealingBeans);
-            CommonInfoHelper.setO(this,loveHealingBeans,"maint2_t2_lovewords_recommend");
+            CommonInfoHelper.setO(this, loveHealingBeans, "maint2_t2_lovewords_recommend");
         } else {
             mAdapter.addData(loveHealingBeans);
         }

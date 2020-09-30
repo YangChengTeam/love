@@ -26,6 +26,7 @@ import net.lucode.hackware.magicindicator.buildins.commonnavigator.titles.Simple
 import java.util.ArrayList;
 import java.util.List;
 
+import androidx.fragment.app.FragmentPagerAdapter;
 import androidx.viewpager.widget.ViewPager;
 
 public class CollectActivity extends BaseSameActivity {
@@ -51,10 +52,8 @@ public class CollectActivity extends BaseSameActivity {
     @Override
     public void onClick(View v) {
         super.onClick(v);
-        switch (v.getId()) {
-            case R.id.collect_pager_iv_back:
-                finish();
-                break;
+        if (v.getId() == R.id.collect_pager_iv_back) {
+            finish();
         }
     }
 
@@ -68,14 +67,14 @@ public class CollectActivity extends BaseSameActivity {
 
         initNavigator(titleLists);
 
-        CollectPagerAdapter collectPagerAdapter = new CollectPagerAdapter(getSupportFragmentManager(), titleLists);
+        CollectPagerAdapter collectPagerAdapter = new CollectPagerAdapter(getSupportFragmentManager(), FragmentPagerAdapter.BEHAVIOR_RESUME_ONLY_CURRENT_FRAGMENT, titleLists);
         mViewPager.setAdapter(collectPagerAdapter);
     }
 
     private void initNavigator(final List<String> titleList) {
         CommonNavigator commonNavigator = new CommonNavigator(this);
 //        commonNavigator.setScrollPivotX(0.65f);
-        commonNavigator.setAdjustMode(true);
+//        commonNavigator.setAdjustMode(true);
         CommonNavigatorAdapter navigatorAdapter = new CommonNavigatorAdapter() {
 
             @Override

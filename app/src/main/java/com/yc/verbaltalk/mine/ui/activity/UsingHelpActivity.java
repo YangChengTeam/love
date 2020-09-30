@@ -11,6 +11,7 @@ import net.lucode.hackware.magicindicator.MagicIndicator;
 import net.lucode.hackware.magicindicator.ViewPagerHelper;
 import net.lucode.hackware.magicindicator.buildins.circlenavigator.CircleNavigator;
 
+import androidx.fragment.app.FragmentPagerAdapter;
 import androidx.viewpager.widget.ViewPager;
 
 public class UsingHelpActivity extends BaseSameActivity {
@@ -35,17 +36,6 @@ public class UsingHelpActivity extends BaseSameActivity {
 //        RelativeLayout rlCon = findViewById(R.love_id.using_help_rl_con);
 
 
-        /*if (!isTransparency) {
-            View viewBar = findViewById(R.love_id.activity_base_same_view_bar);
-            TextView mTvTitle = findViewById(R.love_id.activity_base_same_tv_title);
-            mTvTitle.setText("使用帮助");
-            setStateBarHeight(viewBar);
-            rlCon.setBackgroundColor(getResources().getColor(R.color.white));
-        } else {
-            RelativeLayout rlTitle = findViewById(R.love_id.using_help_rl_title);
-            rlTitle.setVisibility(View.GONE);
-            rlCon.setBackgroundColor(getResources().getColor(R.color.transparency_gray));
-        }*/
 
         viewPager = findViewById(R.id.using_help_viewpager);
 //        llVpIndicate = findViewById(R.love_id.using_help_ll_vp_indicate);
@@ -60,25 +50,20 @@ public class UsingHelpActivity extends BaseSameActivity {
         circleNavigator.setFollowTouch(false);
         circleNavigator.setCircleCount(imageResId.length);
         circleNavigator.setCircleColor(Color.RED);
-        circleNavigator.setCircleClickListener(new CircleNavigator.OnCircleClickListener() {
-            @Override
-            public void onClick(int index) {
-                viewPager.setCurrentItem(index);
-            }
-        });
+        circleNavigator.setCircleClickListener(index -> viewPager.setCurrentItem(index));
         magicIndicator.setNavigator(circleNavigator);
         ViewPagerHelper.bind(magicIndicator, viewPager);
     }
 
     private void initViewPager() {
-        UsingHelpPagerAdapter usingHelpPagerAdapter = new UsingHelpPagerAdapter(getSupportFragmentManager(), imageResId);
+        UsingHelpPagerAdapter usingHelpPagerAdapter = new UsingHelpPagerAdapter(getSupportFragmentManager(), FragmentPagerAdapter.BEHAVIOR_RESUME_ONLY_CURRENT_FRAGMENT, imageResId);
         viewPager.setAdapter(usingHelpPagerAdapter);
     }
 
 
     @Override
     protected String offerActivityTitle() {
-        if(isTransparency){
+        if (isTransparency) {
             return "";
         }
         return "使用帮助";

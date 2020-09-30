@@ -1,38 +1,84 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:background="?android:attr/selectableItemBackground"
     android:gravity="center_vertical"
     android:orientation="horizontal">
 
-    <ImageView
+
+    <com.video.player.lib.view.VideoRoundImageView
         android:id="@+id/item_main_to_pay_vip_iv_icon"
+        android:layout_width="100dp"
+        android:layout_height="72dp"
+        android:layout_marginStart="12dp"
+        android:layout_marginTop="8dp"
+        android:layout_marginEnd="15dp"
+        android:layout_marginBottom="8dp"
+        android:scaleType="centerCrop"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toLeftOf="@id/item_main_to_pay_vip_tv_name"
+        app:layout_constraintTop_toTopOf="parent"
+        app:video_borderRadius="8dp"
+        app:video_type="video_round" />
+
+    <com.video.player.lib.view.VideoRoundImageView
+        android:id="@+id/roundCornerImg_masking"
+        android:layout_width="100dp"
+        android:layout_height="72dp"
+        android:src="@drawable/item_masking_bg"
+        app:layout_constraintLeft_toLeftOf="@id/item_main_to_pay_vip_iv_icon"
+        app:layout_constraintTop_toTopOf="@id/item_main_to_pay_vip_iv_icon"
+        app:video_borderRadius="8dp"
+        app:video_type="video_round" />
+
+    <ImageView
+        android:id="@+id/item_main_vip_lock"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:paddingLeft="12dp"
-        android:paddingTop="16dp"
-        android:paddingRight="12dp"
-        android:paddingBottom="16dp"
-        android:src="@mipmap/icon_case_suo" />
+        android:src="@mipmap/icon_case_suo"
+        android:tint="@color/white"
+        app:layout_constraintBottom_toBottomOf="@id/item_main_to_pay_vip_iv_icon"
+        app:layout_constraintLeft_toLeftOf="@id/item_main_to_pay_vip_iv_icon"
+        app:layout_constraintRight_toRightOf="@id/item_main_to_pay_vip_iv_icon"
+        app:layout_constraintTop_toTopOf="@id/item_main_to_pay_vip_iv_icon" />
 
 
     <TextView
         android:id="@+id/item_main_to_pay_vip_tv_name"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
+        android:layout_marginEnd="12dp"
         android:layout_weight="10"
         android:ellipsize="end"
         android:maxLines="2"
         android:text="中文中文中文中文中文中文中文中文中文中文中文中文中文中文中文中文中文中文"
-        android:textColor="@color/black"
-        android:textSize="@dimen/size_16" />
+        android:textColor="@color/black_0a0a0a"
+        android:textSize="@dimen/size_16"
+        app:layout_constraintLeft_toRightOf="@id/item_main_to_pay_vip_iv_icon"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toTopOf="@id/item_main_to_pay_vip_iv_icon" />
+
+    <TextView
+        android:id="@+id/tv_cheats_count"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textColor="#ff8e8e8e"
+        android:textSize="10sp"
+        app:layout_constraintBottom_toBottomOf="@id/item_main_to_pay_vip_iv_icon"
+        app:layout_constraintLeft_toLeftOf="@id/item_main_to_pay_vip_tv_name"
+        tools:text="122人阅读" />
 
     <ImageView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:padding="12dp"
-        android:src="@mipmap/main_icon_arr_rig_gray" />
+        android:src="@mipmap/main_icon_arr_rig_gray"
+        android:visibility="gone"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
 
-</LinearLayout>
+</androidx.constraintlayout.widget.ConstraintLayout>

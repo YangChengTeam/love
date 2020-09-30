@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.Context;
 import android.os.Bundle;
+import android.text.TextUtils;
 import android.util.Log;
 import android.view.View;
 import android.widget.TextView;
@@ -37,6 +38,15 @@ public class LoadDialog extends AlertDialog {
     }
 
     public void showLoadingDialog() {
+        showLoadingDialog("");
+    }
+
+    public void showLoadingDialog(String mess) {
+        if (!TextUtils.isEmpty(mess) && null != textView) {
+
+            textView.setText(mess);
+            textView.setVisibility(View.VISIBLE);
+        }
         try {
             Activity activity = (Activity) context;
             if (!activity.isFinishing()) {

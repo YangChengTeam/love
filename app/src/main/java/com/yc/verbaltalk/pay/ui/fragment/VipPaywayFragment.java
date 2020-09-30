@@ -20,6 +20,8 @@ import com.umeng.analytics.MobclickAgent;
 import com.yc.verbaltalk.R;
 import com.yc.verbaltalk.base.activity.BaseActivity;
 
+import androidx.annotation.NonNull;
+
 /**
  * Created by suns  on 2019/11/18 18:04.
  */
@@ -41,7 +43,7 @@ public class VipPaywayFragment extends BottomSheetDialogFragment {
     private String payWayName = "alipay";
 
     @Override
-    public void onAttach(Context context) {
+    public void onAttach(@NonNull Context context) {
         super.onAttach(context);
         this.mContext = (BaseActivity) context;
     }

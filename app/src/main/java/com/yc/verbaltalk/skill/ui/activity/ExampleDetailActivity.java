@@ -16,18 +16,20 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.music.player.lib.util.ToastUtils;
 import com.yc.verbaltalk.R;
-import com.yc.verbaltalk.base.activity.MainActivity;
-import com.yc.verbaltalk.base.engine.MySubscriber;
-import com.yc.verbaltalk.chat.bean.AResultInfo;
-import com.yc.verbaltalk.chat.bean.LoveByStagesDetailsBean;
-import com.yc.verbaltalk.model.single.YcSingle;
-import com.yc.verbaltalk.model.util.SizeUtils;
 import com.yc.verbaltalk.base.activity.BaseSameActivity;
+import com.yc.verbaltalk.base.activity.MainActivity;
 import com.yc.verbaltalk.base.utils.StatusBarUtil;
+import com.yc.verbaltalk.base.utils.UserInfoHelper;
+import com.yc.verbaltalk.chat.bean.LoveByStagesDetailsBean;
+import com.yc.verbaltalk.model.util.SizeUtils;
 
 import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.core.content.ContextCompat;
+import io.reactivex.observers.DisposableObserver;
+import yc.com.rthttplibrary.bean.ResultInfo;
+import yc.com.rthttplibrary.config.HttpConfig;
 
 /**
  * 实例详情页 Maint2 click to me
@@ -120,19 +122,17 @@ public class ExampleDetailActivity extends BaseSameActivity {
     @Override
     public void onClick(View v) {
         super.onClick(v);
-        int id = YcSingle.getInstance().id;
+
         switch (v.getId()) {
             case R.id.example_detail_iv_like:
-                netExample(mIsDigArticle);
+                if (UserInfoHelper.isLogin(this))
+                    netExample(mIsDigArticle);
                 break;
             case R.id.activity_base_same_tv_sub:
             case R.id.ll_collect:
 
-                if (id <= 0) {
-                    showToLoginDialog();
-                    return;
-                }
-                netCollect(mIsCollectLovewords, id);
+                if (UserInfoHelper.isLogin(this))
+                    netCollect(mIsCollectLovewords, UserInfoHelper.getUid());
                 break;
             case R.id.ll_get_wechat:
                 showToWxServiceDialog("shizhan", null);
@@ -142,13 +142,9 @@ public class ExampleDetailActivity extends BaseSameActivity {
     }
 
     private void netExample(boolean isDigArticle) {
-        int id = YcSingle.getInstance().id;
-        if (id <= 0) {
-            showToLoginDialog();
-            return;
-        }
+
         if (mDetailId <= 0) {
-            showToastShort("实例Id为 " + mDetailId);
+
             return;
         }
         if (isDigArticle) {
@@ -157,23 +153,31 @@ public class ExampleDetailActivity extends BaseSameActivity {
             mUrl = "Example/dig";
         }
         mLoadingDialog.showLoadingDialog();
-        mLoveEngine.collectExample(String.valueOf(id), String.valueOf(mDetailId), mUrl).subscribe(new MySubscriber<AResultInfo<String>>(mLoadingDialog) {
-            @Override
-            protected void onNetNext(AResultInfo<String> stringAResultInfo) {
-                String msg = stringAResultInfo.msg;
-                showToastShort(msg);
-                mIsDigArticle = !mIsDigArticle;
-                changLikeStaty(mIsDigArticle);
-            }
+        mLoveEngine.collectExample(UserInfoHelper.getUid(), String.valueOf(mDetailId), mUrl)
+                .subscribe(new DisposableObserver<ResultInfo<String>>() {
+                    @Override
+                    public void onComplete() {
+                        mLoadingDialog.dismissLoadingDialog();
+                    }
 
-            @Override
-            protected void onNetError(Throwable e) {
-            }
+                    @Override
+                    public void onError(Throwable e) {
+                        mLoadingDialog.dismissLoadingDialog();
+                    }
 
-            @Override
-            protected void onNetCompleted() {
-            }
-        });
+                    @Override
+                    public void onNext(ResultInfo<String> stringAResultInfo) {
+                        mLoadingDialog.dismissLoadingDialog();
+                        if (stringAResultInfo != null && stringAResultInfo.code == HttpConfig.STATUS_OK) {
+                            String msg = stringAResultInfo.message;
+                            ToastUtils.showCenterToast(msg);
+                            mIsDigArticle = !mIsDigArticle;
+                            changLikeStaty(mIsDigArticle);
+                        }
+                    }
+
+
+                });
     }
 
     private void initWebView(String data) {
@@ -282,14 +286,27 @@ public class ExampleDetailActivity extends BaseSameActivity {
 
     private void netData() {
         mLoadingDialog.showLoadingDialog();
-        mLoveEngine.detailExample(String.valueOf(mId), String.valueOf(YcSingle.getInstance().id), "example/detail").subscribe(new MySubscriber<AResultInfo<LoveByStagesDetailsBean>>(mLoadingDialog) {
+        mLoveEngine.detailExample(String.valueOf(mId), UserInfoHelper.getUid())
+                .subscribe(new DisposableObserver<ResultInfo<LoveByStagesDetailsBean>>() {
 
-            @Override
-            protected void onNetNext(AResultInfo<LoveByStagesDetailsBean> listAResultInfo) {
-                LoveByStagesDetailsBean loveByStagesDetailsBean = listAResultInfo.data;
-                String postContent = loveByStagesDetailsBean.post_content;
-                initWebView(postContent);
-                int collectNum = loveByStagesDetailsBean.collect_num;
+                    @Override
+                    public void onComplete() {
+                        mLoadingDialog.dismissLoadingDialog();
+                    }
+
+                    @Override
+                    public void onError(Throwable e) {
+                        mLoadingDialog.dismissLoadingDialog();
+                    }
+
+                    @Override
+                    public void onNext(ResultInfo<LoveByStagesDetailsBean> loveByStagesDetailsBeanAResultInfo) {
+                        mLoadingDialog.dismissLoadingDialog();
+                        if (loveByStagesDetailsBeanAResultInfo != null && loveByStagesDetailsBeanAResultInfo.code == HttpConfig.STATUS_OK && loveByStagesDetailsBeanAResultInfo.data != null) {
+                            LoveByStagesDetailsBean loveByStagesDetailsBean = loveByStagesDetailsBeanAResultInfo.data;
+                            String postContent = loveByStagesDetailsBean.post_content;
+                            initWebView(postContent);
+                            int collectNum = loveByStagesDetailsBean.collect_num;
 //                String collEctResult = String.valueOf(collectNum);
 //                if (collectNum > 99) {
 //                    collEctResult = "99";
@@ -297,40 +314,31 @@ public class ExampleDetailActivity extends BaseSameActivity {
 
 
 //                tvCollect.setText(collEctResult);
-                mDetailId = loveByStagesDetailsBean.id;
+                            mDetailId = loveByStagesDetailsBean.id;
 
-                int isCollect = loveByStagesDetailsBean.is_collect;
-                if (isCollect > 0) { //是否收藏
-                    mIsCollectLovewords = true;
-                }
+                            int isCollect = loveByStagesDetailsBean.is_collect;
+                            if (isCollect > 0) { //是否收藏
+                                mIsCollectLovewords = true;
+                            }
 
-                changSubImg(collectNum, false);
+                            changSubImg(collectNum, false);
 
-                //点赞
-                int isLike = loveByStagesDetailsBean.is_like;
-                switch (isLike) {
-                    case 0:
-                        break;
-                    case 1:
-                        mIsDigArticle = true;
-                        break;
-                }
-                changLikeStaty(mIsDigArticle);
-            }
-
-            @Override
-            protected void onNetError(Throwable e) {
-
-            }
-
-            @Override
-            protected void onNetCompleted() {
-
-            }
-        });
+                            //点赞
+                            int isLike = loveByStagesDetailsBean.is_like;
+                            switch (isLike) {
+                                case 0:
+                                    break;
+                                case 1:
+                                    mIsDigArticle = true;
+                                    break;
+                            }
+                            changLikeStaty(mIsDigArticle);
+                        }
+                    }
+                });
     }
 
-    private void netCollect(boolean isCollect, int userId) {
+    private void netCollect(boolean isCollect, String userId) {
         mLoadingDialog.showLoadingDialog();
         String url = "";
         if (isCollect) {
@@ -338,25 +346,30 @@ public class ExampleDetailActivity extends BaseSameActivity {
         } else {
             url = "Example/collect";
         }
-        mLoveEngine.collectExample(String.valueOf(userId), String.valueOf(mDetailId), url)
-                .subscribe(new MySubscriber<AResultInfo<String>>(mLoadingDialog) {
+        mLoveEngine.collectExample(userId, String.valueOf(mDetailId), url)
+                .subscribe(new DisposableObserver<ResultInfo<String>>() {
                     @Override
-                    protected void onNetNext(AResultInfo<String> listAResultInfo) {
-                        String msg = listAResultInfo.msg;
-                        showToastShort(msg);
-                        mIsCollectLovewords = !mIsCollectLovewords;
-                        changSubImg(-1, true);
+                    public void onComplete() {
+                        mLoadingDialog.dismissLoadingDialog();
                     }
 
                     @Override
-                    protected void onNetError(Throwable e) {
-
+                    public void onError(Throwable e) {
+                        mLoadingDialog.dismissLoadingDialog();
                     }
 
                     @Override
-                    protected void onNetCompleted() {
-
+                    public void onNext(ResultInfo<String> stringAResultInfo) {
+                        mLoadingDialog.dismissLoadingDialog();
+                        if (stringAResultInfo != null && stringAResultInfo.code == HttpConfig.STATUS_OK) {
+                            String msg = stringAResultInfo.message;
+                            ToastUtils.showCenterToast(msg);
+                            mIsCollectLovewords = !mIsCollectLovewords;
+                            changSubImg(-1, true);
+                        }
                     }
+
+
                 });
     }
 

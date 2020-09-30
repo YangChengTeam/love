@@ -1,0 +1,99 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="@drawable/shape_white_circular">
+
+    <TextView
+        android:id="@+id/tv_top_title"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="20dp"
+        android:text="隐私政策"
+        android:textColor="@color/black_333333"
+        android:textSize="@dimen/size_18"
+        android:textStyle="bold"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+        android:id="@+id/tv_desc"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="15dp"
+        android:layout_marginTop="20dp"
+        android:layout_marginRight="15dp"
+        android:lineSpacingExtra="5dp"
+        android:text="@string/privacy_desc"
+        android:textColor="@color/gray_666"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/tv_top_title" />
+
+    <TextView
+        android:id="@+id/tv_btn_detail"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="15dp"
+        android:text="点击查看"
+        app:layout_constraintLeft_toLeftOf="@id/tv_desc"
+        app:layout_constraintTop_toBottomOf="@id/tv_desc" />
+
+    <TextView
+        android:id="@+id/tv_service_clause"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="《服务条款》"
+        android:textColor="#33A9FF"
+        app:layout_constraintLeft_toRightOf="@id/tv_btn_detail"
+        app:layout_constraintTop_toTopOf="@id/tv_btn_detail" />
+
+    <TextView
+        android:id="@+id/tv_privacy"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="《用户协议》"
+        android:textColor="#33A9FF"
+        app:layout_constraintLeft_toRightOf="@id/tv_service_clause"
+        app:layout_constraintTop_toTopOf="@id/tv_btn_detail" />
+
+    <LinearLayout
+        android:layout_width="0dp"
+        android:layout_height="40dp"
+        android:layout_marginLeft="20dp"
+        android:layout_marginTop="25dp"
+        android:layout_marginRight="20dp"
+        android:layout_marginBottom="30dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/tv_btn_detail">
+
+        <TextView
+            android:id="@+id/tv_not_agree"
+            android:layout_width="0dp"
+            android:layout_height="40dp"
+            android:layout_marginEnd="8dp"
+            android:layout_weight="1"
+            android:background="@drawable/privacy_policy_btn_gray_bg"
+            android:gravity="center"
+            android:text="不同意"
+            android:textColor="@color/white" />
+
+
+        <TextView
+            android:id="@+id/tv_agree"
+            android:layout_width="0dp"
+            android:layout_height="40dp"
+            android:layout_marginStart="8dp"
+            android:layout_weight="1"
+            android:background="@drawable/privacy_policy_btn_bg"
+            android:gravity="center"
+            android:text="同意"
+            android:textColor="@color/white" />
+
+
+    </LinearLayout>
+</androidx.constraintlayout.widget.ConstraintLayout>

@@ -1,7 +1,7 @@
 package com.yc.verbaltalk.chat.bean.confession;
 
 /**
- * Created by mayn on 2019/6/5.
+ * Created by sunshey on 2019/6/5.
  */
 
 public class ImageCreateBean {

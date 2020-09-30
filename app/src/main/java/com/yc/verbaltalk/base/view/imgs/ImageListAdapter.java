@@ -8,9 +8,7 @@ import com.yc.verbaltalk.R;
 
 import java.util.List;
 
-/**
- * Created by mayn on 2019/5/7.
- */
+
 
 public class ImageListAdapter   extends EasyRVAdapter<Image> {
 

@@ -16,9 +16,6 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
-import com.kk.securityhttp.domain.ResultInfo;
-import com.kk.securityhttp.net.contains.HttpConfig;
-import com.kk.utils.ScreenUtil;
 import com.music.player.lib.bean.MusicInfo;
 import com.music.player.lib.bean.MusicInfoWrapper;
 import com.music.player.lib.constants.Constants;
@@ -28,18 +25,21 @@ import com.music.player.lib.mode.PlayerStatus;
 import com.music.player.lib.view.MusicPlayerController;
 import com.umeng.analytics.MobclickAgent;
 import com.yc.verbaltalk.R;
-import com.yc.verbaltalk.base.engine.LoveEngine;
-import com.yc.verbaltalk.model.single.YcSingle;
-import com.yc.verbaltalk.model.util.SizeUtils;
 import com.yc.verbaltalk.base.activity.BaseSameActivity;
-import com.yc.verbaltalk.base.view.MyScrollView;
+import com.yc.verbaltalk.base.engine.LoveEngine;
 import com.yc.verbaltalk.base.utils.StatusBarUtil;
+import com.yc.verbaltalk.base.utils.UserInfoHelper;
+import com.yc.verbaltalk.base.view.MyScrollView;
+import com.yc.verbaltalk.model.util.SizeUtils;
 
 import java.util.List;
 
 import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.core.content.ContextCompat;
-import rx.Subscriber;
+import io.reactivex.observers.DisposableObserver;
+import yc.com.rthttplibrary.bean.ResultInfo;
+import yc.com.rthttplibrary.config.HttpConfig;
+import yc.com.rthttplibrary.util.ScreenUtil;
 
 
 /**
@@ -207,10 +207,11 @@ public class LoveAudioDetailActivity extends BaseSameActivity implements OnUserP
     public void onClick(View view) {
         switch (view.getId()) {
             case R.id.ll_get_wechat:
-                showToWxServiceDialog("audio",null);
+                showToWxServiceDialog("audio", null);
                 break;
             case R.id.ll_collect:
-                collectAudio(musicInfo);
+                if (UserInfoHelper.isLogin(this))
+                    collectAudio(musicInfo);
                 break;
         }
     }
@@ -284,9 +285,9 @@ public class LoveAudioDetailActivity extends BaseSameActivity implements OnUserP
 
 
     private void randomSpaInfo(String type_id) {
-        loveEngin.randomSpaInfo(type_id).subscribe(new Subscriber<ResultInfo<List<MusicInfo>>>() {
+        loveEngin.randomSpaInfo(type_id).subscribe(new DisposableObserver<ResultInfo<List<MusicInfo>>>() {
             @Override
-            public void onCompleted() {
+            public void onComplete() {
 
             }
 
@@ -314,14 +315,10 @@ public class LoveAudioDetailActivity extends BaseSameActivity implements OnUserP
     }
 
     private void collectAudio(final MusicInfo musicInfo) {
-        int id = YcSingle.getInstance().id;
-        if (id <= 0) {
-            showToLoginDialog();
-            return;
-        }
-        loveEngin.collectAudio(id + "", musicInfo.getId()).subscribe(new Subscriber<ResultInfo<String>>() {
+
+        loveEngin.collectAudio(UserInfoHelper.getUid(), musicInfo.getId()).subscribe(new DisposableObserver<ResultInfo<String>>() {
             @Override
-            public void onCompleted() {
+            public void onComplete() {
 
             }
 
@@ -359,9 +356,9 @@ public class LoveAudioDetailActivity extends BaseSameActivity implements OnUserP
     }
 
     private void setPlayCont(String musicId) {
-        loveEngin.audioPlay(musicId).subscribe(new Subscriber<ResultInfo<String>>() {
+        loveEngin.audioPlay(musicId).subscribe(new DisposableObserver<ResultInfo<String>>() {
             @Override
-            public void onCompleted() {
+            public void onComplete() {
 
             }
 
@@ -394,15 +391,11 @@ public class LoveAudioDetailActivity extends BaseSameActivity implements OnUserP
 
 
     public void getData() {
-        int id = YcSingle.getInstance().id;
-        if (id <= 0) {
-            showToLoginDialog();
-            return;
-        }
 
-        loveEngin.getMusicDetailInfo(id + "", typeId).subscribe(new Subscriber<ResultInfo<MusicInfoWrapper>>() {
+
+        loveEngin.getMusicDetailInfo(UserInfoHelper.getUid(), typeId).subscribe(new DisposableObserver<ResultInfo<MusicInfoWrapper>>() {
             @Override
-            public void onCompleted() {
+            public void onComplete() {
 
             }
 

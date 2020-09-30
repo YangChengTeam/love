@@ -13,7 +13,7 @@ import com.bumptech.glide.Glide;
 import com.yc.verbaltalk.R;
 
 /**
- * Created by mayn on 2019/6/6.
+ * Created by sunshey on 2019/6/6.
  */
 
 public class ShareShowImgDialog extends android.app.AlertDialog implements View.OnClickListener {

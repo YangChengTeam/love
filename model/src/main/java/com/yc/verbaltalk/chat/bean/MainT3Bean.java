@@ -7,7 +7,7 @@ import com.chad.library.adapter.base.entity.MultiItemEntity;
 import java.io.Serializable;
 
 /**
- * Created by mayn on 2019/4/30.
+ * Created by sunshey on 2019/4/30.
  */
 
 public class MainT3Bean implements MultiItemEntity, Serializable {

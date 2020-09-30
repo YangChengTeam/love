@@ -26,10 +26,11 @@ import net.lucode.hackware.magicindicator.buildins.commonnavigator.titles.Simple
 import java.util.Arrays;
 import java.util.List;
 
+import androidx.fragment.app.FragmentPagerAdapter;
 import androidx.viewpager.widget.ViewPager;
 
 /**
- * Created by mayn on 2019/6/17.
+ * Created by sunshey on 2019/6/17.
  * 秘技主界面
  */
 
@@ -63,7 +64,7 @@ public class SkillFragment extends BaseMainFragment {
 
         initNavigator(titleList);
 
-        SkillPagerAdapter mainT2NewPagerAdapter = new SkillPagerAdapter(getChildFragmentManager(), titleList);
+        SkillPagerAdapter mainT2NewPagerAdapter = new SkillPagerAdapter(getChildFragmentManager(), FragmentPagerAdapter.BEHAVIOR_RESUME_ONLY_CURRENT_FRAGMENT, titleList);
         mViewPager.setAdapter(mainT2NewPagerAdapter);
     }
 

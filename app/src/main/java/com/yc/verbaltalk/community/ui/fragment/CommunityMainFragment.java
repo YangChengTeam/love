@@ -11,7 +11,7 @@ import android.view.animation.DecelerateInterpolator;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 
-import com.kk.utils.ScreenUtil;
+
 import com.umeng.analytics.MobclickAgent;
 import com.yc.verbaltalk.R;
 import com.yc.verbaltalk.community.adapter.CommunityMainPagerAdapter;
@@ -33,7 +33,9 @@ import net.lucode.hackware.magicindicator.buildins.commonnavigator.titles.Simple
 import java.util.Arrays;
 import java.util.List;
 
+import androidx.fragment.app.FragmentPagerAdapter;
 import androidx.viewpager.widget.ViewPager;
+import yc.com.rthttplibrary.util.ScreenUtil;
 
 /**
  * Created by suns  on 2019/8/29 09:51.
@@ -90,7 +92,7 @@ public class CommunityMainFragment extends BaseMainFragment implements View.OnCl
 
         initNavigator(titleList);
 
-        CommunityMainPagerAdapter communityMainAdapter = new CommunityMainPagerAdapter(getChildFragmentManager(), titleList);
+        CommunityMainPagerAdapter communityMainAdapter = new CommunityMainPagerAdapter(getChildFragmentManager(), FragmentPagerAdapter.BEHAVIOR_RESUME_ONLY_CURRENT_FRAGMENT, titleList);
         mViewPager.setAdapter(communityMainAdapter);
         mViewPager.setOffscreenPageLimit(2);
 //        mViewPager.setCurrentItem(1);
@@ -109,7 +111,6 @@ public class CommunityMainFragment extends BaseMainFragment implements View.OnCl
 
             @Override
             public IPagerTitleView getTitleView(Context context, final int index) {
-                Log.e(TAG, "getTitleView: " + index);
                 SimplePagerTitleView simplePagerTitleView = new ColorFlipPagerTitleView(context);
                 simplePagerTitleView.setText(titleList.get(index));
                 simplePagerTitleView.setTextSize(16);

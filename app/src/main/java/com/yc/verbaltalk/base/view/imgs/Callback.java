@@ -3,9 +3,7 @@ package com.yc.verbaltalk.base.view.imgs;
 import java.io.File;
 import java.io.Serializable;
 
-/**
- * Created by mayn on 2019/5/7.
- */
+
 
 public interface Callback extends Serializable {
 

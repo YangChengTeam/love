@@ -4,24 +4,24 @@ import android.content.Intent;
 import android.os.Handler;
 import android.view.View;
 
-import com.kk.securityhttp.domain.ResultInfo;
-import com.kk.securityhttp.net.contains.HttpConfig;
 import com.music.player.lib.bean.MusicInfo;
 import com.music.player.lib.bean.MusicInfoWrapper;
 import com.yc.verbaltalk.R;
-import com.yc.verbaltalk.mine.adapter.AudioMainAdapter;
 import com.yc.verbaltalk.base.engine.LoveEngine;
-import com.yc.verbaltalk.model.single.YcSingle;
-import com.yc.verbaltalk.model.util.SizeUtils;
-import com.yc.verbaltalk.chat.ui.activity.LoveAudioDetailActivity;
-import com.yc.verbaltalk.base.view.LoadDialog;
 import com.yc.verbaltalk.base.utils.ItemDecorationHelper;
+import com.yc.verbaltalk.base.utils.UserInfoHelper;
+import com.yc.verbaltalk.base.view.LoadDialog;
+import com.yc.verbaltalk.chat.ui.activity.LoveAudioDetailActivity;
+import com.yc.verbaltalk.mine.adapter.AudioMainAdapter;
+import com.yc.verbaltalk.model.util.SizeUtils;
 
 import java.util.List;
 
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
-import rx.Subscriber;
+import io.reactivex.observers.DisposableObserver;
+import yc.com.rthttplibrary.bean.ResultInfo;
+import yc.com.rthttplibrary.config.HttpConfig;
 
 /**
  * Created by wanglin  on 2019/7/17 17:56.
@@ -93,15 +93,11 @@ public class CollectAudioListFragment extends BaseCollectFragment {
     }
 
     public void getData() {
-        final int id = YcSingle.getInstance().id;
-        if (id <= 0) {
-            mCollectActivity.showToLoginDialog();
-            return;
-        }
+
         mLoadingDialog.showLoadingDialog();
-        handler.postDelayed(() -> mLoveEngin.getCollectAudioList(id + "", page, pageSize).subscribe(new Subscriber<ResultInfo<MusicInfoWrapper>>() {
+        handler.postDelayed(() -> mLoveEngin.getCollectAudioList(UserInfoHelper.getUid() + "", page, pageSize).subscribe(new DisposableObserver<ResultInfo<MusicInfoWrapper>>() {
             @Override
-            public void onCompleted() {
+            public void onComplete() {
 
             }
 

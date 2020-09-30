@@ -7,7 +7,7 @@ import android.view.ViewConfiguration;
 import android.widget.ScrollView;
 
 /**
- * Created by mayn on 2019/5/10.
+ * Created by sunshey on 2019/5/10.
  */
 
 public class NewsScrollView  extends ScrollView {

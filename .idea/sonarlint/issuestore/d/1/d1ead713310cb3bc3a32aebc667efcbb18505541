@@ -1,0 +1,40 @@
+
+c
+java:S1192N"HDefine a constant instead of duplicating this literal "keyword" 4 times.(µÛĞŒùÿÿÿÿ
+
+java:S1186ÿ"€Add a nested comment explaining why this method is empty, throw an UnsupportedOperationException or complete the implementation.(¸ÜÒÄøÿÿÿÿ
+I
+java:S1135³"2Complete the task associated to this TODO comment.(¶õòÔ
+W	java:S125í"<This block of commented-out lines of code should be removed.(„¦­áÿÿÿÿÿ
+u
+java:S3012‹"YUse "Arrays.copyOf", "Arrays.asList", "Collections.addAll" or "System.arraycopy" instead.(ÿ¾Ìœùÿÿÿÿ
+?
+java:S1604Û"(Make this anonymous inner class a lambda(î¶³À
+R	java:S125•"<This block of commented-out lines of code should be removed.(§©¾
+C
+java:S1602—",Remove useless curly braces around statement(´±ŒÎ
+
+java:S1186ú"€Add a nested comment explaining why this method is empty, throw an UnsupportedOperationException or complete the implementation.(åí›®ÿÿÿÿÿ
+N
+java:S1874î"0Remove this use of "getColor"; it is deprecated.(¤Í˜8ûÈõëŠ.
+8	java:S131ô""Add a default case to this switch.(Í´êá
+p
+java:S1104?"[Make shareTextString a static final constant or non-public and provide accessors if needed.(±‘A
+P	java:S125}"<This block of commented-out lines of code should be removed.(…œş}
+N
+java:S1874¡"0Remove this use of "getColor"; it is deprecated.(Æö´Ó8ûÈõëŠ.
+X	java:S110="=This class has 12 parents which is greater than 5 authorized.(ßŒ’b8ûÈõëŠ.
+N
+java:S1874Ú"0Remove this use of "getColor"; it is deprecated.(€¶½È8ûÈõëŠ.
+W	java:S125ç"<This block of commented-out lines of code should be removed.(’Âëıÿÿÿÿ
+b
+java:S1301ô"KReplace this "switch" statement by "if" statements to increase readability.(Í´êá
+=	java:S131ª""Add a default case to this switch.(×“¾ñùÿÿÿÿ
+W	java:S125‘"<This block of commented-out lines of code should be removed.(¤Õ¢üÿÿÿÿ
+{
+java:S1149‡"_Replace the synchronized class "StringBuffer" by an unsynchronized one such as "StringBuilder".(ì­ŠÜúÿÿÿÿ
+Q	java:S125D"<This block of commented-out lines of code should be removed.(ñ¢
+W	java:S125™"<This block of commented-out lines of code should be removed.(ñíï—ûÿÿÿÿ
+˜
+java:S1186„"€Add a nested comment explaining why this method is empty, throw an UnsupportedOperationException or complete the implementation.(ÛØ²Ş
+R	java:S125»"<This block of commented-out lines of code should be removed.(«÷äî

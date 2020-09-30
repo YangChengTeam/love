@@ -11,12 +11,15 @@ import android.view.View;
 import android.widget.EditText;
 import android.widget.TextView;
 
+import com.music.player.lib.util.ToastUtils;
 import com.yc.verbaltalk.R;
-import com.yc.verbaltalk.base.engine.MySubscriber;
-import com.yc.verbaltalk.chat.bean.AResultInfo;
-import com.yc.verbaltalk.base.engine.IdCorrelationEngin;
-import com.yc.verbaltalk.model.single.YcSingle;
 import com.yc.verbaltalk.base.activity.BaseSameActivity;
+import com.yc.verbaltalk.base.engine.UserInfoEngine;
+import com.yc.verbaltalk.base.utils.UserInfoHelper;
+
+import io.reactivex.observers.DisposableObserver;
+import yc.com.rthttplibrary.bean.ResultInfo;
+import yc.com.rthttplibrary.config.HttpConfig;
 
 public class FeedbackActivity extends BaseSameActivity {
 
@@ -26,14 +29,14 @@ public class FeedbackActivity extends BaseSameActivity {
     private EditText mEtQq;
     private String mTrimEtQq;
     private EditText mEtWx;
-    private IdCorrelationEngin mIdCorrelationEngin;
+    private UserInfoEngine mIdCorrelationEngin;
     private String mMTrimEtWx;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_feedback);
-        mIdCorrelationEngin = new IdCorrelationEngin(this);
+        mIdCorrelationEngin = new UserInfoEngine(this);
         initViews();
         initDatas();
     }
@@ -78,26 +81,26 @@ public class FeedbackActivity extends BaseSameActivity {
     private boolean checkInput() {
         mTrimEtWorkContent = mEtWorkContent.getText().toString().trim();
         if (TextUtils.isEmpty(mTrimEtWorkContent)) {
-            showToastShort("内容不能为空");
+            ToastUtils.showCenterToast("内容不能为空");
             return false;
         }
         mTrimEtQq = mEtQq.getText().toString().trim();
         if (TextUtils.isEmpty(mTrimEtQq)) {
-            showToastShort("QQ号不能为空");
+            ToastUtils.showCenterToast("QQ号不能为空");
             return false;
         }
         if (mTrimEtQq.length() < 6) {
-            showToastShort("QQ号格式错误");
+            ToastUtils.showCenterToast("QQ号格式错误");
             return false;
         }
         if (mTrimEtWorkContent.length() < 6) {
-            showToastShort("最少输入一句话反馈");
+            ToastUtils.showCenterToast("最少输入一句话反馈");
             return false;
         }
         mMTrimEtWx = mEtWx.getText().toString();
         if (!TextUtils.isEmpty(mMTrimEtWx) && !"null".equals(mMTrimEtWx)) {
             if (mTrimEtQq.length() < 2) {
-                showToastShort("微信号格式错误");
+                ToastUtils.showCenterToast("微信号格式错误");
                 return false;
             }
         }
@@ -113,41 +116,43 @@ public class FeedbackActivity extends BaseSameActivity {
                 ClipboardManager myClipboard = (ClipboardManager) getSystemService(CLIPBOARD_SERVICE);
                 ClipData myClip = ClipData.newPlainText("text", trimQqNum);
                 myClipboard.setPrimaryClip(myClip);
-                showToastShort("复制客服QQ号成功");
+                ToastUtils.showCenterToast("复制客服QQ号成功");
                 break;
             case R.id.feedback_tv_next:
+
                 if (checkInput()) {
                     Log.d("mylog", "onClick: mTrimEtQq qq号" + mTrimEtQq + " mTrimEtWorkContent 输入内容" + mTrimEtWorkContent);
-                    netNext();
+                    if (UserInfoHelper.isLogin(this))
+                        netNext();
                 }
                 break;
         }
     }
 
     private void netNext() {
-        int id = YcSingle.getInstance().id;
-        if (id <= 0) {
-            showToLoginDialog();
-            return;
-        }
-        mIdCorrelationEngin.addSuggestion(String.valueOf(id), mTrimEtWorkContent, mTrimEtQq, mMTrimEtWx, "Suggestion/add").subscribe(new MySubscriber<AResultInfo<String>>(mLoadingDialog) {
-            @Override
-            protected void onNetNext(AResultInfo<String> stringResultInfo) {
-                String message = stringResultInfo.msg;
-                showToastShort(message);
-                finish();
-            }
 
-            @Override
-            protected void onNetError(Throwable e) {
+        mIdCorrelationEngin.addSuggestion(UserInfoHelper.getUid(), mTrimEtWorkContent, mTrimEtQq, mMTrimEtWx)
+                .subscribe(new DisposableObserver<ResultInfo<String>>() {
+                    @Override
+                    public void onComplete() {
 
-            }
+                    }
 
-            @Override
-            protected void onNetCompleted() {
+                    @Override
+                    public void onError(Throwable e) {
 
-            }
-        });
+                    }
+
+                    @Override
+                    public void onNext(ResultInfo<String> stringResultInfo) {
+                        if (stringResultInfo != null && stringResultInfo.code == HttpConfig.STATUS_OK) {
+                            String message = stringResultInfo.message;
+                            ToastUtils.showCenterToast(message);
+                            finish();
+                        }
+                    }
+
+                });
     }
 
     @Override

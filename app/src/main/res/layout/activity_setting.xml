@@ -21,12 +21,11 @@
         android:id="@+id/setting_ll_item_02"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:visibility="gone"
         app:imgSrc="@mipmap/seting_icon_02"
         app:isAddIntervalBom="true"
-        android:visibility="gone"
         app:layout_constraintTop_toBottomOf="@+id/setting_ll_item_01"
         app:textNameMyItem="关于我们" />
-
 
 
     <com.yc.verbaltalk.base.view.MainMyItemLin
@@ -66,11 +65,13 @@
         app:layout_constraintBottom_toBottomOf="parent" />
 
     <FrameLayout
+        android:id="@+id/fl_logout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_marginTop="30dp"
+
         android:background="@color/white"
-        android:visibility="gone"
-        app:layout_constraintBottom_toBottomOf="parent">
+        app:layout_constraintTop_toBottomOf="@id/setting_ll_item_04">
 
         <TextView
             android:layout_width="match_parent"

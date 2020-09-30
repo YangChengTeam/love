@@ -38,11 +38,12 @@ greendao {
 
 dependencies {
     implementation fileTree(include: ['*.jar'], dir: 'libs')
+    api project(path: ':rthttplibrary')
     //    implementation 'com.android.support:appcompat-v7:26.1.0'
     testImplementation 'junit:junit:4.12'
     androidTestImplementation 'com.android.support.test:runner:1.0.2'
     androidTestImplementation 'com.android.support.test.espresso:espresso-core:3.0.2'
-    api 'com.github.CymChad:BaseRecyclerViewAdapterHelper:2.9.34'
+    api 'com.github.CymChad:BaseRecyclerViewAdapterHelper:2.9.47'
     api "org.greenrobot:greendao:$greendao_version"
-    api 'com.kk:securityhttp:1.1.3'
+
 }

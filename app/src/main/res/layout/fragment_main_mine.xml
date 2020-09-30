@@ -41,14 +41,12 @@
                 android:textSize="@dimen/size_22"
                 android:textStyle="bold" />
 
-            <View
-                android:layout_width="1dp"
-                android:layout_height="6dp" />
 
             <TextView
                 android:id="@+id/main_t5_tv_btn_info"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_marginTop="6dp"
                 android:background="@drawable/selectot_btn_red_crimson"
                 android:gravity="center"
                 android:paddingLeft="24dp"
@@ -64,17 +62,19 @@
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_centerHorizontal="true"
         android:background="@color/white"
         android:paddingTop="12dp"
         android:paddingBottom="6dp">
 
         <ImageView
             android:id="@+id/main_t5_ll_iv_vip"
-            android:layout_width="wrap_content"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_centerHorizontal="true"
+            android:layout_marginLeft="15dp"
+            android:layout_marginRight="15dp"
             android:background="@color/white"
+            android:scaleType="centerCrop"
             android:src="@mipmap/main_item_open_vip" />
 
         <TextView
@@ -94,13 +94,23 @@
             android:textSize="@dimen/size_14" />
     </RelativeLayout>
 
+
+    <com.yc.verbaltalk.base.view.MainMyItemLin
+        android:id="@+id/main_my_item_lin_info"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:imgSrc="@mipmap/icon_personal"
+        app:isAddIntervalBom="true"
+        app:isAddIntervalTop="true"
+        app:textNameMyItem="个人信息" />
+
     <com.yc.verbaltalk.base.view.MainMyItemLin
         android:id="@+id/main_t5_ll_item_01"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         app:imgSrc="@mipmap/main_icon_my_01"
         app:isAddIntervalBom="true"
-        app:isAddIntervalTop="true"
+
         app:textNameMyItem="我的收藏" />
 
     <com.yc.verbaltalk.base.view.MainMyItemLin

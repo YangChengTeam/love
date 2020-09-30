@@ -12,7 +12,7 @@ import androidx.fragment.app.FragmentTransaction;
 import cn.youngkaaa.yviewpager.YFragmentPagerAdapter;
 
 /**
- * Created by mayn on 2019/4/23.
+ * Created by sunshey on 2019/4/23.
  */
 
 public class LoveUpDownPhotoPagerAdapter extends YFragmentPagerAdapter  {
@@ -30,8 +30,7 @@ public class LoveUpDownPhotoPagerAdapter extends YFragmentPagerAdapter  {
 
     @Override
     public Fragment getItem(int position) {//指定Fragmemt
-        Fragment fragment = LoveUpDownPhotoFragmentFactory.createFragment(position, childUrl,datas.get(position));
-        return fragment;
+        return LoveUpDownPhotoFragmentFactory.createFragment(position, childUrl,datas.get(position));
     }
 
     @Override

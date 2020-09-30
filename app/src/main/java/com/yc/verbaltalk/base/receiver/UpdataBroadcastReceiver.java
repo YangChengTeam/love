@@ -10,7 +10,7 @@ import com.yc.verbaltalk.base.utils.InstallApkUtlis;
 
 
 /**
- * Created by mayn on 2019/5/20.
+ * Created by sunshey on 2019/5/20.
  */
 
 public class UpdataBroadcastReceiver extends BroadcastReceiver {

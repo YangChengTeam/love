@@ -1,19 +1,21 @@
 package com.yc.verbaltalk.base.okhttp.presenter;
 
-import com.yc.verbaltalk.base.okhttp.IOkHttpBiz;
-import com.yc.verbaltalk.base.okhttp.OkHttpRequest;
+import android.content.Context;
+
+import com.yc.verbaltalk.base.engine.LoveEngine;
 import com.yc.verbaltalk.base.okhttp.view.IResponseToView;
 
 /**
- * Created by mayn on 2019/6/5.
+ * Created by sunshey on 2019/6/5.
  */
 
 public class BasePresenter {
     public IResponseToView mIChangUiView;
-    public IOkHttpBiz mIOkHttpBiz;
+    protected LoveEngine loveEngine;
 
-    public BasePresenter(IResponseToView iChangUiView) {
+    public BasePresenter(Context context, IResponseToView iChangUiView) {
         mIChangUiView = iChangUiView;
-        mIOkHttpBiz = new OkHttpRequest();
+
+        loveEngine = new LoveEngine(context);
     }
 }

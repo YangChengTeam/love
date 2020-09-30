@@ -3,16 +3,16 @@ package com.yc.verbaltalk.chat.ui.fragment;
 import android.content.Intent;
 
 import com.alibaba.fastjson.TypeReference;
-import com.kk.securityhttp.domain.ResultInfo;
-import com.kk.securityhttp.net.contains.HttpConfig;
+
+
 import com.music.player.lib.bean.MusicInfo;
 import com.music.player.lib.bean.MusicInfoWrapper;
 import com.yc.verbaltalk.R;
+import com.yc.verbaltalk.base.utils.UserInfoHelper;
 import com.yc.verbaltalk.chat.adapter.ChatMainAdapter;
 import com.yc.verbaltalk.chat.bean.ChatInfo;
 import com.yc.verbaltalk.chat.bean.CourseInfo;
 import com.yc.verbaltalk.base.engine.LoveEngine;
-import com.yc.verbaltalk.model.single.YcSingle;
 import com.yc.verbaltalk.chat.ui.activity.ChatCourseDetailActivity;
 import com.yc.verbaltalk.chat.ui.activity.ChatRecommendDetailActivity;
 import com.yc.verbaltalk.base.fragment.BaseMainFragment;
@@ -27,7 +27,10 @@ import androidx.core.content.ContextCompat;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
-import rx.Subscriber;
+import io.reactivex.observers.DisposableObserver;
+import yc.com.rthttplibrary.bean.ResultInfo;
+import yc.com.rthttplibrary.config.HttpConfig;
+
 
 /**
  * Created by suns  on 2019/11/16 12:11.
@@ -133,17 +136,15 @@ public class ChatFragment extends BaseMainFragment {
 
     private void getData() {
 
-        final int id = YcSingle.getInstance().id;
-
 
         if (page == 1) {
             loadingDialog = new LoadDialog(mMainActivity);
             loadingDialog.showLoadingDialog();
         }
 
-        mLoveEngine.getLoveItemList(String.valueOf(id), null, page, 3, 1).subscribe(new Subscriber<ResultInfo<MusicInfoWrapper>>() {
+        mLoveEngine.getLoveItemList(UserInfoHelper.getUid(), null, page, 3, 1).subscribe(new DisposableObserver<ResultInfo<MusicInfoWrapper>>() {
             @Override
-            public void onCompleted() {
+            public void onComplete() {
 
             }
 
@@ -170,9 +171,9 @@ public class ChatFragment extends BaseMainFragment {
     }
 
     private void getCourseData() {
-        mLoveEngine.getChatCourseInfos(page, PAGE_SIZE).subscribe(new Subscriber<ResultInfo<List<CourseInfo>>>() {
+        mLoveEngine.getChatCourseInfos(page, PAGE_SIZE).subscribe(new DisposableObserver<ResultInfo<List<CourseInfo>>>() {
             @Override
-            public void onCompleted() {
+            public void onComplete() {
 
             }
 

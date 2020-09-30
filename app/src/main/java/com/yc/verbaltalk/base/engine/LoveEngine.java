@@ -3,23 +3,20 @@ package com.yc.verbaltalk.base.engine;
 import android.content.Context;
 import android.text.TextUtils;
 
-import com.alibaba.fastjson.TypeReference;
-import com.kk.securityhttp.domain.ResultInfo;
-import com.kk.securityhttp.engin.HttpCoreEngin;
 import com.music.player.lib.bean.MusicInfo;
 import com.music.player.lib.bean.MusicInfoWrapper;
-import com.yc.verbaltalk.model.ModelApp;
-import com.yc.verbaltalk.chat.bean.AResultInfo;
+import com.yc.verbaltalk.base.config.URLConfig;
+import com.yc.verbaltalk.base.utils.UserInfoHelper;
 import com.yc.verbaltalk.chat.bean.AudioDataWrapperInfo;
 import com.yc.verbaltalk.chat.bean.BannerInfo;
 import com.yc.verbaltalk.chat.bean.CategoryArticleBean;
+import com.yc.verbaltalk.chat.bean.CommunityDetailInfo;
 import com.yc.verbaltalk.chat.bean.CommunityInfoWrapper;
 import com.yc.verbaltalk.chat.bean.CommunityTagInfoWrapper;
 import com.yc.verbaltalk.chat.bean.CourseInfo;
 import com.yc.verbaltalk.chat.bean.ExampDataBean;
 import com.yc.verbaltalk.chat.bean.ExampListsBean;
 import com.yc.verbaltalk.chat.bean.ExampleTsCategory;
-import com.yc.verbaltalk.chat.bean.IdCorrelationLoginBean;
 import com.yc.verbaltalk.chat.bean.IndexHotInfoWrapper;
 import com.yc.verbaltalk.chat.bean.LoveByStagesBean;
 import com.yc.verbaltalk.chat.bean.LoveByStagesDetailsBean;
@@ -27,29 +24,32 @@ import com.yc.verbaltalk.chat.bean.LoveHealDateBean;
 import com.yc.verbaltalk.chat.bean.LoveHealDetBean;
 import com.yc.verbaltalk.chat.bean.LoveHealDetDetailsBean;
 import com.yc.verbaltalk.chat.bean.LoveHealingBean;
-import com.yc.verbaltalk.chat.bean.LoveUpDownPhotoBean;
 import com.yc.verbaltalk.chat.bean.MenuadvInfoBean;
 import com.yc.verbaltalk.chat.bean.SearchDialogueBean;
 import com.yc.verbaltalk.chat.bean.ShareInfo;
 import com.yc.verbaltalk.chat.bean.TopTopicInfo;
+import com.yc.verbaltalk.chat.bean.UserInfo;
 import com.yc.verbaltalk.chat.bean.WetChatInfo;
-import com.yc.verbaltalk.chat.bean.CommunityDetailInfo;
 import com.yc.verbaltalk.chat.bean.confession.ConfessionBean;
+import com.yc.verbaltalk.index.bean.SmartChatItem;
+import com.yc.verbaltalk.model.ModelApp;
 import com.yc.verbaltalk.model.dao.LoveHealDetDetailsBeanDao;
-import com.yc.verbaltalk.base.config.URLConfig;
 
+import java.io.File;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import rx.Observable;
-import rx.android.schedulers.AndroidSchedulers;
-import rx.functions.Func1;
-import rx.schedulers.Schedulers;
+import io.reactivex.Observable;
+import io.reactivex.android.schedulers.AndroidSchedulers;
+import io.reactivex.functions.Function;
+import io.reactivex.schedulers.Schedulers;
+import okhttp3.MediaType;
+import okhttp3.MultipartBody;
+import okhttp3.RequestBody;
+import retrofit2.http.Field;
+import yc.com.rthttplibrary.bean.ResultInfo;
 
-/**
- * Created by mayn on 2019/5/9.
- */
 
 public class LoveEngine extends BaseEngine {
     private LoveHealDetDetailsBeanDao detailsBeanDao;
@@ -59,379 +59,158 @@ public class LoveEngine extends BaseEngine {
         detailsBeanDao = ModelApp.getDaoSession().getLoveHealDetDetailsBeanDao();
     }
 
-    public Observable<AResultInfo<IdCorrelationLoginBean>> userInfo(String userId, String url) {
-        Map<String, String> params = new HashMap<>();
-        params.put("user_id", userId);
-        requestParams(params);
-        HttpCoreEngin<AResultInfo<IdCorrelationLoginBean>> httpCoreEngin = HttpCoreEngin.get(mContext);
-        Observable<AResultInfo<IdCorrelationLoginBean>> rxpost = httpCoreEngin.rxpost(URLConfig.getUrl(url), new TypeReference<AResultInfo<IdCorrelationLoginBean>>() {
-                }.getType(),
-                params,
-                true,
-                true, true);
-        return rxpost;
+    public Observable<ResultInfo<UserInfo>> userInfo(String userId) {
+
+
+        return request.userInfo(userId).subscribeOn(Schedulers.io()).observeOn(AndroidSchedulers.mainThread());
     }
 
 
-    public Observable<AResultInfo<List<LoveHealDateBean>>> loveCategory(String url, String sence) {
-        Map<String, String> params = new HashMap<>();
-        params.put("sence", sence);
-        requestParams(params);
-        HttpCoreEngin<AResultInfo<List<LoveHealDateBean>>> httpCoreEngin = HttpCoreEngin.get(mContext);
-        Observable<AResultInfo<List<LoveHealDateBean>>> rxpost = httpCoreEngin.rxpost(URLConfig.getUrl(url), new TypeReference<AResultInfo<List<LoveHealDateBean>>>() {
-                }.getType(),
-                params,
-                true,
-                true, true);
-        return rxpost;
+    public Observable<ResultInfo<List<LoveHealDateBean>>> loveCategory(String sence) {
+
+
+        return request.loveCategory(sence).subscribeOn(Schedulers.io()).observeOn(AndroidSchedulers.mainThread());
     }
 
 
-    public Observable<AResultInfo<List<LoveHealDetBean>>> loveListCategory(String userId, String category_id, String page, String page_size, String url) {
-        Map<String, String> params = new HashMap<>();
-        params.put("user_id", userId);
-        params.put("category_id", category_id);
-        params.put("page", page);
-        params.put("page_size", page_size);
-        requestParams(params);
-        HttpCoreEngin<AResultInfo<List<LoveHealDetBean>>> httpCoreEngin = HttpCoreEngin.get(mContext);
-        Observable<AResultInfo<List<LoveHealDetBean>>> rxpost = httpCoreEngin.rxpost(URLConfig.getUrl(url), new TypeReference<AResultInfo<List<LoveHealDetBean>>>() {
-                }.getType(),
-                params,
-                true,
-                true, true);
-        return rxpost;
+    public Observable<ResultInfo<List<LoveHealDetBean>>> loveListCategory(String userId, String category_id, String page, String page_size) {
+
+
+        return request.loveListCategory(userId, category_id, page, page_size).subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread());
     }
 
 
-    public Observable<AResultInfo<List<LoveHealingBean>>> recommendLovewords(String userId, String page, String page_size, String url) {
-        Map<String, String> params = new HashMap<>();
-        params.put("user_id", userId);
-        params.put("page", page);
-        params.put("page_size", page_size);
-        requestParams(params);
-        HttpCoreEngin<AResultInfo<List<LoveHealingBean>>> httpCoreEngin = HttpCoreEngin.get(mContext);
-        Observable<AResultInfo<List<LoveHealingBean>>> rxpost = httpCoreEngin.rxpost(URLConfig.getUrl(url), new TypeReference<AResultInfo<List<LoveHealingBean>>>() {
-                }.getType(),
-                params,
-                true,
-                true, true);
-        return rxpost;
+    public Observable<ResultInfo<List<LoveHealingBean>>> recommendLovewords(String userId, String page, String page_size, String url) {
+
+        if (url.startsWith("/")) {
+            url = url.substring(1);
+        }
+        return request.recommendLovewords(userId, page, page_size, url).subscribeOn(Schedulers.io()).observeOn(AndroidSchedulers.mainThread());
     }
 
 
-    public Observable<AResultInfo<ExampleTsCategory>> exampleTsCategory(String url) {
-        Map<String, String> params = new HashMap<>();
-//        params.put("password", password);
-        requestParams(params);
-        HttpCoreEngin<AResultInfo<ExampleTsCategory>> httpCoreEngin = HttpCoreEngin.get(mContext);
-        Observable<AResultInfo<ExampleTsCategory>> rxpost = httpCoreEngin.rxpost(URLConfig.getUrl(url), new TypeReference<AResultInfo<ExampleTsCategory>>() {
-                }.getType(),
-                params,
-                true,
-                true, true);
-        return rxpost;
+    public Observable<ResultInfo<ExampleTsCategory>> exampleTsCategory() {
+
+        return request.exampleTsCategory().subscribeOn(Schedulers.io()).observeOn(AndroidSchedulers.mainThread());
     }
 
-    public Observable<AResultInfo<MenuadvInfoBean>> menuadvInfo(String url) {
-        Map<String, String> params = new HashMap<>();
-//        params.put("password", password);
-        requestParams(params);
-        HttpCoreEngin<AResultInfo<MenuadvInfoBean>> httpCoreEngin = HttpCoreEngin.get(mContext);
-        Observable<AResultInfo<MenuadvInfoBean>> rxpost = httpCoreEngin.rxpost(URLConfig.getUrl(url), new TypeReference<AResultInfo<MenuadvInfoBean>>() {
-                }.getType(),
-                params,
-                true,
-                true, true);
-        return rxpost;
+    public Observable<ResultInfo<MenuadvInfoBean>> menuadvInfo() {
+
+        return request.menuAdvInfo().subscribeOn(Schedulers.io()).observeOn(AndroidSchedulers.mainThread());
     }
 
 
-    public Observable<AResultInfo<ExampDataBean>> exampLists(String userId, String page, String pageSize, String url) {
-        Map<String, String> params = new HashMap<>();
-        params.put("page", page);
-        params.put("user_id", userId);
-        params.put("page_size", pageSize);
-        requestParams(params);
-        HttpCoreEngin<AResultInfo<ExampDataBean>> httpCoreEngin = HttpCoreEngin.get(mContext);
-        Observable<AResultInfo<ExampDataBean>> rxpost = httpCoreEngin.rxpost(URLConfig.getUrl(url), new TypeReference<AResultInfo<ExampDataBean>>() {
-                }.getType(),
-                params,
-                true,
-                true, true);
-        return rxpost;
+    public Observable<ResultInfo<ExampDataBean>> exampLists(String userId, String page, String pageSize) {
+
+
+        return request.exampLists(userId, page, pageSize).subscribeOn(Schedulers.io()).observeOn(AndroidSchedulers.mainThread());
     }
 
-    public Observable<AResultInfo<List<ExampListsBean>>> exampleCollectList(String userId, String page, String pageSize, String url) {
-        Map<String, String> params = new HashMap<>();
-        params.put("page", page);
-        params.put("user_id", userId);
-        params.put("page_size", pageSize);
-        requestParams(params);
-        HttpCoreEngin<AResultInfo<List<ExampListsBean>>> httpCoreEngin = HttpCoreEngin.get(mContext);
-        Observable<AResultInfo<List<ExampListsBean>>> rxpost = httpCoreEngin.rxpost(URLConfig.getUrl(url), new TypeReference<AResultInfo<List<ExampListsBean>>>() {
-                }.getType(),
-                params,
-                true,
-                true, true);
-        return rxpost;
+    public Observable<ResultInfo<List<ExampListsBean>>> exampleCollectList(String userId, String page, String pageSize) {
+
+        return request.exampleCollectList(userId, page, pageSize).subscribeOn(Schedulers.io()).observeOn(AndroidSchedulers.mainThread());
     }
 
-    public Observable<AResultInfo<List<CategoryArticleBean>>> categoryArticle(String url) {
-        Map<String, String> params = new HashMap<>();
-//        params.put("password", password);
-        requestParams(params);
-        HttpCoreEngin<AResultInfo<List<CategoryArticleBean>>> httpCoreEngin = HttpCoreEngin.get(mContext);
-        Observable<AResultInfo<List<CategoryArticleBean>>> rxpost = httpCoreEngin.rxpost(URLConfig.getUrl(url), new TypeReference<AResultInfo<List<CategoryArticleBean>>>() {
-                }.getType(),
-                params,
-                true,
-                true, true);
-        return rxpost;
+    public Observable<ResultInfo<List<CategoryArticleBean>>> categoryArticle() {
+
+        return request.categoryArticle().subscribeOn(Schedulers.io()).observeOn(AndroidSchedulers.mainThread());
     }
 
-    public Observable<AResultInfo<List<LoveByStagesBean>>> listsArticle(String categoryId, String page, String pageSize, String url) {
-        Map<String, String> params = new HashMap<>();
-        params.put("category_id", categoryId);
-        params.put("page", page);
-        params.put("page_size", pageSize);
-        requestParams(params);
-        HttpCoreEngin<AResultInfo<List<LoveByStagesBean>>> httpCoreEngin = HttpCoreEngin.get(mContext);
-        Observable<AResultInfo<List<LoveByStagesBean>>> rxpost = httpCoreEngin.rxpost(URLConfig.getUrl(url), new TypeReference<AResultInfo<List<LoveByStagesBean>>>() {
-                }.getType(),
-                params,
-                true,
-                true, true);
-        return rxpost;
+    public Observable<ResultInfo<List<LoveByStagesBean>>> listsArticle(String categoryId, String page, String pageSize) {
+
+        return request.listsArticle(categoryId, page, pageSize).subscribeOn(Schedulers.io()).observeOn(AndroidSchedulers.mainThread());
     }
 
 
-    public Observable<AResultInfo<List<LoveHealDetBean>>> searchDialogue(String userId, String searchType, String keyword, String page, String pageSize, String url) {
-        Map<String, String> params = new HashMap<>();
-        params.put("user_id", userId);
-        params.put("search_type", searchType);
-//        params.put("user_id", userId);
-        params.put("page", page);
-        params.put("keyword", keyword);
-        params.put("page_size", pageSize);
-        requestParams(params);
-        HttpCoreEngin<AResultInfo<List<LoveHealDetBean>>> httpCoreEngin = HttpCoreEngin.get(mContext);
-        Observable<AResultInfo<List<LoveHealDetBean>>> rxpost = httpCoreEngin.rxpost(URLConfig.getUrl(url), new TypeReference<AResultInfo<List<LoveHealDetBean>>>() {
-                }.getType(),
-                params,
-                true,
-                true, true);
-        return rxpost;
-    }
+    public Observable<ResultInfo<List<LoveHealDetBean>>> searchDialogue(String userId, String searchType, String keyword, String page, String pageSize) {
 
-    public Observable<AResultInfo<List<LoveHealDetBean>>> searchDialogue(String userId, String keyword, String page, String pageSize, String url) {
-        Map<String, String> params = new HashMap<>();
-        params.put("user_id", userId);
-//        params.put("search_type", searchType);
-//        params.put("user_id", userId);
-        params.put("page", page);
-        params.put("keyword", keyword);
-        params.put("page_size", pageSize);
-        requestParams(params);
-        HttpCoreEngin<AResultInfo<List<LoveHealDetBean>>> httpCoreEngin = HttpCoreEngin.get(mContext);
-        Observable<AResultInfo<List<LoveHealDetBean>>> rxpost = httpCoreEngin.rxpost(URLConfig.getUrl(url), new TypeReference<AResultInfo<List<LoveHealDetBean>>>() {
-                }.getType(),
-                params,
-                true,
-                true, true);
-        return rxpost;
-    }
 
-    public Observable<AResultInfo<SearchDialogueBean>> searchDialogue2(String userId, String keyword, String page, String pageSize, String url) {
-        Map<String, String> params = new HashMap<>();
-        params.put("user_id", userId);
-//        params.put("search_type", searchType);
-//        params.put("user_id", userId);
-        params.put("page", page);
-        params.put("keyword", keyword);
-        params.put("page_size", pageSize);
-        requestParams(params);
-        HttpCoreEngin<AResultInfo<SearchDialogueBean>> httpCoreEngin = HttpCoreEngin.get(mContext);
-        Observable<AResultInfo<SearchDialogueBean>> rxpost = httpCoreEngin.rxpost(URLConfig.getUrl(url), new TypeReference<AResultInfo<SearchDialogueBean>>() {
-                }.getType(),
-                params,
-                true,
-                true, true);
-        return rxpost;
+        return request.searchDialogue(userId, searchType, keyword, page, pageSize).subscribeOn(Schedulers.io()).observeOn(AndroidSchedulers.mainThread());
     }
 
 
-    public Observable<AResultInfo<List<LoveHealingBean>>> listsCollectLovewords(String userId, String page, String pageSize, String url) {
-        Map<String, String> params = new HashMap<>();
-        params.put("user_id", userId);
-        params.put("page", page);
-        params.put("page_size", pageSize);
-        requestParams(params);
-        HttpCoreEngin<AResultInfo<List<LoveHealingBean>>> httpCoreEngin = HttpCoreEngin.get(mContext);
-        Observable<AResultInfo<List<LoveHealingBean>>> rxpost = httpCoreEngin.rxpost(URLConfig.getUrl(url), new TypeReference<AResultInfo<List<LoveHealingBean>>>() {
-                }.getType(),
-                params,
-                true,
-                true, true);
-        return rxpost;
-    }
+    public Observable<ResultInfo<SearchDialogueBean>> searchDialogue2(String userId, String keyword, String page, String pageSize) {
 
-    public Observable<AResultInfo<LoveByStagesDetailsBean>> detailArticle(String id, String userId, String url) {
-        Map<String, String> params = new HashMap<>();
-        params.put("id", id);
-        params.put("user_id", userId);
-        requestParams(params);
-        HttpCoreEngin<AResultInfo<LoveByStagesDetailsBean>> httpCoreEngin = HttpCoreEngin.get(mContext);
-        Observable<AResultInfo<LoveByStagesDetailsBean>> rxpost = httpCoreEngin.rxpost(URLConfig.getUrl(url), new TypeReference<AResultInfo<LoveByStagesDetailsBean>>() {
-                }.getType(),
-                params,
-                true,
-                true, true);
-        return rxpost;
-    }
-
-    public Observable<AResultInfo<LoveByStagesDetailsBean>> detailExample(String id, String userId, String url) {
-        Map<String, String> params = new HashMap<>();
-        params.put("example_id", id);
-        params.put("user_id", userId);
-        requestParams(params);
-        HttpCoreEngin<AResultInfo<LoveByStagesDetailsBean>> httpCoreEngin = HttpCoreEngin.get(mContext);
-        Observable<AResultInfo<LoveByStagesDetailsBean>> rxpost = httpCoreEngin.rxpost(URLConfig.getUrl(url), new TypeReference<AResultInfo<LoveByStagesDetailsBean>>() {
-                }.getType(),
-                params,
-                true,
-                true, true);
-        return rxpost;
-    }
-
-    public Observable<AResultInfo<LoveUpDownPhotoBean>> detailLovewords(String lovewordsId, String url) {
-        Map<String, String> params = new HashMap<>();
-        params.put("lovewords_id", lovewordsId);
-        requestParams(params);
-        HttpCoreEngin<AResultInfo<LoveUpDownPhotoBean>> httpCoreEngin = HttpCoreEngin.get(mContext);
-        Observable<AResultInfo<LoveUpDownPhotoBean>> rxpost = httpCoreEngin.rxpost(URLConfig.getUrl(url), new TypeReference<AResultInfo<LoveUpDownPhotoBean>>() {
-                }.getType(),
-                params,
-                true,
-                true, true);
-        return rxpost;
-    }
-
-    public Observable<AResultInfo<ExampDataBean>> exampleTsList(String id, String page, String pageSize, String url) {
-        Map<String, String> params = new HashMap<>();
-        params.put("category_id", id);
-        params.put("page", page);
-        params.put("page_size", pageSize);
-        requestParams(params);
-        HttpCoreEngin<AResultInfo<ExampDataBean>> httpCoreEngin = HttpCoreEngin.get(mContext);
-        Observable<AResultInfo<ExampDataBean>> rxpost = httpCoreEngin.rxpost(URLConfig.getUrl(url), new TypeReference<AResultInfo<ExampDataBean>>() {
-                }.getType(),
-                params,
-                true,
-                true, true);
-        return rxpost;
-    }
-
-    public Observable<AResultInfo<String>> collectArticle(String userId, String articleId, String url) {
-        Map<String, String> params = new HashMap<>();
-        params.put("user_id", userId);
-        params.put("article_id", articleId);
-        requestParams(params);
-        HttpCoreEngin<AResultInfo<String>> httpCoreEngin = HttpCoreEngin.get(mContext);
-        Observable<AResultInfo<String>> rxpost = httpCoreEngin.rxpost(URLConfig.getUrl(url), new TypeReference<AResultInfo<String>>() {
-                }.getType(),
-                params,
-                true,
-                true, true);
-        return rxpost;
-    }
-
-    public Observable<AResultInfo<String>> likeExample(String userId, String articleId, String url) {
-        Map<String, String> params = new HashMap<>();
-        params.put("user_id", userId);
-        params.put("article_id", articleId);
-        requestParams(params);
-        HttpCoreEngin<AResultInfo<String>> httpCoreEngin = HttpCoreEngin.get(mContext);
-        Observable<AResultInfo<String>> rxpost = httpCoreEngin.rxpost(URLConfig.getUrl(url), new TypeReference<AResultInfo<String>>() {
-                }.getType(),
-                params,
-                true,
-                true, true);
-        return rxpost;
-    }
-
-    public Observable<AResultInfo<String>> collectLovewords(String userId, String lovewordsId, String url) {
-        Map<String, String> params = new HashMap<>();
-        params.put("user_id", userId);
-        params.put("lovewords_id", lovewordsId);
-        requestParams(params);
-        HttpCoreEngin<AResultInfo<String>> httpCoreEngin = HttpCoreEngin.get(mContext);
-        Observable<AResultInfo<String>> rxpost = httpCoreEngin.rxpost(URLConfig.getUrl(url), new TypeReference<AResultInfo<String>>() {
-                }.getType(),
-                params,
-                true,
-                true, true);
-        return rxpost;
-    }
-
-    public Observable<AResultInfo<String>> collectExample(String userId, String exampleId, String url) {
-        Map<String, String> params = new HashMap<>();
-        params.put("user_id", userId);
-        params.put("example_id", exampleId);
-        requestParams(params);
-        HttpCoreEngin<AResultInfo<String>> httpCoreEngin = HttpCoreEngin.get(mContext);
-        Observable<AResultInfo<String>> rxpost = httpCoreEngin.rxpost(URLConfig.getUrl(url), new TypeReference<AResultInfo<String>>() {
-                }.getType(),
-                params,
-                true,
-                true, true);
-        return rxpost;
+        return request.searchDialogue2(userId, keyword, page, pageSize).subscribeOn(Schedulers.io()).observeOn(AndroidSchedulers.mainThread());
     }
 
 
-    public Observable<ConfessionBean> geteExpressData(int page) {
-        Map<String, String> params = new HashMap<>();
-        params.put("id", "1");
-        params.put("page", page + "");
+    public Observable<ResultInfo<List<LoveHealingBean>>> listsCollectLovewords(String userId, String page, String pageSize) {
 
-        return HttpCoreEngin.get(mContext).rxpost(URLConfig.CATEGORY_LIST_URL, new TypeReference<ConfessionBean>() {
-                }.getType(), params,
-                false, false, false);
+
+        return request.listsCollectLovewords(userId, page, pageSize).subscribeOn(Schedulers.io()).observeOn(AndroidSchedulers.mainThread());
+    }
+
+    public Observable<ResultInfo<LoveByStagesDetailsBean>> detailArticle(String id, String userId) {
+
+        return request.detailArticle(id, userId)
+                .subscribeOn(Schedulers.io()).observeOn(AndroidSchedulers.mainThread());
+    }
+
+    public Observable<ResultInfo<LoveByStagesDetailsBean>> detailExample(String id, String userId) {
+
+        return request.detailExample(id, userId).subscribeOn(Schedulers.io()).observeOn(AndroidSchedulers.mainThread());
+
+    }
+
+    public Observable<ResultInfo<ExampDataBean>> exampleTsList(String id, String page, String pageSize) {
+
+
+        return request.exampleTsList(id, page, pageSize).subscribeOn(Schedulers.io()).observeOn(AndroidSchedulers.mainThread());
+    }
+
+    public Observable<ResultInfo<String>> collectArticle(String userId, String articleId, String url) {
+
+
+        return request.collectArticle(userId, articleId, url).subscribeOn(Schedulers.io()).observeOn(AndroidSchedulers.mainThread());
+    }
+
+
+    public Observable<ResultInfo<String>> collectLovewords(String userId, String lovewordsId, String url) {
+
+        return request.collectLovewords(userId, lovewordsId, url).subscribeOn(Schedulers.io()).observeOn(AndroidSchedulers.mainThread());
+    }
+
+    public Observable<ResultInfo<String>> collectExample(String userId, String exampleId, String url) {
+
+
+        return request.collectExample(userId, exampleId, url).subscribeOn(Schedulers.io()).observeOn(AndroidSchedulers.mainThread());
+    }
+
+
+    public Observable<ConfessionBean> getExpressData(int page) {
+
+
+        return request.getExpressData(URLConfig.CATEGORY_LIST_URL, "1", page, false, false)
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread());
 
     }
 
 
     public Observable<String> collectLoveHeal(final LoveHealDetDetailsBean detDetailsBean) {
 
-        return Observable.just("").subscribeOn(Schedulers.io()).observeOn(AndroidSchedulers.mainThread()).map(new Func1<String, String>() {
-            @Override
-            public String call(String s) {
-                if (detDetailsBean == null) return "";
+        return Observable.just("").subscribeOn(Schedulers.io()).observeOn(AndroidSchedulers.mainThread()).map(s -> {
+            if (detDetailsBean == null) return "";
 
-                LoveHealDetDetailsBean queryBean = getCollectLoveHealById(detDetailsBean.content);
-                if (queryBean == null) {
-                    detDetailsBean.saveTime = System.currentTimeMillis();
-                    detailsBeanDao.insert(detDetailsBean);
-                } else {
-                    queryBean.saveTime = System.currentTimeMillis();
-                    detailsBeanDao.update(queryBean);
-                }
-
-                return "success";
+            LoveHealDetDetailsBean queryBean = getCollectLoveHealById(detDetailsBean.content);
+            if (queryBean == null) {
+                detDetailsBean.saveTime = System.currentTimeMillis();
+                detailsBeanDao.insert(detDetailsBean);
+            } else {
+                queryBean.saveTime = System.currentTimeMillis();
+                detailsBeanDao.update(queryBean);
             }
+
+            return "success";
         });
 
 
     }
 
     public Observable<List<LoveHealDetDetailsBean>> getCollectLoveHeals(final int limit, final int offset) {
-        return Observable.just("").subscribeOn(Schedulers.io()).observeOn(AndroidSchedulers.mainThread()).map(new Func1<String, List<LoveHealDetDetailsBean>>() {
-            @Override
-            public List<LoveHealDetDetailsBean> call(String s) {
-
-                return detailsBeanDao.queryBuilder().offset(offset * limit).limit(limit).orderDesc(LoveHealDetDetailsBeanDao.Properties.SaveTime).list();
-            }
-        });
+        return Observable.just("").subscribeOn(Schedulers.io()).observeOn(AndroidSchedulers.mainThread()).map(s -> detailsBeanDao.queryBuilder().offset(offset * limit).limit(limit).orderDesc(LoveHealDetDetailsBeanDao.Properties.SaveTime).list());
     }
 
     private LoveHealDetDetailsBean getCollectLoveHealById(String content) {
@@ -440,26 +219,25 @@ public class LoveEngine extends BaseEngine {
 
 
     public Observable<String> deleteCollectLoveHeals(final LoveHealDetDetailsBean detDetailsBean) {
-        return Observable.just("").subscribeOn(Schedulers.io()).observeOn(AndroidSchedulers.mainThread()).map(new Func1<String, String>() {
-            @Override
-            public String call(String s) {
-                if (detDetailsBean == null) return "";
-                detailsBeanDao.delete(detDetailsBean);
-                return "success";
-            }
+        return Observable.just("").subscribeOn(Schedulers.io()).observeOn(AndroidSchedulers.mainThread()).map(s -> {
+            if (detDetailsBean == null) return "";
+            detailsBeanDao.delete(detDetailsBean);
+            return "success";
         });
     }
 
-    public Observable<ResultInfo<ShareInfo>> getShareInfo(Context context) {
-        return HttpCoreEngin.get(context).rxpost(URLConfig.get_share_info, new TypeReference<ResultInfo<ShareInfo>>() {
-        }.getType(), null, true, true, true);
+    public Observable<ResultInfo<ShareInfo>> getShareInfo() {
+        return request.getShareInfo().subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread());
     }
 
 
     //分类
     public Observable<ResultInfo<AudioDataWrapperInfo>> getAudioDataInfo() {
-        return HttpCoreEngin.get(mContext).rxpost(URLConfig.AUDIO_DATA_LIST_URL, new TypeReference<ResultInfo<AudioDataWrapperInfo>>() {
-        }.getType(), null, true, true, true);
+
+        return request.getAudioDataInfo()
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread());
     }
 
 
@@ -468,7 +246,6 @@ public class LoveEngine extends BaseEngine {
     public Observable<ResultInfo<MusicInfoWrapper>> getLoveItemList(String userId, String typeId, int page, int limit, int orderInt) {
 
 
-        //page=1&page_size=10&user_id=2&order=listen_times
         Map<String, String> params = new HashMap<>();
         if (!TextUtils.isEmpty(typeId))
             params.put("cat_id", typeId);
@@ -482,42 +259,36 @@ public class LoveEngine extends BaseEngine {
             order = "listen_times";
         }
         params.put("order", order);
-        return HttpCoreEngin.get(mContext).rxpost(URLConfig.AUDIO_ITEM_LIST_URL, new TypeReference<ResultInfo<MusicInfoWrapper>>() {
-        }.getType(), params, true, true, true);
+
+
+        return request.getLoveItemList(params).subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread());
 
     }
 
 
     public Observable<ResultInfo<List<MusicInfo>>> randomSpaInfo(String type_id) {
-        Map<String, String> params = new HashMap<>();
 
-        params.put("user_id", "");
-        params.put("type_id", type_id);
 
-        return HttpCoreEngin.get(mContext).rxpost(URLConfig.SPA_RANDOM_URL, new TypeReference<ResultInfo<List<MusicInfo>>>() {
-        }.getType(), params, true, true, true);
-
+        return request.randomSpaInfo("", type_id).subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread());
     }
 
     public Observable<ResultInfo<String>> audioPlay(String spa_id) {
-        Map<String, String> params = new HashMap<>();
 
-        params.put("music_id", spa_id);
 
-        return HttpCoreEngin.get(mContext).rxpost(URLConfig.AUDIO_PLAY_URL, new TypeReference<ResultInfo<MusicInfo>>() {
-        }.getType(), params, true, true, true);
-
+        return request.audioPlay(spa_id).subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread());
     }
 
     //user_id: 用户ID
     //spa_id: SPAID
     //音频收藏
     public Observable<ResultInfo<String>> collectAudio(String user_id, String music_id) {
-        Map<String, String> params = new HashMap<>();
-        params.put("user_id", user_id);
-        params.put("music_id", music_id);
-        return HttpCoreEngin.get(mContext).rxpost(URLConfig.AUDIO_COLLECT_URL, new TypeReference<ResultInfo<String>>() {
-        }.getType(), params, true, true, true);
+
+
+        return request.collectAudio(user_id, music_id).subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread());
     }
 
 
@@ -527,8 +298,9 @@ public class LoveEngine extends BaseEngine {
      * @return
      */
     public Observable<ResultInfo<IndexHotInfoWrapper>> getIndexHotInfo() {
-        return HttpCoreEngin.get(mContext).rxpost(URLConfig.LOVE_INDEX_URL, new TypeReference<ResultInfo<IndexHotInfoWrapper>>() {
-        }.getType(), null, true, true, true);
+
+        return request.getIndexHotInfo().subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread());
     }
 
     /**
@@ -540,13 +312,9 @@ public class LoveEngine extends BaseEngine {
 
     public Observable<ResultInfo<MusicInfoWrapper>> getCollectAudioList(String userId, int page, int page_size) {
 
-        Map<String, String> params = new HashMap<>();
-        params.put("user_id", userId);
-        params.put("page", page + "");
-        params.put("page_size", page_size + "");
 
-        return HttpCoreEngin.get(mContext).rxpost(URLConfig.AUDIO_COLLECT_LIST_URL, new TypeReference<ResultInfo<MusicInfoWrapper>>() {
-        }.getType(), params, true, true, true);
+        return request.getCollectAudioList(userId, page, page_size).subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread());
     }
 
 
@@ -558,13 +326,10 @@ public class LoveEngine extends BaseEngine {
      * @return
      */
     public Observable<ResultInfo<String>> searchCount(String userId, String keyword) {
-        Map<String, String> params = new HashMap<>();
 
-        params.put("user_id", userId);
-        params.put("keyword", keyword);
 
-        return HttpCoreEngin.get(mContext).rxpost(URLConfig.SEARCH_COUNT_URL, new TypeReference<ResultInfo<String>>() {
-        }.getType(), params, true, true, true);
+        return request.searchCount(userId, keyword).subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread());
     }
 
 
@@ -575,11 +340,10 @@ public class LoveEngine extends BaseEngine {
      */
 
     public Observable<ResultInfo<IndexHotInfoWrapper>> getIndexDropInfos(String keyword) {
-        Map<String, String> params = new HashMap<>();
-        params.put("keyword", keyword);
 
-        return HttpCoreEngin.get(mContext).rxpost(URLConfig.INDEX_DROP_URL, new TypeReference<ResultInfo<IndexHotInfoWrapper>>() {
-        }.getType(), params, true, true, true);
+
+        return request.getIndexDropInfos(keyword).subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread());
     }
 
     /**
@@ -591,14 +355,9 @@ public class LoveEngine extends BaseEngine {
      */
 
     public Observable<ResultInfo<MusicInfoWrapper>> getMusicDetailInfo(String userId, String id) {
-        Map<String, String> params = new HashMap<>();
 
-        params.put("user_id", userId);
-        params.put("id", id);
-
-        return HttpCoreEngin.get(mContext).rxpost(URLConfig.AUDIO_DETAIL_URL, new TypeReference<ResultInfo<MusicInfoWrapper>>() {
-                }.getType(),
-                params, true, true, true);
+        return request.getMusicDetailInfo(userId, id).subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread());
     }
 
 
@@ -609,25 +368,23 @@ public class LoveEngine extends BaseEngine {
      * @return
      */
     public Observable<ResultInfo<String>> shareReward(String userId) {
-        Map<String, String> params = new HashMap<>();
-        params.put("user_id", userId);
-        return HttpCoreEngin.get(mContext).rxpost(URLConfig.SHARE_REWARD_URL, new TypeReference<ResultInfo<String>>() {
-        }.getType(), params, true, true, true);
+
+        return request.shareReward(userId).subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread());
     }
 
 
     /**
      * 获取微信号
-     * @param position  xuanfu  shizhan  miji  audio  lesson
+     *
+     * @param position xuanfu  shizhan  miji  audio  lesson
      * @return
      */
     public Observable<ResultInfo<WetChatInfo>> getWechatInfo(String position) {
-        Map<String,String> params = new HashMap<>();
-        params.put("position",position);
 
-        return HttpCoreEngin.get(mContext).rxpost(URLConfig.WECHAT_INFO_URL, new TypeReference<ResultInfo<WetChatInfo>>() {
-        }.getType(), params, true, true, true);
 
+        return request.getWechatInfo(position).subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread());
     }
 
 
@@ -640,13 +397,10 @@ public class LoveEngine extends BaseEngine {
      * @return
      */
     public Observable<ResultInfo<CommunityInfoWrapper>> getCommunityNewstInfos(String userId, int page, int pageSize) {
-        Map<String, String> params = new HashMap<>();
-        params.put("user_id", userId);
-        params.put("page", String.valueOf(page));
-        params.put("page_size", String.valueOf(pageSize));
 
-        return HttpCoreEngin.get(mContext).rxpost(URLConfig.COMMUNITY_NEWEST_LIST_URL, new TypeReference<ResultInfo<CommunityInfoWrapper>>() {
-        }.getType(), params, true, true, true);
+
+        return request.getCommunityNewstInfos(userId, page, pageSize).subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread());
     }
 
 
@@ -657,15 +411,11 @@ public class LoveEngine extends BaseEngine {
      * @param topic_id
      * @return
      */
-    public Observable<ResultInfo<String>> likeTopic(String uesr_id, String topic_id) {
-        Map<String, String> params = new HashMap<>();
-        params.put("user_id", uesr_id);
-        params.put("topic_id", topic_id);
+    public io.reactivex.Observable<yc.com.rthttplibrary.bean.ResultInfo<String>> likeTopic(String uesr_id, String topic_id) {
 
-        return HttpCoreEngin.get(mContext).rxpost(URLConfig.TOPIC_LIKE_URL, new TypeReference<ResultInfo<String>>() {
-                }.getType(),
-                params, true, true, true);
 
+        return request.likeTopic(uesr_id, topic_id).subscribeOn(io.reactivex.schedulers.Schedulers.io())
+                .observeOn(io.reactivex.android.schedulers.AndroidSchedulers.mainThread());
     }
 
     /**
@@ -675,14 +425,10 @@ public class LoveEngine extends BaseEngine {
      * @return
      */
     public Observable<ResultInfo<CommunityDetailInfo>> getCommunityDetailInfo(String userId, String topicId) {
-        Map<String, String> params = new HashMap<>();
-        params.put("user_id", userId);
 
-        params.put("topic_id", topicId);
 
-        return HttpCoreEngin.get(mContext).rxpost(URLConfig.TOPIC_DETAIL_URL, new TypeReference<ResultInfo<CommunityDetailInfo>>() {
-                }.getType(),
-                params, true, true, true);
+        return request.getCommunityDetailInfo(userId, topicId)
+                .subscribeOn(Schedulers.io()).observeOn(AndroidSchedulers.mainThread());
     }
 
     /**
@@ -694,14 +440,9 @@ public class LoveEngine extends BaseEngine {
      * @return
      */
     public Observable<ResultInfo<String>> createComment(String user_id, String topicId, String content) {
-        Map<String, String> params = new HashMap<>();
-        params.put("user_id", user_id);
-        params.put("topic_id", topicId);
-        params.put("content", content);
 
-        return HttpCoreEngin.get(mContext).rxpost(URLConfig.CREATE_COMMENT_URL, new TypeReference<ResultInfo<String>>() {
-                }.getType(),
-                params, true, true, true);
+
+        return request.createComment(user_id, topicId, content).subscribeOn(Schedulers.io()).observeOn(AndroidSchedulers.mainThread());
     }
 
 
@@ -713,11 +454,7 @@ public class LoveEngine extends BaseEngine {
      */
     public Observable<ResultInfo<String>> commentLike(String userId, String commentId) {
 
-        Map<String, String> params = new HashMap<>();
-        params.put("user_id", userId);
-        params.put("comment_id", commentId);
-        return HttpCoreEngin.get(mContext).rxpost(URLConfig.COMMENT_LIKE_URL, new TypeReference<ResultInfo<String>>() {
-        }.getType(), params, true, true, true);
+        return request.commentLike(userId, commentId).subscribeOn(Schedulers.io()).observeOn(AndroidSchedulers.mainThread());
 
     }
 
@@ -727,8 +464,9 @@ public class LoveEngine extends BaseEngine {
      * @return
      */
     public Observable<ResultInfo<CommunityTagInfoWrapper>> getCommunityTagInfos() {
-        return HttpCoreEngin.get(mContext).rxpost(URLConfig.COMMUNITY_TAG_URL, new TypeReference<ResultInfo<CommunityTagInfoWrapper>>() {
-        }.getType(), null, true, true, true);
+
+        return request.getCommunityTagInfos().subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread());
     }
 
     /**
@@ -741,14 +479,10 @@ public class LoveEngine extends BaseEngine {
      */
 
     public Observable<ResultInfo<CommunityInfoWrapper>> getCommunityHotList(String userId, int page, int pageSize) {
-        Map<String, String> params = new HashMap<>();
-        params.put("user_id", userId);
 
-        params.put("page", String.valueOf(page));
-        params.put("page_size", String.valueOf(pageSize));
 
-        return HttpCoreEngin.get(mContext).rxpost(URLConfig.COMMUNITY_HOT_LIST_URL, new TypeReference<ResultInfo<CommunityInfoWrapper>>() {
-        }.getType(), params, true, true, true);
+        return request.getCommunityHotList(userId, page, pageSize).subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread());
     }
 
     /**
@@ -760,15 +494,10 @@ public class LoveEngine extends BaseEngine {
      * @return
      */
     public Observable<ResultInfo<String>> publishCommunityInfo(String userId, String cat_id, String content) {
-        Map<String, String> params = new HashMap<>();
 
-        params.put("user_id", userId);
-        params.put("cat_id", cat_id);
-        params.put("content", content);
 
-        return HttpCoreEngin.get(mContext).rxpost(URLConfig.PUBLISH_COMMUNITY_URL, new TypeReference<ResultInfo<String>>() {
-                }.getType(),
-                params, true, true, true);
+        return request.publishCommunityInfo(userId, cat_id, content).subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread());
     }
 
 
@@ -780,15 +509,9 @@ public class LoveEngine extends BaseEngine {
      */
     public Observable<ResultInfo<CommunityInfoWrapper>> getMyCommunityInfos(String userId, int page, int pageSize) {
 
-        Map<String, String> params = new HashMap<>();
 
-        params.put("user_id", userId);
-        params.put("page", String.valueOf(page));
-        params.put("page_size", String.valueOf(pageSize));
-        return HttpCoreEngin.get(mContext).rxpost(URLConfig.COMMUNITY_MY_URL, new TypeReference<ResultInfo<CommunityInfoWrapper>>() {
-                }.getType(),
-                params, true, true, true);
-
+        return request.getMyCommunityInfos(userId, page, pageSize).subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread());
     }
 
     /**
@@ -799,8 +522,9 @@ public class LoveEngine extends BaseEngine {
 
     public Observable<ResultInfo<TopTopicInfo>> getTopTopicInfos() {
 
-        return HttpCoreEngin.get(mContext).rxpost(URLConfig.TOP_TOPIC_URL, new TypeReference<ResultInfo<TopTopicInfo>>() {
-        }.getType(), null, true, true, true);
+
+        return request.getTopTopicInfos().subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread());
     }
 
 
@@ -815,16 +539,9 @@ public class LoveEngine extends BaseEngine {
      */
     public Observable<ResultInfo<CommunityInfoWrapper>> getCommunityTagListInfo(String userId, String catId, int page, int pageSize) {
 
-        Map<String, String> params = new HashMap<>();
 
-        params.put("user_id", userId);
-        params.put("cat_id", catId);
-        params.put("page", String.valueOf(page));
-        params.put("page_size", String.valueOf(pageSize));
-
-        return HttpCoreEngin.get(mContext).rxpost(URLConfig.COMMUNITY_TAG_LIST_URL, new TypeReference<ResultInfo<CommunityInfoWrapper>>() {
-                }.getType(),
-                params, true, true, true);
+        return request.getCommunityTagListInfo(userId, catId, page, pageSize).subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread());
 
     }
 
@@ -834,8 +551,9 @@ public class LoveEngine extends BaseEngine {
      * @return
      */
     public Observable<ResultInfo<List<BannerInfo>>> getIndexBanner() {
-        return HttpCoreEngin.get(mContext).rxpost(URLConfig.INDEX_BANNER_URL, new TypeReference<ResultInfo<List<BannerInfo>>>() {
-        }.getType(), null, true, true, true);
+
+        return request.getIndexBanner().subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread());
     }
 
     /**
@@ -847,11 +565,10 @@ public class LoveEngine extends BaseEngine {
      */
 
     public Observable<ResultInfo<List<CourseInfo>>> getChatCourseInfos(int page, int page_size) {
-        Map<String, String> params = new HashMap<>();
-        params.put("page", page + "");
-        params.put("page_size", page_size + "");
-        return HttpCoreEngin.get(mContext).rxpost(URLConfig.CHAT_LESSONS_URL, new TypeReference<ResultInfo<List<CourseInfo>>>() {
-        }.getType(), params, true, true, true);
+
+
+        return request.getChatCourseInfos(page, page_size).subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread());
     }
 
 
@@ -862,13 +579,90 @@ public class LoveEngine extends BaseEngine {
      * @return
      */
     public Observable<ResultInfo<CourseInfo>> getChatCourseDetailInfo(String id) {
-        Map<String, String> params = new HashMap<>();
-        params.put("id", id);
 
-        return HttpCoreEngin.get(mContext).rxpost(URLConfig.CHAT_LESSON_DETAIL_URL, new TypeReference<ResultInfo<CourseInfo>>() {
-        }.getType(), params, true, true, true);
+        return request.getChatCourseDetailInfo(id).subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread());
 
     }
 
 
+    /**
+     * 用户进入统计
+     *
+     * @return
+     */
+    public Observable<ResultInfo<String>> userActive() {
+
+        return request.userActive(URLConfig.USER_ACTIVATE_URL).subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread());
+    }
+
+
+    /**
+     * 第三方登录
+     *
+     * @param access_token 登录token
+     * @param account_type 登录类型 1 qq 2 微信
+     * @param face         图像
+     * @param nick_name    昵称
+     * @return
+     */
+
+    public Observable<ResultInfo<UserInfo>> thirdLogin(String access_token, int account_type, String face, String sex, String nick_name) {
+
+
+        return request.thirdLogin(access_token, account_type, face, sex, nick_name).subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread());
+    }
+
+
+    public Observable<String> connectUpFileNet(Map<String, String> params, File file) {
+
+
+        Map<String, RequestBody> requestBodyMap = new HashMap<>();
+        for (Map.Entry<String, String> entry : params.entrySet()) {
+
+            requestBodyMap.put(entry.getKey(), RequestBody.create(MediaType.parse("text/plain"), entry.getValue()));
+        }
+
+        String fileName = URLConfig.BASE_NORMAL_FILE_DIR + File.separator + System.currentTimeMillis() + (int) (Math.random() * 10000) + ".jpg";
+
+        RequestBody photoRequestBody = RequestBody.create(MediaType.parse("image/png"), file);
+        MultipartBody.Part photo = MultipartBody.Part.createFormData("img", fileName, photoRequestBody);
+
+        return request.connectUpFileNet(URLConfig.URL_IMAGE_CREATE, requestBodyMap, photo)
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread());
+    }
+
+    public Observable<String> connectNet(Map<String, String> params) {
+        return request.connectNet(URLConfig.URL_IMAGE_CREATE, params, false, false).
+                subscribeOn(Schedulers.io()).
+                observeOn(AndroidSchedulers.mainThread());
+    }
+
+    public Observable<ResultInfo<SmartChatItem>> smartSearchVerbal(String keyword, int section) {
+        return request.smartSearchVerbal(keyword, UserInfoHelper.getUid(), section)
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread());
+    }
+
+    public Observable<ResultInfo<String>> aiCollect(String id) {
+        return request.aiCollect(id, UserInfoHelper.getUid())
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread());
+    }
+
+    public Observable<ResultInfo<String>> aiPraise(String id) {
+        return request.aiPraise(id, UserInfoHelper.getUid())
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread());
+    }
+
+
+    public Observable<ResultInfo<List<LoveHealDetDetailsBean>>> getVerbalList(int page, int page_size) {
+        return request.getVerbalList(UserInfoHelper.getUid(), page, page_size)
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread());
+    }
 }

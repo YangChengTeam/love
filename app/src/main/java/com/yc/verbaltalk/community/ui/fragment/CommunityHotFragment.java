@@ -1,19 +1,19 @@
 package com.yc.verbaltalk.community.ui.fragment;
 
+import android.util.Log;
 import android.view.View;
 
 import com.alibaba.fastjson.TypeReference;
-import com.kk.securityhttp.domain.ResultInfo;
-import com.kk.securityhttp.net.contains.HttpConfig;
+
 import com.umeng.analytics.MobclickAgent;
 import com.yc.verbaltalk.R;
+import com.yc.verbaltalk.base.utils.UserInfoHelper;
 import com.yc.verbaltalk.community.adapter.CommunityHotAdapter;
 import com.yc.verbaltalk.chat.bean.CommunityInfo;
 import com.yc.verbaltalk.chat.bean.CommunityInfoWrapper;
 import com.yc.verbaltalk.chat.bean.CommunityTagInfo;
 import com.yc.verbaltalk.chat.bean.CommunityTagInfoWrapper;
 import com.yc.verbaltalk.base.engine.LoveEngine;
-import com.yc.verbaltalk.model.single.YcSingle;
 import com.yc.verbaltalk.community.ui.activity.CommunityDetailActivity;
 import com.yc.verbaltalk.community.ui.activity.CommunityTagListActivity;
 import com.yc.verbaltalk.base.fragment.BaseMainFragment;
@@ -27,7 +27,10 @@ import androidx.core.content.ContextCompat;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
-import rx.Subscriber;
+import io.reactivex.observers.DisposableObserver;
+
+import yc.com.rthttplibrary.bean.ResultInfo;
+import yc.com.rthttplibrary.config.HttpConfig;
 
 /**
  * Created by suns  on 2019/8/28 09:17.
@@ -73,6 +76,8 @@ public class CommunityHotFragment extends BaseMainFragment implements View.OnCli
 
     }
 
+
+
     private void initListener() {
         swipeRefreshLayout.setColorSchemeColors(ContextCompat.getColor(mMainActivity, R.color.red_crimson));
         swipeRefreshLayout.setOnRefreshListener(() -> {
@@ -92,7 +97,8 @@ public class CommunityHotFragment extends BaseMainFragment implements View.OnCli
 
                 } else if (CommunityInfo.ITEM_CONTENT == communityInfo.itemType) {
                     MobclickAgent.onEvent(mMainActivity, "look_community", "查看发帖详情");
-                    CommunityDetailActivity.StartActivity(mMainActivity, getString(R.string.community_detail), communityInfo.topicId);
+                    if (UserInfoHelper.isLogin(mMainActivity))
+                        CommunityDetailActivity.StartActivity(mMainActivity, getString(R.string.community_detail), communityInfo.topicId);
                 }
             }
 
@@ -107,11 +113,11 @@ public class CommunityHotFragment extends BaseMainFragment implements View.OnCli
                     switch (view.getId()) {
                         case R.id.iv_like:
                         case R.id.ll_like:
+                            if (UserInfoHelper.isLogin(getActivity()))
+                                if (communityInfo.is_dig == 0) {//未点赞
 
-                            if (communityInfo.is_dig == 0) {//未点赞
-
-                                like(communityInfo, position);
-                            }
+                                    like(communityInfo, position);
+                                }
 
                             break;
                     }
@@ -127,10 +133,10 @@ public class CommunityHotFragment extends BaseMainFragment implements View.OnCli
     }
 
     private void like(CommunityInfo communityInfo, int position) {
-        int userId = YcSingle.getInstance().id;
-        loveEngin.likeTopic(String.valueOf(userId), communityInfo.topicId).subscribe(new Subscriber<ResultInfo<String>>() {
+
+        loveEngin.likeTopic(UserInfoHelper.getUid(), communityInfo.topicId).subscribe(new DisposableObserver<ResultInfo<String>>() {
             @Override
-            public void onCompleted() {
+            public void onComplete() {
 
             }
 
@@ -179,9 +185,9 @@ public class CommunityHotFragment extends BaseMainFragment implements View.OnCli
             loadDialog.showLoadingDialog();
         }
 
-        loveEngin.getCommunityTagInfos().subscribe(new Subscriber<ResultInfo<CommunityTagInfoWrapper>>() {
+        loveEngin.getCommunityTagInfos().subscribe(new DisposableObserver<ResultInfo<CommunityTagInfoWrapper>>() {
             @Override
-            public void onCompleted() {
+            public void onComplete() {
 
             }
 
@@ -205,26 +211,25 @@ public class CommunityHotFragment extends BaseMainFragment implements View.OnCli
     }
 
     public void getData() {
-        int id = YcSingle.getInstance().id;
-        if (id < 0) {
-            mMainActivity.showToLoginDialog();
-            return;
-        }
 
-        loveEngin.getCommunityHotList(String.valueOf(id), page, PAGE_SIZE).subscribe(new Subscriber<ResultInfo<CommunityInfoWrapper>>() {
+
+        loveEngin.getCommunityHotList(UserInfoHelper.getUid(), page, PAGE_SIZE).subscribe(new DisposableObserver<ResultInfo<CommunityInfoWrapper>>() {
             @Override
-            public void onCompleted() {
+            public void onComplete() {
                 if (loadDialog != null) loadDialog.dismissLoadingDialog();
                 if (swipeRefreshLayout.isRefreshing()) swipeRefreshLayout.setRefreshing(false);
             }
 
             @Override
             public void onError(Throwable e) {
-
+                if (loadDialog != null) loadDialog.dismissLoadingDialog();
+                if (swipeRefreshLayout.isRefreshing()) swipeRefreshLayout.setRefreshing(false);
             }
 
             @Override
             public void onNext(ResultInfo<CommunityInfoWrapper> communityInfoWrapperResultInfo) {
+                if (loadDialog != null) loadDialog.dismissLoadingDialog();
+                if (swipeRefreshLayout.isRefreshing()) swipeRefreshLayout.setRefreshing(false);
                 if (communityInfoWrapperResultInfo != null && communityInfoWrapperResultInfo.code == HttpConfig.STATUS_OK) {
                     CommunityInfoWrapper communityInfoWrapper = communityInfoWrapperResultInfo.data;
                     if (communityInfoWrapper != null && communityInfoWrapper.list != null) {

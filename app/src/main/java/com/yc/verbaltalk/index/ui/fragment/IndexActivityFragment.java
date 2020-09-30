@@ -3,6 +3,8 @@ package com.yc.verbaltalk.index.ui.fragment;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
+import android.text.Html;
+import android.util.Log;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -12,12 +14,14 @@ import android.view.WindowManager;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import com.kk.utils.ScreenUtil;
+
 import com.yc.verbaltalk.R;
 import com.yc.verbaltalk.base.view.RoundCornerImg;
 
+import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.DialogFragment;
+import yc.com.rthttplibrary.util.ScreenUtil;
 
 /**
  * Created by suns  on 2019/9/26 17:48.
@@ -29,9 +33,10 @@ public class IndexActivityFragment extends DialogFragment {
     private String mWx = "";
     private TextView tvWx;
 
+
     @Nullable
     @Override
-    public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
+    public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
 
         window = getDialog().getWindow();
 
@@ -78,6 +83,7 @@ public class IndexActivityFragment extends DialogFragment {
     protected void initView() {
 
         RoundCornerImg roundCornerImg = (RoundCornerImg) getView(R.id.roundCornerImg);
+        tvWx = (TextView) getView(R.id.tv_wx);
 
         roundCornerImg.setCorner(20);
 
@@ -113,6 +119,12 @@ public class IndexActivityFragment extends DialogFragment {
     public void setWX(String wx) {
         this.mWx = wx;
 
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        tvWx.setText(Html.fromHtml("添加客服微信：<font color='#ddae52'>" + mWx + "</font>"));
     }
 
     private onToWxListener listener;

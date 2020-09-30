@@ -13,25 +13,24 @@ import android.widget.TextView;
 import com.alibaba.fastjson.TypeReference;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
-import com.kk.securityhttp.net.contains.HttpConfig;
 import com.umeng.analytics.MobclickAgent;
 import com.yc.verbaltalk.R;
-import com.yc.verbaltalk.mine.adapter.BecomeVipAdapter;
-import com.yc.verbaltalk.base.engine.MySubscriber;
-import com.yc.verbaltalk.chat.bean.AResultInfo;
+import com.yc.verbaltalk.base.engine.OrderEngine;
+import com.yc.verbaltalk.base.utils.CommonInfoHelper;
+import com.yc.verbaltalk.base.utils.UserInfoHelper;
+import com.yc.verbaltalk.base.view.LoadDialog;
 import com.yc.verbaltalk.chat.bean.BecomeVipBean;
 import com.yc.verbaltalk.chat.bean.IndexDoodsBean;
 import com.yc.verbaltalk.chat.bean.OrdersInitBean;
 import com.yc.verbaltalk.chat.bean.OthersJoinNum;
+import com.yc.verbaltalk.chat.bean.UserInfo;
 import com.yc.verbaltalk.chat.bean.event.EventBusWxPayResult;
 import com.yc.verbaltalk.chat.bean.event.EventPayVipSuccess;
-import com.yc.verbaltalk.model.constant.ConstantKey;
-import com.yc.verbaltalk.base.engine.OrderEngine;
-import com.yc.verbaltalk.model.single.YcSingle;
-import com.yc.verbaltalk.pay.ui.activity.PayActivity;
+import com.yc.verbaltalk.mine.adapter.BecomeVipAdapter;
 import com.yc.verbaltalk.mine.ui.fragment.ShareAppFragment;
-import com.yc.verbaltalk.base.view.LoadDialog;
-import com.yc.verbaltalk.base.utils.CommonInfoHelper;
+import com.yc.verbaltalk.model.constant.ConstantKey;
+import com.yc.verbaltalk.pay.ui.activity.PayActivity;
+import com.yc.verbaltalk.pay.ui.fragment.PaySuccessFragment;
 
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
@@ -45,6 +44,9 @@ import java.util.Map;
 import androidx.appcompat.app.AlertDialog;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
+import io.reactivex.observers.DisposableObserver;
+import yc.com.rthttplibrary.bean.ResultInfo;
+import yc.com.rthttplibrary.config.HttpConfig;
 
 public class BecomeVipActivity extends PayActivity implements View.OnClickListener {
     private int[] imgResIds = {R.mipmap.become_vip_icon_06, R.mipmap.become_vip_icon_01, R.mipmap.become_vip_icon_02, R.mipmap.become_vip_icon_03,
@@ -106,28 +108,32 @@ public class BecomeVipActivity extends PayActivity implements View.OnClickListen
         });
 
 
-        mOrderEngine.othersJoinNum("Others/join_num").subscribe(new MySubscriber<AResultInfo<OthersJoinNum>>(mLoadingDialog) {
+        mOrderEngine.othersJoinNum().subscribe(new DisposableObserver<ResultInfo<OthersJoinNum>>() {
 
             @Override
-            protected void onNetNext(AResultInfo<OthersJoinNum> othersJoinNumAResultInfo) {
-                OthersJoinNum othersJoinNum = othersJoinNumAResultInfo.data;
-                mNumber = othersJoinNum.number;
+            public void onComplete() {
 
-                CommonInfoHelper.setO(BecomeVipActivity.this, othersJoinNum, "pay_vip_Others_join_num");
-                if (!mIsCacheNumberExist) {
-                    becomeVipAdapter.setNumber(mNumber);
-                }
             }
 
             @Override
-            protected void onNetError(Throwable e) {
+            public void onError(Throwable e) {
                 netData();
             }
 
             @Override
-            protected void onNetCompleted() {
+            public void onNext(ResultInfo<OthersJoinNum> othersJoinNumAResultInfo) {
+                if (othersJoinNumAResultInfo != null && othersJoinNumAResultInfo.code == HttpConfig.STATUS_OK && othersJoinNumAResultInfo.data != null) {
+                    OthersJoinNum othersJoinNum = othersJoinNumAResultInfo.data;
+                    mNumber = othersJoinNum.number;
 
+                    CommonInfoHelper.setO(BecomeVipActivity.this, othersJoinNum, "pay_vip_Others_join_num");
+                    if (!mIsCacheNumberExist) {
+                        becomeVipAdapter.setNumber(mNumber);
+                    }
+                }
             }
+
+
         });
     }
 
@@ -145,24 +151,26 @@ public class BecomeVipActivity extends PayActivity implements View.OnClickListen
             }
         });
 
-        mOrderEngine.indexDoods("goods/index").subscribe(new MySubscriber<AResultInfo<List<IndexDoodsBean>>>(loadDialog) {
+        mOrderEngine.indexGoods().subscribe(new DisposableObserver<ResultInfo<List<IndexDoodsBean>>>() {
 
             @Override
-            protected void onNetNext(AResultInfo<List<IndexDoodsBean>> listAResultInfo) {
+            public void onComplete() {
+                loadDialog.dismissLoadingDialog();
+            }
+
+            @Override
+            public void onError(Throwable e) {
+                loadDialog.dismissLoadingDialog();
+            }
+
+            @Override
+            public void onNext(ResultInfo<List<IndexDoodsBean>> listAResultInfo) {
+                loadDialog.dismissLoadingDialog();
                 if (listAResultInfo != null && listAResultInfo.code == HttpConfig.STATUS_OK && listAResultInfo.data != null)
                     createNewData(listAResultInfo.data);
-
             }
 
-            @Override
-            protected void onNetError(Throwable e) {
 
-            }
-
-            @Override
-            protected void onNetCompleted() {
-
-            }
         });
     }
 
@@ -249,70 +257,72 @@ public class BecomeVipActivity extends PayActivity implements View.OnClickListen
 
     private void nextOrders(final int payType, IndexDoodsBean indexDoodsBean) { // PAY_TYPE_ZFB=0   PAY_TYPE_WX=1;
         if (indexDoodsBean == null) return;
-        int id = YcSingle.getInstance().id;
-        String name = YcSingle.getInstance().name;
-        if (id <= 0) {
-            showToLoginDialog();
-            return;
-        }
-        String payWayName;
-        if (payType == 0) {
-            MobclickAgent.onEvent(this, ConstantKey.UM_PAY_ORDERS_ALIPAY);
-            payWayName = "alipay";
-        } else {
-            MobclickAgent.onEvent(this, ConstantKey.UM_PAY_ORDERS_WXPAY);
-            payWayName = "wxpay";
-        }
+        if (UserInfoHelper.isLogin(this)) {
 
-        Map<String, String> params = new HashMap<>();
-        params.put("user_id", String.valueOf(id));
-        if (!TextUtils.isEmpty(name)) {
-            params.put("user_name", name);
-        }
 
-        params.put("title", indexDoodsBean.name); //订单标题，会员购买，商品购买等
-        if (!TextUtils.isEmpty(indexDoodsBean.m_price))
-            params.put("money", String.valueOf(indexDoodsBean.m_price));
+            String payWayName;
+            if (payType == 0) {
+                MobclickAgent.onEvent(this, ConstantKey.UM_PAY_ORDERS_ALIPAY);
+                payWayName = "alipay";
+            } else {
+                MobclickAgent.onEvent(this, ConstantKey.UM_PAY_ORDERS_WXPAY);
+                payWayName = "wxpay";
+            }
 
-        params.put("pay_way_name", payWayName);
+            Map<String, String> params = new HashMap<>();
+            params.put("user_id", UserInfoHelper.getUid());
+            UserInfo userInfo = UserInfoHelper.getUserInfo();
+            if (null != userInfo && !TextUtils.isEmpty(userInfo.name)) {
+                params.put("user_name", userInfo.name);
+            }
 
-        JsonObject jsonObject = new JsonObject();
-        int goodId = indexDoodsBean.id;
-        jsonObject.addProperty("goods_id", goodId);
-        jsonObject.addProperty("num", 1);
-        JsonArray jsonArray = new JsonArray();
-        jsonArray.add(jsonObject);
-        params.put("goods_list", jsonArray.toString());
+            params.put("title", indexDoodsBean.name); //订单标题，会员购买，商品购买等
+            if (!TextUtils.isEmpty(indexDoodsBean.m_price))
+                params.put("money", String.valueOf(indexDoodsBean.m_price));
 
-        if (mLoadingDialog == null) {
-            mLoadingDialog = new LoadDialog(this);
-        }
-        mLoadingDialog.showLoadingDialog();
-        mOrderEngine.initOrders(params, "orders/init").subscribe(new MySubscriber<AResultInfo<OrdersInitBean>>(mLoadingDialog) {
-            @Override
-            protected void onNetNext(AResultInfo<OrdersInitBean> ordersInitBeanAResultInfo) {
-                OrdersInitBean ordersInitBean = ordersInitBeanAResultInfo.data;
-                OrdersInitBean.ParamsBean paramsBean = ordersInitBean.params;
-                Log.d("mylog", "onNetNext: payType == 0  Zfb   payType " + payType);
-                if (payType == 0) {
+            params.put("pay_way_name", payWayName);
+
+            JsonObject jsonObject = new JsonObject();
+            int goodId = indexDoodsBean.id;
+            jsonObject.addProperty("goods_id", goodId);
+            jsonObject.addProperty("num", 1);
+            JsonArray jsonArray = new JsonArray();
+            jsonArray.add(jsonObject);
+            params.put("goods_list", jsonArray.toString());
+
+            if (mLoadingDialog == null) {
+                mLoadingDialog = new LoadDialog(this);
+            }
+            mLoadingDialog.showLoadingDialog();
+            mOrderEngine.initOrders(params).subscribe(new DisposableObserver<ResultInfo<OrdersInitBean>>() {
+                @Override
+                public void onComplete() {
+                    mLoadingDialog.dismissLoadingDialog();
+                }
+
+                @Override
+                public void onError(Throwable e) {
+                    mLoadingDialog.dismissLoadingDialog();
+                }
+
+                @Override
+                public void onNext(ResultInfo<OrdersInitBean> ordersInitBeanAResultInfo) {
+                    mLoadingDialog.dismissLoadingDialog();
+                    if (ordersInitBeanAResultInfo != null && ordersInitBeanAResultInfo.code == HttpConfig.STATUS_OK && ordersInitBeanAResultInfo.data != null) {
+                        OrdersInitBean ordersInitBean = ordersInitBeanAResultInfo.data;
+                        OrdersInitBean.ParamsBean paramsBean = ordersInitBean.params;
+                        Log.d("mylog", "onNetNext: payType == 0  Zfb   payType " + payType);
+                        if (payType == 0) {
 //                    String info="alipay_sdk=alipay-sdk-php-20180705&app_id=2019051564672294&biz_content=%7B%22timeout_express%22%3A%2230m%22%2C%22seller_id%22%3A%22%22%2C%22product_code%22%3A%22QUICK_MSECURITY_PAY%22%2C%22total_amount%22%3A0.01%2C%22subject%22%3A%221%22%2C%22body%22%3A%22%5Cu5145%5Cu503c%22%2C%22out_trade_no%22%3A%22201905161657594587%22%7D&charset=UTF-8&format=json&method=alipay.trade.app.pay&notify_url=http%3A%2F%2Flove.bshu.com%2Fnotify%2Falipay%2Fdefault&sign_type=RSA2&timestamp=2019-05-16+16%3A57%3A59&version=1.0&sign=BRj%2FY6Bk319dZwNoHwWbYIKYZFJahg1TRgvhFf7ubJzFKZEIESnattbFnaGJ6wq6%2BmauaKZcGv83ianrZfw0R%2BMQ9OmbTPXjKYGZUMzdPNDV3NygmVMgM68vs6oeHyQOxsbx16L4ltGi%2BdEjPDsLWqlw8E1INukZMxV4EDbFl8ZlyzKYerY9YZR1dRtxscFXgG7npmyPp3mO%2BA%2BywZABb5sANxqBShG%2FgeGbE%2BG1hpkZUE4KYGV7rCC80dcBjODWPgj%2FKQtFUXnx5NzCfWIeUMcyc8UaeK%2FsxqyrMJmsFPQgCBYGR5HH1llIfQ8NJuitwhDnJTKMhqCgh03UG9j%2B%2BQ%3D%3D";
 //                    toZfbPay(info);
-                    toZfbPay(paramsBean.info);
-                } else {
-                    toWxPay(paramsBean);
+                            toZfbPay(paramsBean.info);
+                        } else {
+                            toWxPay(paramsBean);
+                        }
+                    }
                 }
-            }
-
-            @Override
-            protected void onNetError(Throwable e) {
-
-            }
-
-            @Override
-            protected void onNetCompleted() {
-
-            }
-        });
+            });
+        }
     }
 
     @Subscribe(threadMode = ThreadMode.MAIN)
@@ -323,8 +333,6 @@ public class BecomeVipActivity extends PayActivity implements View.OnClickListen
                 showPaySuccessDialog(true, event.mess);
                 break;
             case -1://错误
-                showPaySuccessDialog(false, event.mess);
-                break;
             case -2://用户取消
                 showPaySuccessDialog(false, event.mess);
                 break;
@@ -347,6 +355,9 @@ public class BecomeVipActivity extends PayActivity implements View.OnClickListen
         if (result) {
             MobclickAgent.onEvent(BecomeVipActivity.this, ConstantKey.UM_PAY_SUCCESS_ID);
             EventBus.getDefault().post(new EventPayVipSuccess());
+
+            PaySuccessFragment paySuccessFragment = new PaySuccessFragment();
+            paySuccessFragment.show(getSupportFragmentManager(), "");
         }
         alertDialog.setMessage(des);
 

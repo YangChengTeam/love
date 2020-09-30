@@ -13,11 +13,11 @@ import android.view.WindowManager;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import com.kk.utils.ScreenUtil;
 import com.yc.verbaltalk.R;
 
 import androidx.annotation.Nullable;
 import androidx.fragment.app.DialogFragment;
+import yc.com.rthttplibrary.util.ScreenUtil;
 
 /**
  * Created by suns  on 2019/9/6 16:41.

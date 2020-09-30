@@ -5,22 +5,22 @@ import android.view.View;
 
 import com.alibaba.fastjson.TypeReference;
 import com.chad.library.adapter.base.BaseQuickAdapter;
-import com.kk.securityhttp.domain.ResultInfo;
-import com.kk.securityhttp.net.contains.HttpConfig;
 import com.yc.verbaltalk.R;
+import com.yc.verbaltalk.base.engine.LoveEngine;
+import com.yc.verbaltalk.base.popwindow.BasePopwindow;
+import com.yc.verbaltalk.base.utils.CommonInfoHelper;
 import com.yc.verbaltalk.chat.adapter.AudioFilterAdapter;
 import com.yc.verbaltalk.chat.bean.AudioDataInfo;
 import com.yc.verbaltalk.chat.bean.AudioDataWrapperInfo;
-import com.yc.verbaltalk.base.engine.LoveEngine;
 import com.yc.verbaltalk.model.util.SPUtils;
-import com.yc.verbaltalk.base.popwindow.BasePopwindow;
-import com.yc.verbaltalk.base.utils.CommonInfoHelper;
 
 import java.util.List;
 
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
-import rx.Subscriber;
+import io.reactivex.observers.DisposableObserver;
+import yc.com.rthttplibrary.bean.ResultInfo;
+import yc.com.rthttplibrary.config.HttpConfig;
 
 /**
  * Created by wanglin  on 2019/7/22 08:49.
@@ -68,9 +68,9 @@ public class AudioFilterPopwindow extends BasePopwindow {
         });
 
 
-        loveEngin.getAudioDataInfo().subscribe(new Subscriber<ResultInfo<AudioDataWrapperInfo>>() {
+        loveEngin.getAudioDataInfo().subscribe(new DisposableObserver<ResultInfo<AudioDataWrapperInfo>>() {
             @Override
-            public void onCompleted() {
+            public void onComplete() {
 
             }
 

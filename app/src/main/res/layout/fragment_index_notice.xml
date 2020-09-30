@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="@mipmap/announcement_bg"
+    android:gravity="center_horizontal"
+    android:orientation="vertical">
+
+
+    <TextView
+        android:id="@+id/tv_notice_content"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="30dp"
+        android:layout_marginTop="194dp"
+        android:layout_marginRight="30dp"
+        android:lineSpacingExtra="5dp"
+        android:text="系统升级，更新用户登录注册后退出重启即可正常使用！如遇问题，请加客服微信nuanjiguiren886"
+        android:textColor="#666666" />
+
+    <TextView
+        android:id="@+id/tv_know"
+        android:layout_width="match_parent"
+        android:layout_height="40dp"
+        android:layout_marginLeft="30dp"
+        android:layout_marginTop="18dp"
+        android:layout_marginRight="30dp"
+        android:layout_marginBottom="10dp"
+        android:background="@mipmap/announcement_button"
+        android:gravity="center"
+        android:text="我知道了"
+        android:textColor="@color/white"
+        android:textSize="15sp" />
+
+
+</LinearLayout>
+

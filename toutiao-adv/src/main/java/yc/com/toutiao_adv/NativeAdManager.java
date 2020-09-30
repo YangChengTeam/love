@@ -5,12 +5,16 @@ import android.util.Log;
 import android.view.View;
 
 import com.bytedance.sdk.openadsdk.AdSlot;
+import com.bytedance.sdk.openadsdk.FilterWord;
 import com.bytedance.sdk.openadsdk.TTAdConstant;
+import com.bytedance.sdk.openadsdk.TTAdDislike;
 import com.bytedance.sdk.openadsdk.TTAdNative;
 import com.bytedance.sdk.openadsdk.TTNativeExpressAd;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 /**
  * Created by suns  on 2020/1/6 11:50.
@@ -37,7 +41,7 @@ public class NativeAdManager implements OnAdvManagerListener {
 
     @Override
     public void showAD() {
-//step2:创建TTAdNative对象，createAdNative(Context context) banner广告context需要传入Activity对象
+        //step2:创建TTAdNative对象，createAdNative(Context context) banner广告context需要传入Activity对象
         mTTAdNative = TTAdManagerHolder.get().createAdNative(mActivity);
         //step3:(可选，强烈建议在合适的时机调用):申请部分权限，如read_phone_state,防止获取不了imei时候，下载类广告没有填充的问题。
         TTAdManagerHolder.get().requestPermissionIfNecessary(mActivity);
@@ -61,7 +65,7 @@ public class NativeAdManager implements OnAdvManagerListener {
         mTTAdNative.loadNativeExpressAd(adSlot, new TTAdNative.NativeExpressAdListener() {
             @Override
             public void onError(int code, String message) {
-
+                Log.e("TAG", "onError: " + code + ";message:" + message);
             }
 
             @Override
@@ -80,8 +84,8 @@ public class NativeAdManager implements OnAdvManagerListener {
 
     private void bindAdListener(List<TTNativeExpressAd> ads) {
 
-        for (final TTNativeExpressAd ad : ads) {
-
+        for (TTNativeExpressAd ad : ads) {
+            mDatas.add(ad);
             ad.setExpressInteractionListener(new TTNativeExpressAd.ExpressAdInteractionListener() {
                 @Override
                 public void onAdClicked(View view, int type) {
@@ -103,22 +107,53 @@ public class NativeAdManager implements OnAdvManagerListener {
                 public void onRenderSuccess(View view, float width, float height) {
                     Log.e("ExpressView", "render suc:" + (System.currentTimeMillis() - startTime));
                     //返回view的宽高 单位 dp
-                    mDatas.add(ad);
+
 //                    mContainer.removeAllViews();
 //                    mContainer.addView(view);
                 }
             });
             ad.render();
+
             //dislike设置
-//        bindDislike(ad, false);
-            if (ad.getInteractionType() != TTAdConstant.INTERACTION_TYPE_DOWNLOAD) {
-                return;
-            }
+            bindDislike(ad, false);
         }
+
+
         if (mDatas.size() > 0) {
             stateListener.onTTNativeExpressed(mDatas);
         }
     }
+
+    /**
+     * 设置广告的不喜欢，开发者可自定义样式
+     *
+     * @param ad
+     * @param customStyle 是否自定义样式，true:样式自定义
+     */
+    private void bindDislike(TTNativeExpressAd ad, boolean customStyle) {
+
+        //使用默认个性化模板中默认dislike弹出样式
+        ad.setDislikeCallback(mActivity, new TTAdDislike.DislikeInteractionCallback() {
+            @Override
+            public void onSelected(int position, String value) {
+
+                //用户选择不喜欢原因后，移除广告展示
+//                mExpressContainer.removeAllViews();
+                stateListener.removeNativeAd(ad, position);
+            }
+
+            @Override
+            public void onCancel() {
+
+            }
+
+            @Override
+            public void onRefuse() {
+
+            }
+        });
+    }
+
 
     @Override
     public void onResume() {
@@ -134,10 +169,13 @@ public class NativeAdManager implements OnAdvManagerListener {
     @Override
     public void onDestroy() {
         if (mDatas != null) {
-            for (TTNativeExpressAd ad : mDatas) {
-                if (ad != null) {
-                    ad.destroy();
+            if (mDatas.size() > 0) {
+                for (TTNativeExpressAd ad : mDatas) {
+                    if (ad != null) {
+                        ad.destroy();
+                    }
                 }
+
             }
         }
 

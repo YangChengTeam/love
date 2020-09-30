@@ -3,7 +3,8 @@
 
 buildscript {
     ext {
-        greendao_version = '3.2.2'
+        greendao_version = '3.3.0'
+        nav_version = "2.3.0-alpha01"
     }
     repositories {
         google()
@@ -22,7 +23,7 @@ buildscript {
         mavenCentral()
     }
     dependencies {
-        classpath 'com.android.tools.build:gradle:3.5.3'
+        classpath 'com.android.tools.build:gradle:4.0.1'
         classpath "org.greenrobot:greendao-gradle-plugin:$greendao_version"
 //        classpath 'com.android.tools.build:gradle:3.4.1'
         classpath 'com.jfrog.bintray.gradle:gradle-bintray-plugin:1.8.4'

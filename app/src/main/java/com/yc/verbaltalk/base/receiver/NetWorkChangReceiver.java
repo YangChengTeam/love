@@ -20,7 +20,7 @@ import java.util.List;
 
 /**
  * 监听网络状态变化
- * Created by mayn on 2019/5/18.
+ * Created by sunshey on 2019/5/18.
  */
 
 public class NetWorkChangReceiver extends BroadcastReceiver {

@@ -2,9 +2,7 @@ package com.yc.verbaltalk.base.view.imgs;
 
 import java.io.Serializable;
 
-/**
- * Created by mayn on 2019/5/7.
- */
+
 
 public class Image  implements Serializable {
 

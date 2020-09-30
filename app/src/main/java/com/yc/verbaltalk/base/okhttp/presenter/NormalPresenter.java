@@ -1,82 +1,66 @@
 package com.yc.verbaltalk.base.okhttp.presenter;
 
-import com.yc.verbaltalk.base.okhttp.IResultListener;
-import com.yc.verbaltalk.base.okhttp.view.IMoreUiView;
+import android.content.Context;
+
 import com.yc.verbaltalk.base.okhttp.view.INormalUiView;
 import com.yc.verbaltalk.base.okhttp.view.IUpFileUiView;
 
 import java.io.File;
 import java.util.Map;
 
-import okhttp3.Call;
-import okhttp3.Request;
+import io.reactivex.observers.DisposableObserver;
 
 /**
- * Created by mayn on 2019/6/5.
+ * Created by sunshey on 2019/6/5.
  */
 
 public class NormalPresenter extends BasePresenter {
 
-    public NormalPresenter(INormalUiView iChangUiView) {
-        super(iChangUiView);
+    public NormalPresenter(Context context, INormalUiView iChangUiView) {
+        super(context, iChangUiView);
     }
 
-    public void netNormalData(Map<String, String> requestMap, String requestUrl) {
-        mIOkHttpBiz.connectNet(requestMap, requestUrl, new IResultListener() {
+    public void netNormalData(Map<String, String> requestMap) {
+
+        loveEngine.connectNet(requestMap).subscribe(new DisposableObserver<String>() {
             @Override
-            public void onSuccess(String jsonData) {
+            public void onNext(String jsonData) {
                 INormalUiView iNormalUiView = (INormalUiView) mIChangUiView;
                 iNormalUiView.onSuccess(jsonData);
             }
 
             @Override
-            public void onFailed(Call call, Exception e, int id) {
-                mIChangUiView.onFailed(call, e, id);
+            public void onError(Throwable e) {
+                mIChangUiView.onFailed(e.getMessage());
             }
 
             @Override
-            public void onBefore(Request request, int id) {
-                mIChangUiView.onBefore(request, id);
-            }
-        });
-    }
+            public void onComplete() {
 
-    public void netMoreData(Map<String, String> requestMap, String requestUrl) {
-        mIOkHttpBiz.connectNet(requestMap, requestUrl, new IResultListener() {
-            @Override
-            public void onSuccess(String jsonData) {
-                IMoreUiView iMoreUiView = (IMoreUiView) mIChangUiView;
-                iMoreUiView.onMoreSuccess(jsonData);
-            }
-
-            @Override
-            public void onFailed(Call call, Exception e, int id) {
-                mIChangUiView.onFailed(call, e, id);
-            }
-
-            @Override
-            public void onBefore(Request request, int id) {
-                mIChangUiView.onBefore(request, id);
             }
         });
+
+
     }
 
-    public void netUpFileNet(Map<String, String> requestMap, File upFile, String requestUrl){
-        mIOkHttpBiz.connectUpFileNet(requestMap, upFile, requestUrl, new IResultListener() {
+
+    public void netUpFileNet(Map<String, String> requestMap, File upFile) {
+
+        loveEngine.connectUpFileNet(requestMap, upFile).subscribe(new DisposableObserver<String>() {
             @Override
-            public void onSuccess(String jsonData) {
+            public void onNext(String jsonData) {
                 IUpFileUiView iNormalUiView = (IUpFileUiView) mIChangUiView;
                 iNormalUiView.onUpFileSuccess(jsonData);
             }
 
             @Override
-            public void onFailed(Call call, Exception e, int id) {
-                mIChangUiView.onFailed(call, e, id);
+            public void onError(Throwable e) {
+                mIChangUiView.onFailed(e.getMessage());
             }
 
             @Override
-            public void onBefore(Request request, int id) {
-                mIChangUiView.onBefore(request, id);
+            public void onComplete() {
+
             }
         });
     }

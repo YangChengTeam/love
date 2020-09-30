@@ -7,6 +7,7 @@ import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
 import android.graphics.drawable.Drawable;
 import android.net.ConnectivityManager;
+import android.net.Uri;
 import android.net.wifi.WifiManager;
 import android.os.Bundle;
 import android.util.Log;
@@ -14,18 +15,20 @@ import android.view.KeyEvent;
 import android.view.View;
 import android.view.WindowManager;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import com.bumptech.glide.Glide;
 import com.music.player.lib.manager.MusicPlayerManager;
 import com.umeng.socialize.UMShareAPI;
 import com.yc.verbaltalk.R;
 import com.yc.verbaltalk.base.adapter.MainPagerAdapter;
 import com.yc.verbaltalk.index.factory.MainFragmentFactory;
-import com.yc.verbaltalk.model.single.YcSingle;
 import com.yc.verbaltalk.base.receiver.NetWorkChangReceiver;
 import com.yc.verbaltalk.base.view.ControlScrollViewPager;
 
 import androidx.annotation.Nullable;
+import androidx.fragment.app.FragmentPagerAdapter;
 import androidx.viewpager.widget.ViewPager;
 
 //import cn.trinea.android.common.util.PreferencesUtils;
@@ -75,7 +78,6 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
             int currentItem = mVpFragment.getCurrentItem();
             if (MainFragmentFactory.MAIN_FRAGMENT_3 == currentItem && onChildDisposeMainKeyDownListent != null && onChildDisposeMainKeyDownListent.onChildDisposeMainKeyDown()) {
                 Log.d("mylog", "onKeyDown: WebView goBack");
-                return true;
             } else {
                 Log.d("mylog", "onKeyDown: 退出app");
                 MusicPlayerManager.getInstance().unBindService(this);
@@ -84,9 +86,10 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
 //                home.addCategory(Intent.CATEGORY_HOME);
 //                startActivity(home);
                 finish();
-//                System.exit(0);
-                return true;
+                System.exit(0);
             }
+
+            return true;
         }
 
         return super.onKeyDown(keyCode, event);
@@ -116,11 +119,13 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
     @Override
     protected void onDestroy() {
         super.onDestroy();
+
         //解绑
 //        if (isRegistered) {
         if (netWorkChangReceiver != null) {
             unregisterReceiver(netWorkChangReceiver);
         }
+
 //        }
 
     }
@@ -137,6 +142,8 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
 
 //        FloatingActionButton fabToWx = findViewById(R.love_id.comp_main_floating_action_button_to_wx);
         final ImageView ivToWx = findViewById(R.id.comp_main_iv_to_wx);
+
+        LinearLayout llIcon = findViewById(R.id.ll_icon);
 //        fabToWx.setOnClickListener(this);
         ivToWx.setOnClickListener(this);
 
@@ -146,7 +153,7 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
         mTvTab4.setOnClickListener(this);
         mTvTab5.setOnClickListener(this);
 
-        MainPagerAdapter mainPagerAdapter = new MainPagerAdapter(getSupportFragmentManager());
+        MainPagerAdapter mainPagerAdapter = new MainPagerAdapter(getSupportFragmentManager(), FragmentPagerAdapter.BEHAVIOR_RESUME_ONLY_CURRENT_FRAGMENT);
 
         mVpFragment.setAdapter(mainPagerAdapter);
 //        mVpFragment.setOffscreenPageLimit(3);
@@ -162,12 +169,12 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
             @Override
             public void onPageSelected(int position) {
                 if (position == MainFragmentFactory.MAIN_FRAGMENT_2) {
-                    if (ivToWx.getVisibility() != View.GONE) {
-                        ivToWx.setVisibility(View.GONE);
+                    if (llIcon.getVisibility() != View.GONE) {
+                        llIcon.setVisibility(View.GONE);
                     }
                 } else {
-                    if (ivToWx.getVisibility() != View.VISIBLE) {
-                        ivToWx.setVisibility(View.VISIBLE);
+                    if (llIcon.getVisibility() != View.VISIBLE) {
+                        llIcon.setVisibility(View.VISIBLE);
                     }
                 }
             }
@@ -205,11 +212,11 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
                 iconSelect(MainFragmentFactory.MAIN_FRAGMENT_3);
                 break;
             case R.id.comp_main_tv_tab_5:
-                int id = YcSingle.getInstance().id;
-                if (id <= 0) {
-                    showToLoginDialog();
-                    return;
-                }
+//                int id = YcSingle.getInstance().id;
+//                if (id <= 0) {
+//                    showToLoginDialog();
+//                    return;
+//                }
                 mVpFragment.setCurrentItem(MainFragmentFactory.MAIN_FRAGMENT_4, false);
                 iconSelect(MainFragmentFactory.MAIN_FRAGMENT_4);
                 break;
@@ -267,4 +274,15 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
         super.onActivityResult(requestCode, resultCode, data);
         UMShareAPI.get(this).onActivityResult(requestCode, resultCode, data);
     }
+
+    @Override
+    public void onBackPressed() {
+        Log.e("TAG", "onBackPressed: " );
+        finish();
+//        android.os.Process.killProcess(android.os.Process.myPid());
+        System.exit(0);
+        super.onBackPressed();
+    }
+
+
 }

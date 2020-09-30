@@ -13,19 +13,16 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.alibaba.fastjson.TypeReference;
-import com.kk.securityhttp.domain.ResultInfo;
-import com.kk.securityhttp.net.contains.HttpConfig;
-import com.kk.utils.ScreenUtil;
 import com.music.player.lib.bean.MusicInfo;
 import com.music.player.lib.bean.MusicInfoWrapper;
 import com.umeng.analytics.MobclickAgent;
 import com.yc.verbaltalk.R;
-import com.yc.verbaltalk.mine.adapter.AudioMainAdapter;
-import com.yc.verbaltalk.model.single.YcSingle;
 import com.yc.verbaltalk.base.activity.BaseSameActivity;
+import com.yc.verbaltalk.base.utils.CommonInfoHelper;
+import com.yc.verbaltalk.base.utils.UserInfoHelper;
 import com.yc.verbaltalk.base.view.AudioFilterPopwindow;
 import com.yc.verbaltalk.base.view.LoadDialog;
-import com.yc.verbaltalk.base.utils.CommonInfoHelper;
+import com.yc.verbaltalk.mine.adapter.AudioMainAdapter;
 
 import java.util.List;
 
@@ -34,7 +31,10 @@ import androidx.core.content.ContextCompat;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
-import rx.Subscriber;
+import io.reactivex.observers.DisposableObserver;
+import yc.com.rthttplibrary.bean.ResultInfo;
+import yc.com.rthttplibrary.config.HttpConfig;
+import yc.com.rthttplibrary.util.ScreenUtil;
 
 
 /**
@@ -115,8 +115,6 @@ public class AudioActivity extends BaseSameActivity implements View.OnClickListe
     }
 
     private void getData() {
-        final int id = YcSingle.getInstance().id;
-
 
         if (itemPage == 1) {
             loadingDialog = new LoadDialog(this);
@@ -124,9 +122,9 @@ public class AudioActivity extends BaseSameActivity implements View.OnClickListe
         }
 
 
-        mLoveEngine.getLoveItemList(String.valueOf(id), cateId, itemPage, pageSize, order).subscribe(new Subscriber<ResultInfo<MusicInfoWrapper>>() {
+        mLoveEngine.getLoveItemList(UserInfoHelper.getUid(), cateId, itemPage, pageSize, order).subscribe(new DisposableObserver<ResultInfo<MusicInfoWrapper>>() {
             @Override
-            public void onCompleted() {
+            public void onComplete() {
 
             }
 

@@ -6,7 +6,7 @@ import android.util.TypedValue;
 import android.view.WindowManager;
 
 /**
- * Created by mayn on 2019/5/6.
+ * Created by sunshey on 2019/5/6.
  */
 
 public class LocalDisplay {

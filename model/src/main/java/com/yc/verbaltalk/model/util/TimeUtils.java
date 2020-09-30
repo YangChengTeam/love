@@ -9,7 +9,7 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 
 /**
- * Created by mayn on 2019/5/6.
+ * Created by sunshey on 2019/5/6.
  */
 
 public class TimeUtils {
@@ -42,6 +42,20 @@ public class TimeUtils {
         return new int[]{};
     }
 
+    public static String formattingDate(String str) {
+        if (!TextUtils.isEmpty(str) && str.length() >= 8) {
+            StringBuilder sb = new StringBuilder();
+            String y = str.substring(0, 4);
+            sb.append(y).append("-");
+            String m = str.substring(4, 6);
+            sb.append(m).append("-");
+            String d = str.substring(6, 8);
+            sb.append(d);
+            return sb.toString();
+        }
+        return str;
+    }
+
     public static long dateToStamp(Date date) {
         SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd");
         String format = simpleDateFormat.format(date);
@@ -54,6 +68,7 @@ public class TimeUtils {
         }
         return parse.getTime();
     }
+
     public static long dateToStamp(String format) {
         SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd");
 //        String format = simpleDateFormat.format(date);

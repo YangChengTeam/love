@@ -15,7 +15,7 @@ import android.widget.Checkable;
 import com.yc.verbaltalk.R;
 
 /**
- * Created by mayn on 2019/5/6.
+ * Created by sunshey on 2019/5/6.
  */
 
 public class CheckBoxSample extends View implements Checkable {

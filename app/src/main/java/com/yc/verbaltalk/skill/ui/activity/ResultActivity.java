@@ -22,6 +22,7 @@ import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.target.SimpleTarget;
 import com.bumptech.glide.request.transition.Transition;
 import com.google.android.material.snackbar.Snackbar;
+import com.music.player.lib.util.ToastUtils;
 import com.qw.soul.permission.SoulPermission;
 import com.qw.soul.permission.bean.Permission;
 import com.qw.soul.permission.callbcak.CheckRequestPermissionListener;
@@ -82,7 +83,7 @@ public class ResultActivity extends BaseSameActivity {
         setContentView(R.layout.activity_result);
 
         if (TextUtils.isEmpty(mResImagePath)) {
-            showToastShort("获取图片失败");
+            ToastUtils.showCenterToast("获取图片失败");
             finish();
             return;
         }
@@ -221,7 +222,7 @@ public class ResultActivity extends BaseSameActivity {
                         case 0: //QQ
                             mFilePath = saveToSystemGallery(fileBitmap);
                             if (TextUtils.isEmpty(mFilePath)) {
-                                showToastShort("获取图片资源失败，请稍后再试");
+                                ToastUtils.showCenterToast("获取图片资源失败，请稍后再试");
                                 return;
                             }
                             sharePhotoToQQ(ResultActivity.this, tencent, new QQShareIUiListener());
@@ -229,7 +230,7 @@ public class ResultActivity extends BaseSameActivity {
                         case 1: //WX
                             mFilePath = saveToSystemGallery(fileBitmap);
                             if (TextUtils.isEmpty(mFilePath)) {
-                                showToastShort("获取图片资源失败，请稍后再试");
+                                ToastUtils.showCenterToast("获取图片资源失败，请稍后再试");
                                 return;
                             }
                             sharePhotoToWeChat();
@@ -237,7 +238,7 @@ public class ResultActivity extends BaseSameActivity {
                         case 2: //SAVE
                             mFilePath = saveToSystemGallery(fileBitmap);
                             if (TextUtils.isEmpty(mFilePath)) {
-                                showToastShort("获取图片资源失败，请稍后再试");
+                                ToastUtils.showCenterToast("获取图片资源失败，请稍后再试");
                                 return;
                             }
                             saveToSystemGallery(fileBitmap, true);
@@ -328,7 +329,7 @@ public class ResultActivity extends BaseSameActivity {
         public void onError(UiError uiError) {
             // 分享异常
             Log.d("mylog", "onComplete: QQShare--分享异常 ");
-            showToastShort("QQShare--分享异常" + uiError.errorCode + " " + uiError.errorDetail + " " + uiError.errorMessage);
+            ToastUtils.showCenterToast("QQShare--分享异常" + uiError.errorCode + " " + uiError.errorDetail + " " + uiError.errorMessage);
         }
 
         @Override
@@ -380,7 +381,7 @@ public class ResultActivity extends BaseSameActivity {
 
         // 首先保存图片
 //        File fileDir = new File(Environment.getExternalStorageDirectory(), SdPathConfig.SAVE_IMG_PATH);
-        File fileDir = new File(Environment.getExternalStorageDirectory().getPath());
+        File fileDir = new File(getExternalFilesDir(Environment.DIRECTORY_PICTURES).getPath());
         if (!fileDir.exists()) {
             fileDir.mkdir();
         }
@@ -456,7 +457,7 @@ public class ResultActivity extends BaseSameActivity {
                         .show();
             } else {
 //                showToastShort("图片已保存路径：" + file.getAbsolutePath());
-                showToastShort("图片已保存至设备图库");
+                ToastUtils.showCenterToast("图片已保存至设备图库");
             }
         }
 //        Toast.makeText(this,

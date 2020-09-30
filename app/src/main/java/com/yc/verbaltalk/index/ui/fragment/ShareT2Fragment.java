@@ -3,7 +3,7 @@ package com.yc.verbaltalk.index.ui.fragment;
 
 /**
  * .模糊查找
- * Created by mayn on 2019/5/5.
+ * Created by sunshey on 2019/5/5.
  */
 
 public class ShareT2Fragment extends BaseShareFragment {

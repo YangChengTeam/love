@@ -15,7 +15,7 @@ import java.io.File;
 
 /**
  * 查询指定apk文件
- * Created by mayn on 2019/5/20.
+ * Created by sunshey on 2019/5/20.
  */
 
 public class DownloadedApkUtlis {

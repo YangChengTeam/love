@@ -1,15 +1,21 @@
 package com.yc.verbaltalk.mine.ui.activity;
 
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.pm.PackageInfo;
+import android.content.pm.PackageManager;
 import android.os.Bundle;
+import android.text.TextUtils;
 import android.view.View;
+import android.widget.FrameLayout;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import com.music.player.lib.util.ToastUtils;
 import com.yc.verbaltalk.R;
+import com.yc.verbaltalk.base.utils.UserInfoHelper;
 import com.yc.verbaltalk.chat.bean.event.EventLoginState;
-import com.yc.verbaltalk.model.single.YcSingle;
 import com.yc.verbaltalk.model.util.DataCleanManagerUtils;
 import com.yc.verbaltalk.model.util.SPUtils;
 import com.yc.verbaltalk.base.activity.BaseSameActivity;
@@ -23,6 +29,7 @@ import androidx.appcompat.app.AlertDialog;
 public class SettingActivity extends BaseSameActivity {
 
     private MainMyItemLin mLlItem04;
+    private FrameLayout flLogout;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -38,17 +45,19 @@ public class SettingActivity extends BaseSameActivity {
 
 
         TextView tvExit = findViewById(R.id.setting_tv_exit);
-        LinearLayout llItem01 = findViewById(R.id.setting_ll_item_01);
+        MainMyItemLin llVersion = findViewById(R.id.setting_ll_item_01);
         LinearLayout llItem02 = findViewById(R.id.setting_ll_item_02);
 
         mLlItem04 = findViewById(R.id.setting_ll_item_04);
+        flLogout = findViewById(R.id.fl_logout);
 
         tvExit.setOnClickListener(this);
 
-        llItem01.setOnClickListener(this);
+        llVersion.setOnClickListener(this);
         llItem02.setOnClickListener(this);
 
         mLlItem04.setOnClickListener(this);
+        flLogout.setOnClickListener(this);
 
         try {
             String totalCacheSize = DataCleanManagerUtils.getTotalCacheSize(SettingActivity.this);
@@ -57,10 +66,27 @@ public class SettingActivity extends BaseSameActivity {
             e.printStackTrace();
         }
 
-        int id = YcSingle.getInstance().id;
-        if (id > 0) {
-//            tvExit.setVisibility(View.VISIBLE);
+        llVersion.setSub(getVersion());
+
+        String uid = UserInfoHelper.getUid();
+        if (!TextUtils.isEmpty(uid)) {
+            flLogout.setVisibility(View.VISIBLE);
+        } else {
+            flLogout.setVisibility(View.GONE);
         }
+    }
+
+
+    private String getVersion() {
+        PackageManager pm = getPackageManager();
+
+        try {
+            PackageInfo packageInfo = pm.getPackageInfo(getPackageName(), 0);
+            return packageInfo.versionName;
+        } catch (PackageManager.NameNotFoundException e) {
+            e.printStackTrace();
+        }
+        return "";
     }
 
     @Override
@@ -69,10 +95,11 @@ public class SettingActivity extends BaseSameActivity {
         switch (v.getId()) {
             case R.id.setting_tv_exit:
             case R.id.setting_ll_exit:
+            case R.id.fl_logout:
                 clearExit();
                 break;
             case R.id.setting_ll_item_01:
-                showToastShort("当前已经是最新版了");
+                ToastUtils.showCenterToast("当前已经是最新版了");
                 break;
             case R.id.setting_ll_item_02:
                 startActivity(new Intent(this, AboutUsActivity.class));
@@ -94,11 +121,11 @@ public class SettingActivity extends BaseSameActivity {
             public void onClick(DialogInterface dialogInterface, int i) {
 //                SPUtils.put(SettingActivity.this, SPUtils.LOGIN_PWD, "");
                 SPUtils.put(SettingActivity.this, SPUtils.ID_INFO_BEAN, "");
-                YcSingle.getInstance().clearAllData();
-
+                UserInfoHelper.logout();
+                flLogout.setVisibility(View.GONE);
                 EventBus.getDefault().post(new EventLoginState(EventLoginState.STATE_EXIT));
 //                showToastShort("退出登录成功");
-                finish();
+//                finish();
             }
         });
         alertDialog.show();
@@ -121,7 +148,7 @@ public class SettingActivity extends BaseSameActivity {
                     e.printStackTrace();
                 }
                 loadingView.dismissLoadingDialog();
-                showToastShort("清除成功");
+                ToastUtils.showCenterToast("清除成功");
             }, 600);
         });
         alertDialog.show();

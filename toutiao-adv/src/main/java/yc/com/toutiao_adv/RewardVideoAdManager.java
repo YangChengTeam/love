@@ -58,7 +58,8 @@ public class RewardVideoAdManager implements OnAdvManagerListener, WeakHandler.I
         AdSlot adSlot = new AdSlot.Builder()
                 .setCodeId(codeId)
                 .setSupportDeepLink(true)
-                .setImageAcceptedSize(1080, 1920)
+//                .setImageAcceptedSize(1080, 1920)
+                .setExpressViewAcceptedSize(500,500)
                 .setRewardName(rewardName) //奖励的名称 金币
                 .setRewardAmount(rewardCount)  //奖励的数量
                 .setUserID(userId)//用户id,必传参数
@@ -69,7 +70,7 @@ public class RewardVideoAdManager implements OnAdvManagerListener, WeakHandler.I
         mTTAdNative.loadRewardVideoAd(adSlot, new TTAdNative.RewardVideoAdListener() {
             @Override
             public void onError(int code, String message) {
-
+                Log.e("TAG", "onError: "+code+" mess: "+message );
             }
 
             //视频广告加载后，视频资源缓存到本地的回调，在此回调后，播放本地视频，流畅不阻塞。
@@ -106,6 +107,7 @@ public class RewardVideoAdManager implements OnAdvManagerListener, WeakHandler.I
                     @Override
                     public void onVideoComplete() {
                         Log.e("rewardvideo", "rewardVideoAd complete");
+                        stateListener.rewardComplete();
                     }
 
                     @Override

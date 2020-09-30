@@ -1,7 +1,7 @@
 package com.yc.verbaltalk.chat.bean;
 
 /**
- * Created by mayn on 2019/4/24.
+ * Created by sunshey on 2019/4/24.
  */
 
 public class JobBean {

@@ -13,14 +13,16 @@ import android.view.WindowManager;
 import android.widget.CheckBox;
 import android.widget.TextView;
 
-import com.kk.utils.ScreenUtil;
-import com.kk.utils.ToastUtil;
 import com.yc.verbaltalk.R;
+import com.yc.verbaltalk.base.YcApplication;
 import com.yc.verbaltalk.model.util.SPUtils;
 
+import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.core.content.ContextCompat;
 import androidx.fragment.app.DialogFragment;
+import yc.com.rthttplibrary.util.ScreenUtil;
+import yc.com.rthttplibrary.util.ToastUtil;
 
 /**
  * Created by wanglin  on 2019/4/12 14:40.
@@ -31,7 +33,7 @@ public class IndexDialogFragment extends DialogFragment {
 
     @Nullable
     @Override
-    public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
+    public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
 
         Window window = getDialog().getWindow();
 
@@ -79,6 +81,7 @@ public class IndexDialogFragment extends DialogFragment {
 
 
         CheckBox cb = (CheckBox) getView(R.id.cb_privacy);
+        ((TextView) getView(R.id.tv_privacy)).setText(YcApplication.privacyPolicy);
 
         final TextView tvEnterApp = (TextView) getView(R.id.tv_enter_app);
         mChecked = cb.isChecked();
@@ -101,13 +104,16 @@ public class IndexDialogFragment extends DialogFragment {
 //                    if (getActivity() != null) {
 //                        promotionDialogFragment.show(getActivity().getSupportFragmentManager(), "");
 //                    }
+                IndexNoticeDialogFragment indexNoticeDialogFragment= new IndexNoticeDialogFragment();
+                indexNoticeDialogFragment.show(getActivity().getSupportFragmentManager(),"");
+
                 if (listener != null) {
                     listener.onConfirm();
                 }
 
                 dismiss();
             } else {
-                ToastUtil.toast2(getActivity(), "请先同意用户协议");
+                ToastUtil.toast(getActivity(), "请先同意用户协议");
             }
         });
 

@@ -26,7 +26,7 @@ import androidx.appcompat.app.AlertDialog;
 
 
 /**
- * Created by mayn on 2019/5/14.
+ * Created by sunshey on 2019/5/14.
  */
 
 public abstract class PayActivity extends BaseSlidingActivity {

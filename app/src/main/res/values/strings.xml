@@ -3,7 +3,7 @@
     <!--恋爱话术宝-->
     <!--西门恋爱话术库-->
     <!--恋爱秘籍-->
-    <string name="app_name" translatable="false">恋爱话术宝</string>
+    <string name="app_name" translatable="false">恋爱秘籍</string>
 
 
     <string name="confirm_format" translatable="false">%1$s(%2$d/%3$d)</string>
@@ -23,26 +23,30 @@
     <string name="share_des_explain" translatable="false">输入妹子说的话，点击搜索即可获得与之匹配的回复，一键复制到对应聊天软件打开即可粘贴；</string>
     <string name="share_des_help" translatable="false"><u>使用帮助</u></string>
 
-    <string name="privacy_statement" translatable="false">一、介绍\n
-1.1我们深知个人信息对您的重要性，并会尽全力保护您的个人信息安全可靠。我们致力于维持您对我们的信任，恪守以下原则，保护您的个人信息：权责一致原则、目的明确原则、选择同意原则、最少够用原则、确保安全原则、主体参与原则、公开透明原则等。同时，我们承诺，我们将按业界成熟的安全标准，采取相应的安全保护措施来保护您的个人信息。\n
-1.2我们制定了本隐私政策，向您提供您需要了解的有关我们如何收集和处理信息，并概述您的责任，以帮助您保护自己使用我们的产品的安全。请注意，当我们谈论“服务”时，指的是我们的所有网站，产品和服务。\n
-\n二、我们收集的信息以及如何使用它\n
-2.1个人信息是指以电子或者其他方式记录的能够单独或者与其他信息结合识别特定自然人身份或者反映特定自然人活动情况的各种信息。\n
-2.2为完成登录，您需提供以下信息：您的手机号、验证码；您提供的上述信息，将在您使用本服务期间持续授权我们使用。在您注销账号时，我们将停止使用并删除上述信息。\n
-2.3我们可能会使用您的联系信息与您就使用体验进行沟通，提供支持。并向您发送其他信息，如产品更新提示、官方公告、帐号安全警报等。\n
-\n三、保证您的信息安全\n
-3.1APP将数据存储在我们所购买的阿里云有限公司的云服务器中。其先进的安防措施包括防火墙、安全警卫系统及监控系统以尽力确保您的数据免遭自然灾害、人工入侵或其它干扰事故。\n
-3.2我们实施了严格的访问控制措施，以限制只有部分员工，才有权访问或查看服务数据。而服务数据仅可用于有效的业务需求，包括但不限于提供用户服务，评估服务性能和使用情况，以及监控和改进基础设施。我们利用非公开协议、防火墙、加密保护和其他标准措施来防止未经授权访问您的信息。\n
-3.3在任何情况下，我们都不会将您的数据用于任何目的。\n
-3.4我们永远不会销售用户的任何信息。也不会与任何第三方共享信息。\n
-\n四、软件权限说明\n
-我们对于软件需要在用户使用的设备上获取的权限非常严格和克制。\n
-坚决不会要求获取任何隐私权限，例如读取通话记录、读取通讯录、读取短信、获取定位、录音、拨打电话、发送短信等。\n
-\n五、关于集成第三方SDK\n
-APP目前已集成腾讯Bugly软件崩溃日志统计SDK、友盟统计SDK。\n
-\n六、第三方链接\n
-当用户访问或使用APP程序及其网站时，我们可能提供到其它第三方网站的链接。恋爱话术宝不对这些网站的隐私准则或内容负责。恋爱话术宝建议您浏览张贴在这些第三方网站上的隐私条款。</string>
-    <string name="login_protocol" translatable="false">一、使用协议的接受与修改\n
+    <string name="collect" translatable="false">收藏</string>
+    <string name="wx" translatable="false">微信</string>
+    <string name="wx_circle" translatable="false">朋友圈</string>
+    <string name="mini_program" translatable="false">小程序</string>
+    <string name="share_cancel" translatable="false">取消</string>
+    <string name="audio" translatable="false">音频</string>
+    <string name="search" translatable="false">搜索</string>
+    <string name="get_wechat" translatable="false">获取微信</string>
+    <string name="community_detail" translatable="false">话题详情</string>
+    <string name="send" translatable="false">发送</string>
+    <string name="community_tag" translatable="false">社区标签</string>
+    <string name="publish" translatable="false">发布</string>
+    <string name="tint" translatable="false">提示</string>
+    <string name="confirm" translatable="false">确定</string>
+    <string name="cancel" translatable="false">取消</string>
+    <string name="notice" translatable="false">公告</string>
+    <string name="contact_teacher" translatable="false">联系导师</string>
+    <string name="more_comment" translatable="false">更多评论</string>
+    <string name="login" translatable="false">登录</string>
+    <string name="register" translatable="false">注册</string>
+    <string name="set_pwd" translatable="false">设置密码</string>
+
+    <string name="user_policy" translatable="false">
+        一、使用协议的接受与修改\n
 此协议是用户与本App之间的协议，本App依据此协议为用户提供服务。\n
 此协议服务条款构成用户（无论是个人或者单位）使用本App所提供服务之先决条件。如用户不同意此协议服务条款或其随时对其的修改，用户应不使用或主动取消本App提供的服务。用户的使用行为将视为其对此协议服务条款及其随时修改版本的完全接受；\n
 这些条款可由本App随时更新，且无需另行通知。修改后的服务条款一旦在本App上公布即取代原来的服务条款，并构成本条款整体之一部分。用户可随时登录本App查阅最新的服务条款。\n
@@ -53,7 +57,7 @@ APP目前已集成腾讯Bugly软件崩溃日志统计SDK、友盟统计SDK。\n
 \n三、用户注册\n
 1.如果用户使用本App进行内容的上载、传播服务，用户需要注册一个账号、密码，并确保注册信息的真实性、正确性及完整性，如果上述注册信息发生变化，用户应及时更改。在安全完成本服务的登记程序并收到一个密码及账号后，用户应维持密码及账号的机密安全。用户应对任何人利用用户的密码及账号所进行的活动负完全的责任，本App无法对非法或未经用户授权使用用户账号及密码的行为做出甄别，因此本App不承担任何责任。在此，用户同意并承诺做到：\n
 经本App注册系统完成注册程序并获得本App账号的用户即为本App的正式用户，即获得本App规定用户所应享有的一切权限；本App有权对其正式用户的权限设计进行变更。\n
-在用户填写注册资料时，用户要确保所填写的信息是真实有效的。如果因注册信息不真实而引起的问题，并对问题发生所带来的后果，本App不负任何责任。\n
+在用户填写注册资料时，用户要确保所填写的信息是真实有效的。如果因注册信息不真实而引起的问题，并对问题发生所带来的后果，本App不负任何责任。\n\n
 用户注册账号时不得以下列内容作为账号名称，如发现用户账号中含有不雅文字或不恰当名称的，本App保留取消其用户资格的权利。\n
 除此协议注明之服务条款外，其他一切因使用本App而引致之任何意外、疏忽、合约毁坏、诽谤、版权或其他知识产权侵犯及其所造成的损失（包括但不限于因下载而感染电脑病毒）， 本App概不负责，亦不承担任何法律责任。\n
 (1)请勿以党和国家领导人或其他社会名人的真实姓名、字号、艺名、笔名注册；\n
@@ -109,28 +113,11 @@ APP目前已集成腾讯Bugly软件崩溃日志统计SDK、友盟统计SDK。\n
 \n十三、服务终止\n
 1. 用户同意本App有权基于其自行之考虑，因任何理由，包括但不限于缺乏使用或本App认为用户已经违反此协议的文字及精神，而终止用户的账号或服务之全部或任何部分，并将用户在本App看的服务内的任何内容加以移除并删除；\n
 2. 用户同意依此协议任何规定提供之服务，无需进行事先通知即可中断或终止，用户承认并同意，本App可立即关闭或删除用户的账号及用户账号中所有相关信息及文件，及/或禁止继续使用前述文件或本App的服务。 此外，用户同意若本App的服务之使用被中断、终止或用户的账号及相关信息和文件被关闭、删除，本App对用户或任何第三人均不承担任何责任。\n
-\n十四、法律适用和管辖\n
+\n十四、法律适用和管辖\n\n
 1. 此协议的生效、履行、解释及争议的解决均适用中华人民共和国法律。\n
 2. 如就此协议内容或其执行发生任何争议，应尽量友好协商解决；协商不成时，则争议各方均可向本APP注册所在地具有管辖权的人民法院提起诉讼。\n
-3. 本《协议》的一切解释权与修改权归本App所有。\n</string>
-    <string name="collect" translatable="false">收藏</string>
-    <string name="wx" translatable="false">微信</string>
-    <string name="wx_circle" translatable="false">朋友圈</string>
-    <string name="mini_program" translatable="false">小程序</string>
-    <string name="share_cancel" translatable="false">取消</string>
-    <string name="audio" translatable="false">音频</string>
-    <string name="search" translatable="false">搜索</string>
-    <string name="get_wechat" translatable="false">获取微信</string>
-    <string name="community_detail" translatable="false">话题详情</string>
-    <string name="send" translatable="false">发送</string>
-    <string name="community_tag" translatable="false">社区标签</string>
-    <string name="publish" translatable="false">发布</string>
-    <string name="tint" translatable="false">提示</string>
-    <string name="confirm" translatable="false">确定</string>
-    <string name="cancel" translatable="false">取消</string>
-    <string name="notice" translatable="false">公告</string>
-    <string name="contact_teacher" translatable="false">联系导师</string>
-    <string name="more_comment" translatable="false">更多评论</string>
+3. 本《协议》的一切解释权与修改权归本App所有。\n
+    </string>
 
     <string-array name="love_practice">
         <item>聊天秘籍</item>
@@ -161,6 +148,8 @@ APP目前已集成腾讯Bugly软件崩溃日志统计SDK、友盟统计SDK。\n
         <item>热门</item>
         <item>我的</item>
     </string-array>
+    <string name="refresh_verbal">换一换</string>
+    <string name="privacy_desc" translatable="false">欢 迎 使 用 %1$s A P P ! 在 您 使 用 %1$s 产 品 或 服 务 前 ， 请 您 仔 细 阅 读 并   充 分 理 解 《 服 务 条 款 》 及 《 隐 私 政   策 》 ； 当 您 点 击 \" 我 知 道 了 ” 并 开   始 使 用 产 品 服 务 时 ， 即 表 示 您 已 阅   读 并 同 意 条 款 内 容 ， 如 果 您 不 同 意   条 款 内 容 ， 将 可 能 导 致 无 法 继 续 使   用 我 们 的 产 品 及 服 务</string>
 
 
 </resources>

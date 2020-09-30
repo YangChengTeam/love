@@ -6,11 +6,12 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 
 /**
- * Created by mayn on 2019/4/23.
+ * Created by sunshey on 2019/4/23.
  */
 
 public abstract class BaseFragment extends Fragment {
@@ -20,7 +21,7 @@ public abstract class BaseFragment extends Fragment {
 
     @Nullable
     @Override
-    public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
+    public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
 //        LOG_TAG_FRAGMENT_NAME = getClass().getName() + " ";
         Log.d("ClassName", "onCreate: ------Fragment :" + getClass().getName());
         return onFragmentCreateView(inflater, container, savedInstanceState);

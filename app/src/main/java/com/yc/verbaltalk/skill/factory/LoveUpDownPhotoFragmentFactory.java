@@ -10,7 +10,7 @@ import java.util.Map;
 import androidx.fragment.app.Fragment;
 
 /**
- * Created by mayn on 2019/4/23.
+ * Created by sunshey on 2019/4/23.
  */
 
 public class LoveUpDownPhotoFragmentFactory {

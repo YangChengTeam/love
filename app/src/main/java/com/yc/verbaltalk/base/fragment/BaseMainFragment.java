@@ -8,7 +8,7 @@ import android.view.ViewGroup;
 import com.yc.verbaltalk.base.activity.MainActivity;
 
 /**
- * Created by mayn on 2019/4/23.
+ * Created by sunshey on 2019/4/23.
  */
 
 public abstract class BaseMainFragment extends BaseLazyFragment {

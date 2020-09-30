@@ -3,7 +3,7 @@ package com.yc.verbaltalk.chat.bean.event;
 import java.util.List;
 
 /**
- * Created by mayn on 2019/5/18.
+ * Created by sunshey on 2019/5/18.
  */
 
 public class NetWorkChangBean {

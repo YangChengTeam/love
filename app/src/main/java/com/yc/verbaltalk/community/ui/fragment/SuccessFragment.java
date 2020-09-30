@@ -12,11 +12,11 @@ import android.view.Window;
 import android.view.WindowManager;
 import android.widget.TextView;
 
-import com.kk.utils.ScreenUtil;
 import com.yc.verbaltalk.R;
 
 import androidx.annotation.Nullable;
 import androidx.fragment.app.DialogFragment;
+import yc.com.rthttplibrary.util.ScreenUtil;
 
 /**
  * Created by suns  on 2019/9/4 17:01.

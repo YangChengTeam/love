@@ -9,7 +9,7 @@ import com.yc.verbaltalk.base.activity.BaseActivity;
 import com.yc.verbaltalk.base.fragment.BaseLazyFragment;
 
 /**
- * Created by mayn on 2019/5/24.
+ * Created by sunshey on 2019/5/24.
  */
 
 public abstract class BaseUsingHelpFragment extends BaseLazyFragment {

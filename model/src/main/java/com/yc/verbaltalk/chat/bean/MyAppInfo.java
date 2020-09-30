@@ -3,7 +3,7 @@ package com.yc.verbaltalk.chat.bean;
 import android.graphics.drawable.Drawable;
 
 /**
- * Created by mayn on 2019/5/21.
+ * Created by sunshey on 2019/5/21.
  */
 
 public class MyAppInfo {

@@ -6,24 +6,25 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.yc.verbaltalk.R;
+import com.yc.verbaltalk.base.engine.LoveEngine;
 import com.yc.verbaltalk.base.fragment.BaseLazyFragment;
-import com.yc.verbaltalk.index.adapter.LoveHealDetailsAdapter;
-import com.yc.verbaltalk.base.engine.MySubscriber;
-import com.yc.verbaltalk.chat.bean.AResultInfo;
+import com.yc.verbaltalk.base.utils.UserInfoHelper;
+import com.yc.verbaltalk.base.view.LoadDialog;
 import com.yc.verbaltalk.chat.bean.LoveHealDetBean;
 import com.yc.verbaltalk.chat.bean.LoveHealDetDetailsBean;
-import com.yc.verbaltalk.base.engine.LoveEngine;
-import com.yc.verbaltalk.model.single.YcSingle;
+import com.yc.verbaltalk.index.adapter.LoveHealDetailsAdapter;
 import com.yc.verbaltalk.index.ui.activity.SearchActivity;
-import com.yc.verbaltalk.base.view.LoadDialog;
 
 import java.util.List;
 
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
+import io.reactivex.observers.DisposableObserver;
+import yc.com.rthttplibrary.bean.ResultInfo;
+import yc.com.rthttplibrary.config.HttpConfig;
 
 /**
- * Created by mayn on 2019/5/5.
+ * Created by sunshey on 2019/5/5.
  */
 
 public class BaseShareFragment extends BaseLazyFragment {
@@ -83,31 +84,33 @@ public class BaseShareFragment extends BaseLazyFragment {
     public void netData(String searchType, String keyword) {
         this.mSearchType = searchType;
         this.keyword = keyword;
-        int id = YcSingle.getInstance().id;
-        if (id <= 0) {
-            mShareActivity.showToLoginDialog();
-            return;
-        }
+
         mLoadingDialog.showLoadingDialog();
-        mLoveEngin.searchDialogue(String.valueOf(id), searchType, keyword, String.valueOf(PAGE_NUM), String.valueOf(PAGE_SIZE), "Dialogue/search").subscribe(new MySubscriber<AResultInfo<List<LoveHealDetBean>>>(mLoadingDialog) {
+        mLoveEngin.searchDialogue(UserInfoHelper.getUid(), searchType, keyword, String.valueOf(PAGE_NUM), String.valueOf(PAGE_SIZE))
+                .subscribe(new DisposableObserver<ResultInfo<List<LoveHealDetBean>>>() {
 
 
-            @Override
-            protected void onNetNext(AResultInfo<List<LoveHealDetBean>> listAResultInfo) {
-                mLoveHealDetBeans = listAResultInfo.data;
-                initRecyclerData(mLoveHealDetBeans);
-            }
+                    @Override
+                    public void onComplete() {
+                        mLoadingDialog.dismissLoadingDialog();
+                    }
 
-            @Override
-            protected void onNetError(Throwable e) {
+                    @Override
+                    public void onError(Throwable e) {
+                        mLoadingDialog.dismissLoadingDialog();
+                    }
 
-            }
+                    @Override
+                    public void onNext(ResultInfo<List<LoveHealDetBean>> listAResultInfo) {
+                        mLoadingDialog.dismissLoadingDialog();
+                        if (listAResultInfo != null && listAResultInfo.code == HttpConfig.STATUS_OK && listAResultInfo.data != null) {
+                            mLoveHealDetBeans = listAResultInfo.data;
+                            initRecyclerData(mLoveHealDetBeans);
+                        }
+                    }
 
-            @Override
-            protected void onNetCompleted() {
 
-            }
-        });
+                });
     }
 
     private void initRecyclerData(List<LoveHealDetBean> loveHealDetBeans) {
@@ -130,7 +133,7 @@ public class BaseShareFragment extends BaseLazyFragment {
 
     private List<LoveHealDetBean> addTitle(List<LoveHealDetBean> loveHealDetBeans) {
         for (LoveHealDetBean loveHealDetBean : loveHealDetBeans
-                ) {
+        ) {
             List<LoveHealDetDetailsBean> details = loveHealDetBean.details;
             if (details == null || details.size() == 0) {
                 details = loveHealDetBean.detail;

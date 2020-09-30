@@ -75,7 +75,7 @@ public class CacheUtils {
     }
 
     private static String makeBaseDir(Context context) {
-        File dir = new File(Environment.getExternalStorageDirectory() + "/" + context.getPackageName());
+        File dir = new File(context.getExternalCacheDir() + "/" + context.getPackageName());
         if (!dir.exists()) {
             dir.mkdir();
         }

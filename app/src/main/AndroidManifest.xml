@@ -11,10 +11,13 @@
     <uses-permission android:name="android.permission.READ_PHONE_STATE" />
     <uses-permission android:name="android.permission.CHANGE_WIFI_STATE" />
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.READ_PRIVILEGED_PHONE_STATE" />
     <uses-permission android:name="android.permission.REQUEST_INSTALL_PACKAGES" />
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
-    <uses-permission android:name="android.permission.REQUEST_PERMISSIONS" /> <!-- <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" /> -->
+    <uses-permission android:name="android.permission.REQUEST_PERMISSIONS" />
+    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
     <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
+
 
     <application
         android:name=".base.YcApplication"
@@ -22,16 +25,15 @@
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
         android:networkSecurityConfig="@xml/network_security_config"
+        android:requestLegacyExternalStorage="true"
         android:roundIcon="@mipmap/ic_launcher"
         android:supportsRtl="true"
         android:theme="@style/JK.SwipeBack.Transparent.Theme"
         tools:targetApi="n">
-        <activity android:name=".pay.ui.activity.PayVipActivity" />
         <activity android:name=".chat.ui.activity.LoveCaseActivity" />
         <activity android:name=".skill.ui.activity.ResultActivity" />
         <activity android:name=".skill.ui.activity.ImageCropActivity" />
         <activity android:name=".skill.ui.activity.CreateBeforeActivity" />
-        <activity android:name=".mine.ui.activity.UsingHelpHomeActivity" />
         <activity
             android:name=".wxapi.WXPayEntryActivity"
             android:exported="true"
@@ -52,7 +54,6 @@
             android:label="@string/app_name"
             android:launchMode="singleTask"
             android:theme="@style/AppTheme" />
-        <activity android:name=".mine.ui.activity.IdCorrelationSlidingActivity" />
         <activity android:name=".skill.ui.activity.LoveDialogueActivity" />
         <activity android:name=".chat.ui.activity.LoveByStagesActivity" />
         <activity android:name=".skill.ui.activity.LoveUpDownPhotoActivity" />
@@ -207,6 +208,10 @@
         <activity android:name=".chat.ui.activity.ChatRecommendDetailActivity" />
         <activity android:name=".chat.ui.activity.ChatCourseDetailActivity" />
         <activity android:name=".skill.ui.activity.ConsultDetailActivity" />
+        <activity android:name=".mine.ui.activity.LoginRegisterActivity" />
+        <activity android:name=".mine.ui.activity.PwdInfoActivity" />
+        <activity android:name=".index.ui.activity.SmartChatVerbalActivity" />
+        <activity android:name=".mine.ui.activity.UserPolicyActivity" />
 
         <!--android:windowSoftInputMode="adjustPan|stateHidden"-->
         <uses-library

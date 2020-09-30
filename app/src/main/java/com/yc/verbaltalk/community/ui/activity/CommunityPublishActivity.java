@@ -4,18 +4,16 @@ import android.os.Bundle;
 import android.text.TextUtils;
 import android.widget.EditText;
 
-import com.kk.securityhttp.domain.ResultInfo;
-import com.kk.securityhttp.net.contains.HttpConfig;
 import com.yc.verbaltalk.R;
-import com.yc.verbaltalk.community.adapter.PublishTagAdapter;
+import com.yc.verbaltalk.base.activity.BaseSameActivity;
+import com.yc.verbaltalk.base.utils.SnackBarUtils;
+import com.yc.verbaltalk.base.utils.UserInfoHelper;
+import com.yc.verbaltalk.base.view.LoadDialog;
 import com.yc.verbaltalk.chat.bean.CommunityTagInfo;
 import com.yc.verbaltalk.chat.bean.CommunityTagInfoWrapper;
 import com.yc.verbaltalk.chat.bean.event.CommunityPublishSuccess;
-import com.yc.verbaltalk.model.single.YcSingle;
-import com.yc.verbaltalk.base.activity.BaseSameActivity;
+import com.yc.verbaltalk.community.adapter.PublishTagAdapter;
 import com.yc.verbaltalk.mine.ui.fragment.ExitPublishFragment;
-import com.yc.verbaltalk.base.view.LoadDialog;
-import com.yc.verbaltalk.base.utils.SnackBarUtils;
 
 import org.greenrobot.eventbus.EventBus;
 
@@ -23,7 +21,10 @@ import java.util.List;
 
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
-import rx.Subscriber;
+import io.reactivex.observers.DisposableObserver;
+
+import yc.com.rthttplibrary.bean.ResultInfo;
+import yc.com.rthttplibrary.config.HttpConfig;
 
 /**
  * Created by suns  on 2019/8/30 18:12.
@@ -85,7 +86,8 @@ public class CommunityPublishActivity extends BaseSameActivity {
                 SnackBarUtils.tips(CommunityPublishActivity.this, "请输入您的问题");
                 return;
             }
-            publishComment(content);
+            if (UserInfoHelper.isLogin(this))
+                publishComment(content);
 
         });
 
@@ -94,17 +96,13 @@ public class CommunityPublishActivity extends BaseSameActivity {
 
 
     private void publishComment(String content) {
-        int id = YcSingle.getInstance().id;
-        if (id < 0) {
-            showToLoginDialog();
-            return;
-        }
+
         if (mLoadingDialog == null) mLoadingDialog = new LoadDialog(this);
 
         mLoadingDialog.showLoadingDialog();
-        mLoveEngine.publishCommunityInfo(String.valueOf(id), tagInfo.getId(), content).subscribe(new Subscriber<ResultInfo<String>>() {
+        mLoveEngine.publishCommunityInfo(UserInfoHelper.getUid(), tagInfo.getId(), content).subscribe(new DisposableObserver<ResultInfo<String>>() {
             @Override
-            public void onCompleted() {
+            public void onComplete() {
 
             }
 
@@ -129,19 +127,20 @@ public class CommunityPublishActivity extends BaseSameActivity {
     public void getTag() {
         if (mLoadingDialog == null) mLoadingDialog = new LoadDialog(this);
         mLoadingDialog.showLoadingDialog();
-        mLoveEngine.getCommunityTagInfos().subscribe(new Subscriber<ResultInfo<CommunityTagInfoWrapper>>() {
+        mLoveEngine.getCommunityTagInfos().subscribe(new DisposableObserver<ResultInfo<CommunityTagInfoWrapper>>() {
             @Override
-            public void onCompleted() {
+            public void onComplete() {
                 mLoadingDialog.dismissLoadingDialog();
             }
 
             @Override
             public void onError(Throwable e) {
-
+                mLoadingDialog.dismissLoadingDialog();
             }
 
             @Override
             public void onNext(ResultInfo<CommunityTagInfoWrapper> communityTagInfoWrapperResultInfo) {
+                mLoadingDialog.dismissLoadingDialog();
                 if (communityTagInfoWrapperResultInfo != null && communityTagInfoWrapperResultInfo.code == HttpConfig.STATUS_OK
                         && communityTagInfoWrapperResultInfo.data != null) {
                     List<CommunityTagInfo> tagInfos = communityTagInfoWrapperResultInfo.data.getList();

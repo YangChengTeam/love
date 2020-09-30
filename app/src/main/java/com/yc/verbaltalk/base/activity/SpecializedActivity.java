@@ -4,34 +4,32 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Build;
 import android.os.Bundle;
-import android.text.TextUtils;
 import android.util.Log;
 import android.view.KeyEvent;
-import android.view.View;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.bytedance.sdk.openadsdk.TTFeedAd;
 import com.bytedance.sdk.openadsdk.TTNativeExpressAd;
-import com.qq.e.ads.nativ.NativeExpressADView;
 import com.yc.verbaltalk.R;
-import com.yc.verbaltalk.base.utils.BackfillSingle;
+import com.yc.verbaltalk.base.fragment.PrivacyPolicyFragment;
 import com.yc.verbaltalk.base.utils.UIUtils;
 import com.yc.verbaltalk.base.view.imgs.Constant;
 import com.yc.verbaltalk.model.util.CheckNetwork;
+import com.yc.verbaltalk.model.util.SPUtils;
 
 import java.util.List;
 import java.util.Map;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AlertDialog;
-import yc.com.tencent_adv.AdvDispatchManager;
-import yc.com.tencent_adv.OnAdvStateListener;
+
 import yc.com.toutiao_adv.TTAdDispatchManager;
 import yc.com.toutiao_adv.TTAdType;
 
 
-public class SpecializedActivity extends BaseActivity implements OnAdvStateListener, yc.com.toutiao_adv.OnAdvStateListener {
+public class SpecializedActivity extends BaseActivity implements yc.com.toutiao_adv.OnAdvStateListener {
 
     private ImageView ivLighting;
     private FrameLayout splashContainer;
@@ -52,6 +50,7 @@ public class SpecializedActivity extends BaseActivity implements OnAdvStateListe
             finish();
             return;
         }
+        boolean isFirstOpen = (boolean) SPUtils.get(this, SPUtils.FIRST_OPEN, true);
 
         ivLighting = findViewById(R.id.specialized_iv_lightning);
         splashContainer = findViewById(R.id.splash_container);
@@ -61,25 +60,25 @@ public class SpecializedActivity extends BaseActivity implements OnAdvStateListe
 //        AdvDispatchManager.getManager().init(this, AdvType.SPLASH, splashContainer, tvSipView, Constant.TENCENT_ADV_ID, Constant.SPLASH_ADV_ID, this);
 
         String brand = Build.BRAND.toLowerCase();
-        if (TextUtils.equals(brand, "huawei") || TextUtils.equals(brand, "honor")) {
-            ivLighting.setVisibility(View.VISIBLE);
-            tvSipView.setVisibility(View.GONE);
-            switchMain(1000);
+
+        if (isFirstOpen) {
+            mHandler.postDelayed(() -> {
+                PrivacyPolicyFragment privacyPolicyFragment = new PrivacyPolicyFragment();
+                privacyPolicyFragment.show(getSupportFragmentManager(), "");
+                privacyPolicyFragment.setOnClickBtnListener(() -> {
+                    TTAdDispatchManager.getManager().init(SpecializedActivity.this, TTAdType.SPLASH, splashContainer, Constant.TOUTIAO_SPLASH_ID, 0, null, 0, null, 0, SpecializedActivity.this);
+                    SPUtils.put(SpecializedActivity.this, SPUtils.FIRST_OPEN, false);
+                });
+            }, 100);
         } else {
-            TTAdDispatchManager.getManager().init(this, TTAdType.SPLASH, splashContainer, Constant.TOUTIAO_SPLASH_ID, 0, null, 0, null, 0, this);
+            TTAdDispatchManager.getManager().init(SpecializedActivity.this, TTAdType.SPLASH, splashContainer, Constant.TOUTIAO_SPLASH_ID, 0, null, 0, null, 0, SpecializedActivity.this);
         }
-//        ivLighting.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View v) {
-//                showToWxServiceDialog(null);
-//            }
-//        });
+
     }
 
 
     private void startNextActivity() {
         startActivity(new Intent(SpecializedActivity.this, MainActivity.class));
-        BackfillSingle.backfillLoginData(SpecializedActivity.this, ""); //初始化单例，回填ID数据
 //        overridePendingTransition(R.anim.screen_zoom_in, R.anim.screen_zoom_out);  //开屏动画
         finish();
     }
@@ -127,31 +126,6 @@ public class SpecializedActivity extends BaseActivity implements OnAdvStateListe
 
 
     @Override
-    public void onShow() {
-        ivLighting.setVisibility(View.GONE);
-        tvSipView.setVisibility(View.VISIBLE);
-    }
-
-    @Override
-    public void onDismiss(long delayTime) {
-        switchMain(delayTime);
-    }
-
-    @Override
-    public void onError() {
-        startNextActivity();
-    }
-
-    @Override
-    public void onNativeExpressDismiss(NativeExpressADView view) {
-    }
-
-    @Override
-    public void onNativeExpressShow(Map<NativeExpressADView, Integer> mDatas) {
-
-    }
-
-    @Override
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults);
 
@@ -190,25 +164,20 @@ public class SpecializedActivity extends BaseActivity implements OnAdvStateListe
     }
 
 
-//    private Runnable runnable = new Runnable() {
-//        @Override
-//        public void run() {
-//            tvSipView.setVisibility(View.VISIBLE);
-//            tvSipView.setText(seconds + "s");
-//            seconds--;
-//            if (seconds > 0) {
-//                weakHandler.postDelayed(this, 1000);
-//            } else {
-//                switchMain(0);
-//            }
-//        }
-//    };
-//
-//    @Override
-//    protected void onDestroy() {
-//        super.onDestroy();
-//        weakHandler.removeCallbacks(runnable);
-//    }
+    @Override
+    public void onDrawFeedAd(List<TTFeedAd> feedAdList) {
+
+    }
+
+    @Override
+    public void removeNativeAd(TTNativeExpressAd ad, int position) {
+
+    }
+
+    @Override
+    public void rewardComplete() {
+
+    }
 
 
 }

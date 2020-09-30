@@ -8,32 +8,33 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.yc.verbaltalk.R;
-import com.yc.verbaltalk.index.adapter.LoveHealDetailsAdapter;
-import com.yc.verbaltalk.base.engine.MySubscriber;
-import com.yc.verbaltalk.chat.bean.AResultInfo;
+import com.yc.verbaltalk.base.engine.LoveEngine;
+import com.yc.verbaltalk.base.fragment.BaseLazyFragment;
+import com.yc.verbaltalk.base.utils.UserInfoHelper;
+import com.yc.verbaltalk.base.view.LoadDialog;
 import com.yc.verbaltalk.chat.bean.LoveHealDetBean;
 import com.yc.verbaltalk.chat.bean.LoveHealDetDetailsBean;
 import com.yc.verbaltalk.chat.bean.SearchDialogueBean;
-import com.yc.verbaltalk.base.engine.LoveEngine;
-import com.yc.verbaltalk.model.single.YcSingle;
-import com.yc.verbaltalk.mine.ui.activity.BecomeVipActivity;
+import com.yc.verbaltalk.index.adapter.LoveHealDetailsAdapter;
 import com.yc.verbaltalk.index.ui.activity.SearchActivity;
-import com.yc.verbaltalk.base.fragment.BaseLazyFragment;
-import com.yc.verbaltalk.base.view.LoadDialog;
+import com.yc.verbaltalk.mine.ui.activity.BecomeVipActivity;
 
 import java.util.List;
 
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
+import io.reactivex.observers.DisposableObserver;
+import yc.com.rthttplibrary.bean.ResultInfo;
+import yc.com.rthttplibrary.config.HttpConfig;
 
 /**
- * Created by mayn on 2019/5/5.
+ * Created by sunshey on 2019/5/5.
  */
 
 public class SearchFragment extends BaseLazyFragment {
 
-    public SearchActivity mShareActivity;
+    private SearchActivity mShareActivity;
     private RecyclerView mRecyclerView;
     private LoveEngine mLoveEngin;
     private int PAGE_SIZE = 10;
@@ -52,6 +53,7 @@ public class SearchFragment extends BaseLazyFragment {
         return super.onFragmentCreateView(inflater, container, savedInstanceState);
     }
 
+
     @Override
     protected int setContentView() {
         return R.layout.fragment_base_share;
@@ -69,7 +71,7 @@ public class SearchFragment extends BaseLazyFragment {
         mLoadingDialog = mShareActivity.mLoadingDialog;
         initRecyclerView();
         initListener();
-        netData(keyword);
+
 
     }
 
@@ -90,7 +92,7 @@ public class SearchFragment extends BaseLazyFragment {
 
     @Override
     protected void lazyLoad() {
-
+        netData(keyword);
     }
 
     private void initRecyclerView() {
@@ -107,44 +109,49 @@ public class SearchFragment extends BaseLazyFragment {
      */
     public void netData(String keyword) {
         this.keyword = keyword;
-        int id = YcSingle.getInstance().id;
-        if (id <= 0) {
-            mShareActivity.showToLoginDialog();
-            return;
-        }
+
         if (PAGE_NUM == 1)
             mLoadingDialog.showLoadingDialog();
-        mLoveEngin.searchDialogue2(String.valueOf(id), keyword, String.valueOf(PAGE_NUM), String.valueOf(PAGE_SIZE), "Dialogue/search").subscribe(new MySubscriber<AResultInfo<SearchDialogueBean>>(mLoadingDialog) {
+        mLoveEngin.searchDialogue2(UserInfoHelper.getUid(), keyword, String.valueOf(PAGE_NUM), String.valueOf(PAGE_SIZE))
+                .subscribe(new DisposableObserver<ResultInfo<SearchDialogueBean>>() {
 
 
-            @Override
-            protected void onNetNext(AResultInfo<SearchDialogueBean> searchDialogueBeanAResultInfo) {
-                SearchDialogueBean searchDialogueBean = searchDialogueBeanAResultInfo.data;
-                int searchBuyVip = searchDialogueBean.search_buy_vip;
-                if (1 == searchBuyVip) { //1 弹窗 0不弹
-                    startActivity(new Intent(mShareActivity, BecomeVipActivity.class));
-                    mRecyclerView.postDelayed(() -> mShareActivity.childDisposeOnBack(), 1000);
+                    @Override
+                    public void onComplete() {
+                        if (mSwipeRefresh.isRefreshing())
+                            mSwipeRefresh.setRefreshing(false);
+                        if (PAGE_NUM == 1) mLoadingDialog.dismissLoadingDialog();
+                    }
 
+                    @Override
+                    public void onError(Throwable e) {
+                        if (PAGE_NUM == 1) mLoadingDialog.dismissLoadingDialog();
+                        if (mSwipeRefresh.isRefreshing())
+                            mSwipeRefresh.setRefreshing(false);
+                    }
+
+                    @Override
+                    public void onNext(ResultInfo<SearchDialogueBean> searchDialogueBeanAResultInfo) {
+                        if (PAGE_NUM == 1) mLoadingDialog.dismissLoadingDialog();
+                        if (searchDialogueBeanAResultInfo != null && searchDialogueBeanAResultInfo.code == HttpConfig.STATUS_OK && searchDialogueBeanAResultInfo.data != null) {
+                            SearchDialogueBean searchDialogueBean = searchDialogueBeanAResultInfo.data;
+                            int searchBuyVip = searchDialogueBean.search_buy_vip;
+                            if (1 == searchBuyVip) { //1 弹窗 0不弹
+                                if (UserInfoHelper.isLogin(mShareActivity)) {
+                                    startActivity(new Intent(mShareActivity, BecomeVipActivity.class));
+                                    mRecyclerView.postDelayed(() -> mShareActivity.childDisposeOnBack(), 1000);
+                                }
 //                    notCanShart();
-                    return;
-                }
-                List<LoveHealDetBean> mLoveHealDetBeans = searchDialogueBean.list;
+                                return;
+                            }
+                            List<LoveHealDetBean> mLoveHealDetBeans = searchDialogueBean.list;
 
-                initRecyclerData(mLoveHealDetBeans);
-            }
+                            initRecyclerData(mLoveHealDetBeans);
+                        }
+                    }
 
-            @Override
-            protected void onNetError(Throwable e) {
-                if (mSwipeRefresh.isRefreshing())
-                    mSwipeRefresh.setRefreshing(false);
-            }
 
-            @Override
-            protected void onNetCompleted() {
-                if (mSwipeRefresh.isRefreshing())
-                    mSwipeRefresh.setRefreshing(false);
-            }
-        });
+                });
     }
 
     private void initRecyclerData(List<LoveHealDetBean> loveHealDetBeans) {

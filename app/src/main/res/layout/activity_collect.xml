@@ -10,10 +10,11 @@
 
     <net.lucode.hackware.magicindicator.MagicIndicator
         android:id="@+id/collect_pager_tabs"
-        android:layout_width="245dp"
+        android:layout_width="0dp"
         android:layout_height="40dp"
         android:background="@color/white"
-        app:layout_constraintLeft_toLeftOf="parent"
+        android:layout_marginEnd="@dimen/size_20"
+        app:layout_constraintLeft_toRightOf="@id/collect_pager_iv_back"
         app:layout_constraintRight_toRightOf="parent"
         tools:ignore="MissingConstraints" />
 
@@ -22,7 +23,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_centerVertical="true"
-        android:layout_marginLeft="12dp"
+        android:layout_marginStart="12dp"
         android:background="?attr/selectableItemBackgroundBorderless"
         android:padding="8dp"
         android:src="@mipmap/icon_arr_lift_black"

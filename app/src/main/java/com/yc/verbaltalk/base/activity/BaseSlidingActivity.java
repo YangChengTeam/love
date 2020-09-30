@@ -8,10 +8,11 @@ import com.yc.verbaltalk.R;
 
 import java.lang.reflect.Field;
 
+import androidx.annotation.NonNull;
 import androidx.slidingpanelayout.widget.SlidingPaneLayout;
 
 /**
- * Created by mayn on 2019/4/25.
+ * Created by sunshey on 2019/4/25.
  */
 
 public class BaseSlidingActivity extends BaseActivity implements SlidingPaneLayout.PanelSlideListener {
@@ -72,12 +73,12 @@ public class BaseSlidingActivity extends BaseActivity implements SlidingPaneLayo
     }
 
     @Override
-    public void onPanelClosed(View view) {
+    public void onPanelClosed(@NonNull View view) {
 
     }
 
     @Override
-    public void onPanelOpened(View view) {
+    public void onPanelOpened(@NonNull View view) {
         finish();
         this.overridePendingTransition(0, R.anim.out_to_right);
     }

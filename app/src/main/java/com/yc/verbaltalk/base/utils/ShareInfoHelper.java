@@ -4,14 +4,14 @@ import android.content.Context;
 import android.util.Log;
 
 import com.alibaba.fastjson.JSON;
-import com.kk.securityhttp.domain.ResultInfo;
-import com.kk.securityhttp.net.contains.HttpConfig;
 import com.yc.verbaltalk.base.YcApplication;
-import com.yc.verbaltalk.chat.bean.ShareInfo;
 import com.yc.verbaltalk.base.engine.LoveEngine;
+import com.yc.verbaltalk.chat.bean.ShareInfo;
 import com.yc.verbaltalk.model.util.SPUtils;
 
-import rx.Subscriber;
+import io.reactivex.observers.DisposableObserver;
+import yc.com.rthttplibrary.bean.ResultInfo;
+import yc.com.rthttplibrary.config.HttpConfig;
 
 /**
  * Created by wanglin  on 2019/7/9 18:18.
@@ -52,9 +52,9 @@ public class ShareInfoHelper {
     public static void getNetShareInfo(Context context) {
         LoveEngine loveEngin = new LoveEngine(context);
 
-        loveEngin.getShareInfo(context).subscribe(new Subscriber<ResultInfo<ShareInfo>>() {
+        loveEngin.getShareInfo().subscribe(new DisposableObserver<ResultInfo<ShareInfo>>() {
             @Override
-            public void onCompleted() {
+            public void onComplete() {
 
             }
 

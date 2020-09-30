@@ -1,7 +1,7 @@
 package com.yc.verbaltalk.index.ui.fragment;
 
 /**
- * Created by mayn on 2019/5/5.
+ * Created by sunshey on 2019/5/5.
  */
 
 public class ShareT1Fragment extends BaseShareFragment {

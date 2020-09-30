@@ -14,10 +14,10 @@
         android:layout_height="wrap_content" />-->
 
     <ImageView
-        android:padding="3dp"
         android:id="@+id/item_details_bean_iv_sex"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:padding="3dp"
         android:src="@mipmap/icon_dialogue_men" />
 
     <TextView
@@ -34,11 +34,11 @@
 
 
     <ImageView
-        android:padding="3dp"
         android:id="@+id/item_details_bean_iv_copy"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:background="?attr/selectableItemBackgroundBorderless"
+        android:padding="3dp"
         android:src="@mipmap/icon_dialogue_copy" />
 
 </LinearLayout>

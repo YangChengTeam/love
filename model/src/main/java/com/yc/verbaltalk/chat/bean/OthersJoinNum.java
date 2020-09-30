@@ -3,7 +3,7 @@ package com.yc.verbaltalk.chat.bean;
 import java.io.Serializable;
 
 /**
- * Created by mayn on 2019/6/11.
+ * Created by sunshey on 2019/6/11.
  */
 
 public class OthersJoinNum implements Serializable {

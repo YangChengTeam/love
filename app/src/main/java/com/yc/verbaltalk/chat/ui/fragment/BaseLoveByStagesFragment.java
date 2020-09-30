@@ -9,7 +9,7 @@ import com.yc.verbaltalk.base.fragment.BaseLazyFragment;
 import com.yc.verbaltalk.chat.ui.activity.LoveByStagesActivity;
 
 /**
- * Created by mayn on 2019/5/5.
+ * Created by sunshey on 2019/5/5.
  */
 
 public  abstract class BaseLoveByStagesFragment  extends BaseLazyFragment {

@@ -4,9 +4,7 @@ import android.content.Context;
 import android.util.AttributeSet;
 import android.widget.RelativeLayout;
 
-/**
- * Created by mayn on 2019/5/7.
- */
+
 
 public class SquareRelativeLayout extends RelativeLayout {
 

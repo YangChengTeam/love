@@ -5,9 +5,7 @@ import android.graphics.Typeface;
 import android.graphics.drawable.Drawable;
 import android.view.View;
 
-/**
- * Created by mayn on 2019/5/7.
- */
+
 
 public class ViewHelper {
 

@@ -2,13 +2,13 @@ package com.yc.verbaltalk.skill.ui.fragment;
 
 import com.alibaba.fastjson.TypeReference;
 import com.yc.verbaltalk.R;
-import com.yc.verbaltalk.skill.adapter.ConfessionAdapter;
+import com.yc.verbaltalk.base.engine.LoveEngine;
+import com.yc.verbaltalk.base.utils.CommonInfoHelper;
+import com.yc.verbaltalk.base.view.LoadDialog;
 import com.yc.verbaltalk.chat.bean.confession.ConfessionBean;
 import com.yc.verbaltalk.chat.bean.confession.ConfessionDataBean;
-import com.yc.verbaltalk.base.engine.LoveEngine;
+import com.yc.verbaltalk.skill.adapter.ConfessionAdapter;
 import com.yc.verbaltalk.skill.ui.activity.CreateBeforeActivity;
-import com.yc.verbaltalk.base.view.LoadDialog;
-import com.yc.verbaltalk.base.utils.CommonInfoHelper;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -17,7 +17,8 @@ import androidx.recyclerview.widget.DefaultItemAnimator;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
-import rx.Subscriber;
+import io.reactivex.observers.DisposableObserver;
+
 
 //表白
 public class ExpressFragment extends BaseMainT2ChildFragment {
@@ -49,7 +50,6 @@ public class ExpressFragment extends BaseMainT2ChildFragment {
     protected void lazyLoad() {
         initData();
     }
-
 
 
     private void initView() {
@@ -99,9 +99,9 @@ public class ExpressFragment extends BaseMainT2ChildFragment {
 
         }
 
-        loveEngin.geteExpressData(PAGE_NUM).subscribe(new Subscriber<ConfessionBean>() {
+        loveEngin.getExpressData(PAGE_NUM).subscribe(new DisposableObserver<ConfessionBean>() {
             @Override
-            public void onCompleted() {
+            public void onComplete() {
                 if (mLoadDialog != null) mLoadDialog.dismissLoadingDialog();
                 if (mSipe.isRefreshing()) mSipe.setRefreshing(false);
             }
@@ -154,8 +154,6 @@ public class ExpressFragment extends BaseMainT2ChildFragment {
         }
 
     }
-
-
 
 
 }

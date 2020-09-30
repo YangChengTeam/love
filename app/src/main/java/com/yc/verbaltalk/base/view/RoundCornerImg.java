@@ -1,21 +1,30 @@
 package com.yc.verbaltalk.base.view;
 
 import android.content.Context;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
+import android.graphics.Paint;
+import android.graphics.PaintFlagsDrawFilter;
 import android.graphics.Path;
+import android.graphics.Rect;
+import android.graphics.drawable.BitmapDrawable;
 import android.os.Build;
 import android.util.AttributeSet;
+import android.util.Log;
 import android.view.View;
 
 import androidx.appcompat.widget.AppCompatImageView;
 
 /**
- * Created by mayn on 2019/4/28.
+ * Created by sunshey on 2019/4/28.
  */
 
 public class RoundCornerImg extends AppCompatImageView {
-    float width, height;
-    int corners = 12;
+    private float width, height;
+    private int corners = 12;
+
+    private Paint mPaint;
 
     public RoundCornerImg(Context context, AttributeSet attrs) {
         super(context, attrs);
@@ -26,6 +35,9 @@ public class RoundCornerImg extends AppCompatImageView {
         if (Build.VERSION.SDK_INT < 18) {
             setLayerType(View.LAYER_TYPE_SOFTWARE, null);
         }
+        mPaint = new Paint();
+        mPaint.setAntiAlias(true);
+
     }
 
     @Override
@@ -37,10 +49,12 @@ public class RoundCornerImg extends AppCompatImageView {
 
     public void setCorner(int corner) {
         this.corners = corner;
+
     }
 
     @Override
     protected void onDraw(Canvas canvas) {
+
         if (width >= 12 && height > 12) {
             Path path = new Path();
             //四个圆角
@@ -52,10 +66,16 @@ public class RoundCornerImg extends AppCompatImageView {
             path.lineTo(corners, height);
             path.quadTo(0, height, 0, height - corners);
             path.lineTo(0, corners);
+            //quadTo 贝塞尔曲线  quadTo(float x1, float y1, float x2, float y2)
+            //x1,y1分别是控制点的横坐标纵坐标
+            //x2,y2分别是结束点点横坐标纵坐标
             path.quadTo(0, 0, corners, 0);
+            canvas.setDrawFilter(new PaintFlagsDrawFilter(0, Paint.ANTI_ALIAS_FLAG | Paint.FILTER_BITMAP_FLAG));
             canvas.clipPath(path);
         }
         super.onDraw(canvas);
     }
+
+
 }
 

@@ -1,8 +1,10 @@
 package com.yc.verbaltalk.mine.ui.activity;
 
 import android.os.Bundle;
+import android.widget.TextView;
 
 import com.yc.verbaltalk.R;
+import com.yc.verbaltalk.base.YcApplication;
 import com.yc.verbaltalk.base.activity.BaseSameActivity;
 
 public class PrivacyStatementActivity extends BaseSameActivity {
@@ -11,10 +13,11 @@ public class PrivacyStatementActivity extends BaseSameActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_privacy_statement);
+        ((TextView) findViewById(R.id.tv_privacy)).setText(YcApplication.privacyPolicy);
     }
 
     @Override
     protected String offerActivityTitle() {
-        return "恋爱话术宝隐私声明";
+        return getString(R.string.app_name) + "隐私声明";
     }
 }

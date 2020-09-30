@@ -2,15 +2,15 @@ package com.yc.verbaltalk.skill.factory;
 
 import android.os.Bundle;
 
+import androidx.fragment.app.Fragment;
+
 import com.yc.verbaltalk.chat.ui.fragment.LoveByStagesFragment;
 
 import java.util.HashMap;
 import java.util.Map;
 
-import androidx.fragment.app.Fragment;
-
 /**
- * Created by mayn on 2019/5/5.
+ * Created by sunshey on 2019/5/5.
  */
 
 public class LoveByStagesFactory {

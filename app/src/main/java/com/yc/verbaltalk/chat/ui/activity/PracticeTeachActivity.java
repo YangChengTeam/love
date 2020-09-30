@@ -4,16 +4,15 @@ import android.content.Intent;
 import android.os.Bundle;
 
 import com.alibaba.fastjson.TypeReference;
+
 import com.yc.verbaltalk.R;
+import com.yc.verbaltalk.base.utils.UserInfoHelper;
 import com.yc.verbaltalk.mine.ui.activity.BecomeVipActivity;
 import com.yc.verbaltalk.skill.adapter.ChatSkillItemAdapter;
-import com.yc.verbaltalk.base.engine.MySubscriber;
-import com.yc.verbaltalk.chat.bean.AResultInfo;
 import com.yc.verbaltalk.chat.bean.ExampDataBean;
 import com.yc.verbaltalk.chat.bean.ExampListsBean;
-import com.yc.verbaltalk.chat.bean.MainT2Bean;
+import com.yc.verbaltalk.skill.model.bean.ChatCheatsInfo;
 import com.yc.verbaltalk.chat.bean.event.EventPayVipSuccess;
-import com.yc.verbaltalk.model.single.YcSingle;
 import com.yc.verbaltalk.base.activity.BaseSameActivity;
 import com.yc.verbaltalk.skill.ui.activity.ExampleDetailActivity;
 import com.yc.verbaltalk.base.view.LoadDialog;
@@ -30,9 +29,13 @@ import androidx.recyclerview.widget.DefaultItemAnimator;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
+import io.reactivex.observers.DisposableObserver;
+
+import yc.com.rthttplibrary.bean.ResultInfo;
+import yc.com.rthttplibrary.config.HttpConfig;
 
 /**
- * Created by mayn on 2019/6/18.
+ * Created by sunshey on 2019/6/18.
  */
 
 //LoveCaseActivity
@@ -43,7 +46,7 @@ public class PracticeTeachActivity extends BaseSameActivity {
 
 //    private LoveEngine mLoveEngine;
 
-    private List<MainT2Bean> mMainT2Beans;
+    private List<ChatCheatsInfo> mMainT2Beans;
 
     private int PAGE_SIZE = 10;
     private int PAGE_NUM = 1;
@@ -94,12 +97,13 @@ public class PracticeTeachActivity extends BaseSameActivity {
         });
         mAdapter.setOnLoadMoreListener(() -> netData(false), mRecyclerView);
         mAdapter.setOnItemClickListener((adapter, view, position) -> {
-            MainT2Bean mainT2Bean = mAdapter.getItem(position);
+            ChatCheatsInfo mainT2Bean = mAdapter.getItem(position);
             if (mainT2Bean != null) {
-                if (MainT2Bean.VIEW_ITEM == mainT2Bean.type) {
+                if (ChatCheatsInfo.VIEW_ITEM == mainT2Bean.type) {
                     ExampleDetailActivity.startExampleDetailActivity(PracticeTeachActivity.this, mainT2Bean.id, mainT2Bean.post_title);
-                } else if (MainT2Bean.VIEW_TO_PAY_VIP == mainT2Bean.type || MainT2Bean.VIEW_VIP == mainT2Bean.type) {
-                    startActivity(new Intent(PracticeTeachActivity.this, BecomeVipActivity.class));
+                } else if (ChatCheatsInfo.VIEW_TO_PAY_VIP == mainT2Bean.type || ChatCheatsInfo.VIEW_VIP == mainT2Bean.type) {
+                    if (UserInfoHelper.isLogin(PracticeTeachActivity.this))
+                        startActivity(new Intent(PracticeTeachActivity.this, BecomeVipActivity.class));
                 }
             }
         });
@@ -107,8 +111,8 @@ public class PracticeTeachActivity extends BaseSameActivity {
 
 
     private void initData() {
-        CommonInfoHelper.getO(this, "main2_example_lists", new TypeReference<List<MainT2Bean>>() {
-        }.getType(), (CommonInfoHelper.onParseListener<List<MainT2Bean>>) o -> {
+        CommonInfoHelper.getO(this, "main2_example_lists", new TypeReference<List<ChatCheatsInfo>>() {
+        }.getType(), (CommonInfoHelper.onParseListener<List<ChatCheatsInfo>>) o -> {
             if (o != null && o.size() > 0) {
                 mAdapter.setNewData(o);
             }
@@ -126,19 +130,10 @@ public class PracticeTeachActivity extends BaseSameActivity {
             mLoadingDialog.showLoadingDialog();
         }
 
-        mLoveEngine.exampLists(String.valueOf(YcSingle.getInstance().id), String.valueOf(PAGE_NUM), String.valueOf(PAGE_SIZE), "example/lists")
-                .subscribe(new MySubscriber<AResultInfo<ExampDataBean>>(mLoadingDialog) {
+        mLoveEngine.exampLists(UserInfoHelper.getUid(), String.valueOf(PAGE_NUM), String.valueOf(PAGE_SIZE))
+                .subscribe(new DisposableObserver<ResultInfo<ExampDataBean>>() {
                     @Override
-                    protected void onNetNext(AResultInfo<ExampDataBean> exampDataBeanAResultInfo) {
-                        if (PAGE_NUM == 1 && !isRefresh) {
-                            mLoadingDialog.dismissLoadingDialog();
-                        }
-                        ExampDataBean exampDataBean = exampDataBeanAResultInfo.data;
-                        createNewData(exampDataBean);
-                    }
-
-                    @Override
-                    protected void onNetError(Throwable e) {
+                    public void onComplete() {
                         if (mSwipeRefresh.isRefreshing()) {
                             mSwipeRefresh.setRefreshing(false);
                         }
@@ -148,7 +143,7 @@ public class PracticeTeachActivity extends BaseSameActivity {
                     }
 
                     @Override
-                    protected void onNetCompleted() {
+                    public void onError(Throwable e) {
                         if (mSwipeRefresh.isRefreshing()) {
                             mSwipeRefresh.setRefreshing(false);
                         }
@@ -156,6 +151,20 @@ public class PracticeTeachActivity extends BaseSameActivity {
                             mLoadingDialog.dismissLoadingDialog();
                         }
                     }
+
+                    @Override
+                    public void onNext(ResultInfo<ExampDataBean> exampDataBeanAResultInfo) {
+                        if (PAGE_NUM == 1 && !isRefresh) {
+                            mLoadingDialog.dismissLoadingDialog();
+                        }
+                        if (exampDataBeanAResultInfo != null && exampDataBeanAResultInfo.code == HttpConfig.STATUS_OK && exampDataBeanAResultInfo.data != null) {
+
+                            ExampDataBean exampDataBean = exampDataBeanAResultInfo.data;
+                            createNewData(exampDataBean);
+                        }
+                    }
+
+
                 });
     }
 
@@ -168,21 +177,21 @@ public class PracticeTeachActivity extends BaseSameActivity {
 
 
         mMainT2Beans = new ArrayList<>();
-        if (PAGE_NUM == 1) mMainT2Beans.add(new MainT2Bean("tit", MainT2Bean.VIEW_TITLE));
+        if (PAGE_NUM == 1) mMainT2Beans.add(new ChatCheatsInfo("tit", ChatCheatsInfo.VIEW_TITLE));
         if (exampListsBeans != null && exampListsBeans.size() > 0) {
 
             for (ExampListsBean exampListsBean : exampListsBeans) {
-                int type = MainT2Bean.VIEW_ITEM;
+                int type = ChatCheatsInfo.VIEW_ITEM;
                 if (PAGE_NUM > 1) {
-                    type = exampDataBean.is_vip > 0 ? MainT2Bean.VIEW_ITEM : MainT2Bean.VIEW_TO_PAY_VIP;
+                    type = exampDataBean.is_vip > 0 ? ChatCheatsInfo.VIEW_ITEM : ChatCheatsInfo.VIEW_TO_PAY_VIP;
                 }
 
-                mMainT2Beans.add(new MainT2Bean(type, exampListsBean.create_time, exampListsBean.id, exampListsBean.image, exampListsBean.post_title));
+                mMainT2Beans.add(new ChatCheatsInfo(type, exampListsBean.create_time, exampListsBean.id, exampListsBean.image, exampListsBean.post_title));
             }
 
         }
         if (!mUserIsVip && mMainT2Beans != null && mMainT2Beans.size() > 6 && PAGE_NUM == 1) {
-            mMainT2Beans.add(6, new MainT2Bean("vip", MainT2Bean.VIEW_VIP));
+            mMainT2Beans.add(6, new ChatCheatsInfo("vip", ChatCheatsInfo.VIEW_VIP));
         }
 
 

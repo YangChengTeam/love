@@ -8,6 +8,9 @@ import android.util.Log;
 import android.view.animation.AccelerateInterpolator;
 import android.view.animation.DecelerateInterpolator;
 
+import androidx.fragment.app.FragmentPagerAdapter;
+import androidx.viewpager.widget.ViewPager;
+
 import com.yc.verbaltalk.R;
 import com.yc.verbaltalk.base.activity.BaseSameActivity;
 import com.yc.verbaltalk.base.view.ColorFlipPagerTitleView;
@@ -26,8 +29,6 @@ import net.lucode.hackware.magicindicator.buildins.commonnavigator.titles.Simple
 
 import java.util.ArrayList;
 import java.util.List;
-
-import androidx.viewpager.widget.ViewPager;
 
 /**
  * 首页提升--》不同恋爱阶段
@@ -57,18 +58,20 @@ public class LoveByStagesActivity extends BaseSameActivity {
     private void netSwitchPagerData() {
         List<String> titleLists = new ArrayList<>();
         List<Integer> idLists = new ArrayList<>();
-        for (int i = 0; i < mCategoryArticleChildrenBeans.size(); i++) {
-            CategoryArticleChildrenBean categoryArticleChildrenBean = mCategoryArticleChildrenBeans.get(i);
-            titleLists.add(categoryArticleChildrenBean.name);
-            idLists.add(categoryArticleChildrenBean.id);
+        if (mCategoryArticleChildrenBeans != null && mCategoryArticleChildrenBeans.size() > 0) {
+            for (int i = 0; i < mCategoryArticleChildrenBeans.size(); i++) {
+                CategoryArticleChildrenBean categoryArticleChildrenBean = mCategoryArticleChildrenBeans.get(i);
+                titleLists.add(categoryArticleChildrenBean.name);
+                idLists.add(categoryArticleChildrenBean.id);
 
-            Log.d("mylog", "netSwitchPagerData: categoryArticleChildrenBean.name " + categoryArticleChildrenBean.name
-                    + " categoryArticleChildrenBean.id " + categoryArticleChildrenBean.id);
+                Log.d("mylog", "netSwitchPagerData: categoryArticleChildrenBean.name " + categoryArticleChildrenBean.name
+                        + " categoryArticleChildrenBean.id " + categoryArticleChildrenBean.id);
+            }
         }
 
         initNavigator(titleLists);
 
-        LoveByStagesPagerAdapter loveByStagesPagerAdapter = new LoveByStagesPagerAdapter(getSupportFragmentManager(), titleLists, idLists);
+        LoveByStagesPagerAdapter loveByStagesPagerAdapter = new LoveByStagesPagerAdapter(getSupportFragmentManager(), FragmentPagerAdapter.BEHAVIOR_RESUME_ONLY_CURRENT_FRAGMENT, titleLists, idLists);
         mViewPager.setAdapter(loveByStagesPagerAdapter);
         if (mCategoryArticleChildrenBeans != null && mCategoryArticleChildrenBeans.size() > 0)
             mViewPager.setOffscreenPageLimit(mCategoryArticleChildrenBeans.size() - 1);

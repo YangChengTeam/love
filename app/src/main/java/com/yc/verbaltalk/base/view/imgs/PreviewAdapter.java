@@ -11,9 +11,7 @@ import java.util.List;
 
 import androidx.viewpager.widget.PagerAdapter;
 
-/**
- * Created by mayn on 2019/5/7.
- */
+
 
 public class PreviewAdapter  extends PagerAdapter {
 

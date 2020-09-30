@@ -9,6 +9,7 @@ import com.yc.verbaltalk.chat.bean.IndexDoodsBean;
 
 import java.util.List;
 
+import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -39,10 +40,11 @@ public class BecomeVipAdapter extends BaseMultiItemQuickAdapter<BecomeVipBean, B
     }
 
     @Override
-    protected void convert(BaseViewHolder helper, BecomeVipBean item) {
+    protected void convert(@NonNull BaseViewHolder helper, BecomeVipBean item) {
         if (item != null) {
             switch (item.type) {
                 case BecomeVipBean.VIEW_TITLE:
+                case BecomeVipBean.VIEW_VIP_TAG:
                     break;
                 case BecomeVipBean.VIEW_ITEM:
 //                    helper.setImageResource(R.love_id.item_become_vip_iv_icon, item.imgResId);
@@ -70,8 +72,6 @@ public class BecomeVipAdapter extends BaseMultiItemQuickAdapter<BecomeVipBean, B
                             .addOnClickListener(R.id.item_become_vip_rl_btn_zfb)
                             .addOnClickListener(R.id.item_become_vip_rl_btn_share);
 
-                    break;
-                case BecomeVipBean.VIEW_VIP_TAG:
                     break;
             }
         }

@@ -11,7 +11,6 @@
     <color name="gray_et_gb">#f8f8f8</color>
     <color name="gray_et_text">#999999</color>
     <color name="transparency">#00FFFFFF</color>
-    <color name="transparency_gray">#66000000</color>
     <color name="white">#FFFFFF</color>
     <color name="text_gray_deep">#555555</color>
     <color name="text_gray">#9a9a9a</color>
@@ -24,20 +23,12 @@
     <color name="red_crimson_thin">#fff8f8</color>
     <color name="red_crimson_66">#66fa4a65</color>
     <color name="red_crimson_99">#99fa4a65</color>
-    <color name="red_crimson_login_start">#ff6a9a</color>
     <color name="red_crimson_login_center">#ff6e89</color>
     <color name="red_crimson_login_end">#fe7c7c</color>
     <color name="red_crimson_login_end_s">#88fe7c7c</color>
-    <color name="red_crimson_login_btn_start">#fe9276</color>
-    <color name="red_crimson_login_btn_center">#fe748c</color>
-    <color name="red_crimson_login_btn_end">#ff54a4</color>
-    <color name="red_crimson_login_btn_start_s">#88fe9276</color>
-    <color name="red_crimson_login_btn_center_s">#88fe748c</color>
-    <color name="red_crimson_login_btn_end_s">#88ff54a4</color>
     <!-- <color name="red_crimson_login_card_start">#11fe9276</color>
      <color name="red_crimson_login_card_center">#11fe748c</color>
      <color name="red_crimson_login_card_end">#11ff54a4</color>-->
-    <color name="red_crimson_card_back">#fff0f1</color>
 
 
     <color name="red_crimson_brim_01">#22f6e0e2</color>
@@ -57,11 +48,6 @@
     <color name="yellow_vip_btn">#bf8d53</color>
 
     <color name="yellow_vip_tv_pay">#ddae52</color>
-
-    <color name="red_crimson_card_01">#22ffdeea</color>
-    <color name="red_crimson_card_02">#22ffe1e7</color>
-    <color name="red_crimson_card_03">#22ffdaed</color>
-    <color name="red_crimson_card_04">#11ffe7eb</color>
 
     <color name="gray_brim_gray_04">#f3f6fa</color>
     <color name="gray_brim_gray_03">#88f4f7fb</color>
@@ -106,6 +92,16 @@
     <color name="gray_f2f2f2">#F2F2F2</color>
     <color name="red_f23d35">#F23D35</color>
     <color name="gray_666666">#666666</color>
+    <color name="gray_c5c5c5">#C5C5C5</color>
+    <color name="red_f35a4c">#F35A4C</color>
+    <color name="gray_373737">#373737</color>
+    <color name="gray_e2e2e2">#e2e2e2</color>
+    <color name="gray_a0a0a0">#A0A0A0</color>
+    <color name="color_bdbcbc">#bdbcbc</color>
+    <color name="gray_f5f5f5">#F5F5F5</color>
+    <color name="gray_aaa">#AAAAAA</color>
+    <color name="gray_666">#666666</color>
+    <color name="black_0a0a0a">#0A0A0A</color>
 
 
 </resources>

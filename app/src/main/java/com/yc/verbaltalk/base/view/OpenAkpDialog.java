@@ -15,7 +15,7 @@ import android.view.Window;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.kk.utils.ToastUtil;
+
 import com.umeng.analytics.MobclickAgent;
 import com.yc.verbaltalk.R;
 import com.yc.verbaltalk.chat.bean.LoveHealDetDetailsBean;
@@ -30,10 +30,12 @@ import java.util.Collections;
 import java.util.List;
 
 import androidx.annotation.NonNull;
-import rx.Subscriber;
+import io.reactivex.observers.DisposableObserver;
+
+import yc.com.rthttplibrary.util.ToastUtil;
 
 /**
- * Created by mayn on 2019/5/21.
+ * Created by sunshey on 2019/5/21.
  */
 
 public class OpenAkpDialog extends AlertDialog {
@@ -93,9 +95,9 @@ public class OpenAkpDialog extends AlertDialog {
 
     private void handleCollect() {
         if (mIsCollect) {
-            loveEngin.deleteCollectLoveHeals(loveHealDetDetailsBean).subscribe(new Subscriber<String>() {
+            loveEngin.deleteCollectLoveHeals(loveHealDetDetailsBean).subscribe(new DisposableObserver<String>() {
                 @Override
-                public void onCompleted() {
+                public void onComplete() {
 
                 }
 
@@ -107,16 +109,16 @@ public class OpenAkpDialog extends AlertDialog {
                 @Override
                 public void onNext(String s) {
                     if (TextUtils.equals("success", s)) {
-                        ToastUtil.toast2(context, "已取消收藏！");
+                        ToastUtil.toast(context, "已取消收藏！");
                     }
                     EventBus.getDefault().post("collect_cancel");
                     dismiss();
                 }
             });
         } else {
-            loveEngin.collectLoveHeal(loveHealDetDetailsBean).subscribe(new Subscriber<String>() {
+            loveEngin.collectLoveHeal(loveHealDetDetailsBean).subscribe(new DisposableObserver<String>() {
                 @Override
-                public void onCompleted() {
+                public void onComplete() {
 
                 }
 
@@ -128,7 +130,7 @@ public class OpenAkpDialog extends AlertDialog {
                 @Override
                 public void onNext(String s) {
                     if (TextUtils.equals("success", s)) {
-                        ToastUtil.toast2(context, "已经收藏成功，快去查看吧！");
+                        ToastUtil.toast(context, "已经收藏成功，快去查看吧！");
                     }
                     dismiss();
                 }

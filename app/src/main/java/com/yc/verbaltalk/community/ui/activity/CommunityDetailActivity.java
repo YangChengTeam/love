@@ -17,22 +17,23 @@ import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.RequestOptions;
-import com.kk.securityhttp.domain.ResultInfo;
-import com.kk.securityhttp.net.contains.HttpConfig;
-import com.kk.utils.ToastUtil;
 import com.yc.verbaltalk.R;
-import com.yc.verbaltalk.community.adapter.CommunityFollowAdapter;
-import com.yc.verbaltalk.chat.bean.AResultInfo;
-import com.yc.verbaltalk.chat.bean.CommunityDetailInfo;
-import com.yc.verbaltalk.chat.bean.CommunityInfo;
-import com.yc.verbaltalk.chat.bean.IdCorrelationLoginBean;
-import com.yc.verbaltalk.model.single.YcSingle;
 import com.yc.verbaltalk.base.activity.BaseSlidingActivity;
-import com.yc.verbaltalk.mine.ui.activity.BecomeVipActivity;
-import com.yc.verbaltalk.mine.ui.activity.UserInfoActivity;
-import com.yc.verbaltalk.base.view.LoadDialog;
 import com.yc.verbaltalk.base.utils.DateUtils;
 import com.yc.verbaltalk.base.utils.StatusBarUtil;
+import com.yc.verbaltalk.base.utils.UserInfoHelper;
+import com.yc.verbaltalk.base.view.LoadDialog;
+import com.yc.verbaltalk.chat.bean.CommunityDetailInfo;
+import com.yc.verbaltalk.chat.bean.CommunityInfo;
+import com.yc.verbaltalk.chat.bean.UserInfo;
+import com.yc.verbaltalk.chat.bean.event.EventLoginState;
+import com.yc.verbaltalk.community.adapter.CommunityFollowAdapter;
+import com.yc.verbaltalk.mine.ui.activity.BecomeVipActivity;
+import com.yc.verbaltalk.mine.ui.activity.UserInfoActivity;
+
+import org.greenrobot.eventbus.EventBus;
+import org.greenrobot.eventbus.Subscribe;
+import org.greenrobot.eventbus.ThreadMode;
 
 import java.util.Date;
 import java.util.List;
@@ -40,7 +41,10 @@ import java.util.List;
 import androidx.core.content.ContextCompat;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
-import rx.Subscriber;
+import io.reactivex.observers.DisposableObserver;
+import yc.com.rthttplibrary.bean.ResultInfo;
+import yc.com.rthttplibrary.config.HttpConfig;
+import yc.com.rthttplibrary.util.ToastUtil;
 
 /**
  * Created by suns  on 2019/8/29 11:23.
@@ -178,9 +182,10 @@ public class CommunityDetailActivity extends BaseSlidingActivity implements View
                     case R.id.iv_like:
                     case R.id.ll_like:
 //
-                        if (communityInfo.is_dig == 0) {
-                            like(communityInfo, position);
-                        }
+                        if (UserInfoHelper.isLogin(this))
+                            if (communityInfo.is_dig == 0) {
+                                like(communityInfo, position);
+                            }
                         break;
                 }
             }
@@ -189,11 +194,11 @@ public class CommunityDetailActivity extends BaseSlidingActivity implements View
     }
 
     private void like(CommunityInfo communityInfo, int position) {
-        int id = YcSingle.getInstance().id;
 
-        mLoveEngine.commentLike(String.valueOf(id), communityInfo.comment_id).subscribe(new Subscriber<ResultInfo<String>>() {
+
+        mLoveEngine.commentLike(UserInfoHelper.getUid(), communityInfo.comment_id).subscribe(new DisposableObserver<ResultInfo<String>>() {
             @Override
-            public void onCompleted() {
+            public void onComplete() {
 
             }
 
@@ -216,25 +221,26 @@ public class CommunityDetailActivity extends BaseSlidingActivity implements View
     }
 
     private void getData() {
-        int userId = YcSingle.getInstance().id;
+
         if (mLoadingDialog == null)
             mLoadingDialog = new LoadDialog(this);
 
         mLoadingDialog.showLoadingDialog();
 
-        mLoveEngine.getCommunityDetailInfo(String.valueOf(userId), id).subscribe(new Subscriber<ResultInfo<CommunityDetailInfo>>() {
+        mLoveEngine.getCommunityDetailInfo(UserInfoHelper.getUid(), id).subscribe(new DisposableObserver<ResultInfo<CommunityDetailInfo>>() {
             @Override
-            public void onCompleted() {
+            public void onComplete() {
                 mLoadingDialog.dismissLoadingDialog();
             }
 
             @Override
             public void onError(Throwable e) {
-
+                mLoadingDialog.dismissLoadingDialog();
             }
 
             @Override
             public void onNext(ResultInfo<CommunityDetailInfo> communityDetaiInfoResultInfo) {
+                mLoadingDialog.dismissLoadingDialog();
                 if (communityDetaiInfoResultInfo != null && communityDetaiInfoResultInfo.code == HttpConfig.STATUS_OK &&
                         communityDetaiInfoResultInfo.data != null) {
                     CommunityDetailInfo detailInfo = communityDetaiInfoResultInfo.data;
@@ -268,19 +274,30 @@ public class CommunityDetailActivity extends BaseSlidingActivity implements View
                 break;
             case R.id.tv_send:
                 if (TextUtils.isEmpty(result)) {
-                    ToastUtil.toast2(this, "评论内容不能为空");
+                    ToastUtil.toast(this, "评论内容不能为空");
                     return;
                 }
                 // TODO: 2019/8/30 提交到服务器
-                submitComment(id, result);
+
+                if (UserInfoHelper.isLogin(this))
+                    submitComment(id, result);
 
                 break;
             case R.id.ll_vip:
-                if (isVip) {
-                    ToastUtil.toast2(this, "你已经是VIP不需要重复购买");
-                    return;
+
+
+                //1.isVip 有两种情况
+
+                if (UserInfoHelper.isLogin(this)) {//2.没登录返回false 提示登录 跳转到登录界面 登录成功后继续请求
+                    if (isVip) {//4.登录返回true 提示用户已购买vip
+                        ToastUtil.toast(CommunityDetailActivity.this, "你已经是VIP不需要重复购买");
+                        return;
+                    }
+                    //3.登录返回false  跳转到支付界面
+                    startActivity(new Intent(CommunityDetailActivity.this, BecomeVipActivity.class));
                 }
-                startActivity(new Intent(this, BecomeVipActivity.class));
+
+
                 break;
             case R.id.ll_wx_service:
                 showToWxServiceDialog(null);
@@ -288,29 +305,52 @@ public class CommunityDetailActivity extends BaseSlidingActivity implements View
         }
     }
 
-    private void submitComment(String topicId, String content) {
-        final int id = YcSingle.getInstance().id;
-        if (id <= 0) {
-            showToLoginDialog();
-            return;
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    public void loginSuccess(EventLoginState event) {
+        switch (event.state) {
+            case EventLoginState.STATE_LOGINED:
+            case EventLoginState.STATE_EXIT:
+                netIsVipData();
+                break;
         }
+//        if (TextUtils.equals("login", tint)) {
+//
+//        }
+    }
+
+    @Override
+    protected void onStart() {
+        super.onStart();
+        EventBus.getDefault().register(this);
+
+    }
+
+    @Override
+    protected void onStop() {
+        super.onStop();
+        EventBus.getDefault().unregister(this);
+    }
+
+    private void submitComment(String topicId, String content) {
+
         if (mLoadingDialog == null)
             mLoadingDialog = new LoadDialog(this);
         mLoadingDialog.showLoadingDialog();
 
-        mLoveEngine.createComment(String.valueOf(id), topicId, content).subscribe(new Subscriber<ResultInfo<String>>() {
+        mLoveEngine.createComment(UserInfoHelper.getUid(), topicId, content).subscribe(new DisposableObserver<ResultInfo<String>>() {
             @Override
-            public void onCompleted() {
+            public void onComplete() {
                 mLoadingDialog.dismissLoadingDialog();
             }
 
             @Override
             public void onError(Throwable e) {
-
+                mLoadingDialog.dismissLoadingDialog();
             }
 
             @Override
             public void onNext(ResultInfo<String> stringResultInfo) {
+                mLoadingDialog.dismissLoadingDialog();
                 if (stringResultInfo != null) {
                     if (stringResultInfo.code == HttpConfig.STATUS_OK) {
                         hindKeyboard(etInputComment);
@@ -327,16 +367,11 @@ public class CommunityDetailActivity extends BaseSlidingActivity implements View
 
 
     private void netIsVipData() {
-        final int id = YcSingle.getInstance().id;
-        if (id <= 0) {
-            showToLoginDialog();
-            return;
-        }
 
-        mLoveEngine.userInfo(String.valueOf(id), "user/info").subscribe(new Subscriber<AResultInfo<IdCorrelationLoginBean>>() {
+        mLoveEngine.userInfo(UserInfoHelper.getUid()).subscribe(new DisposableObserver<ResultInfo<UserInfo>>() {
 
             @Override
-            public void onCompleted() {
+            public void onComplete() {
 
             }
 
@@ -346,15 +381,16 @@ public class CommunityDetailActivity extends BaseSlidingActivity implements View
             }
 
             @Override
-            public void onNext(AResultInfo<IdCorrelationLoginBean> idCorrelationLoginBeanAResultInfo) {
+            public void onNext(ResultInfo<UserInfo> idCorrelationLoginBeanAResultInfo) {
                 if (idCorrelationLoginBeanAResultInfo != null && idCorrelationLoginBeanAResultInfo.code == HttpConfig.STATUS_OK) {
-                    IdCorrelationLoginBean idCorrelationLoginBean = idCorrelationLoginBeanAResultInfo.data;
+                    UserInfo idCorrelationLoginBean = idCorrelationLoginBeanAResultInfo.data;
                     if (idCorrelationLoginBean == null) {
                         return;
                     }
 
                     int vipTips = idCorrelationLoginBean.vip_tips; //0 未开通   1 已开通   2 已过期
                     isVip = vipTips == 1;
+
                 }
 
             }
@@ -365,14 +401,14 @@ public class CommunityDetailActivity extends BaseSlidingActivity implements View
 
     private void saveToList(String content) {
 
-        YcSingle ycSingle = YcSingle.getInstance();
-        if (ycSingle == null) return;
+        UserInfo userInfo = UserInfoHelper.getUserInfo();
+        if (userInfo == null) return;
         List<CommunityInfo> communityInfos = communityMainAdapter.getData();
 
 //        SimpleDateFormat sd = new SimpleDateFormat("MM月dd日", Locale.getDefault());
 
-        CommunityInfo communityInfo = new CommunityInfo(ycSingle.nick_name, new Date().getTime() / 1000, content, "", 0, 0);
-        communityInfo.pic = ycSingle.face;
+        CommunityInfo communityInfo = new CommunityInfo(userInfo.nick_name, new Date().getTime() / 1000, content, "", 0, 0);
+        communityInfo.pic = userInfo.face;
         communityInfos.add(0, communityInfo);
         communityMainAdapter.setNewData(communityInfos);
 

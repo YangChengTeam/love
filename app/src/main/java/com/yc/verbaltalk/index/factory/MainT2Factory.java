@@ -8,7 +8,7 @@ import com.yc.verbaltalk.skill.ui.fragment.ChatSkillFragment;
 import androidx.fragment.app.Fragment;
 
 /**
- * Created by mayn on 2019/5/5.
+ * Created by sunshey on 2019/5/5.
  */
 
 public class MainT2Factory {

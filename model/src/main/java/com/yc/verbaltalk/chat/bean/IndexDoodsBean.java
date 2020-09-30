@@ -3,7 +3,7 @@ package com.yc.verbaltalk.chat.bean;
 import java.io.Serializable;
 
 /**
- * Created by mayn on 2019/5/14.
+ * Created by sunshey on 2019/5/14.
  */
 
 public class IndexDoodsBean implements Serializable {

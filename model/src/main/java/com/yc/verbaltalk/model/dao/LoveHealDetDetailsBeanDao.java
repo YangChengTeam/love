@@ -29,8 +29,9 @@ public class LoveHealDetDetailsBeanDao extends AbstractDao<LoveHealDetDetailsBea
         public final static Property Dialogue_id = new Property(2, int.class, "dialogue_id", false, "DIALOGUE_ID");
         public final static Property Content = new Property(3, String.class, "content", false, "CONTENT");
         public final static Property Ans_sex = new Property(4, String.class, "ans_sex", false, "ANS_SEX");
-        public final static Property SaveTime = new Property(5, long.class, "saveTime", false, "SAVE_TIME");
-        public final static Property Title = new Property(6, String.class, "title", false, "TITLE");
+        public final static Property S_value = new Property(5, String.class, "s_value", false, "S_VALUE");
+        public final static Property SaveTime = new Property(6, long.class, "saveTime", false, "SAVE_TIME");
+        public final static Property Title = new Property(7, String.class, "title", false, "TITLE");
     }
 
 
@@ -51,8 +52,9 @@ public class LoveHealDetDetailsBeanDao extends AbstractDao<LoveHealDetDetailsBea
                 "\"DIALOGUE_ID\" INTEGER NOT NULL ," + // 2: dialogue_id
                 "\"CONTENT\" TEXT," + // 3: content
                 "\"ANS_SEX\" TEXT," + // 4: ans_sex
-                "\"SAVE_TIME\" INTEGER NOT NULL ," + // 5: saveTime
-                "\"TITLE\" TEXT);"); // 6: title
+                "\"S_VALUE\" TEXT," + // 5: s_value
+                "\"SAVE_TIME\" INTEGER NOT NULL ," + // 6: saveTime
+                "\"TITLE\" TEXT);"); // 7: title
         // Add Indexes
         db.execSQL("CREATE INDEX " + constraint + "IDX_LOVE_HEAL_DET_DETAILS_BEAN_LOVE_ID ON \"LOVE_HEAL_DET_DETAILS_BEAN\"" +
                 " (\"LOVE_ID\" ASC);");
@@ -84,11 +86,16 @@ public class LoveHealDetDetailsBeanDao extends AbstractDao<LoveHealDetDetailsBea
         if (ans_sex != null) {
             stmt.bindString(5, ans_sex);
         }
-        stmt.bindLong(6, entity.getSaveTime());
+ 
+        String s_value = entity.getS_value();
+        if (s_value != null) {
+            stmt.bindString(6, s_value);
+        }
+        stmt.bindLong(7, entity.getSaveTime());
  
         String title = entity.getTitle();
         if (title != null) {
-            stmt.bindString(7, title);
+            stmt.bindString(8, title);
         }
     }
 
@@ -112,11 +119,16 @@ public class LoveHealDetDetailsBeanDao extends AbstractDao<LoveHealDetDetailsBea
         if (ans_sex != null) {
             stmt.bindString(5, ans_sex);
         }
-        stmt.bindLong(6, entity.getSaveTime());
+ 
+        String s_value = entity.getS_value();
+        if (s_value != null) {
+            stmt.bindString(6, s_value);
+        }
+        stmt.bindLong(7, entity.getSaveTime());
  
         String title = entity.getTitle();
         if (title != null) {
-            stmt.bindString(7, title);
+            stmt.bindString(8, title);
         }
     }
 
@@ -133,8 +145,9 @@ public class LoveHealDetDetailsBeanDao extends AbstractDao<LoveHealDetDetailsBea
             cursor.getInt(offset + 2), // dialogue_id
             cursor.isNull(offset + 3) ? null : cursor.getString(offset + 3), // content
             cursor.isNull(offset + 4) ? null : cursor.getString(offset + 4), // ans_sex
-            cursor.getLong(offset + 5), // saveTime
-            cursor.isNull(offset + 6) ? null : cursor.getString(offset + 6) // title
+            cursor.isNull(offset + 5) ? null : cursor.getString(offset + 5), // s_value
+            cursor.getLong(offset + 6), // saveTime
+            cursor.isNull(offset + 7) ? null : cursor.getString(offset + 7) // title
         );
         return entity;
     }
@@ -146,8 +159,9 @@ public class LoveHealDetDetailsBeanDao extends AbstractDao<LoveHealDetDetailsBea
         entity.setDialogue_id(cursor.getInt(offset + 2));
         entity.setContent(cursor.isNull(offset + 3) ? null : cursor.getString(offset + 3));
         entity.setAns_sex(cursor.isNull(offset + 4) ? null : cursor.getString(offset + 4));
-        entity.setSaveTime(cursor.getLong(offset + 5));
-        entity.setTitle(cursor.isNull(offset + 6) ? null : cursor.getString(offset + 6));
+        entity.setS_value(cursor.isNull(offset + 5) ? null : cursor.getString(offset + 5));
+        entity.setSaveTime(cursor.getLong(offset + 6));
+        entity.setTitle(cursor.isNull(offset + 7) ? null : cursor.getString(offset + 7));
      }
     
     @Override

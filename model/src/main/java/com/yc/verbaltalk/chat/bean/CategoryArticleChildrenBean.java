@@ -6,7 +6,7 @@ import android.os.Parcelable;
 import java.io.Serializable;
 
 /**
- * Created by mayn on 2019/5/10.
+ * Created by sunshey on 2019/5/10.
  */
 
 public class CategoryArticleChildrenBean implements Parcelable,Serializable {

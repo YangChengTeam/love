@@ -17,7 +17,7 @@ import java.util.ArrayList;
 import java.util.UUID;
 
 /**
- * Created by mayn on 2019/5/15.
+ * Created by sunshey on 2019/5/15.
  */
 
 public class UploadUtils {

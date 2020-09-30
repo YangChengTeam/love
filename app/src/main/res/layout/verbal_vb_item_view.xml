@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/ll_container"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:gravity="center_vertical"
+    android:orientation="horizontal"
+    android:padding="4dp">
+
+    <!--<TextView
+        android:textColor="@color/black"
+        android:textSize="@dimen/size_16"
+        android:layout_width="wrap_content"
+        android:padding="3dp"
+        android:love_id="@+love_id/item_details_bean_tv_sex"
+        android:layout_height="wrap_content" />-->
+
+    <ImageView
+        android:id="@+id/item_details_bean_iv_sex"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:padding="3dp"
+        android:src="@mipmap/icon_dialogue_men" />
+
+    <TextView
+        android:id="@+id/item_details_bean_tv_name"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="4dp"
+        android:layout_marginRight="4dp"
+        android:layout_weight="10"
+        android:lineSpacingExtra="5dp"
+        android:text="中文"
+        android:textColor="@color/black"
+        android:textSize="12sp" />
+
+
+
+
+</LinearLayout>

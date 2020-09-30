@@ -1,0 +1,97 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/gray_f2f2f2"
+    android:fitsSystemWindows="true"
+    android:focusable="true"
+    android:focusableInTouchMode="true">
+
+    <ImageView
+        android:id="@+id/iv_ai_back"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerVertical="true"
+        android:layout_marginStart="10dp"
+        android:background="?attr/selectableItemBackgroundBorderless"
+        android:padding="8dp"
+        android:src="@mipmap/icon_arr_lift_black"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/recyclerview_smart_chat"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_marginBottom="8dp"
+        android:background="@android:color/transparent"
+        app:layout_constraintBottom_toTopOf="@id/tv_ai_tint"
+        app:layout_constraintTop_toBottomOf="@id/iv_ai_back" />
+
+    <RelativeLayout
+        android:id="@+id/rl_bottom"
+        android:layout_width="match_parent"
+        android:layout_height="40dp"
+        android:background="@drawable/ai_chat_bg"
+        android:focusable="true"
+        android:focusableInTouchMode="true"
+        android:paddingLeft="15dp"
+        android:paddingRight="15dp"
+        app:layout_constraintBottom_toBottomOf="parent">
+
+        <HorizontalScrollView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_toStartOf="@id/iv_fly"
+            android:fillViewport="true"
+            android:scrollbars="none">
+
+            <EditText
+                android:id="@+id/et_content"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:background="@null"
+                android:hint="猜你想问“你好”"
+                android:inputType="none"
+                android:lineSpacingExtra="9.0sp"
+                android:maxHeight="120.0dip"
+                android:minHeight="50.0dip"
+                android:paddingStart="10.0dip"
+                android:paddingTop="5.0dip"
+                android:paddingBottom="5.0dip"
+                android:textColor="#ff303030"
+                android:textColorHint="@color/gray_999"
+                android:textSize="14.0sp"
+                tools:ignore="RtlSymmetry" />
+        </HorizontalScrollView>
+
+        <ImageView
+            android:id="@+id/iv_fly"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentEnd="true"
+            android:layout_centerVertical="true"
+            android:paddingLeft="8dp"
+            android:paddingRight="8dp"
+            android:src="@mipmap/fly"
+            app:tint="@color/red_crimson" />
+    </RelativeLayout>
+
+    <TextView
+        android:id="@+id/tv_ai_tint"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="#D5E0F4"
+        android:gravity="center"
+        android:paddingTop="5dp"
+        android:paddingBottom="5dp"
+        android:text="温馨提示：点击对话框文字即可复制"
+        android:textColor="#446CE5"
+        android:textSize="10sp"
+        app:layout_constraintBottom_toTopOf="@id/rl_bottom"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent" />
+</androidx.constraintlayout.widget.ConstraintLayout>

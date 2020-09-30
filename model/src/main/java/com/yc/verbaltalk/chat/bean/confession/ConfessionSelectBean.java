@@ -3,7 +3,7 @@ package com.yc.verbaltalk.chat.bean.confession;
 import java.io.Serializable;
 
 /**
- * Created by mayn on 2019/6/5.
+ * Created by sunshey on 2019/6/5.
  */
 
 public class ConfessionSelectBean implements Serializable {

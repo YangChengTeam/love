@@ -1,15 +1,54 @@
 <?xml version="1.0" encoding="utf-8"?>
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    tools:context=".index.ui.activity.LoveHealDetailsActivity">
+    android:layout_height="match_parent">
+
+    <LinearLayout
+        android:id="@+id/ll_search_container"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="15dp"
+        android:layout_marginRight="15dp"
+        android:focusable="true"
+        android:focusableInTouchMode="true"
+        android:orientation="horizontal">
+
+        <androidx.appcompat.widget.SearchView
+            android:id="@+id/share_searchView"
+            android:layout_width="0dp"
+            android:layout_height="38dp"
+            android:layout_weight="10"
+            android:background="@color/love_background"
+            app:iconifiedByDefault="false"
+            app:queryBackground="@null"
+            app:queryHint="@string/share_des_short"
+            app:showDividers="none"
+            app:submitBackground="@null" />
+
+
+        <TextView
+            android:id="@+id/tv_search_btn"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="8dp"
+            android:background="@drawable/selectot_btn_brim_red_crimson_brim"
+            android:gravity="center_horizontal"
+            android:paddingLeft="8dp"
+            android:paddingTop="4dp"
+            android:paddingRight="8dp"
+            android:paddingBottom="10dp"
+            android:text="搜索"
+            android:textColor="@color/white"
+            android:textSize="@dimen/size_16" />
+    </LinearLayout>
 
     <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
         android:id="@+id/love_heal_details_swipe_refresh"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+        android:layout_height="wrap_content"
+        android:layout_below="@id/ll_search_container">
 
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/love_heal_details_rl"
@@ -20,10 +59,22 @@
 
     <ImageView
         android:id="@+id/love_heal_details_iv_to_wx"
-        android:layout_width="71dp"
-        android:layout_height="71dp"
-        android:layout_gravity="bottom|end"
-        android:layout_marginRight="15dp"
-        android:layout_marginBottom="62dp"
+        android:layout_width="53dp"
+        android:layout_height="53dp"
+        android:layout_above="@id/love_heal_details_iv_to_top"
+        android:layout_alignParentEnd="true"
+        android:layout_marginEnd="15dp"
+        android:layout_marginBottom="15dp"
         android:src="@mipmap/icon_floating_weixin" />
-</FrameLayout>
+
+    <ImageView
+        android:id="@+id/love_heal_details_iv_to_top"
+        android:layout_width="40dp"
+        android:layout_height="40dp"
+        android:layout_alignParentEnd="true"
+        android:layout_alignParentBottom="true"
+        android:layout_marginEnd="20dp"
+        android:layout_marginBottom="20dp"
+        android:src="@mipmap/to_top_icon"
+        android:visibility="invisible" />
+</RelativeLayout>

@@ -4,7 +4,7 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 /**
- * Created by mayn on 2019/5/8.
+ * Created by sunshey on 2019/5/8.
  */
 
 public class CheckNumberRegulationsUtil {

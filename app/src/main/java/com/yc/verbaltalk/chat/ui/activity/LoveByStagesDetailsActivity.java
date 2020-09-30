@@ -15,12 +15,12 @@ import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
-import com.kk.utils.LogUtil;
+
+import com.music.player.lib.util.ToastUtils;
 import com.yc.verbaltalk.R;
-import com.yc.verbaltalk.base.engine.MySubscriber;
+import com.yc.verbaltalk.base.utils.UserInfoHelper;
 import com.yc.verbaltalk.chat.bean.AResultInfo;
 import com.yc.verbaltalk.chat.bean.LoveByStagesDetailsBean;
-import com.yc.verbaltalk.model.single.YcSingle;
 import com.yc.verbaltalk.model.util.SizeUtils;
 import com.yc.verbaltalk.base.activity.BaseSameActivity;
 import com.yc.verbaltalk.base.view.NewsScrollView;
@@ -28,6 +28,11 @@ import com.yc.verbaltalk.base.utils.StatusBarUtil;
 
 import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.core.content.ContextCompat;
+import io.reactivex.observers.DisposableObserver;
+
+import yc.com.rthttplibrary.bean.ResultInfo;
+import yc.com.rthttplibrary.config.HttpConfig;
+import yc.com.rthttplibrary.util.LogUtil;
 
 public class LoveByStagesDetailsActivity extends BaseSameActivity {
 
@@ -79,28 +84,24 @@ public class LoveByStagesDetailsActivity extends BaseSameActivity {
         super.onClick(v);
         switch (v.getId()) {
             case R.id.activity_base_same_tv_sub:
-                netCollectArticle(mIsCollectArticle);
+            case R.id.ll_collect:
+                if (UserInfoHelper.isLogin(this))
+                    netCollectArticle(mIsCollectArticle);
                 break;
             case R.id.love_by_stages_details_iv_like:
-                netDigArticle(mIsDigArticle);
+                if (UserInfoHelper.isLogin(this))
+                    netDigArticle(mIsDigArticle);
                 break;
             case R.id.ll_get_wechat:
                 showToWxServiceDialog(null);
-                break;
-            case R.id.ll_collect:
-                netCollectArticle(mIsCollectArticle);
                 break;
         }
     }
 
     private void netDigArticle(boolean isDigArticle) {
-        int id = YcSingle.getInstance().id;
-        if (id <= 0) {
-            showToLoginDialog();
-            return;
-        }
+
         if (mCategoryId <= 0) {
-            showToastShort("文章Id为 " + mCategoryId);
+
             return;
         }
         if (isDigArticle) {
@@ -109,33 +110,36 @@ public class LoveByStagesDetailsActivity extends BaseSameActivity {
             mUrl = "Article/dig";
         }
         mLoadingDialog.showLoadingDialog();
-        mLoveEngine.collectArticle(String.valueOf(id), String.valueOf(mCategoryId), mUrl).subscribe(new MySubscriber<AResultInfo<String>>(mLoadingDialog) {
+        mLoveEngine.collectArticle(UserInfoHelper.getUid(), String.valueOf(mCategoryId), mUrl).subscribe(new DisposableObserver<ResultInfo<String>>() {
             @Override
-            protected void onNetNext(AResultInfo<String> stringAResultInfo) {
-                String msg = stringAResultInfo.msg;
-                showToastShort(msg);
-                mIsDigArticle = !mIsDigArticle;
-                changLikeStaty(mIsDigArticle);
+            public void onComplete() {
+                mLoadingDialog.dismissLoadingDialog();
             }
 
             @Override
-            protected void onNetError(Throwable e) {
+            public void onError(Throwable e) {
+                mLoadingDialog.dismissLoadingDialog();
             }
 
             @Override
-            protected void onNetCompleted() {
+            public void onNext(ResultInfo<String> stringAResultInfo) {
+                mLoadingDialog.dismissLoadingDialog();
+                if (stringAResultInfo != null && stringAResultInfo.code == HttpConfig.STATUS_OK && stringAResultInfo.data != null) {
+                    String msg = stringAResultInfo.message;
+                    ToastUtils.showCenterToast(msg);
+                    mIsDigArticle = !mIsDigArticle;
+                    changLikeStaty(mIsDigArticle);
+                }
             }
+
+
         });
     }
 
     private void netCollectArticle(boolean isCollectArticle) {
-        int id = YcSingle.getInstance().id;
-        if (id <= 0) {
-            showToLoginDialog();
-            return;
-        }
+
         if (mCategoryId <= 0) {
-            showToastShort("文章Id为 " + mCategoryId);
+
             return;
         }
         if (!isCollectArticle) {
@@ -144,25 +148,29 @@ public class LoveByStagesDetailsActivity extends BaseSameActivity {
             mUrl = "Article/uncollect";
         }
         mLoadingDialog.showLoadingDialog();
-        mLoveEngine.collectArticle(String.valueOf(id), String.valueOf(mCategoryId), mUrl).subscribe(new MySubscriber<AResultInfo<String>>(mLoadingDialog) {
+        mLoveEngine.collectArticle(UserInfoHelper.getUid(), String.valueOf(mCategoryId), mUrl).subscribe(new DisposableObserver<ResultInfo<String>>() {
 
             @Override
-            protected void onNetNext(AResultInfo<String> stringAResultInfo) {
-                String msg = stringAResultInfo.msg;
-                showToastShort(msg);
-                mIsCollectArticle = !mIsCollectArticle;
-                changCollectStaty(mIsCollectArticle);
+            public void onComplete() {
+                mLoadingDialog.dismissLoadingDialog();
             }
 
             @Override
-            protected void onNetError(Throwable e) {
-
+            public void onError(Throwable e) {
+                mLoadingDialog.dismissLoadingDialog();
             }
 
             @Override
-            protected void onNetCompleted() {
-
+            public void onNext(ResultInfo<String> stringAResultInfo) {
+                mLoadingDialog.dismissLoadingDialog();
+                if (stringAResultInfo != null && stringAResultInfo.code == HttpConfig.STATUS_OK && stringAResultInfo.data != null) {
+                    String msg = stringAResultInfo.message;
+                    ToastUtils.showCenterToast(msg);
+                    mIsCollectArticle = !mIsCollectArticle;
+                    changCollectStaty(mIsCollectArticle);
+                }
             }
+
         });
     }
 
@@ -207,7 +215,7 @@ public class LoveByStagesDetailsActivity extends BaseSameActivity {
         ConstraintLayout.MarginLayoutParams layoutParams = (ConstraintLayout.LayoutParams) bottomView.getLayoutParams();
         LinearLayout.MarginLayoutParams layoutParams1 = (LinearLayout.MarginLayoutParams) llLike.getLayoutParams();
         int bottom = 0;
-        int bottom1=0;
+        int bottom1 = 0;
         if (StatusBarUtil.isNavigationBarExist(this)) {
             bottom = StatusBarUtil.getNavigationBarHeight(this);
             bottom1 = SizeUtils.dp2px(this, 30);
@@ -308,63 +316,66 @@ public class LoveByStagesDetailsActivity extends BaseSameActivity {
 
     private void netData() {
         mLoadingDialog.showLoadingDialog();
-        mLoveEngine.detailArticle(String.valueOf(String.valueOf(mId)), String.valueOf(YcSingle.getInstance().id), "Article/detail").subscribe(new MySubscriber<AResultInfo<LoveByStagesDetailsBean>>(mLoadingDialog) {
+        mLoveEngine.detailArticle(String.valueOf(mId), UserInfoHelper.getUid()).subscribe(new DisposableObserver<ResultInfo<LoveByStagesDetailsBean>>() {
 
             @Override
-            protected void onNetNext(AResultInfo<LoveByStagesDetailsBean> listAResultInfo) {
-                LoveByStagesDetailsBean loveByStagesDetailsBean = listAResultInfo.data;
+            public void onComplete() {
+                mLoadingDialog.dismissLoadingDialog();
+            }
 
-                int collectNum = loveByStagesDetailsBean.collect_num;
-                String collEctResult = String.valueOf(loveByStagesDetailsBean.collect_num);
-                if (collectNum == 0) {
-                    collEctResult = "50";
-                } else if (collectNum > 99) {
-                    collEctResult = "99+";
-                }
+            @Override
+            public void onError(Throwable e) {
+                mLoadingDialog.dismissLoadingDialog();
+            }
 
-                tvCollect.setText(collEctResult);
+            @Override
+            public void onNext(ResultInfo<LoveByStagesDetailsBean> loveByStagesDetailsBeanAResultInfo) {
+                mLoadingDialog.dismissLoadingDialog();
+                if (loveByStagesDetailsBeanAResultInfo != null && loveByStagesDetailsBeanAResultInfo.code == HttpConfig.STATUS_OK && loveByStagesDetailsBeanAResultInfo.data != null) {
+                    LoveByStagesDetailsBean loveByStagesDetailsBean = loveByStagesDetailsBeanAResultInfo.data;
 
-                //收藏
-                int isCollect = loveByStagesDetailsBean.is_collect;
-                switch (isCollect) {
-                    case 0:
-                        break;
-                    case 1:
-                        mIsCollectArticle = true;
-                        break;
-                }
-                changCollectStaty(mIsCollectArticle);
-                mBaseSameTvSub.setOnClickListener(LoveByStagesDetailsActivity.this);
+                    int collectNum = loveByStagesDetailsBean.collect_num;
+                    String collEctResult = String.valueOf(loveByStagesDetailsBean.collect_num);
+                    if (collectNum == 0) {
+                        collEctResult = "50";
+                    } else if (collectNum > 99) {
+                        collEctResult = "99+";
+                    }
 
-                //点赞
-                int isLike = loveByStagesDetailsBean.is_like;
-                switch (isLike) {
-                    case 0:
-                        break;
-                    case 1:
-                        mIsDigArticle = true;
-                        break;
-                }
-                changLikeStaty(mIsDigArticle);
+                    tvCollect.setText(collEctResult);
+
+                    //收藏
+                    int isCollect = loveByStagesDetailsBean.is_collect;
+                    switch (isCollect) {
+                        case 0:
+                            break;
+                        case 1:
+                            mIsCollectArticle = true;
+                            break;
+                    }
+                    changCollectStaty(mIsCollectArticle);
+                    mBaseSameTvSub.setOnClickListener(LoveByStagesDetailsActivity.this);
+
+                    //点赞
+                    int isLike = loveByStagesDetailsBean.is_like;
+                    switch (isLike) {
+                        case 0:
+                            break;
+                        case 1:
+                            mIsDigArticle = true;
+                            break;
+                    }
+                    changLikeStaty(mIsDigArticle);
 //                mClLikeCon.setVisibility(View.VISIBLE);
 
-                mCategoryId = loveByStagesDetailsBean.id;
+                    mCategoryId = loveByStagesDetailsBean.id;
 
-                String postContent = loveByStagesDetailsBean.post_content;
-                initWebView(postContent);
-
-
+                    String postContent = loveByStagesDetailsBean.post_content;
+                    initWebView(postContent);
+                }
             }
 
-            @Override
-            protected void onNetError(Throwable e) {
 
-            }
-
-            @Override
-            protected void onNetCompleted() {
-
-            }
         });
     }
 

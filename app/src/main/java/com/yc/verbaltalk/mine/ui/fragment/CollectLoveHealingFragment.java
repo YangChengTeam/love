@@ -3,25 +3,25 @@ package com.yc.verbaltalk.mine.ui.fragment;
 import android.os.Bundle;
 import android.view.View;
 
-import com.kk.securityhttp.net.contains.HttpConfig;
 import com.yc.verbaltalk.R;
-import com.yc.verbaltalk.mine.adapter.LoveHealingItemAdapter;
-import com.yc.verbaltalk.chat.bean.AResultInfo;
-import com.yc.verbaltalk.chat.bean.LoveHealingBean;
 import com.yc.verbaltalk.base.engine.LoveEngine;
-import com.yc.verbaltalk.model.single.YcSingle;
-import com.yc.verbaltalk.skill.ui.activity.LoveUpDownPhotoActivity;
+import com.yc.verbaltalk.base.utils.UserInfoHelper;
 import com.yc.verbaltalk.base.view.LoadDialog;
+import com.yc.verbaltalk.chat.bean.LoveHealingBean;
+import com.yc.verbaltalk.mine.adapter.LoveHealingItemAdapter;
+import com.yc.verbaltalk.skill.ui.activity.LoveUpDownPhotoActivity;
 
 import java.util.List;
 
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
-import rx.Subscriber;
+import io.reactivex.observers.DisposableObserver;
+import yc.com.rthttplibrary.bean.ResultInfo;
+import yc.com.rthttplibrary.config.HttpConfig;
 
 /**
  * 收藏 情话
- * Created by mayn on 2019/5/5.
+ * Created by sunshey on 2019/5/5.
  */
 
 public class CollectLoveHealingFragment extends BaseCollectFragment {
@@ -84,18 +84,14 @@ public class CollectLoveHealingFragment extends BaseCollectFragment {
 
 
     private void netData() {
-        int id = YcSingle.getInstance().id;
-        if (id <= 0) {
-            mCollectActivity.showToLoginDialog();
-            return;
-        }
+
         if (PAGE_NUM == 1)
             mLoadingDialog.showLoadingDialog();
-        mLoveEngin.listsCollectLovewords(String.valueOf(id), String.valueOf(PAGE_NUM), String.valueOf(PAGE_SIZE), "Lovewords/collect_list")
-                .subscribe(new Subscriber<AResultInfo<List<LoveHealingBean>>>() {
+        mLoveEngin.listsCollectLovewords(UserInfoHelper.getUid(), String.valueOf(PAGE_NUM), String.valueOf(PAGE_SIZE))
+                .subscribe(new DisposableObserver<ResultInfo<List<LoveHealingBean>>>() {
 
                     @Override
-                    public void onCompleted() {
+                    public void onComplete() {
 
                     }
 
@@ -105,7 +101,7 @@ public class CollectLoveHealingFragment extends BaseCollectFragment {
                     }
 
                     @Override
-                    public void onNext(AResultInfo<List<LoveHealingBean>> listAResultInfo) {
+                    public void onNext(ResultInfo<List<LoveHealingBean>> listAResultInfo) {
                         if (PAGE_NUM == 1) mLoadingDialog.dismissLoadingDialog();
                         if (listAResultInfo != null && listAResultInfo.code == HttpConfig.STATUS_OK) {
                             List<LoveHealingBean> mLoveHealingBeans = listAResultInfo.data;

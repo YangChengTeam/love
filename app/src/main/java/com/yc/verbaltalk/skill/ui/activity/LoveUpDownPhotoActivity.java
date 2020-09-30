@@ -27,7 +27,7 @@ public class LoveUpDownPhotoActivity extends BaseSameActivity {
     @Override
     protected void initIntentData() {
         Intent intent = getIntent();
-        mClickPosition = intent.getIntExtra("position", -1);
+        mClickPosition = intent.getIntExtra("position", 0);
         mChildUrl = intent.getStringExtra("childUrl");
     }
 

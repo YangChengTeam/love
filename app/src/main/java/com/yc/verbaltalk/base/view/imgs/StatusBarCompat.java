@@ -13,9 +13,7 @@ import com.yc.verbaltalk.R;
 
 import androidx.core.content.ContextCompat;
 
-/**
- * Created by mayn on 2019/5/7.
- */
+
 
 public class StatusBarCompat {
 

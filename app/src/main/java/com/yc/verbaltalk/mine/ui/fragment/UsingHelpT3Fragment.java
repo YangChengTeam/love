@@ -3,7 +3,7 @@ package com.yc.verbaltalk.mine.ui.fragment;
 import com.yc.verbaltalk.R;
 
 /**
- * Created by mayn on 2019/5/24.
+ * Created by sunshey on 2019/5/24.
  */
 
 public class UsingHelpT3Fragment extends BaseUsingHelpFragment {

@@ -20,8 +20,8 @@ public class CollectLoveHealDetailAdapter extends BaseQuickAdapter<LoveHealDetDe
 
     @Override
     protected void convert(BaseViewHolder helper, LoveHealDetDetailsBean item) {
-        helper.setText(R.id.item_love_healing_tv_name, item.content)
-                .setText(R.id.tv_tag, item.title).setVisible(R.id.tv_tag, true);
+        helper.setText(R.id.item_love_healing_tv_name, item.s_value)
+                .setText(R.id.tv_tag, item.title).setVisible(R.id.tv_tag, false);
         TextView tv = helper.getView(R.id.item_love_healing_tv_name);
         tv.setCompoundDrawables(null, null, null, null);
 

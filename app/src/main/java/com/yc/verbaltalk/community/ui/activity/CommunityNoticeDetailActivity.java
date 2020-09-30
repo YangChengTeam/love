@@ -4,20 +4,22 @@ import android.os.Bundle;
 import android.webkit.WebSettings;
 import android.webkit.WebView;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.RequestOptions;
-import com.kk.securityhttp.domain.ResultInfo;
-import com.kk.securityhttp.net.contains.HttpConfig;
 import com.yc.verbaltalk.R;
-import com.yc.verbaltalk.chat.bean.CommunityInfo;
-import com.yc.verbaltalk.chat.bean.TopTopicInfo;
 import com.yc.verbaltalk.base.activity.BaseSameActivity;
 import com.yc.verbaltalk.base.utils.DateUtils;
+import com.yc.verbaltalk.base.utils.StatusBarUtil;
+import com.yc.verbaltalk.chat.bean.CommunityInfo;
+import com.yc.verbaltalk.chat.bean.TopTopicInfo;
 
 import androidx.core.content.ContextCompat;
-import rx.Subscriber;
+import io.reactivex.observers.DisposableObserver;
+import yc.com.rthttplibrary.bean.ResultInfo;
+import yc.com.rthttplibrary.config.HttpConfig;
 
 /**
  * Created by suns  on 2019/8/28 17:36.
@@ -52,9 +54,9 @@ public class CommunityNoticeDetailActivity extends BaseSameActivity {
     }
 
     private void getData() {
-        mLoveEngine.getTopTopicInfos().subscribe(new Subscriber<ResultInfo<TopTopicInfo>>() {
+        mLoveEngine.getTopTopicInfos().subscribe(new DisposableObserver<ResultInfo<TopTopicInfo>>() {
             @Override
-            public void onCompleted() {
+            public void onComplete() {
 
             }
 
@@ -75,7 +77,7 @@ public class CommunityNoticeDetailActivity extends BaseSameActivity {
 
     }
 
-    private void initWebview() {
+    private void initWebView() {
         mWebView.setBackgroundColor(ContextCompat.getColor(this, android.R.color.transparent));
 
         mWebView.setClickable(true);
@@ -97,24 +99,9 @@ public class CommunityNoticeDetailActivity extends BaseSameActivity {
         //不显示webview缩放按钮
         settings.setDisplayZoomControls(false);
 
-//        String content = getString(R.string.community_notice);
-
-//        mWebView.addJavascriptInterface(new LoveAudioDetailActivity.MyJavaScript(), "APP");
-
-//        mWebView.setWebViewClient(new WebViewClient() {
-//
-//            @Override
-//            public void onPageFinished(WebView view, String url) {
-//                super.onPageFinished(view, url);
-////                Log.e(TAG, "onPageFinished: ");
-//
-////                document.body.getBoundingClientRect().height
-//                mWebView.loadUrl("javascript:window.APP.resize(document.body.getScrollHeight())");
-//
-//            }
-//        });
         mWebView.loadDataWithBaseURL(null, formatting(content), "text/html", "utf-8", null);
     }
+
 
     private String formatting(String data) {
         StringBuilder stringBuilder = new StringBuilder();
@@ -127,13 +114,27 @@ public class CommunityNoticeDetailActivity extends BaseSameActivity {
     }
 
 
+    @Override
+    public void onWindowFocusChanged(boolean hasFocus) {
+        super.onWindowFocusChanged(hasFocus);
+        LinearLayout.MarginLayoutParams layoutParams = (LinearLayout.MarginLayoutParams) mWebView.getLayoutParams();
+        int bottom = 0;
+        if (StatusBarUtil.isNavigationBarExist(this)) {
+            bottom = StatusBarUtil.getNavigationBarHeight(this);
+        }
+        layoutParams.bottomMargin = bottom;
+        mWebView.setLayoutParams(layoutParams);
+
+
+    }
+
     private void initData(CommunityInfo data) {
         Glide.with(this).load(R.mipmap.ic_launcher).apply(new RequestOptions().circleCrop()).into(ivIcon);
 //        tvName.setText(data.name);
         tvContent.setText(data.content);
         tvDate.setText(DateUtils.formatTimeToStr(data.create_time));
         Glide.with(this).load(R.mipmap.community_detail_bg).into(ivCommunityPic);
-        initWebview();
+        initWebView();
     }
 
     @Override

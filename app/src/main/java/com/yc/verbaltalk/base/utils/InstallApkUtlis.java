@@ -15,7 +15,7 @@ import java.io.File;
 import androidx.core.content.FileProvider;
 
 /**
- * Created by mayn on 2019/5/20.
+ * Created by sunshey on 2019/5/20.
  */
 
 public class InstallApkUtlis {

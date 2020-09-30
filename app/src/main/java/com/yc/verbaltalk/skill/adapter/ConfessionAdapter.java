@@ -12,7 +12,7 @@ import com.yc.verbaltalk.chat.bean.confession.ConfessionDataBean;
 import java.util.List;
 
 /**
- * Created by mayn on 2019/5/5.
+ * Created by sunshey on 2019/5/5.
  */
 
 public class ConfessionAdapter extends BaseMultiItemQuickAdapter<ConfessionDataBean, BaseViewHolder> {

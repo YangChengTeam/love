@@ -15,9 +15,7 @@ import androidx.fragment.app.Fragment;
 //import com.yuyh.library.imgsel.ui.ISCameraActivity;
 //import com.yuyh.library.imgsel.ui.ISListActivity;
 
-/**
- * Created by mayn on 2019/5/7.
- */
+
 
 public class ISNav {
 

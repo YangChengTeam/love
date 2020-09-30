@@ -16,9 +16,7 @@ import android.widget.TextView;
 import androidx.core.content.ContextCompat;
 import androidx.recyclerview.widget.RecyclerView;
 
-/**
- * Created by mayn on 2019/5/7.
- */
+
 
 public class EasyRVHolder   extends RecyclerView.ViewHolder implements ViewHelper.RecyclerView<EasyRVHolder> {
 

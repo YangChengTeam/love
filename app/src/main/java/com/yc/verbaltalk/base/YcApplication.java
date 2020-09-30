@@ -1,28 +1,38 @@
 package com.yc.verbaltalk.base;
 
+import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.content.pm.ApplicationInfo;
 import android.os.Build;
+import android.os.Bundle;
+import android.os.Handler;
 import android.text.TextUtils;
+import android.util.Log;
+import android.view.View;
 
-import com.kk.securityhttp.domain.GoagalInfo;
-import com.kk.securityhttp.net.contains.HttpConfig;
+import com.bytedance.sdk.openadsdk.activity.base.TTRewardExpressVideoActivity;
 import com.kk.share.UMShareImpl;
-import com.kk.utils.FileUtil;
-import com.kk.utils.LogUtil;
 import com.music.player.lib.manager.MusicPlayerManager;
 import com.tencent.bugly.Bugly;
 import com.umeng.commonsdk.UMConfigure;
 import com.umeng.socialize.UMShareAPI;
+import com.video.player.lib.utils.VideoUtils;
 import com.yc.verbaltalk.R;
-import com.yc.verbaltalk.model.ModelApp;
-import com.yc.verbaltalk.base.view.imgs.Constant;
+import com.yc.verbaltalk.base.config.URLConfig;
+import com.yc.verbaltalk.base.engine.LoveEngine;
+import com.yc.verbaltalk.base.utils.AssetsUtils;
 import com.yc.verbaltalk.base.utils.ShareInfoHelper;
+import com.yc.verbaltalk.base.utils.UIUtils;
+import com.yc.verbaltalk.base.utils.UserInfoHelper;
+import com.yc.verbaltalk.base.view.imgs.Constant;
+import com.yc.verbaltalk.model.ModelApp;
 
 import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.InputStream;
+import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -30,13 +40,28 @@ import java.util.Map;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipFile;
 
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.appcompat.app.AlertDialog;
 import androidx.multidex.MultiDexApplication;
-import rx.Observable;
-import rx.schedulers.Schedulers;
+import io.reactivex.Observable;
+import io.reactivex.android.schedulers.AndroidSchedulers;
+import io.reactivex.observers.DisposableObserver;
+import io.reactivex.schedulers.Schedulers;
+import yc.com.rthttplibrary.bean.ResultInfo;
+import yc.com.rthttplibrary.config.GoagalInfo;
+import yc.com.rthttplibrary.config.HttpConfig;
+import yc.com.rthttplibrary.converter.FastJsonConverterFactory;
+import yc.com.rthttplibrary.request.RetrofitHttpRequest;
+import yc.com.rthttplibrary.util.FileUtil;
+import yc.com.rthttplibrary.util.LogUtil;
+import yc.com.rthttplibrary.util.ToastUtil;
+import yc.com.toutiao_adv.BrandType;
+import yc.com.toutiao_adv.TTAdDispatchManager;
 import yc.com.toutiao_adv.TTAdManagerHolder;
 
 /**
- * Created by mayn on 2019/4/24.
+ * Created by sunshey on 2019/4/24.
  */
 
 public class YcApplication extends MultiDexApplication {
@@ -50,18 +75,25 @@ public class YcApplication extends MultiDexApplication {
     public List<Activity> activityIdCorList;
 
 
-    @SuppressWarnings("unused")
+    private Handler handler = new Handler();
+
+    public static String privacyPolicy;
+
+    @SuppressLint("CheckResult")
     @Override
     public void onCreate() {
         super.onCreate();
         ycApplication = this;
 
-        Observable.just("").subscribeOn(Schedulers.io()).subscribe(s -> init());
+        new RetrofitHttpRequest.Builder(URLConfig.baseUrlV1)
+                .convert(FastJsonConverterFactory.create());
+        Observable.just("").subscribeOn(Schedulers.io()).observeOn(AndroidSchedulers.mainThread()).subscribe(s -> init());
 
         ModelApp.init(this);
         MusicPlayerManager.getInstance().init(this);
         MusicPlayerManager.getInstance().setDebug(true);
         TTAdManagerHolder.init(this, Constant.TOUTIAO_AD_ID);
+        registerActivityLifecycleCallbacks(callbacks);
 
     }
 
@@ -69,6 +101,9 @@ public class YcApplication extends MultiDexApplication {
     private void init() {
         //        Bugly.init(getApplicationContext(), "注册时申请的APPID", false);  //腾迅自动更新
         Bugly.init(getApplicationContext(), "dc88d75f55", false);  //腾迅自动更新
+
+        TTAdDispatchManager.getManager().init(BrandType.HUAWEI, BrandType.HONOR);
+
 
         UMConfigure.init(getApplicationContext(), "5cec86d84ca35779b00010b8", "Umeng", UMConfigure.DEVICE_TYPE_PHONE, null);
 
@@ -84,6 +119,7 @@ public class YcApplication extends MultiDexApplication {
         builder.setWeixin("wx97a8dad615ab0283", "2c3424ec501402d1ecc663974117cdb5")
                 .build(this);
 //
+
 
         //全局信息初始化
         GoagalInfo.get().init(getApplicationContext());
@@ -121,8 +157,12 @@ public class YcApplication extends MultiDexApplication {
 
 
         activityIdCorList = new ArrayList<>();
+        userActive();
 
         ShareInfoHelper.getNetShareInfo(this);
+        UserInfoHelper.login(this);
+        privacyPolicy = AssetsUtils.readAsset(this, "privacy_policy.txt");
+//        netUserReg();
     }
 
 
@@ -135,8 +175,7 @@ public class YcApplication extends MultiDexApplication {
         } else if (TextUtils.equals("西门恋爱话术库", appName)) {
             agent_id = "2";
         }
-//        View view;
-//        view.setVisibility(g);
+
         Map<String, String> params = new HashMap<>();
         if (GoagalInfo.get().channelInfo != null && GoagalInfo.get().channelInfo.agent_id != null) {
             params.put("from_id", GoagalInfo.get().channelInfo.from_id + "");
@@ -170,6 +209,30 @@ public class YcApplication extends MultiDexApplication {
         }
         HttpConfig.setDefaultParams(params);
 
+
+    }
+
+    /**
+     * 用户激活数据统计
+     */
+    private void userActive() {
+        LoveEngine loveEngine = new LoveEngine(this);
+        loveEngine.userActive().subscribe(new DisposableObserver<ResultInfo<String>>() {
+            @Override
+            public void onComplete() {
+
+            }
+
+            @Override
+            public void onError(Throwable e) {
+
+            }
+
+            @Override
+            public void onNext(ResultInfo<String> stringResultInfo) {
+
+            }
+        });
     }
 
 
@@ -189,5 +252,78 @@ public class YcApplication extends MultiDexApplication {
                 Build.TYPE.length() % 10 +
                 Build.USER.length() % 10;
     }
+
+    private ActivityLifecycleCallbacks callbacks = new ActivityLifecycleCallbacks() {
+        @Override
+        public void onActivityCreated(@NonNull Activity activity, @Nullable Bundle savedInstanceState) {
+//            Log.e(TAG, "onActivityCreated: " + activity.getClass().getName());
+        }
+
+        @Override
+        public void onActivityStarted(@NonNull Activity activity) {
+//            Log.e(TAG, "onActivityStarted: " + activity.getClass().getName());
+        }
+
+        @Override
+        public void onActivityResumed(@NonNull Activity activity) {
+            Log.e("TAG", "onActivityResumed: " + activity.getClass().getName());
+            String className = activity.getClass().getName();
+            if (TextUtils.equals("com.bytedance.sdk.openadsdk.activity.base.TTRewardExpressVideoActivity", className)) {
+                handler.postDelayed(() -> {
+                    View view = activity.findViewById(UIUtils.getIdentifier(activity, "tt_video_ad_close_layout"));
+                    View close = activity.findViewById(UIUtils.getIdentifier(activity, "tt_video_ad_close"));
+                    view.setVisibility(View.VISIBLE);
+                    close.setVisibility(View.VISIBLE);
+
+//                    view.setOnClickListener(new View.OnClickListener() {
+//                        @Override
+//                        public void onClick(View v) {
+//                            AlertDialog.Builder builder = new AlertDialog.Builder(activity);
+//                            builder.setMessage("关闭广告可能无法使用功能！！");
+//                            builder.setPositiveButton("确定", (dialog, which) -> {
+//                                try {
+//                                    Class clazz = Class.forName("com.bytedance.sdk.openadsdk.activity.base.TTRewardExpressVideoActivity");
+//
+//
+//                                    Method method = clazz.getSuperclass().getMethod("finish");
+//                                    method.setAccessible(true);
+//                                    method.invoke(clazz.getSuperclass());
+//
+//                                } catch (ClassNotFoundException | NoSuchMethodException | IllegalAccessException | InvocationTargetException e) {
+//                                    e.printStackTrace();
+//                                }
+//                            })
+//                                    .setNegativeButton("取消", null).create().show();
+//                            ToastUtil.toast(ycApplication, "点击了");
+//                        }
+//                    });
+//                    Log.e(TAG, "onActivityResumed: " + view.getClass().getName());
+//                    Log.e(TAG, "onActivityResumed: " + close.getClass().getName());
+                }, 1500 * 10);
+
+            }
+        }
+
+        @Override
+        public void onActivityPaused(@NonNull Activity activity) {
+//            Log.e(TAG, "onActivityPaused: " + activity.getClass().getName());
+        }
+
+        @Override
+        public void onActivityStopped(@NonNull Activity activity) {
+//            Log.e(TAG, "onActivityStopped: " + activity.getClass().getName());
+        }
+
+        @Override
+        public void onActivitySaveInstanceState(@NonNull Activity activity, @NonNull Bundle outState) {
+//            Log.e(TAG, "onActivitySaveInstanceState: " + activity.getClass().getName());
+        }
+
+        @Override
+        public void onActivityDestroyed(@NonNull Activity activity) {
+//            Log.e(TAG, "onActivityDestroyed: " + activity.getClass().getName());
+        }
+    };
+
 
 }

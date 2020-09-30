@@ -21,10 +21,8 @@ import android.widget.TextView;
 import com.google.android.material.bottomsheet.BottomSheetBehavior;
 import com.google.android.material.bottomsheet.BottomSheetDialog;
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment;
-import com.kk.securityhttp.domain.ResultInfo;
-import com.kk.securityhttp.net.contains.HttpConfig;
 import com.kk.share.UMShareImpl;
-import com.kk.utils.ToastUtil;
+
 import com.tencent.mm.opensdk.modelmsg.SendMessageToWX;
 import com.tencent.mm.opensdk.modelmsg.WXMediaMessage;
 import com.tencent.mm.opensdk.modelmsg.WXMiniProgramObject;
@@ -34,13 +32,13 @@ import com.umeng.analytics.MobclickAgent;
 import com.umeng.socialize.UMShareListener;
 import com.umeng.socialize.bean.SHARE_MEDIA;
 import com.yc.verbaltalk.R;
+import com.yc.verbaltalk.base.engine.LoveEngine;
+import com.yc.verbaltalk.base.utils.ShareInfoHelper;
+import com.yc.verbaltalk.base.utils.UserInfoHelper;
+import com.yc.verbaltalk.base.view.LoadDialog;
 import com.yc.verbaltalk.chat.bean.ShareInfo;
 import com.yc.verbaltalk.chat.bean.event.EventBusWxPayResult;
 import com.yc.verbaltalk.model.constant.ConstantKey;
-import com.yc.verbaltalk.base.engine.LoveEngine;
-import com.yc.verbaltalk.model.single.YcSingle;
-import com.yc.verbaltalk.base.view.LoadDialog;
-import com.yc.verbaltalk.base.utils.ShareInfoHelper;
 
 import org.greenrobot.eventbus.EventBus;
 
@@ -49,7 +47,10 @@ import java.util.ArrayList;
 import java.util.List;
 
 import androidx.core.content.ContextCompat;
-import rx.Subscriber;
+import io.reactivex.observers.DisposableObserver;
+import yc.com.rthttplibrary.bean.ResultInfo;
+import yc.com.rthttplibrary.config.HttpConfig;
+import yc.com.rthttplibrary.util.ToastUtil;
 
 /**
  * Created by wanglin  on 2019/7/9 15:54.
@@ -132,7 +133,7 @@ public class ShareAppFragment extends BottomSheetDialogFragment {
     }
 
     private void init() {
-         api = WXAPIFactory.createWXAPI(mContext, ConstantKey.WX_APP_ID, false);
+        api = WXAPIFactory.createWXAPI(mContext, ConstantKey.WX_APP_ID, false);
         loveEngin = new LoveEngine(mContext);
         tvCancelShare.setOnClickListener(v -> dismiss());
         List<View> shareItemViews = new ArrayList<>();
@@ -154,7 +155,7 @@ public class ShareAppFragment extends BottomSheetDialogFragment {
         String title = "表白神器——" + mContext.getString(R.string.app_name) + "！会聊才会撩，撩到心动的TA！";
         String url = "http://tic.upkao.com/apk/love.apk";
         String desc = "谈恋爱时，你是否因为不会聊天而苦恼过？\n" +
-                "和女生聊天没有话题？遇见喜欢的人不敢搭讪？无法吸引TA的注意？猜不透女生的心意？恋爱话术宝，一款专门为您解决以上所有情感烦恼的APP。从搭讪开场到线下邀约互动对话，妹子的回复再也不用担心没话聊。只需搜一搜，N+精彩聊天回复任你选择，让您和女生聊天不再烦恼，全方面提高您的聊天能力。";
+                "和女生聊天没有话题？遇见喜欢的人不敢搭讪？无法吸引TA的注意？猜不透女生的心意？" + getString(R.string.app_name) + "，一款专门为您解决以上所有情感烦恼的APP。从搭讪开场到线下邀约互动对话，妹子的回复再也不用担心没话聊。只需搜一搜，N+精彩聊天回复任你选择，让您和女生聊天不再烦恼，全方面提高您的聊天能力。";
 
         mShareInfo = ShareInfoHelper.getShareInfo();
         if (mShareInfo != null) {
@@ -267,7 +268,7 @@ public class ShareAppFragment extends BottomSheetDialogFragment {
             if (loadingView != null) {
                 loadingView.dismissLoadingDialog();
             }
-            ToastUtil.toast2(mContext, "分享成功");
+            ToastUtil.toast(mContext, "分享成功");
             //            RxSPTool.putBoolean(mContext, SpConstant.SHARE_SUCCESS, true);
 
 //            if (mShareInfo == null)
@@ -290,7 +291,7 @@ public class ShareAppFragment extends BottomSheetDialogFragment {
             if (loadingView != null) {
                 loadingView.dismissLoadingDialog();
             }
-            ToastUtil.toast2(mContext, "分享有误");
+            ToastUtil.toast(mContext, "分享有误");
         }
 
         @Override
@@ -299,18 +300,15 @@ public class ShareAppFragment extends BottomSheetDialogFragment {
 
                 loadingView.dismissLoadingDialog();
             }
-            ToastUtil.toast2(mContext, "取消发送");
+            ToastUtil.toast(mContext, "取消发送");
         }
     };
 
     private void shareReward() {
-        int id = YcSingle.getInstance().id;
-        if (id < 0) {
-            return;
-        }
-        loveEngin.shareReward(id + "").subscribe(new Subscriber<ResultInfo<String>>() {
+
+        loveEngin.shareReward(UserInfoHelper.getUid()).subscribe(new DisposableObserver<ResultInfo<String>>() {
             @Override
-            public void onCompleted() {
+            public void onComplete() {
 
             }
 

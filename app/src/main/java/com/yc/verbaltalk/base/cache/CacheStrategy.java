@@ -3,7 +3,7 @@ package com.yc.verbaltalk.base.cache;
 import android.content.Context;
 
 /**
- * Created by mayn on 2019/5/30.
+ * Created by sunshey on 2019/5/30.
  */
 
 public interface CacheStrategy {

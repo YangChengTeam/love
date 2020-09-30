@@ -4,50 +4,44 @@ import android.content.ClipData;
 import android.content.ClipboardManager;
 import android.content.ComponentName;
 import android.content.Context;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Color;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
-import android.text.TextUtils;
 import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.Window;
 import android.view.WindowManager;
 import android.view.inputmethod.InputMethodManager;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.alibaba.fastjson.JSON;
-import com.kk.securityhttp.domain.ResultInfo;
-import com.kk.securityhttp.net.contains.HttpConfig;
+import com.music.player.lib.util.ToastUtils;
 import com.umeng.analytics.MobclickAgent;
-import com.yc.verbaltalk.base.engine.MySubscriber;
-import com.yc.verbaltalk.chat.bean.AResultInfo;
-import com.yc.verbaltalk.chat.bean.IdCorrelationLoginBean;
+import com.yc.verbaltalk.base.engine.LoveEngine;
+import com.yc.verbaltalk.base.fragment.AddWxFragment;
+import com.yc.verbaltalk.base.utils.StatusBarUtil;
+import com.yc.verbaltalk.base.view.LoadDialog;
+import com.yc.verbaltalk.chat.bean.UserInfo;
 import com.yc.verbaltalk.chat.bean.WetChatInfo;
 import com.yc.verbaltalk.chat.bean.event.EventLoginState;
 import com.yc.verbaltalk.model.constant.ConstantKey;
-import com.yc.verbaltalk.base.utils.BackfillSingle;
-import com.yc.verbaltalk.base.engine.LoveEnginV2;
-import com.yc.verbaltalk.base.engine.LoveEngine;
-import com.yc.verbaltalk.model.single.YcSingle;
-import com.yc.verbaltalk.model.util.SPUtils;
-import com.yc.verbaltalk.mine.ui.activity.IdCorrelationSlidingActivity;
-import com.yc.verbaltalk.base.fragment.AddWxFragment;
-import com.yc.verbaltalk.base.view.LoadDialog;
-import com.yc.verbaltalk.base.utils.StatusBarUtil;
 
 import org.greenrobot.eventbus.EventBus;
 
-import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.drawerlayout.widget.DrawerLayout;
-import rx.Subscriber;
+import io.reactivex.observers.DisposableObserver;
+
+import yc.com.rthttplibrary.bean.ResultInfo;
+import yc.com.rthttplibrary.config.HttpConfig;
+import yc.com.rthttplibrary.util.ToastUtil;
 
 /**
- * Created by mayn on 2019/4/25.
+ * Created by sunshey on 2019/4/25.
  */
 
 public abstract class BaseActivity extends AppCompatActivity {
@@ -55,6 +49,7 @@ public abstract class BaseActivity extends AppCompatActivity {
     public LoadDialog mLoadingDialog;
     protected LoveEngine mLoveEngine;
     protected Handler mHandler;
+    private MyRunnable taskRunnable;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -63,27 +58,25 @@ public abstract class BaseActivity extends AppCompatActivity {
         mLoadingDialog = new LoadDialog(this);
         mLoveEngine = new LoveEngine(this);
         mHandler = new Handler();
-        checkSingle();
+//        checkSingle();
 
     }
 
-    private void checkSingle() {
-        if (this instanceof SpecializedActivity) { //默认在闪屏页恢复数据
-            return;
-        }
-        int id = YcSingle.getInstance().id;
-        if (id <= 0) {
-            String idInfo = (String) SPUtils.get(this, SPUtils.ID_INFO_BEAN, "");
-            if (!TextUtils.isEmpty(idInfo)) {
-//                MobclickAgent.onEvent(this, ConstantKey.UM_INFO_LOSE_ID);
-                BackfillSingle.backfillLoginData(this, "");
-            }
-        }
-    }
+//    private void checkSingle() {
+//        if (this instanceof SpecializedActivity) { //默认在闪屏页恢复数据
+//            return;
+//        }
+//        int id = YcSingle.getInstance().id;
+//        if (id <= 0) {
+//            String idInfo = (String) SPUtils.get(this, SPUtils.ID_INFO_BEAN, "");
+//            if (!TextUtils.isEmpty(idInfo)) {
+////                MobclickAgent.onEvent(this, ConstantKey.UM_INFO_LOSE_ID);
+//                BackfillSingle.backfillLoginData(this, "");
+//            }
+//        }
+//    }
 
-    public void showToastShort(String des) {
-        Toast.makeText(this, des, Toast.LENGTH_SHORT).show();
-    }
+
 
     /**
      * 侵入状态栏
@@ -238,48 +231,19 @@ public abstract class BaseActivity extends AppCompatActivity {
         }
     }
 
-    public void showToLoginDialog() {
-        netUserReg();
-        if (3 > 0) {
-            return;
-        }
-
-        AlertDialog alertDialog = new AlertDialog.Builder(this).create();
-        alertDialog.setTitle("提示");
-        alertDialog.setMessage("您还未登录，请先登录");
-        alertDialog.setButton(DialogInterface.BUTTON_POSITIVE, "确定", (dialogInterface, i) -> IdCorrelationSlidingActivity.startIdCorrelationActivity(BaseActivity.this, IdCorrelationSlidingActivity.ID_CORRELATION_STATE_LOGIN));
-        DialogInterface.OnClickListener listent = null;
-        alertDialog.setButton(DialogInterface.BUTTON_NEGATIVE, "取消", listent);
-        alertDialog.show();
+    /**
+     * 根据百分比改变颜色透明度
+     */
+    public int changeAlpha(int color, float fraction) {
+        int alpha = (int) (Color.alpha(color) * fraction);
+        return Color.argb(alpha, 255, 255, 255);
     }
 
 
-    private void netUserReg() {
-        LoadDialog loadDialog = new LoadDialog(this);
-        LoveEnginV2 loveEnginV2 = new LoveEnginV2(this);
-        loveEnginV2.userReg("user/reg").subscribe(new MySubscriber<AResultInfo<IdCorrelationLoginBean>>(loadDialog) {
-            @Override
-            protected void onNetNext(AResultInfo<IdCorrelationLoginBean> idCorrelationLoginBeanAResultInfo) {
-                IdCorrelationLoginBean data = idCorrelationLoginBeanAResultInfo.data;
-                loginSuccess(data);
-            }
-
-            @Override
-            protected void onNetError(Throwable e) {
-
-            }
-
-            @Override
-            protected void onNetCompleted() {
-
-            }
-        });
-    }
-
-    private void loginSuccess(IdCorrelationLoginBean data) {
+    private void loginSuccess(UserInfo data) {
         //持久化存储登录信息
         String str = JSON.toJSONString(data);// java对象转为jsonString
-        BackfillSingle.backfillLoginData(this, str);
+//        BackfillSingle.backfillLoginData(this, str);
 
         EventBus.getDefault().post(new EventLoginState(EventLoginState.STATE_LOGINED));
     }
@@ -292,9 +256,9 @@ public abstract class BaseActivity extends AppCompatActivity {
         MobclickAgent.onEvent(this, ConstantKey.UM_CONTACT_US_CLICK_ID);
         final String[] mWechat = {"pai201807"};
 
-        mLoveEngine.getWechatInfo(position).subscribe(new Subscriber<ResultInfo<WetChatInfo>>() {
+        mLoveEngine.getWechatInfo(position).subscribe(new DisposableObserver<ResultInfo<WetChatInfo>>() {
             @Override
-            public void onCompleted() {
+            public void onComplete() {
 
             }
 
@@ -328,7 +292,7 @@ public abstract class BaseActivity extends AppCompatActivity {
 
 
         if (null != listener) {
-            listener.onExtra();
+            listener.onExtra(wechat);
 
         } else {
             AddWxFragment addWxFragment = new AddWxFragment();
@@ -358,7 +322,7 @@ public abstract class BaseActivity extends AppCompatActivity {
             intent.setComponent(cmp);
             startActivity(intent);
         } catch (Exception exception) {
-            showToastShort("未安装微信");
+            ToastUtils.showCenterToast("未安装微信");
         }
 
     }
@@ -392,6 +356,68 @@ public abstract class BaseActivity extends AppCompatActivity {
     }
 
     public interface onExtraListener {
-        void onExtra();
+        void onExtra(String wx);
+    }
+
+
+    /**
+     * 改变获取验证码按钮状态
+     */
+    public void showGetCodeDisplay(TextView textView) {
+        taskRunnable = new MyRunnable(textView);
+        if (null != mHandler) {
+
+            mHandler.removeCallbacks(taskRunnable);
+            mHandler.removeMessages(0);
+            totalTime = 60;
+            textView.setClickable(false);
+//            textView.setTextColor(ContextCompat.getColor(R.color.coment_color));
+//            textView.setBackgroundResource(R.drawable.bg_btn_get_code);
+            if (null != mHandler) mHandler.postDelayed(taskRunnable, 0);
+        }
+    }
+
+    /**
+     * 定时任务，模拟倒计时广告
+     */
+    private int totalTime = 60;
+
+
+    private class MyRunnable implements Runnable {
+        TextView mTv;
+
+
+        public MyRunnable(TextView textView) {
+            this.mTv = textView;
+        }
+
+        @Override
+        public void run() {
+            mTv.setText(totalTime + "s");
+            totalTime--;
+            if (totalTime < 0) {
+                //还原
+                initGetCodeBtn(mTv);
+                return;
+            }
+            if (null != mHandler) mHandler.postDelayed(this, 1000);
+        }
+    }
+
+
+    /**
+     * 还原获取验证码按钮状态
+     */
+    private void initGetCodeBtn(TextView textView) {
+        totalTime = 0;
+        if (null != taskRunnable && null != mHandler) {
+            mHandler.removeCallbacks(taskRunnable);
+            mHandler.removeMessages(0);
+        }
+        textView.setText("重新获取");
+
+        textView.setClickable(true);
+//        textView.setTextColor(CommonUtils.getColor(R.color.white));
+//        textView.setBackgroundResource(R.drawable.bg_btn_get_code_true);
     }
 }

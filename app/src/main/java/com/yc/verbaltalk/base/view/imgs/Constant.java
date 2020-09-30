@@ -2,9 +2,6 @@ package com.yc.verbaltalk.base.view.imgs;
 
 import java.util.ArrayList;
 
-/**
- * Created by mayn on 2019/5/7.
- */
 
 public class Constant {
 
@@ -21,6 +18,8 @@ public class Constant {
     public static final String TOUTIAO_REWARD_ID = "945008656";
 
     public static final String TOUTIAO_REWARD2_ID = "945022147";
+
+    public static final String TOUTIAO_FEED_ID = "945471658";
 
     public static ArrayList<String> imageList = new ArrayList<>();
 

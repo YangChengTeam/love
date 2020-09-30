@@ -10,7 +10,7 @@ import org.greenrobot.greendao.annotation.Transient;
 import org.greenrobot.greendao.annotation.Generated;
 
 /**
- * Created by mayn on 2019/5/10.
+ * Created by sunshey on 2019/5/10.
  */
 
 @Entity
@@ -26,9 +26,12 @@ public class LoveHealDetDetailsBean implements MultiItemEntity {
     @Transient
     public int size;
     public int dialogue_id;
+
     public String content;
 
     public String ans_sex;
+
+    public String s_value;
     public static final int VIEW_TITLE = 0;
     public static final int VIEW_ITEM = 1;
     public static final int VIEW_PROG = 2;
@@ -50,14 +53,15 @@ public class LoveHealDetDetailsBean implements MultiItemEntity {
         this.ans_sex = ans_sex;
     }
 
-    @Generated(hash = 1954233063)
+    @Generated(hash = 1612580505)
     public LoveHealDetDetailsBean(Long id, int love_id, int dialogue_id, String content,
-            String ans_sex, long saveTime, String title) {
+            String ans_sex, String s_value, long saveTime, String title) {
         this.id = id;
         this.love_id = love_id;
         this.dialogue_id = dialogue_id;
         this.content = content;
         this.ans_sex = ans_sex;
+        this.s_value = s_value;
         this.saveTime = saveTime;
         this.title = title;
     }
@@ -131,5 +135,13 @@ public class LoveHealDetDetailsBean implements MultiItemEntity {
 
     public void setTitle(String title) {
         this.title = title;
+    }
+
+    public String getS_value() {
+        return this.s_value;
+    }
+
+    public void setS_value(String s_value) {
+        this.s_value = s_value;
     }
 }

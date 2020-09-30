@@ -16,6 +16,6 @@ public class ProtocolActivity extends BaseSameActivity {
 
     @Override
     protected String offerActivityTitle() {
-        return "恋爱话术宝用户协议";
+        return getString(R.string.app_name) + "用户协议";
     }
 }

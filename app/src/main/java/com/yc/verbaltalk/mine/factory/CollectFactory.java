@@ -2,7 +2,7 @@ package com.yc.verbaltalk.mine.factory;
 
 import com.yc.verbaltalk.mine.ui.fragment.CollectAudioListFragment;
 import com.yc.verbaltalk.mine.ui.fragment.CollectExampleFragment;
-import com.yc.verbaltalk.mine.ui.fragment.CollectLoveHealDetailFragment;
+import com.yc.verbaltalk.mine.ui.fragment.CollectVerbalFragment;
 import com.yc.verbaltalk.mine.ui.fragment.CollectLoveHealingFragment;
 
 import java.util.HashMap;
@@ -11,7 +11,7 @@ import java.util.Map;
 import androidx.fragment.app.Fragment;
 
 /**
- * Created by mayn on 2019/5/5.
+ * Created by sunshey on 2019/5/5.
  */
 
 public class CollectFactory {
@@ -29,7 +29,7 @@ public class CollectFactory {
         }
         switch (position) {
             case FRAGMENT_0:
-                fragment = new CollectLoveHealDetailFragment();
+                fragment = new CollectVerbalFragment();
                 fragments.put(FRAGMENT_0, fragment);
 
                 break;

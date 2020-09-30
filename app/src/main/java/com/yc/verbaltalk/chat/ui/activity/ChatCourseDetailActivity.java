@@ -20,26 +20,22 @@ import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.bumptech.glide.request.RequestOptions;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
-import com.kk.securityhttp.domain.ResultInfo;
-import com.kk.securityhttp.net.contains.HttpConfig;
-import com.kk.utils.ScreenUtil;
 import com.umeng.analytics.MobclickAgent;
 import com.yc.verbaltalk.R;
-import com.yc.verbaltalk.base.engine.MySubscriber;
-import com.yc.verbaltalk.chat.bean.AResultInfo;
+import com.yc.verbaltalk.base.engine.OrderEngine;
+import com.yc.verbaltalk.base.utils.StatusBarUtil;
+import com.yc.verbaltalk.base.utils.UserInfoHelper;
+import com.yc.verbaltalk.base.view.CommonWebView;
+import com.yc.verbaltalk.base.view.LoadDialog;
 import com.yc.verbaltalk.chat.bean.CourseInfo;
 import com.yc.verbaltalk.chat.bean.OrdersInitBean;
+import com.yc.verbaltalk.chat.bean.UserInfo;
 import com.yc.verbaltalk.chat.bean.event.EventBusWxPayResult;
 import com.yc.verbaltalk.chat.bean.event.EventPayVipSuccess;
 import com.yc.verbaltalk.model.constant.ConstantKey;
-import com.yc.verbaltalk.base.engine.OrderEngine;
-import com.yc.verbaltalk.model.single.YcSingle;
 import com.yc.verbaltalk.model.util.SizeUtils;
 import com.yc.verbaltalk.pay.ui.activity.PayActivity;
 import com.yc.verbaltalk.pay.ui.fragment.VipPaywayFragment;
-import com.yc.verbaltalk.base.view.CommonWebView;
-import com.yc.verbaltalk.base.view.LoadDialog;
-import com.yc.verbaltalk.base.utils.StatusBarUtil;
 
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
@@ -49,7 +45,10 @@ import java.util.HashMap;
 import java.util.Map;
 
 import androidx.appcompat.app.AlertDialog;
-import rx.Subscriber;
+import io.reactivex.observers.DisposableObserver;
+import yc.com.rthttplibrary.bean.ResultInfo;
+import yc.com.rthttplibrary.config.HttpConfig;
+import yc.com.rthttplibrary.util.ScreenUtil;
 
 /**
  * Created by suns  on 2019/11/18 12:31.
@@ -96,7 +95,7 @@ public class ChatCourseDetailActivity extends PayActivity implements View.OnClic
         tvCourseTitle = findViewById(R.id.tv_course_title);
 
         courseWebView = findViewById(R.id.course_webView);
-        llBottom= findViewById(R.id.ll_bottom);
+        llBottom = findViewById(R.id.ll_bottom);
         llBuy = findViewById(R.id.ll_tutor_buy);
         ivCourseDetail = findViewById(R.id.iv_course_detail);
         llWx = findViewById(R.id.ll_tutor_wx);
@@ -140,19 +139,20 @@ public class ChatCourseDetailActivity extends PayActivity implements View.OnClic
     private void getData() {
         if (mLoadingDialog == null) mLoadingDialog = new LoadDialog(this);
         mLoadingDialog.showLoadingDialog();
-        mLoveEngine.getChatCourseDetailInfo(id + "").subscribe(new Subscriber<ResultInfo<CourseInfo>>() {
+        mLoveEngine.getChatCourseDetailInfo(id + "").subscribe(new DisposableObserver<ResultInfo<CourseInfo>>() {
             @Override
-            public void onCompleted() {
+            public void onComplete() {
                 mLoadingDialog.dismissLoadingDialog();
             }
 
             @Override
             public void onError(Throwable e) {
-
+                mLoadingDialog.dismissLoadingDialog();
             }
 
             @Override
             public void onNext(ResultInfo<CourseInfo> courseInfoResultInfo) {
+                mLoadingDialog.dismissLoadingDialog();
                 if (courseInfoResultInfo != null && courseInfoResultInfo.code == HttpConfig.STATUS_OK && courseInfoResultInfo.data != null) {
                     initData(courseInfoResultInfo.data);
                 }
@@ -204,8 +204,9 @@ public class ChatCourseDetailActivity extends PayActivity implements View.OnClic
                 VipPaywayFragment vipPaywayFragment = new VipPaywayFragment();
                 vipPaywayFragment.show(getSupportFragmentManager(), "");
                 vipPaywayFragment.setOnPayWaySelectListener(payway -> {
-                    if (courseInfo != null)
-                        nextOrders(payway, courseInfo);
+                    if (UserInfoHelper.isLogin(this))
+                        if (courseInfo != null)
+                            nextOrders(payway, courseInfo);
                 });
 
                 break;
@@ -218,17 +219,13 @@ public class ChatCourseDetailActivity extends PayActivity implements View.OnClic
 
     private void nextOrders(final String payWayName, CourseInfo indexDoodsBean) { // PAY_TYPE_ZFB=0   PAY_TYPE_WX=1;
         if (indexDoodsBean == null) return;
-        int id = YcSingle.getInstance().id;
-        String name = YcSingle.getInstance().name;
-        if (id <= 0) {
-            showToLoginDialog();
-            return;
-        }
+
 
         Map<String, String> params = new HashMap<>();
-        params.put("user_id", String.valueOf(id));
-        if (!TextUtils.isEmpty(name)) {
-            params.put("user_name", name);
+        params.put("user_id", UserInfoHelper.getUid());
+        UserInfo userInfo = UserInfoHelper.getUserInfo();
+        if (null != userInfo && !TextUtils.isEmpty(userInfo.name)) {
+            params.put("user_name", userInfo.name);
         }
 
         params.put("title", indexDoodsBean.getTitle()); //订单标题，会员购买，商品购买等
@@ -249,29 +246,33 @@ public class ChatCourseDetailActivity extends PayActivity implements View.OnClic
             mLoadingDialog = new LoadDialog(this);
         }
         mLoadingDialog.showLoadingDialog();
-        mOrderEngine.initOrders(params, "orders/init").subscribe(new MySubscriber<AResultInfo<OrdersInitBean>>(mLoadingDialog) {
+        mOrderEngine.initOrders(params).subscribe(new DisposableObserver<ResultInfo<OrdersInitBean>>() {
             @Override
-            protected void onNetNext(AResultInfo<OrdersInitBean> ordersInitBeanAResultInfo) {
-                OrdersInitBean ordersInitBean = ordersInitBeanAResultInfo.data;
-                OrdersInitBean.ParamsBean paramsBean = ordersInitBean.params;
+            public void onComplete() {
+                mLoadingDialog.dismissLoadingDialog();
+            }
 
-                if (payWayName.equals("alipay")) {
+            @Override
+            public void onError(Throwable e) {
+                mLoadingDialog.dismissLoadingDialog();
+            }
 
-                    toZfbPay(paramsBean.info);
-                } else {
-                    toWxPay(paramsBean);
+            @Override
+            public void onNext(ResultInfo<OrdersInitBean> ordersInitBeanAResultInfo) {
+                mLoadingDialog.dismissLoadingDialog();
+                if (ordersInitBeanAResultInfo != null && ordersInitBeanAResultInfo.code == HttpConfig.STATUS_OK && ordersInitBeanAResultInfo.data != null) {
+                    OrdersInitBean ordersInitBean = ordersInitBeanAResultInfo.data;
+                    OrdersInitBean.ParamsBean paramsBean = ordersInitBean.params;
+
+                    if (payWayName.equals("alipay")) {
+
+                        toZfbPay(paramsBean.info);
+                    } else {
+                        toWxPay(paramsBean);
+                    }
                 }
             }
 
-            @Override
-            protected void onNetError(Throwable e) {
-
-            }
-
-            @Override
-            protected void onNetCompleted() {
-
-            }
         });
     }
 
@@ -284,8 +285,6 @@ public class ChatCourseDetailActivity extends PayActivity implements View.OnClic
                 showPaySuccessDialog(true, event.mess);
                 break;
             case -1://错误
-                showPaySuccessDialog(false, event.mess);
-                break;
             case -2://用户取消
                 showPaySuccessDialog(false, event.mess);
                 break;

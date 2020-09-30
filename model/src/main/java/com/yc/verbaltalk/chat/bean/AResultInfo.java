@@ -1,7 +1,7 @@
 package com.yc.verbaltalk.chat.bean;
 
 /**
- * Created by mayn on 2019/5/8.
+ * Created by sunshey on 2019/5/8.
  */
 
 public class AResultInfo <T>  {
