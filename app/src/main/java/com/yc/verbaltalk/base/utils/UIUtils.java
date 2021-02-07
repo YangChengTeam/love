@@ -13,6 +13,8 @@ import java.lang.reflect.Method;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+import androidx.core.content.ContextCompat;
+
 /**
  * Created by wanglin  on 2018/2/5 17:37.
  */
@@ -71,6 +73,8 @@ public class UIUtils {
         if (mResources == null) {
             mResources = context.getResources();
         }
+
+
         return mResources.getIdentifier(name, defType, getPackageName(context));
     }
 

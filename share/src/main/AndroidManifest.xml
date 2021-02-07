@@ -7,44 +7,44 @@
         android:allowBackup="true"
         android:supportsRtl="true"
         >
-        <activity
-            android:name="com.umeng.qq.tencent.AuthActivity"
-            android:launchMode="singleTask"
-            android:noHistory="true" >
+<!--        <activity-->
+<!--            android:name="com.umeng.qq.tencent.AuthActivity"-->
+<!--            android:launchMode="singleTask"-->
+<!--            android:noHistory="true" >-->
 
-            <intent-filter>
-                <action android:name="android.intent.action.VIEW" />
-                <category android:name="android.intent.category.DEFAULT" />
-                <category android:name="android.intent.category.BROWSABLE" />
-                <data android:scheme="tencent1106261461" />
-            </intent-filter>
+<!--            <intent-filter>-->
+<!--                <action android:name="android.intent.action.VIEW" />-->
+<!--                <category android:name="android.intent.category.DEFAULT" />-->
+<!--                <category android:name="android.intent.category.BROWSABLE" />-->
+<!--                <data android:scheme="tencent1106261461" />-->
+<!--            </intent-filter>-->
 
-        </activity>
+<!--        </activity>-->
 
-        <activity
-            android:name="com.umeng.qq.tencent.AssistActivity"
-            android:screenOrientation="portrait"
-            android:theme="@android:style/Theme.Translucent.NoTitleBar"
-            android:configChanges="orientation|keyboardHidden|screenSize"/>
+<!--        <activity-->
+<!--            android:name="com.umeng.qq.tencent.AssistActivity"-->
+<!--            android:screenOrientation="portrait"-->
+<!--            android:theme="@android:style/Theme.Translucent.NoTitleBar"-->
+<!--            android:configChanges="orientation|keyboardHidden|screenSize"/>-->
 
-        <activity
-            android:name="com.umeng.socialize.media.WBShareCallBackActivity"
-            android:configChanges="keyboardHidden|orientation"
-            android:theme="@android:style/Theme.Translucent.NoTitleBar"
-            android:exported="false"
-            android:screenOrientation="portrait" >
-        </activity>
+<!--        <activity-->
+<!--            android:name="com.umeng.socialize.media.WBShareCallBackActivity"-->
+<!--            android:configChanges="keyboardHidden|orientation"-->
+<!--            android:theme="@android:style/Theme.Translucent.NoTitleBar"-->
+<!--            android:exported="false"-->
+<!--            android:screenOrientation="portrait" >-->
+<!--        </activity>-->
 
-        <activity
-            android:theme="@android:style/Theme.Translucent.NoTitleBar.Fullscreen"
-            android:launchMode="singleTask"
-            android:name="com.sina.weibo.sdk.share.WbShareTransActivity">
-            <intent-filter>
-                <action android:name="com.sina.weibo.sdk.action.ACTION_SDK_REQ_ACTIVITY" />
-                <category android:name="android.intent.category.DEFAULT" />
-            </intent-filter>
+<!--        <activity-->
+<!--            android:theme="@android:style/Theme.Translucent.NoTitleBar.Fullscreen"-->
+<!--            android:launchMode="singleTask"-->
+<!--            android:name="com.sina.weibo.sdk.share.WbShareTransActivity">-->
+<!--            <intent-filter>-->
+<!--                <action android:name="com.sina.weibo.sdk.action.ACTION_SDK_REQ_ACTIVITY" />-->
+<!--                <category android:name="android.intent.category.DEFAULT" />-->
+<!--            </intent-filter>-->
 
-        </activity>
+<!--        </activity>-->
     </application>
 
 </manifest>

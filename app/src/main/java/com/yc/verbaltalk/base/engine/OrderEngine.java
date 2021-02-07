@@ -31,42 +31,17 @@ public class OrderEngine extends BaseEngine {
     }
 
     public Observable<ResultInfo<List<IndexDoodsBean>>> indexGoods() {
-//        Map<String, String> params = new HashMap<>();
-////        params.put("page_size", pageSize);
-//        requestParams(params);
-//        HttpCoreEngin<AResultInfo<List<IndexDoodsBean>>> httpCoreEngin = HttpCoreEngin.get(mContext);
-//        Observable<AResultInfo<List<IndexDoodsBean>>> rxpost = httpCoreEngin.rxpost(URLConfig.getUrl(url), new TypeReference<AResultInfo<List<IndexDoodsBean>>>() {
-//                }.getType(),
-//                params,
-//                true,
-//                true, true);
-//        return rxpost;
 
         return request.indexGoods().subscribeOn(Schedulers.io()).observeOn(AndroidSchedulers.mainThread());
     }
 
     public Observable<ResultInfo<OthersJoinNum>> othersJoinNum() {
-//        Map<String, String> params = new HashMap<>();
-//        requestParams(params);
-//        HttpCoreEngin<AResultInfo<OthersJoinNum>> httpCoreEngin = HttpCoreEngin.get(mContext);
-//        Observable<AResultInfo<OthersJoinNum>> rxpost = httpCoreEngin.rxpost(URLConfig.getUrl(url), new TypeReference<AResultInfo<OthersJoinNum>>() {
-//                }.getType(),
-//                params,
-//                true,
-//                true, true);
-//        return rxpost;
+
         return request.othersJoinNum().subscribeOn(Schedulers.io()).observeOn(AndroidSchedulers.mainThread());
     }
 
     public Observable<ResultInfo<OrdersInitBean>> initOrders(Map<String, String> params) {
-//        requestParams(params);
-//        HttpCoreEngin<AResultInfo<OrdersInitBean>> httpCoreEngin = HttpCoreEngin.get(mContext);
-//        Observable<AResultInfo<OrdersInitBean>> rxpost = httpCoreEngin.rxpost(URLConfig.getUrl(url), new TypeReference<AResultInfo<OrdersInitBean>>() {
-//                }.getType(),
-//                params,
-//                true,
-//                true, true);
-//        return rxpost;
+
 
         return request.initOrders(params).subscribeOn(Schedulers.io()).observeOn(AndroidSchedulers.mainThread());
     }

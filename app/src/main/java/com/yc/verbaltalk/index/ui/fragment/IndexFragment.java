@@ -383,7 +383,7 @@ public class IndexFragment extends BaseMainFragment {
         getIndexBanner();
 //        getRandomWords();
 
-        
+//        AdvertisingIdClient    getAdvertisingIdInfo(getActivity());
     }
 
 

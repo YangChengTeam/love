@@ -4,6 +4,7 @@ package com.yc.verbaltalk.chat.bean;
  * Created by sunshey on 2019/5/5.
  */
 
+
 public class BecomeVipPayBean {
 
     /**
@@ -15,6 +16,7 @@ public class BecomeVipPayBean {
     public String payName;
     public int payMoney;
     public String payDes;
+
 
     public BecomeVipPayBean(String payName, int payMoney, String payDes) {
         this.payName = payName;

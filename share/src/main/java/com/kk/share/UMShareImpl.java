@@ -5,7 +5,10 @@ import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
+import android.text.TextUtils;
+import android.view.TextureView;
 
+import com.umeng.commonsdk.UMConfigure;
 import com.umeng.socialize.Config;
 import com.umeng.socialize.PlatformConfig;
 import com.umeng.socialize.ShareAction;
@@ -15,6 +18,8 @@ import com.umeng.socialize.bean.SHARE_MEDIA;
 import com.umeng.socialize.media.UMImage;
 import com.umeng.socialize.media.UMMin;
 import com.umeng.socialize.media.UMWeb;
+
+import org.w3c.dom.Text;
 
 /**
  * Created by zhangkai on 2017/5/9.
@@ -77,9 +82,14 @@ public class UMShareImpl extends IShare {
 
         public void build(Context context) {
             PlatformConfig.setWeixin(wxappid, wxappsecert);
-            PlatformConfig.setQQZone(qqappid, qqappsecert);
-            PlatformConfig.setSinaWeibo(wbappid, wbappsecert, "http://sns.whalecloud.com");
-            Config.DEBUG = debug;
+            PlatformConfig.setWXFileProvider("com.yc.verbaltalk.fileProvider");
+            if (!TextUtils.isEmpty(qqappid) && !TextUtils.isEmpty(qqappsecert))
+                PlatformConfig.setQQZone(qqappid, qqappsecert);
+            if (!TextUtils.isEmpty(wbappid) && !TextUtils.isEmpty(wbappsecert))
+                PlatformConfig.setSinaWeibo(wbappid, wbappsecert, "http://sns.whalecloud.com");
+//            Config.DEBUG = debug;
+            UMConfigure.setLogEnabled(debug);
+
             UMShareAPI.get(context);
         }
 

@@ -10,13 +10,11 @@ import android.text.TextUtils;
 import android.util.Log;
 import android.view.View;
 
-import com.bytedance.sdk.openadsdk.activity.base.TTRewardExpressVideoActivity;
 import com.kk.share.UMShareImpl;
 import com.music.player.lib.manager.MusicPlayerManager;
 import com.tencent.bugly.Bugly;
 import com.umeng.commonsdk.UMConfigure;
 import com.umeng.socialize.UMShareAPI;
-import com.video.player.lib.utils.VideoUtils;
 import com.yc.verbaltalk.R;
 import com.yc.verbaltalk.base.config.URLConfig;
 import com.yc.verbaltalk.base.engine.LoveEngine;
@@ -31,8 +29,6 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.InputStream;
-import java.lang.reflect.InvocationTargetException;
-import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -42,7 +38,6 @@ import java.util.zip.ZipFile;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-import androidx.appcompat.app.AlertDialog;
 import androidx.multidex.MultiDexApplication;
 import io.reactivex.Observable;
 import io.reactivex.android.schedulers.AndroidSchedulers;
@@ -55,7 +50,6 @@ import yc.com.rthttplibrary.converter.FastJsonConverterFactory;
 import yc.com.rthttplibrary.request.RetrofitHttpRequest;
 import yc.com.rthttplibrary.util.FileUtil;
 import yc.com.rthttplibrary.util.LogUtil;
-import yc.com.rthttplibrary.util.ToastUtil;
 import yc.com.toutiao_adv.BrandType;
 import yc.com.toutiao_adv.TTAdDispatchManager;
 import yc.com.toutiao_adv.TTAdManagerHolder;

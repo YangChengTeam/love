@@ -148,7 +148,7 @@
         <item>热门</item>
         <item>我的</item>
     </string-array>
-    <string name="refresh_verbal">换一换</string>
+    <string name="refresh_verbal" translatable="false">换一换</string>
     <string name="privacy_desc" translatable="false">欢 迎 使 用 %1$s A P P ! 在 您 使 用 %1$s 产 品 或 服 务 前 ， 请 您 仔 细 阅 读 并   充 分 理 解 《 服 务 条 款 》 及 《 隐 私 政   策 》 ； 当 您 点 击 \" 我 知 道 了 ” 并 开   始 使 用 产 品 服 务 时 ， 即 表 示 您 已 阅   读 并 同 意 条 款 内 容 ， 如 果 您 不 同 意   条 款 内 容 ， 将 可 能 导 致 无 法 继 续 使   用 我 们 的 产 品 及 服 务</string>
 
 

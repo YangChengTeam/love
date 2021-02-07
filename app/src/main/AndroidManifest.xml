@@ -218,5 +218,10 @@
             android:name="org.apache.http.legacy"
             android:required="false" />
     </application>
+    <!--    // 指定微信包名-->
+    <queries>
+        <package android:name="com.tencent.mm" />
+
+    </queries>
 
 </manifest>

@@ -1,6 +1,7 @@
 package com.yc.verbaltalk.mine.ui.activity;
 
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.text.TextUtils;
@@ -13,7 +14,9 @@ import android.widget.TextView;
 import com.alibaba.fastjson.TypeReference;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
+import com.kk.share.UMShareImpl;
 import com.umeng.analytics.MobclickAgent;
+import com.umeng.socialize.UMShareAPI;
 import com.yc.verbaltalk.R;
 import com.yc.verbaltalk.base.engine.OrderEngine;
 import com.yc.verbaltalk.base.utils.CommonInfoHelper;
@@ -41,6 +44,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import androidx.annotation.Nullable;
 import androidx.appcompat.app.AlertDialog;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -169,7 +173,6 @@ public class BecomeVipActivity extends PayActivity implements View.OnClickListen
                 if (listAResultInfo != null && listAResultInfo.code == HttpConfig.STATUS_OK && listAResultInfo.data != null)
                     createNewData(listAResultInfo.data);
             }
-
 
         });
     }
@@ -341,6 +344,11 @@ public class BecomeVipActivity extends PayActivity implements View.OnClickListen
         }
     }
 
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        UMShareAPI.get(this).onActivityResult(requestCode, resultCode, data);
+    }
 
     //  支付宝支付成功
     @Override

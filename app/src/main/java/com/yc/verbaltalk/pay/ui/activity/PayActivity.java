@@ -60,14 +60,6 @@ public abstract class PayActivity extends BaseSlidingActivity {
         request.timeStamp = paramsBean.timestamp;
         request.sign = paramsBean.sign;
         mMsgApi.registerApp(ConstantKey.WX_APP_ID);
-        Log.d("mylog", "toWxPay: request.appId " + request.appId);
-        Log.d("mylog", "toWxPay: request.partnerId " + request.partnerId);
-        Log.d("mylog", "toWxPay: request.prepayId " + request.prepayId);
-        Log.d("mylog", "toWxPay: request.packageValue " + request.packageValue);
-        Log.d("mylog", "toWxPay: request.nonceStr " + request.nonceStr);
-        Log.d("mylog", "toWxPay: request.timeStamp " + request.timeStamp);
-        Log.d("mylog", "toWxPay: request.sign " + request.sign);
-
         mMsgApi.sendReq(request);
     }
 
