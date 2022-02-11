@@ -104,6 +104,7 @@ public abstract class BasePushPhotoActivity extends BaseSameActivity {
                 .needCrop(true)
                 // 第一个是否显示相机，默认true
                 .needCamera(false)
+
                 // 最大选择图片数量，默认9
                 .maxNum(9)
                 .build();

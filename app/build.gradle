@@ -29,8 +29,8 @@ android {
         applicationId "com.yc.verbaltalk"
         minSdkVersion 19
         targetSdkVersion 29
-        versionCode 31//21
-        versionName "3.7.0"//1.2.0
+        versionCode 32//21
+        versionName "3.8.0"//1.2.0
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
         ndk {
             //设置支持的SO库架构
@@ -74,9 +74,9 @@ dependencies {
     implementation 'com.android.support:appcompat-v7:29.0.0'
     implementation 'com.android.support.constraint:constraint-layout:2.0.1'
     implementation 'com.android.support:design:29.0.0'
-    testImplementation 'junit:junit:4.12'
-    androidTestImplementation 'com.android.support.test:runner:1.0.2'
-    androidTestImplementation 'com.android.support.test.espresso:espresso-core:3.0.2'
+//    testImplementation 'junit:junit:4.12'
+//    androidTestImplementation 'com.android.support.test:runner:1.0.2'
+//    androidTestImplementation 'com.android.support.test.espresso:espresso-core:3.0.2'
 
     api project(':model')
     implementation 'com.android.support:multidex:1.0.3'

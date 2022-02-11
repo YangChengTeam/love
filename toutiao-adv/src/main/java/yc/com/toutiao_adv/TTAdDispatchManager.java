@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.content.Context;
 import android.os.Build;
 import android.text.TextUtils;
+import android.util.Log;
 import android.view.ViewGroup;
 import android.widget.Toast;
 
@@ -39,8 +40,10 @@ public class TTAdDispatchManager {
 
     public void init(Enum<BrandType>... branTypes) {
         if (branTypes.length > 0) {
+
             for (Enum<BrandType> branType : branTypes) {
-                if (TextUtils.equals(Build.BRAND.toLowerCase(), branType.name())) {
+//                Log.e("showAd", Build.BRAND.toLowerCase() + "---" + branType.name());
+                if (TextUtils.equals(Build.BRAND.toLowerCase(), branType.name().toLowerCase())) {
                     isShowAd = false;
                 }
             }
@@ -50,10 +53,10 @@ public class TTAdDispatchManager {
 
     }
 
-    public void init(Activity activity,  TTAdType adType, ViewGroup container, String adId, int nativeCount,
-                     String rewardName, int rewardCount, String userId, int orientation, OnAdvStateListener onAdvStateListener) {
+    public boolean init(Activity activity, TTAdType adType, ViewGroup container, String adId, int nativeCount,
+                        String rewardName, int rewardCount, String userId, int orientation, OnAdvStateListener onAdvStateListener) {
         this.mActivity = activity;
-//        if (!isVip && isShowAd) {
+        if (isShowAd) {
             if (adType == TTAdType.SPLASH) {
                 managerListener = new SplashADManager(activity, container, adId, onAdvStateListener);
             } else if (adType == TTAdType.BANNER) {
@@ -66,18 +69,15 @@ public class TTAdDispatchManager {
                 managerListener = new RewardVideoAdManager(activity, adId, rewardName, rewardCount, userId, orientation, onAdvStateListener);
             } else if (adType == TTAdType.FULLSCREEN_VIDEO) {
                 managerListener = new FullscreenVideoAdManager(activity, adId, orientation);
-            }else if (adType==TTAdType.DRAW_FEED){
-                managerListener= new DrawFeedAdManager(activity, adId,nativeCount,onAdvStateListener);
+            } else if (adType == TTAdType.DRAW_FEED) {
+                managerListener = new DrawFeedAdManager(activity, adId, nativeCount, onAdvStateListener);
             }
+//        Log.e("showAd", isShowAd + "");
 
-                managerListener.showAD();
-
-//        } else {
-//
-//            if (onHideAdvListener != null) {
-//                onHideAdvListener.onHide();
-//            }
-//        }
+            managerListener.showAD();
+            return true;
+        }
+        return false;
     }
 
     private void showAdDialog(final Context context) {

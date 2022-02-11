@@ -36,7 +36,7 @@ public class SpecializedActivity extends BaseActivity implements yc.com.toutiao_
     private TextView tvSipView;
 
 
-    private int seconds = 3;
+    private int delay = 2000;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -66,12 +66,17 @@ public class SpecializedActivity extends BaseActivity implements yc.com.toutiao_
                 PrivacyPolicyFragment privacyPolicyFragment = new PrivacyPolicyFragment();
                 privacyPolicyFragment.show(getSupportFragmentManager(), "");
                 privacyPolicyFragment.setOnClickBtnListener(() -> {
-                    TTAdDispatchManager.getManager().init(SpecializedActivity.this, TTAdType.SPLASH, splashContainer, Constant.TOUTIAO_SPLASH_ID, 0, null, 0, null, 0, SpecializedActivity.this);
+                    if (!TTAdDispatchManager.getManager().init(SpecializedActivity.this, TTAdType.SPLASH, splashContainer, Constant.TOUTIAO_SPLASH_ID, 0, null, 0, null, 0, SpecializedActivity.this)) {
+                        switchMain(delay);
+                    }
+
                     SPUtils.put(SpecializedActivity.this, SPUtils.FIRST_OPEN, false);
                 });
             }, 100);
         } else {
-            TTAdDispatchManager.getManager().init(SpecializedActivity.this, TTAdType.SPLASH, splashContainer, Constant.TOUTIAO_SPLASH_ID, 0, null, 0, null, 0, SpecializedActivity.this);
+            if (!TTAdDispatchManager.getManager().init(SpecializedActivity.this, TTAdType.SPLASH, splashContainer, Constant.TOUTIAO_SPLASH_ID, 0, null, 0, null, 0, SpecializedActivity.this)) {
+                switchMain(delay);
+            }
         }
 
     }
@@ -83,11 +88,12 @@ public class SpecializedActivity extends BaseActivity implements yc.com.toutiao_
         finish();
     }
 
+
     private void checkNetwork() {
         boolean networkConnected = CheckNetwork.isNetworkConnected(SpecializedActivity.this);
-        boolean connected = CheckNetwork.isWifiConnected(SpecializedActivity.this);
-        Log.d("mylog", "checkNetwork: networkConnected " + networkConnected);
-        Log.d("mylog", "checkNetwork: connected " + connected);
+//        boolean connected = CheckNetwork.isWifiConnected(SpecializedActivity.this);
+//        Log.d("mylog", "checkNetwork: networkConnected " + networkConnected);
+//        Log.d("mylog", "checkNetwork: connected " + connected);
         if (!networkConnected) {
             showNotNetworkDialog();
         } else {

@@ -39,6 +39,7 @@ import java.util.zip.ZipFile;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.multidex.MultiDexApplication;
+
 import io.reactivex.Observable;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.observers.DisposableObserver;
@@ -81,6 +82,7 @@ public class YcApplication extends MultiDexApplication {
 
         new RetrofitHttpRequest.Builder(URLConfig.baseUrlV1)
                 .convert(FastJsonConverterFactory.create());
+        TTAdDispatchManager.getManager().init(BrandType.HUAWEI, BrandType.HONOR);
         Observable.just("").subscribeOn(Schedulers.io()).observeOn(AndroidSchedulers.mainThread()).subscribe(s -> init());
 
         ModelApp.init(this);
@@ -95,8 +97,6 @@ public class YcApplication extends MultiDexApplication {
     private void init() {
         //        Bugly.init(getApplicationContext(), "注册时申请的APPID", false);  //腾迅自动更新
         Bugly.init(getApplicationContext(), "dc88d75f55", false);  //腾迅自动更新
-
-        TTAdDispatchManager.getManager().init(BrandType.HUAWEI, BrandType.HONOR);
 
 
         UMConfigure.init(getApplicationContext(), "5cec86d84ca35779b00010b8", "Umeng", UMConfigure.DEVICE_TYPE_PHONE, null);
